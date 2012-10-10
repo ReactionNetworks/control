@@ -1,0 +1,7 @@
+CoNtRol - Chemical Reaction Network analysis tool
+
+Comprises several components:
+Java applet to draw DSR graphs (Anca Marginean)
+C code to analyse reaction networks (Murad Banaji)
+Octave code to analyse reaction networks (Casian Pantea)
+Web interface code (Pete Donnell)

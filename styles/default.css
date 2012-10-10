@@ -1,0 +1,163 @@
+/**
+ * Default stylesheet for CoNtRol
+ *
+ * Written in PHP to simplify keeping track of colours, etc.
+ *
+ * @author     Pete Donnell <pete.donnell@port.ac.uk>
+ * @copyright  University of Portsmouth 2012
+ * @created    02/10/2012
+ * @modified   04/10/2012
+ */
+
+*
+{
+	font-family: sans-serif;
+}
+
+h1
+{
+	text-align: center;
+	font-size: 150%;
+	padding: 1em;
+}
+
+ul.tabs
+{
+	width: 100%;
+	border-bottom: 1px solid #999;
+	background-color: #ccc;
+	text-align: center;
+/*	margin-bottom: 1em;*/
+}
+
+ul.tabs li
+{
+	display: inline-block;
+	text-align: center;
+	padding: 0;
+}
+
+ul.tabs li :link
+{
+	display: inline-block;
+	text-decoration: none;
+	color: black;
+	padding: 0.5em 1em;
+}
+
+ul.tabs li :link.active
+{
+	background-color: white;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+	border-top: 1px solid #999;
+	border-bottom: 1px solid white;
+	margin-bottom: -1px;
+}
+
+#reaction_input_holder, #reaction_input_form, #reaction_upload_form
+{
+	text-align: center;
+	margin: auto;
+}
+
+#reaction_input_form, #reaction_upload_form
+{
+	padding: 1em 0;
+}
+
+#reaction_upload_form p
+{
+	padding: 0.5em;
+}
+
+#reaction_input_submit_buttons, #reaction_input_form fieldset
+{
+	padding-top: 1em;
+}
+
+#reaction_input_form fieldset select, #reaction_input_form fieldset input
+{
+	font-size: 150%;
+}
+
+#reaction_input_form fieldset textarea
+{
+	width: 40%;
+}
+
+#dsr_graph_applet_holder
+{
+	text-align: center;
+/*	width: 1000px;
+	height: 500px;*/
+	margin: 0 auto;
+/*	border: 1px solid #999;*/
+}
+
+#calculation_output_hider
+{
+	visibility: hidden;
+	height: 1px;
+}
+
+#calculation_output_holder p
+{
+	text-align: left;
+	margin: 1em;
+	padding: 1em;
+	border: 1px solid #999;
+	font-family: monospace;
+	font-size: 125%;
+	background-color: black;
+	color: white;
+}
+
+.blink
+{
+	text-decoration: blink;
+}
+
+.button
+{
+	text-decoration: none;
+	color: black;
+	background-color: #ddd;
+	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+	border: 1px solid #999;
+	border-radius: 2px;
+	padding: 2px 8px;
+	box-shadow: 1px 1px 1px #333;
+	font-size: 100%;
+}
+
+.button:hover
+{
+	background-color: #eee;
+	background-image: -ms-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: -moz-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: -o-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: linear-gradient(to bottom, #fff 0%, #ddd 100%);
+}
+
+.button.disabled
+{
+	color: #bbb;
+	box-shadow: none;
+}
+
+.button.disabled:hover
+{
+	background-color: #ddd;	
+	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+	cursor: default;
+}
