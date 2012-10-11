@@ -56,6 +56,18 @@ class Reaction
 	}
 
 	/*
+	 * Parse a string describing a reaction
+	 *
+	 * @param   string  $reactionString  The string describing the reaction.
+	 * @return  mixed   $reactants       If there is no error, returns a Reaction. Otherwise returns FALSE.
+	 */
+	private static function parseReactants($reactantString)
+	{
+		$reaction = false;
+		return $reaction;
+	}
+
+	/*
 	 * Parse a string describing one side of a reaction
 	 *
 	 * @param   string  $reactionString  The string describing the reaction.
@@ -134,6 +146,8 @@ class ReactionNetwork
 	public function exportReactionNetworkEquations($LaTeX = false)
 	{
 		$equations = '';
+		$numberOfReactions = count($this->reactions);
+		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText();
 		return $equations;
 	}
 
@@ -153,8 +167,7 @@ class ReactionNetwork
 		header('Content-Type: text/plain');
 		header('Content-Disposition: Attachment; filename=crn.txt');
 		header('Pragma: no-cache');
-		$numberOfReactions = count($this->reactions);
-		for($i = 0; $i < $numberOfReactions; ++$i) echo $this->reactions[$i]->exportAsText();
+		echo $this->exportReactionNetworkEquations();
 	}
 
 	public function generateStoichiometryMatrix()

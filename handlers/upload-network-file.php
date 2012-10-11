@@ -27,6 +27,7 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_network_file_inpu
 			if($finfo)
 			{
 				$mimetype = $finfo->file($_FILES['upload_network_file_input']['tmp_name']);
+				if($mimetype !== 'text/plain') $errors[] = 'File not in plain text format';
 			}
 			else
 			{
@@ -61,6 +62,19 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_network_file_inpu
 	}
 }
 else $errors[] = 'No file uploaded';
+
+if(!count($errors))
+{
+	$reactionNetwork = new ReactionNetwork();
+	$fhandle = fopen($_FILES['upload_network_file_input']['tmp_name'], 'r');
+	while(!feof($fhandle))
+	{
+		$reactionString = fgets($fhandle);
+		$newReaction = Reaction::parseReaction($reactionString);
+		if($newReaction) $reactionNetwork->addReaction($newReaction);
+		fclose($fhandle);
+	}
+}
 
 if(CRNDEBUG)
 {
