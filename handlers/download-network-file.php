@@ -6,10 +6,11 @@
  * suitable for upload to CoNtRol at a later date, or for
  * use with offline CRN analysis tools.
  *
- * @author     Pete Donnell <pete.donnell@port.ac.uk>
+ * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @copyright  University of Portsmouth 2012
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   08/10/2012
+ * @modified   10/10/2012
  */
 
 require_once('../includes/config.php');

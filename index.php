@@ -4,10 +4,11 @@
  *
  * This is the default page for CoNtRol
  *
- * @author     Pete Donnell <pete.donnell@port.ac.uk>
+ * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @copyright  University of Portsmouth 2012
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   04/10/2012
+ * @modified   10/10/2012
  */
 
 require_once('includes/header.php');
@@ -37,16 +38,16 @@ require_once('includes/header.php');
 						<a class="button disabled" id="dsr_graph_button" href="iframes/dsr-applet.php">View DSR graph</a>
 						<a class="button disabled" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
 						<!--a class="button disabled" id="download_network_file_button" href="handlers/download-network-file.php">Download reaction network file</a-->
-						<button class="button disabled" id="download_network_file_button" type="submit">Download reaction network file</button>
+						<button class="button disabled" id="download_network_file_button" type="submit" disabled="disabled">Download reaction network file</button>
 					</p>
 				</form>
-				<form id="reaction_upload_form" action="">
+				<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
 					<p>
 						<label for="reaction_upload_file">Choose a file to upload:</label>
-						<input type="file" id="reaction_upload_file" name="reaction_upload_file" />
+						<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
 					</p>
 					<p>
-						<input type="submit" value="Upload and process reaction network" />
+						<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
 					</p>
 				</form>
 			</div>
