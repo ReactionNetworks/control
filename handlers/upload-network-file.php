@@ -14,6 +14,7 @@
 
 require_once('../includes/config.php');
 require_once('../includes/classes.php');
+require_once('../includes/session.php');
 
 $errors = array();
 $mimetype = '';
@@ -72,8 +73,9 @@ if(!count($errors))
 		$reactionString = fgets($fhandle);
 		$newReaction = Reaction::parseReaction($reactionString);
 		if($newReaction) $reactionNetwork->addReaction($newReaction);
-		fclose($fhandle);
 	}
+	fclose($fhandle);
+	$_SESSION['reactionNetwork']=$reactionNetwork;
 }
 
 if(CRNDEBUG)
@@ -84,9 +86,12 @@ if(CRNDEBUG)
 	print_r($errors);
 	echo CLIENT_LINE_ENDING, CLIENT_LINE_ENDING, '$mimetype:', CLIENT_LINE_ENDING;
 	echo $mimetype;
+	echo CLIENT_LINE_ENDING, CLIENT_LINE_ENDING, '$_SESSION:', CLIENT_LINE_ENDING;
+	print_r($_SESSION);
 	echo CLIENT_LINE_ENDING, '</pre>';
 }
 else
 {
+	header('Location: '.SITE_URL);
 	//header('Location: '.SITE_URL);
 }

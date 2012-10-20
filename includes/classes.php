@@ -55,17 +55,7 @@ class Reaction
 		$this->reversible = $reversible;
 	}
 
-	/*
-	 * Parse a string describing a reaction
-	 *
-	 * @param   string  $reactionString  The string describing the reaction.
-	 * @return  mixed   $reactants       If there is no error, returns a Reaction. Otherwise returns FALSE.
-	 */
-	private static function parseReactants($reactantString)
-	{
-		$reaction = false;
-		return $reaction;
-	}
+
 
 	/*
 	 * Parse a string describing one side of a reaction
@@ -75,8 +65,9 @@ class Reaction
 	 */
 	private static function parseReactants($reactantString)
 	{
+		$reactantString = trim($reactantString);
 		if((strpos($reactantString, '>') !== false) or (strpos($reactantString, '-') !== false) or
-		   (strpos($reactantString, '<') !== false) or (strpos($reactantString, '=') !== false)) $reactants = false;
+		   (strpos($reactantString, '<') !== false) or (strpos($reactantString, '=') !== false)) return false;
 		else
 		{
 			$temp = '';
@@ -88,24 +79,113 @@ class Reaction
 			}
 			$reactants = explode('+', $temp);
 		}
-		return $reactants;
+		$numberOfReactants = count($reactants);
+		$reactantStoichiometries = array();	
+		for ($i=0;$i<$numberOfReactants;++$i)
+		{
+			if (is_numeric($reactants[$i])) return false;
+			else if (!is_numeric($reactants[$i][0])) $reactantStoichiometries[$reactants[$i]] = 1;
+			else 
+			{
+				$reactantLength = strlen($reactants[$i]);
+				$characterPos = 0;
+				for ($j=0;$j<$reactantLength;++$j)
+				{
+					if (!is_numeric($reactants[$i][$j])) $characterPos = $j;
+					if ($characterPos) break;				
+				} 			
+				$reactantStoichiometries[substr($reactants[$i],$characterPos)] = substr($reactants[$i],0,$characterPos);
+			}
+		}
+		return $reactantStoichiometries;
+	}
+
+
+/*
+	 * Parse a string describing both sides of a reaction
+	 *
+	 * @param   string  $reactionString  The string describing the reaction.
+	 * @return  mixed   $reaction       If there is no error, returns a reaction object. Otherwise returns FALSE.
+	 */
+	public static function parseReaction($reactionString)
+	{
+			$temp = '';
+			$reversible = true;
+			$reactionStringLength = strlen($reactionString);
+			// Remove whitespace
+			for($i = 0; $i < $reactionStringLength; ++$i)
+			{
+				if($reactionString{$i} !== ' ' and $reactionString{$i} !== '-' and $reactionString{$i} !== '=') $temp .= $reactionString{$i}; 
+			}
+		
+			$leftArrowPos = strpos($temp, '<');
+			$rightArrowPos = strpos($temp, '>');
+			
+			if ($leftArrowPos === false and $rightArrowPos === false) return false; 
+		else
+		 {
+				if ($leftArrowPos !== false and $rightArrowPos !== false)	
+				{
+					if ($leftArrowPos === $rightArrowPos-1)
+					{
+						$lhs = Reaction::parseReactants(substr($temp,0,$leftArrowPos));
+						$rhs = Reaction::parseReactants(substr($temp,$rightArrowPos+1));
+					}	
+						else return false;				
+				}
+				else if ($leftArrowPos!==false)
+				{
+						$rhs = Reaction::parseReactants(substr($temp,0,$leftArrowPos));
+						$lhs = Reaction::parseReactants(substr($temp,$leftArrowPos+1));
+						$reversible = false;
+				}	 	
+				else 
+				{
+						$lhs = Reaction::parseReactants(substr($temp,0,$rightArrowPos));
+						$rhs = Reaction::parseReactants(substr($temp,$rightArrowPos+1));
+						$reversible = false;
+				}	
+		 	} 
+		 	return new Reaction($lhs,$rhs,$reversible); 
+	/*	if((strpos($reactantString, '>') !== false) or (strpos($reactantString, '-') !== false) or
+		   (strpos($reactantString, '<') !== false) or (strpos($reactantString, '=') !== false)) $reactants = false;
+		else
+		{
+			
+			$reactants = explode('+', $temp);
+		}
+		return $reactants;*/
 	}
 
 	public function exportAsText()
 	{
-		$text = $this->leftHandSide[0];
-		$leftHandSideLength = count($this->leftHandSide);
-		$rightHandSideLength = count($this->rightHandSide);
-		for($i = 1; $i < $leftHandSideLength; ++$i) $text = $text.' + '.$this->leftHandSide[$i];
+	//	$text = $this->leftHandSide[0];
+		$text = '';
+	//	$leftHandSideLength = count($this->leftHandSide);
+  //	$rightHandSideLength = count($this->rightHandSide);
+	//	for($i = 1; $i < $leftHandSideLength; ++$i) $text = $text.' + '.$this->leftHandSide[$i];
 
+		foreach($this->leftHandSide as $reactant => $stoichiometry)
+		{
+			if (strlen($text)) $text .= ' + ';
+			if ($stoichiometry == 1) $text .= $reactant;
+			else $text = $text.$stoichiometry.$reactant;		
+		}
 		if($this->reversible) $text .= ' <> ';
 		else $text .= ' > ';
+		
+		foreach($this->rightHandSide as $reactant => $stoichiometry)
+		{
+			if (strlen($text)) $text .= ' + ';
+			if ($stoichiometry == 1) $text .= $reactant;
+			else $text = $text.$stoichiometry.$reactant;		
+		}
 
-		if($rightHandSideLength)
+	/*	if($rightHandSideLength)
 		{
 			$text .= $this->rightHandSide[0];
 			for($i = 1; $i < $rightHandSideLength; ++$i) $text = $text.' + '.$this->rightHandSide[$i];
-		}
+		}*/
 
 		$text .= CLIENT_LINE_ENDING;
 
