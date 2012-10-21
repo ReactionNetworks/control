@@ -25,3 +25,14 @@ function sanitise($text)
 {
 	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false);
 }
+
+function printMatrix($matrix)
+{
+	$text = '';
+	foreach($matrix as $row)
+	{
+		foreach($row as $element) $text = $text.' '.$element;	
+		$text.=PHP_EOL;	
+	}
+	return $text;		
+}

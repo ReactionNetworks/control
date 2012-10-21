@@ -54,6 +54,7 @@ for($i = 0; $i < $numberOfReactions; ++$i)
 	}
 
 	$reactions->addReaction(new Reaction($leftHandSide, $rightHandSide, $reversible));
+	$_SESSION['reactionNetwork']=$reactions;
 }
 
 if(CRNDEBUG)
@@ -63,6 +64,12 @@ if(CRNDEBUG)
 	print_r($_POST);
 	echo PHP_EOL, PHP_EOL, '$reactions:', PHP_EOL;
 	print_r($reactions);
+	echo PHP_EOL, PHP_EOL, '$sourceStoichiometryMatrix:', PHP_EOL;
+	print_r($reactions->generateSourceStoichiometryMatrix());
+	echo PHP_EOL, PHP_EOL, '$targetStoichiometryMatrix:', PHP_EOL;
+	print_r($reactions->generateTargetStoichiometryMatrix());
+	echo PHP_EOL, PHP_EOL, '$stoichiometryMatrix:', PHP_EOL;
+	print_r($reactions->generateStoichiometryMatrix());
 	die('</pre>');
 }
 else

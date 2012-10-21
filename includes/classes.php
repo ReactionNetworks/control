@@ -159,11 +159,7 @@ class Reaction
 
 	public function exportAsText()
 	{
-	//	$text = $this->leftHandSide[0];
 		$text = '';
-	//	$leftHandSideLength = count($this->leftHandSide);
-  //	$rightHandSideLength = count($this->rightHandSide);
-	//	for($i = 1; $i < $leftHandSideLength; ++$i) $text = $text.' + '.$this->leftHandSide[$i];
 
 		foreach($this->leftHandSide as $reactant => $stoichiometry)
 		{
@@ -181,15 +177,60 @@ class Reaction
 			else $text = $text.$stoichiometry.$reactant;		
 		}
 
-	/*	if($rightHandSideLength)
-		{
-			$text .= $this->rightHandSide[0];
-			for($i = 1; $i < $rightHandSideLength; ++$i) $text = $text.' + '.$this->rightHandSide[$i];
-		}*/
-
 		$text .= CLIENT_LINE_ENDING;
 
 		return $text;
+	}
+
+public function exportLHSAsText()
+	{
+		$text = '';
+
+		foreach($this->leftHandSide as $reactant => $stoichiometry)
+		{
+			if (strlen($text)) $text .= ' + ';
+			if ($stoichiometry == 1) $text .= $reactant;
+			else $text = $text.$stoichiometry.$reactant;		
+		}
+		
+		return $text;
+	}
+	
+	public function exportRHSAsText()
+	{
+		$text = '';
+		
+		foreach($this->rightHandSide as $reactant => $stoichiometry)
+		{
+			if (strlen($text)) $text .= ' + ';
+			if ($stoichiometry == 1) $text .= $reactant;
+			else $text = $text.$stoichiometry.$reactant;		
+		}
+
+		return $text;
+	}
+	
+	public function isReversible()
+	{
+		return $this->reversible;	
+	}
+
+	public function getReactants()
+	{
+		$reactants=array();
+		foreach($this->leftHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+		foreach($this->rightHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+		return $reactants;
+	}
+	
+	public function getLeftHandSide()
+	{
+		return $this->leftHandSide;	
+	}
+	
+	public function getRightHandSide()
+	{
+		return $this->rightHandSide;	
 	}
 }
 
@@ -250,10 +291,107 @@ class ReactionNetwork
 		echo $this->exportReactionNetworkEquations();
 	}
 
+	public function generateFieldsetHTML()
+	{
+		if (count($this->reactions))
+		{
+			foreach($this->reactions as $reaction) 
+			{			
+			echo '<fieldset class="reaction_input_row">
+						<input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', $reaction->exportLHSAsText(), '" />
+						<select class="reaction_direction" name="reaction_direction[]">
+							<option value="left">&larr;</option>
+							<option value="both"';
+							if ($reaction->isReversible()) echo ' selected="selected"';
+							echo '>&#x21cc;</option>
+							<option value="right"';
+							if (!$reaction->isReversible()) echo ' selected="selected"';
+							echo '>&rarr;</option>
+						</select>
+						<input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
+					</fieldset><!-- reaction_input_row -->';	
+			}					
+		}
+		else echo 	
+		'<fieldset class="reaction_input_row">
+						<input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
+						<select class="reaction_direction" name="reaction_direction[]">
+							<option value="left">&larr;</option>
+							<option value="both" selected="selected">&#x21cc;</option>
+							<option value="right">&rarr;</option>
+						</select>
+						<input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
+					</fieldset><!-- reaction_input_row -->';		
+	}
+
+	private function generateReactantList()
+	{
+		$reactantList=array();
+		foreach($this->reactions as $reaction)
+		{
+			foreach($reaction->getReactants() as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
+		}	
+		return $reactantList;
+	}
+
+	public function generateSourceStoichiometryMatrix()
+	{
+		$sourceStoichiometryMatrix=array();
+		$reactantList=$this->generateReactantList();
+		$numberOfReactants=count($reactantList);
+		for($i=0;$i<$numberOfReactants; ++$i)
+		{
+			$sourceStoichiometryMatrix[]=array();	
+			
+			foreach($this->reactions as $reaction)
+			{
+				$matrixEntry=0;
+				foreach($reaction->getLeftHandSide() as $reactant => $stoichiometry)
+				{
+					if ($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
+				}	
+				$sourceStoichiometryMatrix[$i][]=$matrixEntry;
+			}
+		}
+		return $sourceStoichiometryMatrix;
+	}
+
+	public function generateTargetStoichiometryMatrix()
+	{
+		$targetStoichiometryMatrix=array();
+		$reactantList=$this->generateReactantList();
+		$numberOfReactants=count($reactantList);
+		for($i=0;$i<$numberOfReactants; ++$i)
+		{
+			$targetStoichiometryMatrix[]=array();	
+			
+			foreach($this->reactions as $reaction)
+			{
+				$matrixEntry=0;
+				foreach($reaction->getRightHandSide() as $reactant => $stoichiometry)
+				{
+					if ($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
+				}	
+				$targetStoichiometryMatrix[$i][]=$matrixEntry;
+			}
+		}
+		return $targetStoichiometryMatrix;
+	}
+
 	public function generateStoichiometryMatrix()
 	{
-		return;
+		$stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
+		$sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
+		$numberOfReactants = count($stoichiometryMatrix);
+		$numberOfReactions = count($stoichiometryMatrix[0]);
+		for ($i=0;$i<$numberOfReactants;++$i)
+		{
+			for ($j=0;$j<$numberOfReactions;++$j) $stoichiometryMatrix[$i][$j]-=$sourceStoichiometryMatrix[$i][$j];		
+		}
+		return $stoichiometryMatrix;
 	}
+
+
 
 	public function generateReactionRateJacobianMatrix()
 	{

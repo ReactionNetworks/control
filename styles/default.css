@@ -89,11 +89,22 @@ ul.tabs li :link.active
 
 #dsr_graph_applet_holder
 {
-	text-align: center;
-/*	width: 1000px;
-	height: 500px;*/
-	margin: 0 auto;
-/*	border: 1px solid #999;*/
+/*	text-align: center;*/
+	position: absolute;
+	z-index: 1;
+	top: 10px;
+	left: -10000px;
+  width: 1000px;
+/*height: 500px;*/
+	margin-left: -500px;
+	border: 1px solid #999;
+	background-color: white;
+	text-align: right;
+}
+
+#dsr_graph_close_button
+{
+
 }
 
 #calculation_output_hider

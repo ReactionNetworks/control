@@ -195,4 +195,14 @@ $(document).ready(function()
 	});
 
 	$('.fancybox').fancybox({autoDimensions: false, width: 1000, height: 700});
+	$('#dsr_graph_button').click(function(e)
+	{
+		e.preventDefault();
+		$('#dsr_graph_applet_holder').css('left', '50%');
+	});
+  $('#dsr_graph_close_button').click(function(e)
+	{
+		e.preventDefault();
+		$('#dsr_graph_applet_holder').css('left', '-10000px');
+	});
 });
