@@ -23,8 +23,9 @@ ini_set('session.use_only_cookies', true);
 // Check if the client is on a secure connection
 $https = false;
 if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] != 'off') $https = true;
-// Name the session, to avoid possible conflicts with other sessions on the same host
-session_name('control');
 // Set session cookie, restrict it to the CoNtRol directory and host, if client is on secure connection then restrict cookie to secure connections too, and disallow JavaScript access
 session_set_cookie_params(0, '/'.SITE_DIR.'/', $_SERVER['HTTP_HOST'], $https, true);
+// Name the session, to avoid possible conflicts with other sessions on the same host
+session_name('control');
 session_start();
+if (!isset($_SESSION['tempfile'])) $_SESSION['tempfile'] = TEMP_FILE_DIR.uniqid();

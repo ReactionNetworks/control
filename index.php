@@ -19,7 +19,7 @@ require_once('includes/header.php');
 			</ul>
 
 			<div id="reaction_input_holder">
-				<form id="reaction_input_form" action="handlers/process-network.php" method="post">
+				<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
 					<p>
 						<a class="button" id="add_reaction_button" href="#">Add new reaction</a>
 						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="remove_reaction_button" href="#">Remove last reaction</a>

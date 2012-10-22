@@ -160,22 +160,10 @@ class Reaction
 	public function exportAsText()
 	{
 		$text = '';
-
-		foreach($this->leftHandSide as $reactant => $stoichiometry)
-		{
-			if (strlen($text)) $text .= ' + ';
-			if ($stoichiometry == 1) $text .= $reactant;
-			else $text = $text.$stoichiometry.$reactant;		
-		}
+		$text.=$this->exportLHSAsText();
 		if($this->reversible) $text .= ' <> ';
 		else $text .= ' > ';
-		
-		foreach($this->rightHandSide as $reactant => $stoichiometry)
-		{
-			if (strlen($text)) $text .= ' + ';
-			if ($stoichiometry == 1) $text .= $reactant;
-			else $text = $text.$stoichiometry.$reactant;		
-		}
+		$text.=$this->exportRHSAsText();
 
 		$text .= CLIENT_LINE_ENDING;
 
@@ -218,8 +206,10 @@ public function exportLHSAsText()
 	public function getReactants()
 	{
 		$reactants=array();
-		foreach($this->leftHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
-		foreach($this->rightHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+		if ($this->leftHandSide) foreach($this->leftHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+		else return false;
+		if ($this->rightHandSide) foreach($this->rightHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+		else return false;
 		return $reactants;
 	}
 	
@@ -255,7 +245,12 @@ class ReactionNetwork
 	 */
 	public function addReaction($reaction)
 	{
-		$this->reactions[] = $reaction;
+		if ($reaction) 
+		{
+			$this->reactions[] = $reaction;
+			return true;
+		}
+		else return false;
 	}
 
 	/*
@@ -329,7 +324,8 @@ class ReactionNetwork
 		$reactantList=array();
 		foreach($this->reactions as $reaction)
 		{
-			foreach($reaction->getReactants() as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
+			$reactants = $reaction->getReactants(); 
+			if ($reactants) foreach($reactants as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
 		}	
 		return $reactantList;
 	}

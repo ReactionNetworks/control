@@ -33,4 +33,8 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'Macintosh;') !== false) $line_ending = "
 
 define('CLIENT_LINE_ENDING', $line_ending, false);
 
-define('CRNDEBUG', true, false);
+define('CRNDEBUG', false, false);
+
+define('TEMP_FILE_DIR', '/var/tmp/', false);
+
+define('BINARY_FILE_DIR', '../bin/', false);

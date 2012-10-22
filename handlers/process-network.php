@@ -21,7 +21,7 @@ require_once('../includes/session.php');
 if (count($_POST))
 {
 	$reactions = new ReactionNetwork();
-
+	$output = '';
 	$numberOfReactions = count($_POST['reaction_direction']);
 
 	for($i = 0; $i < $numberOfReactions; ++$i)
@@ -50,18 +50,19 @@ if (count($_POST))
 				// Throw exception?
 				break;
 		}
-	
-		$reactions->addReaction(new Reaction($leftHandSide, $rightHandSide, $reversible));
-		$_SESSION['reactionNetwork']=$reactions;
+		$reaction = new Reaction($leftHandSide, $rightHandSide, $reversible);	
+		if (!$reactions->addReaction($reaction) or !$reaction->getReactants()) $output .= 'Reaction '.($i+1).' is invalid.<br />';
 	}
-
-	if (isset($_POST['ajax']) and $_POST['ajax']==='true')
+	$_SESSION['reactionNetwork']=$reactions;
+	if (strlen($output)) echo $output;
+	if (CRNDEBUG) print_r($_SESSION['reactionNetwork']);
+	/*if (isset($_POST['ajax']) and $_POST['ajax']==='true')
 	{
 		
 	}
 	else 
 	{
-		$filename = '/var/tmp/crnmatrix.txt'; 
+		$filename = $_SESSION['tempfile']; 
 		$ssdBinary = 'test';
 		$output = '';
 		$returnValue = 0;
@@ -98,5 +99,5 @@ if (true)
     	echo "The file $filename is not writable";
     }
 		//echo '<pre>', printMatrix($reactions->generateStoichiometryMatrix());
-	}	
+	}	*/
 }

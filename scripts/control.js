@@ -94,8 +94,43 @@ function enableButtons()
 	$('#download_network_file_button').removeAttr('disabled');
 }
 
+function testSSDonly()
+{
+	var url = 'handlers/ssd-test.php';
+	$.get(url, null, function(returndata) {showTestOutput(returndata);});
+}
+
+function showTestOutput(output)
+{
+	$('#calculation_output_holder').append(output);
+}
+
+function resetPopup()
+{
+	$('#calculation_output_holder').html('<p>Processing...<span class="blink">_</span></p>');
+}
+
+var validNetwork=true;
+function saveNetwork()
+{
+	validNetwork=true;
+	var url = 'handlers/process-network.php';
+	var reactionsLeftHandSide = new Array();
+	var temp = $('.reaction_left_hand_side');
+	for (i=0;i<temp.length;++i) reactionsLeftHandSide.push(temp.val()); 		
+  var reactionsRightHandSide = new Array();
+	temp = $('.reaction_right_hand_side');
+	for (i=0;i<temp.length;++i) reactionsRightHandSide.push(temp.val()); 	
+  var reactionsDirection = new Array();
+	temp = $('.reaction_direction :selected');
+	for (i=0;i<temp.length;++i) reactionsDirection.push(temp.val()); 	
+	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>');validNetwork=false;}});
+	return validNetwork;
+}
+
 $(document).ready(function()
 {
+	
 	$('#add_reaction_button').click(function()
 	{
 		addReaction();
@@ -195,6 +230,18 @@ $(document).ready(function()
 	});
 
 	$('.fancybox').fancybox({autoDimensions: false, width: 1000, height: 700});
+	$('#process_network_button').click(function()
+	{
+		if(!$(this).hasClass('disabled')) 
+		{		
+			resetPopup();
+			if (saveNetwork())
+			{				
+				testSSDonly();
+			}
+		}
+		return false;
+	});	
 	$('#dsr_graph_button').click(function(e)
 	{
 		e.preventDefault();
