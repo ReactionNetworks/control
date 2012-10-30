@@ -116,14 +116,17 @@ function saveNetwork()
 	validNetwork=true;
 	var url = 'handlers/process-network.php';
 	var reactionsLeftHandSide = new Array();
-	var temp = $('.reaction_left_hand_side');
-	for (i=0;i<temp.length;++i) reactionsLeftHandSide.push(temp.val()); 		
+	//var temp = $('.reaction_left_hand_side');
+	//for (i=0;i<temp.length;++i) reactionsLeftHandSide.push(temp.val());
+        $.each($('.reaction_left_hand_side'), function(index,value){reactionsLeftHandSide.push(value.value)}); 		
   var reactionsRightHandSide = new Array();
-	temp = $('.reaction_right_hand_side');
-	for (i=0;i<temp.length;++i) reactionsRightHandSide.push(temp.val()); 	
+	//temp = $('.reaction_right_hand_side');
+	//for (i=0;i<temp.length;++i) reactionsRightHandSide.push(temp.val()); 	
+        $.each($('.reaction_right_hand_side'), function(index,value){reactionsRightHandSide.push(value.value)});
   var reactionsDirection = new Array();
-	temp = $('.reaction_direction :selected');
-	for (i=0;i<temp.length;++i) reactionsDirection.push(temp.val()); 	
+	//temp = $('.reaction_direction :selected');
+	//for (i=0;i<temp.length;++i) reactionsDirection.push(temp.val()); 	
+        $.each($('.reaction_direction :selected'), function(index,value){reactionsDirection.push(value.value)});
 	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>');validNetwork=false;}});
 	return validNetwork;
 }
