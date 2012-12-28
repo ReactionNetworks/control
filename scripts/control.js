@@ -1,13 +1,12 @@
 /**
  * Main CoNtRol JavaScript file
  *
- * Written in PHP to simplify colours, etc.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @copyright  University of Portsmouth 2012
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   10/10/2012
+ * @modified   28/12/2012
  */
 
 /**
@@ -133,6 +132,7 @@ function saveNetwork()
 
 $(document).ready(function()
 {
+	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
 	
 	$('#add_reaction_button').click(function()
 	{
@@ -231,8 +231,11 @@ $(document).ready(function()
 		$('#upload_network_file_button').removeClass('disabled');
 		$('#upload_network_file_button').removeAttr('disabled');
 	});
-
-	$('.fancybox').fancybox({autoDimensions: false, width: 1000, height: 700});
+ var popupWidth = screen.width - 256;
+ var popupHeight = screen.height - 256;
+ $('#dsr_graph_applet_holder').css('width', popupWidth);
+ $('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);
+	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
 	$('#process_network_button').click(function()
 	{
 		if(!$(this).hasClass('disabled')) 
@@ -248,7 +251,7 @@ $(document).ready(function()
 	$('#dsr_graph_button').click(function(e)
 	{
 		e.preventDefault();
-		$('#dsr_graph_applet_holder').css('left', '50%');
+		if(!$(this).hasClass('disabled') && deployJava.getJREs().length) $('#dsr_graph_applet_holder').css('left', '50%');
 	});
   $('#dsr_graph_close_button').click(function(e)
 	{
