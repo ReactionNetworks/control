@@ -3,18 +3,41 @@
  *
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   28/12/2012
+ * @modified   07/01/2013
  */
 
+/**
+ * Warns about invalid character input
+ */
+	function validateKeyPress(inputElement)
+	{
+		if(inputElement.val()[0] == '+') alert('A set of reactants cannot begin with a +');
+		var invalidCharacters = new Array('<', '>', '-', '=');
+		for(i=0; i<invalidCharacters.length;++i)
+		{
+			if (inputElement.val().indexOf(invalidCharacters[i]) > -1)
+			{
+				inputElement.val( inputElement.val().replace(invalidCharacters[i], ''));
+				//alert('You entered the following invalid character: '+invalidCharacters[i]);
+				$('#invalid_character_span').html(invalidCharacters[i]);
+				var position = inputElement.position();
+				$('#hidden_character_warning').css('top', position.top + 48);
+				$('#hidden_character_warning').css('left', position.left);
+				$('#hidden_character_warning').show();
+				setTimeout(function() {$('#hidden_character_warning').hide();}, 1500);
+			}
+		}
+	} 
+ 
 /**
  * Adds a row to the reaction input form
  */
 function addReaction()
 {
-	$('#reaction_input_submit_buttons').before('<fieldset class="reaction_input_row"> <input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	$('#reaction_input_submit_buttons').before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
 	$('select.reaction_direction').each(function()
 	{
@@ -29,6 +52,7 @@ function addReaction()
 		$(this).keyup(function()
 		{
 			enableButtons();
+			validateKeyPress($(this));
 		});
 	});
 
@@ -37,6 +61,7 @@ function addReaction()
 		$(this).keyup(function()
 		{
 			enableButtons();
+			validateKeyPress($(this));
 		});
 	});
 }
@@ -210,6 +235,7 @@ $(document).ready(function()
 		$(this).keyup(function()
 		{
 			enableButtons();
+			validateKeyPress($(this));
 		});
 	});
 
@@ -218,6 +244,7 @@ $(document).ready(function()
 		$(this).keyup(function()
 		{
 			enableButtons();
+			validateKeyPress($(this));
 		});
 	});
 

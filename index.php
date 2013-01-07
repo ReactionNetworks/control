@@ -5,10 +5,10 @@
  * This is the default page for CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   28/12/2012
+ * @modified   07/01/2013
  */
 
 require_once('includes/header.php');
@@ -32,13 +32,13 @@ require_once('includes/header.php');
 						?>
 
 					<fieldset class="reaction_input_row">
-						<input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
+						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
 							<option value="both" selected="selected">&#x21cc;</option>
 							<option value="right">&rarr;</option>
 						</select>
-						<input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
+						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
 					</fieldset><!-- reaction_input_row -->
 
 					<?php
@@ -93,5 +93,10 @@ else echo '<p>The DSR graph requires Java to view, which is not installed on you
 					</p>
 				</div>
 			</div>
+				<div id="hidden_character_warning">
+				<p>
+				You entered the following invalid character: <span id="invalid_character_span"></span>
+				</p>
+				</div>
 <?php
 require_once('includes/footer.php');

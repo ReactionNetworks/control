@@ -3,10 +3,10 @@
  *
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   28/12/2012
+ * @modified   07/01/2013
  */
 
 *
@@ -172,3 +172,16 @@ ul.tabs li :link.active
 	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
 	cursor: default;
 }
+
+#hidden_character_warning
+{
+	display: none;	
+	padding: 4px;
+	z-index: 1;
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	border: 1px solid #333;
+	box-shadow: 2px 2px #000;
+	background-color: #EEE;
+	}
