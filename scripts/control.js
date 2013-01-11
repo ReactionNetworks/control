@@ -31,10 +31,10 @@
 			}
 		}
 		var validInput = true;
+		$('#missing_reactant_warning').hide();
 		$('.reaction_left_hand_side').each(function()
 		{
 			$(this).css('border-color', '');
-			$('#missing_reactant_warning').hide();
 			if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
 			{
 				validInput = false;
@@ -48,7 +48,6 @@
 		$('.reaction_right_hand_side').each(function()
 		{
 			$(this).css('border-color', '');
-			$('#missing_reactant_warning').hide();
 			if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
 			{
 				validInput = false;

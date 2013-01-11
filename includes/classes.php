@@ -84,7 +84,7 @@ class Reaction
 		for ($i=0;$i<$numberOfReactants;++$i)
 		{
 			if (is_numeric($reactants[$i])) return false;
-			else if (!is_numeric($reactants[$i][0])) $reactantStoichiometries[$reactants[$i]] = 1;
+			else if ($reactants[$i] and !is_numeric($reactants[$i][0])) $reactantStoichiometries[$reactants[$i]] = 1;
 			else
 			{
 				$reactantLength = strlen($reactants[$i]);
