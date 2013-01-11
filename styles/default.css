@@ -1,12 +1,12 @@
 /**
  * Default stylesheet for CoNtRol
  *
+ * Written in PHP to simplify keeping track of colours, etc.
  *
- * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
- * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @author     Pete Donnell <pete.donnell@port.ac.uk>
+ * @copyright  University of Portsmouth 2012
  * @created    02/10/2012
- * @modified   07/01/2013
+ * @modified   04/10/2012
  */
 
 *
@@ -88,22 +88,11 @@ ul.tabs li :link.active
 
 #dsr_graph_applet_holder
 {
-/*	text-align: center;*/
-	position: absolute;
-	z-index: 1;
-	top: 64px;
-	left: -10000px;
-  width: 800px;
-/*height: 500px;*/
-	margin-left: -400px;
-	border: 1px solid #999;
-	background-color: white;
-	text-align: right;
-}
-
-#dsr_graph_close_button
-{
-
+	text-align: center;
+/*	width: 1000px;
+	height: 500px;*/
+	margin: 0 auto;
+/*	border: 1px solid #999;*/
 }
 
 #calculation_output_hider
@@ -172,16 +161,3 @@ ul.tabs li :link.active
 	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
 	cursor: default;
 }
-
-#hidden_character_warning
-{
-	display: none;	
-	padding: 4px;
-	z-index: 1;
-	position: absolute;
-	top: 100px;
-	left: 100px;
-	border: 1px solid #333;
-	box-shadow: 2px 2px #000;
-	background-color: #EEE;
-	}

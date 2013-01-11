@@ -1,43 +1,20 @@
 /**
  * Main CoNtRol JavaScript file
  *
+ * Written in PHP to simplify colours, etc.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
- * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @copyright  University of Portsmouth 2012
  * @created    01/10/2012
- * @modified   07/01/2013
+ * @modified   04/10/2012
  */
 
-/**
- * Warns about invalid character input
- */
-	function validateKeyPress(inputElement)
-	{
-		if(inputElement.val()[0] == '+') alert('A set of reactants cannot begin with a +');
-		var invalidCharacters = new Array('<', '>', '-', '=');
-		for(i=0; i<invalidCharacters.length;++i)
-		{
-			if (inputElement.val().indexOf(invalidCharacters[i]) > -1)
-			{
-				inputElement.val( inputElement.val().replace(invalidCharacters[i], ''));
-				//alert('You entered the following invalid character: '+invalidCharacters[i]);
-				$('#invalid_character_span').html(invalidCharacters[i]);
-				var position = inputElement.position();
-				$('#hidden_character_warning').css('top', position.top + 48);
-				$('#hidden_character_warning').css('left', position.left);
-				$('#hidden_character_warning').show();
-				setTimeout(function() {$('#hidden_character_warning').hide();}, 1500);
-			}
-		}
-	} 
- 
 /**
  * Adds a row to the reaction input form
  */
 function addReaction()
 {
-	$('#reaction_input_submit_buttons').before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	$('#reaction_input_submit_buttons').before('<fieldset class="reaction_input_row"> <input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
 	$('select.reaction_direction').each(function()
 	{
@@ -52,7 +29,6 @@ function addReaction()
 		$(this).keyup(function()
 		{
 			enableButtons();
-			validateKeyPress($(this));
 		});
 	});
 
@@ -61,7 +37,6 @@ function addReaction()
 		$(this).keyup(function()
 		{
 			enableButtons();
-			validateKeyPress($(this));
 		});
 	});
 }
@@ -115,50 +90,10 @@ function enableButtons()
 	$('#dsr_graph_button').removeClass('disabled');
 	$('#process_network_button').removeClass('disabled');
 	$('#download_network_file_button').removeClass('disabled');
-	$('#download_network_file_button').removeAttr('disabled');
-}
-
-function testSSDonly()
-{
-	var url = 'handlers/ssd-test.php';
-	$.get(url, null, function(returndata) {showTestOutput(returndata);});
-}
-
-function showTestOutput(output)
-{
-	$('#calculation_output_holder').append(output);
-}
-
-function resetPopup()
-{
-	$('#calculation_output_holder').html('<p>Processing...<span class="blink">_</span></p>');
-}
-
-var validNetwork=true;
-function saveNetwork()
-{
-	validNetwork=true;
-	var url = 'handlers/process-network.php';
-	var reactionsLeftHandSide = new Array();
-	//var temp = $('.reaction_left_hand_side');
-	//for (i=0;i<temp.length;++i) reactionsLeftHandSide.push(temp.val());
-        $.each($('.reaction_left_hand_side'), function(index,value){reactionsLeftHandSide.push(value.value)}); 		
-  var reactionsRightHandSide = new Array();
-	//temp = $('.reaction_right_hand_side');
-	//for (i=0;i<temp.length;++i) reactionsRightHandSide.push(temp.val()); 	
-        $.each($('.reaction_right_hand_side'), function(index,value){reactionsRightHandSide.push(value.value)});
-  var reactionsDirection = new Array();
-	//temp = $('.reaction_direction :selected');
-	//for (i=0;i<temp.length;++i) reactionsDirection.push(temp.val()); 	
-        $.each($('.reaction_direction :selected'), function(index,value){reactionsDirection.push(value.value)});
-	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>');validNetwork=false;}});
-	return validNetwork;
 }
 
 $(document).ready(function()
 {
-	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
-	
 	$('#add_reaction_button').click(function()
 	{
 		addReaction();
@@ -235,7 +170,6 @@ $(document).ready(function()
 		$(this).keyup(function()
 		{
 			enableButtons();
-			validateKeyPress($(this));
 		});
 	});
 
@@ -244,7 +178,6 @@ $(document).ready(function()
 		$(this).keyup(function()
 		{
 			enableButtons();
-			validateKeyPress($(this));
 		});
 	});
 
@@ -253,36 +186,5 @@ $(document).ready(function()
 		if($(this).hasClass('disabled')) e.preventDefault();
 	});
 
-	$('#upload_network_file_input').change(function()
-	{
-		$('#upload_network_file_button').removeClass('disabled');
-		$('#upload_network_file_button').removeAttr('disabled');
-	});
- var popupWidth = screen.width - 256;
- var popupHeight = screen.height - 256;
- $('#dsr_graph_applet_holder').css('width', popupWidth);
- $('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);
-	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
-	$('#process_network_button').click(function()
-	{
-		if(!$(this).hasClass('disabled')) 
-		{		
-			resetPopup();
-			if (saveNetwork())
-			{				
-				testSSDonly();
-			}
-		}
-		return false;
-	});	
-	$('#dsr_graph_button').click(function(e)
-	{
-		e.preventDefault();
-		if(!$(this).hasClass('disabled') && deployJava.getJREs().length) $('#dsr_graph_applet_holder').css('left', '50%');
-	});
-  $('#dsr_graph_close_button').click(function(e)
-	{
-		e.preventDefault();
-		$('#dsr_graph_applet_holder').css('left', '-10000px');
-	});
+	$('.fancybox').fancybox({autoDimensions: false, width: 1000, height: 700});
 });
