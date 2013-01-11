@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   07/01/2013
+ * @modified   11/01/2013
  */
 
 *
@@ -61,6 +61,11 @@ ul.tabs li :link.active
 	margin: auto;
 }
 
+#reaction_input_holder p:first-child
+{
+	margin-bottom: 1em;
+}
+
 #reaction_input_form, #reaction_upload_form
 {
 	padding: 1em 0;
@@ -71,14 +76,34 @@ ul.tabs li :link.active
 	padding: 0.5em;
 }
 
-#reaction_input_submit_buttons, #reaction_input_form fieldset
+#reaction_input_submit_buttons
 {
-	padding-top: 1em;
+	position:absolute;
+	left:0; 
+	top: 50%;
+	margin-top: -4em;
 }
 
-#reaction_input_form fieldset select, #reaction_input_form fieldset input
+#reaction_input_submit_buttons a, #reaction_input_submit_buttons button
+{
+	display:block;
+	margin: 5px 0;
+}
+
+#reaction_input_form fieldset
+{
+	/*margin-top: 1em;*/
+	padding-bottom: 1em;
+}
+
+#reaction_input_form fieldset select, #reaction_input_form fieldset input, #add_reaction_button, #remove_reaction_button
 {
 	font-size: 150%;
+}
+
+#remove_reaction_button
+{
+	margin-top: 28em;
 }
 
 #reaction_input_form fieldset textarea
@@ -106,7 +131,7 @@ ul.tabs li :link.active
 
 }
 
-#calculation_output_hider
+#calculation_output_hider, #reaction_upload_form_hider
 {
 	visibility: hidden;
 	height: 1px;
@@ -173,7 +198,7 @@ ul.tabs li :link.active
 	cursor: default;
 }
 
-#hidden_character_warning
+#hidden_character_warning, #missing_reactant_warning
 {
 	display: none;	
 	padding: 4px;

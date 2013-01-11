@@ -8,22 +8,20 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   07/01/2013
+ * @modified   11/01/2013
  */
 
 require_once('includes/header.php');
 ?>
-			<ul class="tabs">
+			<!--ul class="tabs">
 				<li><a href="#reaction_input_form">Input reactions manually</a></li>
 				<li><a href="#reaction_upload_form">Upload reaction file</a></li>
-			</ul>
+			</ul-->
 
 			<div id="reaction_input_holder">
 				<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
 					<p>
-						<a class="button" id="add_reaction_button" href="#">Add new reaction</a>
-						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="remove_reaction_button" href="#">Remove last reaction</a>
-						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
+						<a class="button" id="add_reaction_button" href="#" title="Add new reaction">+</a>
 					</p>
 					<?php
 					if(isset($_SESSION['reactionNetwork'])) echo $_SESSION['reactionNetwork']->generateFieldsetHTML();
@@ -40,6 +38,9 @@ require_once('includes/header.php');
 						</select>
 						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
 					</fieldset><!-- reaction_input_row -->
+					<p>
+						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
+					</p>
 
 					<?php
 					}
@@ -49,18 +50,22 @@ require_once('includes/header.php');
 						<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
 						<!--a class="button disabled" id="download_network_file_button" href="handlers/download-network-file.php">Download reaction network file</a-->
 						<button class="button disabled" id="download_network_file_button" type="submit" disabled="disabled">Download reaction network file</button>
+						<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
+						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
 					</p>
 				</form>
 				
-				<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
-					<p>
-						<label for="reaction_upload_file">Choose a file to upload:</label>
-						<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
-					</p>
-					<p>
-						<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
-					</p>
-				</form>
+				<div id="reaction_upload_form_hider">
+					<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
+						<p>
+							<label for="reaction_upload_file">Choose a file to upload:</label>
+							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
+						</p>
+						<p>
+							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
+						</p>
+					</form>
+				</div>
 			</div>
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') === FALSE):
@@ -93,10 +98,15 @@ else echo '<p>The DSR graph requires Java to view, which is not installed on you
 					</p>
 				</div>
 			</div>
-				<div id="hidden_character_warning">
+			<div id="hidden_character_warning">
 				<p>
-				You entered the following invalid character: <span id="invalid_character_span"></span>
+					You entered the following invalid character: <span id="invalid_character_span"></span>
 				</p>
-				</div>
+			</div>
+			<div id="missing_reactant_warning">
+				<p>
+					There is a reactant missing.
+				</p>
+			</div>
 <?php
 require_once('includes/footer.php');

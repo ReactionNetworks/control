@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   07/01/2013
+ * @modified   11/01/2013
  */
 
 /**
@@ -14,7 +14,7 @@
  */
 	function validateKeyPress(inputElement)
 	{
-		if(inputElement.val()[0] == '+') alert('A set of reactants cannot begin with a +');
+		//if(inputElement.val()[0] == '+') alert('A set of reactants cannot begin with a +');
 		var invalidCharacters = new Array('<', '>', '-', '=');
 		for(i=0; i<invalidCharacters.length;++i)
 		{
@@ -30,6 +30,37 @@
 				setTimeout(function() {$('#hidden_character_warning').hide();}, 1500);
 			}
 		}
+		var validInput = true;
+		$('.reaction_left_hand_side').each(function()
+		{
+			$(this).css('border-color', '');
+			$('#missing_reactant_warning').hide();
+			if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
+			{
+				validInput = false;
+				$(this).css('border-color', 'red');
+				var position = inputElement.position();
+				$('#missing_reactant_warning').css('top', position.top + 48);
+				$('#missing_reactant_warning').css('left', position.left);
+				$('#missing_reactant_warning').show();
+			}
+		});
+		$('.reaction_right_hand_side').each(function()
+		{
+			$(this).css('border-color', '');
+			$('#missing_reactant_warning').hide();
+			if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
+			{
+				validInput = false;
+				$(this).css('border-color', 'red');
+				var position = inputElement.position();
+				$('#missing_reactant_warning').css('top', position.top + 48);
+				$('#missing_reactant_warning').css('left', position.left);
+				$('#missing_reactant_warning').show();
+			}
+		});
+		if(validInput) enableButtons();
+		else disableButtons();
 	} 
  
 /**
@@ -37,21 +68,21 @@
  */
 function addReaction()
 {
-	$('#reaction_input_submit_buttons').before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	$('#remove_reaction_button').parent().before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
-	$('select.reaction_direction').each(function()
+	/*$('select.reaction_direction').each(function()
 	{
 		$(this).change(function()
 		{
 			enableButtons();
 		});
-	});
+	}); */
 
 	$('.reaction_left_hand_side').each(function()
 	{
 		$(this).keyup(function()
 		{
-			enableButtons();
+			//enableButtons();
 			validateKeyPress($(this));
 		});
 	});
@@ -60,7 +91,7 @@ function addReaction()
 	{
 		$(this).keyup(function()
 		{
-			enableButtons();
+			//enableButtons();
 			validateKeyPress($(this));
 		});
 	});
@@ -91,6 +122,7 @@ function resetReactions()
 	$('#reaction_input_form fieldset input').val('');
 	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
 	disableButtons();
+	while($('#reaction_input_form fieldset').length -1) removeReaction();
 }
 
 /*
@@ -157,6 +189,8 @@ function saveNetwork()
 
 $(document).ready(function()
 {
+	var buttonDivOffset=-Math.floor($('#reaction_input_submit_buttons').height()/2);
+	$('#reaction_input_submit_buttons').css('margin-top', buttonDivOffset.toString() + 'px');
 	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
 	
 	$('#add_reaction_button').click(function()
@@ -222,19 +256,19 @@ $(document).ready(function()
 		});
 	});
 
-	$('select.reaction_direction').each(function()
+	/*$('select.reaction_direction').each(function()
 	{
 		$(this).change(function()
 		{
 			enableButtons();
 		});
-	});
+	});*/
 
 	$('.reaction_left_hand_side').each(function()
 	{
 		$(this).keyup(function()
 		{
-			enableButtons();
+			//enableButtons();
 			validateKeyPress($(this));
 		});
 	});
@@ -243,7 +277,7 @@ $(document).ready(function()
 	{
 		$(this).keyup(function()
 		{
-			enableButtons();
+			//enableButtons();
 			validateKeyPress($(this));
 		});
 	});
