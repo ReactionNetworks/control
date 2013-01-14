@@ -38,34 +38,24 @@ require_once('includes/header.php');
 						</select>
 						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
 					</fieldset><!-- reaction_input_row -->
-					<p>
-						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
-					</p>
 
 					<?php
 					}
 					?>
+					<p>
+						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
+					</p>
 					<p id="reaction_input_submit_buttons">
 						<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View DSR graph</a>
 						<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
 						<!--a class="button disabled" id="download_network_file_button" href="handlers/download-network-file.php">Download reaction network file</a-->
 						<button class="button disabled" id="download_network_file_button" type="submit" disabled="disabled">Download reaction network file</button>
+						<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
 						<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
 						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
 					</p>
 				</form>
 				
-				<div id="reaction_upload_form_hider">
-					<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
-						<p>
-							<label for="reaction_upload_file">Choose a file to upload:</label>
-							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
-						</p>
-						<p>
-							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
-						</p>
-					</form>
-				</div>
 			</div>
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') === FALSE):
@@ -85,7 +75,16 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER[
 <?php
 endif;
 ?>
-			<div id="calculation_output_hider">
+			<div id="popup_hider">
+				<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
+					<p>
+						<label for="reaction_upload_file">Choose a file to upload:</label>
+						<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
+					</p>
+					<p>
+						<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
+					</p>
+				</form>
 				<div id="missing_java_warning_holder">
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== FALSE or strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') !== FALSE ) echo "<p>The DSR graph requires Java to view, which is not available on your system.</p>\n";
@@ -96,6 +95,8 @@ else echo '<p>The DSR graph requires Java to view, which is not installed on you
 					<p>
 						Processing...<span class="blink">_</span>
 					</p>
+				</div>
+				<div id="latex_output_holder">
 				</div>
 			</div>
 			<div id="hidden_character_warning">

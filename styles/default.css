@@ -131,7 +131,7 @@ ul.tabs li :link.active
 
 }
 
-#calculation_output_hider, #reaction_upload_form_hider
+#popup_hider
 {
 	visibility: hidden;
 	height: 1px;

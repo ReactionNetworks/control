@@ -177,7 +177,7 @@ class Reaction
 		{
 			if (strlen($text)) $text .= ' + ';
 			if ($stoichiometry == 1) $text .= $reactant;
-			else $text = $text.$stoichiometry.$reactant;
+			else if($stoichiometry) $text = $text.$stoichiometry.$reactant;
 		}
 
 		return $text;
@@ -191,7 +191,7 @@ class Reaction
 		{
 			if (strlen($text)) $text .= ' + ';
 			if ($stoichiometry == 1) $text .= $reactant;
-			else $text = $text.$stoichiometry.$reactant;
+			else if($stoichiometry) $text = $text.$stoichiometry.$reactant;
 		}
 
 		return $text;
@@ -292,7 +292,7 @@ class ReactionNetwork
 			foreach($this->reactions as $reaction) 
 			{			
 			echo '<fieldset class="reaction_input_row">
-						<input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', $reaction->exportLHSAsText(), '" />
+						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', $reaction->exportLHSAsText(), '" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
 							<option value="both"';
@@ -302,7 +302,7 @@ class ReactionNetwork
 							if (!$reaction->isReversible()) echo ' selected="selected"';
 							echo '>&rarr;</option>
 						</select>
-						<input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
+						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
 					</fieldset><!-- reaction_input_row -->';	
 			}					
 		}

@@ -133,6 +133,7 @@ function disableButtons()
 	$('#dsr_graph_button').addClass('disabled');
 	$('#process_network_button').addClass('disabled');
 	$('#download_network_file_button').addClass('disabled');
+	$('#latex_output_button').addClass('disabled');
 }
 
 /*
@@ -147,7 +148,11 @@ function enableButtons()
 	$('#process_network_button').removeClass('disabled');
 	$('#download_network_file_button').removeClass('disabled');
 	$('#download_network_file_button').removeAttr('disabled');
+	$('#latex_output_button').removeClass('disabled');
 }
+
+function generateLaTeX()
+{}
 
 function testSSDonly()
 {
@@ -217,7 +222,7 @@ $(document).ready(function()
 		return false;
 	});
 
-	$('ul.tabs').each(function()
+	/*$('ul.tabs').each(function()
 	{
 		// For each set of tabs, we want to keep track of
 		// which tab is active and its associated content
@@ -253,7 +258,7 @@ $(document).ready(function()
 			// Prevent the anchor's default click action
 			e.preventDefault();
 		});
-	});
+	});*/
 
 	/*$('select.reaction_direction').each(function()
 	{
@@ -308,6 +313,13 @@ $(document).ready(function()
 		}
 		return false;
 	});	
+	$('#latex_output_button').click(function(e)
+	{
+		if(!$(this).hasClass('disabled'))
+		{
+			generateLaTeX();
+		}
+	});
 	$('#dsr_graph_button').click(function(e)
 	{
 		e.preventDefault();
