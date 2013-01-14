@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/01/2013
+ * @modified   14/01/2013
  */
 
 require_once('includes/header.php');
@@ -17,7 +17,14 @@ require_once('includes/header.php');
 				<li><a href="#reaction_input_form">Input reactions manually</a></li>
 				<li><a href="#reaction_upload_form">Upload reaction file</a></li>
 			</ul-->
-
+			<div id="error_message_holder">
+<?php 
+if(isset($_SESSION['errors']))
+{
+	foreach($_SESSION['errors'] as $error) echo '				<p>', sanitise($error), "</p>\n";
+}
+?>
+			</div>
 			<div id="reaction_input_holder">
 				<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
 					<p>
@@ -80,6 +87,11 @@ endif;
 					<p>
 						<label for="reaction_upload_file">Choose a file to upload:</label>
 						<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
+					</p>
+					<p class="left_centred">
+						<label for="reaction_upload_format">File format:</label><br />
+						<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> /> Human readable, e.g. A + 2B --&gt; C <br />
+						<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> /> Stoichiometry, e.g. -1 -2 1
 					</p>
 					<p>
 						<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>

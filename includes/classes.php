@@ -5,10 +5,10 @@
  * Assorted classes used within CoNtRol.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   02/11/2012
+ * @modified   14/01/2013
  */
 
 class Reaction
@@ -386,7 +386,37 @@ class ReactionNetwork
 		return $stoichiometryMatrix;
 	}
 
-
+	public function parseStoichiometry($matrix)
+	{
+		$success=true;
+		if(gettype($matrix) == 'array' and count($matrix))
+		{
+			$allReactants = array();
+			$reactantPrefix = '';
+			$numberOfReactants = count($matrix);
+			$numberOfReactions = count($matrix[0]);
+			for($i = 0; $i < $numberOfReactants; ++$i)
+			{
+				if(count($matrix[$i]) !== $numberOfReactions) $success = false;
+				if(floor($i/26))$reactantPrefix = chr((floor($i/26)%26)+65);
+				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
+			}
+			for($i=0; $i<$numberOfReactions; ++$i)
+			{
+				$lhs = array();
+				$rhs = array();
+				for($j=0; $j<$numberOfReactants; ++$j)
+				{
+					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i])) $success = false;
+					else if($matrix[$j][$i] <0 ) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
+					else if($matrix[$j][$i] >0 ) $rhs[$allReactants[$j]] = $matrix[$j][$i];
+				}
+				$this->addReaction(new Reaction($lhs, $rhs, false));
+			}
+		}
+		else $success = false;
+		return $success;
+	}
 
 	public function generateReactionRateJacobianMatrix()
 	{

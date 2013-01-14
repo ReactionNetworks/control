@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/01/2013
+ * @modified   14/01/2013
  */
 
 /**
@@ -152,7 +152,45 @@ function enableButtons()
 }
 
 function generateLaTeX()
-{}
+{
+	var numberOfRows=0;
+	var numberOfColumns=0;
+	var textOutput='\\begin{array}{rcl}\n';
+	$('.reaction_input_row').each(function()
+	{
+		++numberOfRows;
+		textOutput += $('.reaction_left_hand_side', $(this)).val().replace('&', '\&');
+		textOutput += ' &amp; ';
+		switch($('select.reaction_direction option:selected', $(this)).val())
+		{
+			case 'left':
+				textOutput += '\\leftarrow';
+				break;
+			case 'right':
+				textOutput += '\\rightarrow';
+				break;
+			case 'both':
+				textOutput += '\\rightleftharpoons';
+				break;
+			default:
+				textOutput += ' ? ';
+		}
+		textOutput += ' &amp; ';
+		textOutput += $('.reaction_right_hand_side', $(this)).val().replace('&', '\\&');
+		textOutput = textOutput.replace('$', '\\$');
+		textOutput += ' \\\\\n';
+	});
+	var allLines= textOutput.split('\n');
+	for(i=0;i<allLines.length;++i)
+	{
+		if(allLines[i].length > numberOfColumns) numberOfColumns = allLines[i].length;
+	}
+	numberOfColumns *= 2;
+	numberOfRows += 2;
+	textOutput = '<textarea rows="' + numberOfRows + '" cols="' + numberOfColumns + '">\n' + textOutput + '\\end{array}</textarea>\n';
+	//alert(textOutput);
+	$('#latex_output_holder').html(textOutput);
+}
 
 function testSSDonly()
 {

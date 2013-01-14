@@ -6,10 +6,10 @@
  * network, and attempts to analyse it.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   10/10/2012
+ * @modified   14/01/2013
  */
 
 require_once('../includes/config.php');
@@ -63,16 +63,30 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_network_file_inpu
 	}
 }
 else $errors[] = 'No file uploaded';
+if(!(isset($_POST['upload_network_file_format']) and $_POST['upload_network_file_format'])) $errors[] = 'File format not specified';
 
 if(!count($errors))
 {
+	unset($_SESSION['errors']);
+	$_SESSION['upload_file_format'] = $_POST['upload_network_file_format'];
 	$reactionNetwork = new ReactionNetwork();
 	$fhandle = fopen($_FILES['upload_network_file_input']['tmp_name'], 'r');
-	while(!feof($fhandle))
+	switch($_POST['upload_network_file_format'])
 	{
-		$reactionString = fgets($fhandle);
-		$newReaction = Reaction::parseReaction($reactionString);
-		if($newReaction) $reactionNetwork->addReaction($newReaction);
+		case 'stoichiometry':
+			$matrix = array();
+			$_SESSION['errors'][] = 'Warning: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.';
+			while(!feof($fhandle)) $matrix[]=explode(' ', trim(fgets($fhandle)));
+			if(!$reactionNetwork->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+			break;
+		default: // assume 'human' if unsure
+			while(!feof($fhandle))
+			{
+				$reactionString = fgets($fhandle);
+				$newReaction = Reaction::parseReaction($reactionString);
+				if($newReaction) $reactionNetwork->addReaction($newReaction);
+			}
+			break;
 	}
 	fclose($fhandle);
 	$_SESSION['reactionNetwork']=$reactionNetwork;
