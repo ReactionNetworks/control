@@ -85,6 +85,7 @@ if(!count($errors))
 				$reactionString = fgets($fhandle);
 				$newReaction = Reaction::parseReaction($reactionString);
 				if($newReaction) $reactionNetwork->addReaction($newReaction);
+				else $_SESSION['errors'][] = 'An error occurred while adding a reaction from the file. Please check that the output below is as expected.';
 			}
 			break;
 	}

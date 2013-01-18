@@ -12,6 +12,7 @@
  */
 
 require_once('includes/header.php');
+require_once('includes/standard-tests.php');
 ?>
 			<!--ul class="tabs">
 				<li><a href="#reaction_input_form">Input reactions manually</a></li>
@@ -30,11 +31,18 @@ if(isset($_SESSION['errors']))
 					<p>
 						<a class="button" id="add_reaction_button" href="#" title="Add new reaction">+</a>
 					</p>
-					<?php
-					if(isset($_SESSION['reactionNetwork'])) echo $_SESSION['reactionNetwork']->generateFieldsetHTML();
-					else 
-					{
-						?>
+<?php
+/*if(count($standardTests))
+{
+	foreach($standardTests as $test)
+	{
+		echo '<input type="hidden" name="', sanitise($test->getShortName()), '" id="test_', sanitise($test->getShortName()), '" class="test" value="1" />', "\n";
+	}
+}*/
+if(isset($_SESSION['reactionNetwork'])) echo $_SESSION['reactionNetwork']->generateFieldsetHTML();
+else 
+{
+?>
 
 					<fieldset class="reaction_input_row">
 						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
@@ -61,6 +69,7 @@ if(isset($_SESSION['errors']))
 						<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
 						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
 					</p>
+					<p id="advanced_options"><a class="button fancybox" href="#option_holder">Advanced options</a></p>
 				</form>
 				
 			</div>
@@ -89,9 +98,9 @@ endif;
 						<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
 					</p>
 					<p class="left_centred">
-						<label for="reaction_upload_format">File format:</label><br />
-						<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> /> Human readable, e.g. A + 2B --&gt; C <br />
-						<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> /> Stoichiometry, e.g. -1 -2 1
+						File format:<br />
+						<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_network_file_format_human" /> <label for="upload_network_file_format_human"> Human readable, e.g. A + 2B --&gt; C</label> <br />
+						<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_network_file_format_stoichiometry" /> <label for="upload_network_file_format_stoichiometry"> Stoichiometry, e.g. -1 -2 1 </label>
 					</p>
 					<p>
 						<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
@@ -110,6 +119,25 @@ else echo '<p>The DSR graph requires Java to view, which is not installed on you
 				</div>
 				<div id="latex_output_holder">
 				</div>
+				<form id="option_holder">
+					<input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox">Test mass action kinetics only</label>
+					<h3>Tests:</h3>
+					<p>
+<?php
+if(count($standardTests))
+{
+	foreach($standardTests as $test)
+	{
+		//echo '<input type="checkbox" checked="checked" name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" onChange="if(this.checked == \'checked\') document.getElementById(\'test_', sanitise($test->getShortName()), '\').value = 1; else document.getElementById(\'test_', sanitise($test->getShortName()), '\').value = 0;" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";
+		
+		echo '<input type="checkbox"';
+		if(!isset($_SESSION['tests'][$test]) or $_SESSION['tests'][$test]) echo ' checked="checked"';
+		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";		
+	}
+}
+?>
+					</p>
+				</form>
 			</div>
 			<div id="hidden_character_warning">
 				<p>

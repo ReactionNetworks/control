@@ -84,6 +84,14 @@ ul.tabs li :link.active
 	margin-top: -4em;
 }
 
+#advanced_options
+{
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -0.5em;
+}
+
 #reaction_input_submit_buttons a, #reaction_input_submit_buttons button
 {
 	display:block;
@@ -96,15 +104,22 @@ ul.tabs li :link.active
 	padding-bottom: 1em;
 }
 
+#add_reaction_button, #remove_reaction_button
+{
+	display: inline-block;
+	/*width: 2em;
+	height: 2em;*/
+}
+
 #reaction_input_form fieldset select, #reaction_input_form fieldset input, #add_reaction_button, #remove_reaction_button
 {
 	font-size: 150%;
 }
 
-#remove_reaction_button
+/*#remove_reaction_button
 {
 	margin-top: 28em;
-}
+}*/
 
 #reaction_input_form fieldset textarea
 {

@@ -198,6 +198,12 @@ function testSSDonly()
 	$.get(url, null, function(returndata) {showTestOutput(returndata);});
 }
 
+function testTests()
+{
+	var url = 'handlers/test.php';
+	$.get(url, null, function(returndata) {showTestOutput(returndata);});
+}
+
 function showTestOutput(output)
 {
 	$('#calculation_output_holder').append(output);
@@ -214,19 +220,21 @@ function saveNetwork()
 	validNetwork=true;
 	var url = 'handlers/process-network.php';
 	var reactionsLeftHandSide = new Array();
-	//var temp = $('.reaction_left_hand_side');
-	//for (i=0;i<temp.length;++i) reactionsLeftHandSide.push(temp.val());
-        $.each($('.reaction_left_hand_side'), function(index,value){reactionsLeftHandSide.push(value.value)}); 		
+	$.each($('.reaction_left_hand_side'), function(index,value){reactionsLeftHandSide.push(value.value)}); 		
   var reactionsRightHandSide = new Array();
-	//temp = $('.reaction_right_hand_side');
-	//for (i=0;i<temp.length;++i) reactionsRightHandSide.push(temp.val()); 	
-        $.each($('.reaction_right_hand_side'), function(index,value){reactionsRightHandSide.push(value.value)});
+	$.each($('.reaction_right_hand_side'), function(index,value){reactionsRightHandSide.push(value.value)});
   var reactionsDirection = new Array();
-	//temp = $('.reaction_direction :selected');
-	//for (i=0;i<temp.length;++i) reactionsDirection.push(temp.val()); 	
-        $.each($('.reaction_direction :selected'), function(index,value){reactionsDirection.push(value.value)});
-	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>');validNetwork=false;}});
+	$.each($('.reaction_direction :selected'), function(index,value){reactionsDirection.push(value.value)});
+	var testSettings = new Array();
+	$.each($('.test'), function(index, v){testSettings.push({name: $(this).attr('name'), value: $(this).val()})});
+	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection, 'test_settings':testSettings}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>');validNetwork=false;}});
 	return validNetwork;
+}
+
+function toggleTest(testName, newStatus)
+{
+	var url = 'handlers/toggle-test.php';
+	$.post(url, {testName: testName, active: newStatus});
 }
 
 $(document).ready(function()
@@ -334,8 +342,19 @@ $(document).ready(function()
 		$('#upload_network_file_button').removeClass('disabled');
 		$('#upload_network_file_button').removeAttr('disabled');
 	});
- var popupWidth = screen.width - 256;
- var popupHeight = screen.height - 256;
+ if(screen.width > 800)var popupWidth = screen.width - 256;
+ else var popupWidth = screen.width - 64;
+ if(screen.height > 800)var popupHeight = screen.height - 256;
+ else var popupHeight = screen.height - 64;
+ var buttonSize = 0;
+ if($('#add_reaction_button').height() > buttonSize) buttonSize = $('#add_reaction_button').height();
+ if($('#add_reaction_button').width() > buttonSize) buttonSize = $('#add_reaction_button').width();
+ if($('#remove_reaction_button').height() > buttonSize) buttonSize = $('#remove_reaction_button').height();
+ if($('#remove_reaction_button').width() > buttonSize) buttonSize = $('#remove_reaction_button').width();
+ $('#add_reaction_button').height(buttonSize);
+  $('#add_reaction_button').width(buttonSize);
+   $('#remove_reaction_button').height(buttonSize);
+  $('#remove_reaction_button').width(buttonSize);
  $('#dsr_graph_applet_holder').css('width', popupWidth);
  $('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);
 	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
@@ -368,4 +387,13 @@ $(document).ready(function()
 		e.preventDefault();
 		$('#dsr_graph_applet_holder').css('left', '-10000px');
 	});
+	$('#option_holder input[name*="test_checkbox"]').change(function()
+	{
+		var testName = $(this).attr('name').slice(14, -1);
+		var activated = 0;
+		if($(this).is(':checked')) activated = 1;
+		toggleTest(testName, activated);
+		//alert(testName);
+		//alert('testName = ' + testName + ', activated = ' + activated);
+	})
 });

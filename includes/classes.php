@@ -423,3 +423,47 @@ class ReactionNetwork
 		return;
 	}
 }
+
+class NetworkTest
+{
+	private $shortName='';
+	private $longName='';
+	private $description='';
+	private $supportsMassAction= true;
+	private $supportsGeneralKinetics= true;
+	private $executableName= '';
+	private $inputFileFormats= array('human', 'stoichiometry');
+/*
+	 * Constructor
+	 */
+	function __construct($shortName, $longName, $description, $executableName, $inputFileFormats, $supportsMassAction = false, $supportsGeneralKinetics = true)
+	{
+		$this->shortName = $shortName;
+		$this->longName = $longName;
+		$this->description = $description;
+		$this->executableName = $executableName;
+		$this->inputFileFormats = $inputFileFormats;
+		$this->supportsMassAction = $supportsMassAction;
+		$this->supportsGeneralKinetics = $supportsGeneralKinetics;
+	}
+	public function getShortName()
+	{
+		return $this->shortName;
+	}
+	
+	public function getLongName()
+	{
+		return $this->longName;
+	}
+	
+	public function getDescription()
+	{
+		return $this->description;
+	}
+	
+	public function getExecutableName()
+	{
+		return $this->executableName;
+	}
+}
+
