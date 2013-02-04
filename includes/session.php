@@ -13,6 +13,7 @@
 
 require_once('config.php');
 require_once('classes.php');
+require_once('standard-tests.php');
 
 // Disable session IDs in GET parameters
 ini_set('session.use_trans_sid', false);
@@ -29,3 +30,5 @@ session_set_cookie_params(0, '/'.SITE_DIR.'/', $_SERVER['HTTP_HOST'], $https, tr
 session_name('control');
 session_start();
 if (!isset($_SESSION['tempfile'])) $_SESSION['tempfile'] = TEMP_FILE_DIR.uniqid();
+if (!isset($_SESSION['tests'])) $_SESSION['tests'] = array();
+if (!isset($_SESSION['standardtests'])) $_SESSION['standardtests'] = $standardTests;

@@ -17,6 +17,7 @@ require_once('../includes/config.php');
 require_once('../includes/classes.php');
 require_once('../includes/functions.php');
 require_once('../includes/session.php');
+require_once('../includes/standard-tests.php');
 
 if (count($_POST))
 {
@@ -56,6 +57,54 @@ if (count($_POST))
 	$_SESSION['reactionNetwork']=$reactions;
 	if (strlen($output)) echo $output;
 	if (CRNDEBUG) print_r($_SESSION['reactionNetwork']);
+	$filename = $_SESSION['tempfile'].'.hmn';
+	
+	// In our example we're opening $filename in append mode.
+	// The file pointer is at the bottom of the file hence
+	// that's where $somecontent will go when we fwrite() it.
+	
+	if (!$handle = fopen($filename, 'w'))
+	{
+		echo "<p>Cannot open file ($filename)</p>";
+	        exit;
+	}
+
+	// Write $somecontent to our opened file.
+	if (fwrite($handle, $_SESSION['reactionNetwork']->exportReactionNetworkEquations()) === false)
+	{
+		echo "<p>Cannot write to file ($filename)</p>";
+		exit;
+	}
+
+   fclose($handle);
+   
+  foreach($_SESSION['tests'] as $testname => $test)
+  
+  {
+   	if ($test)
+   	
+    {
+     foreach($_SESSION['standardtests'] as &$standardTest)
+     if ($testname === $standardTest->getShortname()) $standardTest->enableTest();
+   	}
+   	
+    else 
+    
+    {    	    				
+    	foreach($_SESSION['standardtests'] as &$standardTest)
+    	if ($testname === $standardTest->getShortname()) $standardTest->disableTest();
+   	}
+  	
+  }
+
+  $_SESSION['numberOfTests']=0;
+  $_SESSION['testoutput']=array();
+	$_SESSION['currenttest']=0;
+	
+	for ($i=0;$i<count($_SESSION['standardtests']);++$i)
+	{
+		if ($_SESSION['standardtests'][$i]->getIsEnabled())++$_SESSION['numberOfTests'];
+	}    	
 	/*if (isset($_POST['ajax']) and $_POST['ajax']==='true')
 	{
 		

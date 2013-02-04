@@ -433,6 +433,7 @@ class NetworkTest
 	private $supportsGeneralKinetics= true;
 	private $executableName= '';
 	private $inputFileFormats= array('human', 'stoichiometry');
+	private $isEnabled=true;
 /*
 	 * Constructor
 	 */
@@ -464,6 +465,18 @@ class NetworkTest
 	public function getExecutableName()
 	{
 		return $this->executableName;
+	}
+	public function enableTest()
+	{
+		$this->isEnabled=true;
+	}
+	public function disableTest()
+	{
+		$this->isEnabled=false;
+	}
+	public function getIsEnabled()
+	{
+		return $this->isEnabled;
 	}
 }
 

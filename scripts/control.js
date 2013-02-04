@@ -192,10 +192,12 @@ function generateLaTeX()
 	$('#latex_output_holder').html(textOutput);
 }
 
-function testSSDonly()
+function processTests()
 {
-	var url = 'handlers/ssd-test.php';
-	$.get(url, null, function(returndata) {showTestOutput(returndata);});
+	var url = 'handlers/process-tests.php';
+	$.get(url, null, function(returndata) {showTestOutput(returndata);
+	if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='handlers/test.php';
+	else processTests()});
 }
 
 function testTests()
@@ -365,7 +367,7 @@ $(document).ready(function()
 			resetPopup();
 			if (saveNetwork())
 			{				
-				testSSDonly();
+				processTests();
 			}
 		}
 		return false;

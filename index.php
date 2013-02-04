@@ -129,9 +129,9 @@ if(count($standardTests))
 	foreach($standardTests as $test)
 	{
 		//echo '<input type="checkbox" checked="checked" name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" onChange="if(this.checked == \'checked\') document.getElementById(\'test_', sanitise($test->getShortName()), '\').value = 1; else document.getElementById(\'test_', sanitise($test->getShortName()), '\').value = 0;" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";
-		
+		if (!isset($_SESSION['tests'][$test->getShortName()])) $_SESSION['tests'][$test->getShortName()]=true;
 		echo '<input type="checkbox"';
-		if(!isset($_SESSION['tests'][$test]) or $_SESSION['tests'][$test]) echo ' checked="checked"';
+		if( $_SESSION['tests'][$test->getShortName()]) echo ' checked="checked"';
 		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";		
 	}
 }
