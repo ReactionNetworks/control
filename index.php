@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   14/01/2013
+ * @modified   07/02/2013
  */
 
 require_once('includes/header.php');
@@ -19,13 +19,13 @@ require_once('includes/standard-tests.php');
 				<li><a href="#reaction_upload_form">Upload reaction file</a></li>
 			</ul-->
 			<div id="error_message_holder">
-<?php 
+<?php
 if(isset($_SESSION['errors']))
 {
 	foreach($_SESSION['errors'] as $error) echo '				<p>', sanitise($error), "</p>\n";
 }
 ?>
-			</div>
+			</div><!-- error_message_holder -->
 			<div id="reaction_input_holder">
 				<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
 					<p>
@@ -40,7 +40,7 @@ if(isset($_SESSION['errors']))
 	}
 }*/
 if(isset($_SESSION['reactionNetwork'])) echo $_SESSION['reactionNetwork']->generateFieldsetHTML();
-else 
+else
 {
 ?>
 
@@ -68,26 +68,36 @@ else
 						<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
 						<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
 						<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
-					</p>
+					</p><!-- reaction_input_submit_buttons -->
 					<p id="advanced_options"><a class="button fancybox" href="#option_holder">Advanced options</a></p>
 				</form>
-				
+
 			</div>
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') === FALSE):
-?>			
-			<div id="dsr_graph_applet_holder">	<a href="#" id="dsr_graph_close_button"><img src="styles/close.png" alt="X" /></a><script type="text/javascript">
-    var popupWidth = screen.width - 256;
-    var popupHeight = screen.height - 256;
-    var attributes = {codebase:'<?php echo SITE_URL; ?>',
-                      code:'dsr.DsrDraw.class',
-                      archive:'dsr_0.1.3A.jar',
-                      width:popupWidth, height:popupHeight};
-    var parameters = {fontSize:16};
-    var version = '1.5';
-    if(deployJava.getJREs().length) deployJava.runApplet(attributes, parameters, version);
-   // else document.write('<p>The view DSR graph feature requires Java, which does not appear to be installed on your system.</p>')
-		</script></div>
+?>
+			<div id="dsr_graph_applet_holder">
+				<a href="#" id="dsr_graph_close_button"><img src="styles/close.png" alt="X" /></a>
+				<div id="dsr_graph_applet">
+					<script type="text/javascript">
+						/* <![CDATA[ */
+						var popupWidth = screen.width - 256;
+						var popupHeight = screen.height - 256;
+						var siteURL = '<?php echo SITE_URL; ?>';
+						/*var attributes = {
+							codebase:siteURL,
+							code:'dsr.DsrDraw.class',
+							archive:'dsr_1.0.jar',
+							width:popupWidth, height:popupHeight
+						};
+						var parameters = {content:'a-->b.'};
+						var version = '1.6';
+						if(deployJava.getJREs().length) deployJava.runApplet(attributes, parameters, version);*/
+						// else document.write('<p>The view DSR graph feature requires Java, which does not appear to be installed on your system.</p>')
+					/* ]]> */
+					</script>
+				</div><!-- applet_holder_inner -->
+			</div><!-- dsr_graph_applet_holder -->
 <?php
 endif;
 ?>
@@ -105,20 +115,20 @@ endif;
 					<p>
 						<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
 					</p>
-				</form>
+				</form><!-- reaction_upload_form -->
 				<div id="missing_java_warning_holder">
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== FALSE or strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') !== FALSE ) echo "<p>The DSR graph requires Java to view, which is not available on your system.</p>\n";
 else echo '<p>The DSR graph requires Java to view, which is not installed on your system. Please <a href="http://java.com/">download Java</a> to enable this functionality.</p>', PHP_EOL;
 ?>
-				</div>
+				</div><!-- missing_java_warning_holder -->
 				<div id="calculation_output_holder">
 					<p>
 						Processing...<span class="blink">_</span>
 					</p>
-				</div>
+				</div><!-- calculation_output_holder -->
 				<div id="latex_output_holder">
-				</div>
+				</div><!-- latex_output_holder -->
 				<form id="option_holder">
 					<input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox">Test mass action kinetics only</label>
 					<h3>Tests:</h3>
@@ -132,22 +142,22 @@ if(count($standardTests))
 		if (!isset($_SESSION['tests'][$test->getShortName()])) $_SESSION['tests'][$test->getShortName()]=true;
 		echo '<input type="checkbox"';
 		if( $_SESSION['tests'][$test->getShortName()]) echo ' checked="checked"';
-		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";		
+		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";
 	}
 }
 ?>
 					</p>
-				</form>
-			</div>
+				</form><!-- option_holder -->
+			</div><!-- reaction_input_holder -->
 			<div id="hidden_character_warning">
 				<p>
 					You entered the following invalid character: <span id="invalid_character_span"></span>
 				</p>
-			</div>
+			</div><!-- hidden_character_warning -->
 			<div id="missing_reactant_warning">
 				<p>
 					There is a reactant missing.
 				</p>
-			</div>
+			</div><!-- missing_reactant_warning -->
 <?php
 require_once('includes/footer.php');
