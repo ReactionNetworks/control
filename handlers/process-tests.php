@@ -47,8 +47,8 @@ if (isset($_SESSION['reactionNetwork']))
 	$returnValue = 0;
 	exec('./'.$binary.' '.$filename.' 2>&1', $output, $returnValue);
 	$temp = '';
-	foreach($output as $line) $temp .= " $line";
-	$_SESSION['testoutput'][]=$temp;
+	foreach($output as $line) $temp .= "\n$line";
+	$_SESSION['testoutput'][$currentTest->getShortName()]=$temp;
   echo '<p>Completed test ',$_SESSION['currenttest'],' of ',$_SESSION['numberOfTests'], '.</p>';
 		
   }

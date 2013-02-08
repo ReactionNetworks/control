@@ -79,12 +79,12 @@ if (count($_POST))
 		if($test)
 		{
 			foreach($_SESSION['standardtests'] as &$standardTest)
-			if ($testname === $standardTest->getShortname()) $standardTest->enableTest();
+			if ($testname === $standardTest->getShortName()) $standardTest->enableTest();
 		}
 		else
 		{
 			foreach($_SESSION['standardtests'] as &$standardTest)
-			if($testname === $standardTest->getShortname()) $standardTest->disableTest();
+			if($testname === $standardTest->getShortName()) $standardTest->disableTest();
 		}
 	}
 

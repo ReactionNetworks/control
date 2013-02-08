@@ -12,4 +12,6 @@
  */
 
 $standardTests = array(
-new NetworkTest('dummy', 'Dummy', 'This is a dummy test.', 'dummy', array('human', 'stoichiometry'), true, true));
+new NetworkTest('dummy', 'Dummy', 'This is a dummy test.', 'dummy', array('human', 'stoichiometry'), true, true),
+new NetworkTest('ssdonly', 'SSD test', 'Tests if the stoichiometric matrix is strongly sign determined', 'test', array('human'))
+);

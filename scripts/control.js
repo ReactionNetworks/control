@@ -196,7 +196,7 @@ function processTests()
 {
 	var url = 'handlers/process-tests.php';
 	$.get(url, null, function(returndata) {showTestOutput(returndata);
-	if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='handlers/test.php';
+	if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='results.php';
 	else processTests()});
 }
 
