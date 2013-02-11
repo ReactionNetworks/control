@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   07/02/2013
+ * @modified   11/02/2013
  */
 
 require_once('includes/header.php');
@@ -104,7 +104,7 @@ endif;
 			<div id="popup_hider">
 				<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
 					<p>
-						<label for="reaction_upload_file">Choose a file to upload:</label>
+						<label for="upload_network_file_input">Choose a file to upload:</label>
 						<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
 					</p>
 					<p class="left_centred">
@@ -118,46 +118,61 @@ endif;
 				</form><!-- reaction_upload_form -->
 				<div id="missing_java_warning_holder">
 <?php
-if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== FALSE or strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') !== FALSE ) echo "<p>The DSR graph requires Java to view, which is not available on your system.</p>\n";
-else echo '<p>The DSR graph requires Java to view, which is not installed on your system. Please <a href="http://java.com/">download Java</a> to enable this functionality.</p>', PHP_EOL;
+if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== FALSE or strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') !== FALSE ) echo "					<p>The DSR graph requires Java to view, which is not available on your system.</p>\n";
+else echo '					<p>The DSR graph requires Java to view, which is not installed on your system. Please <a href="http://java.com/">download Java</a> to enable this functionality.</p>', PHP_EOL;
 ?>
 				</div><!-- missing_java_warning_holder -->
 				<div id="calculation_output_holder">
-					<p>
-						Processing...<span class="blink">_</span>
-					</p>
+					<p>Processing...<span class="blink">_</span></p>
 				</div><!-- calculation_output_holder -->
 				<div id="latex_output_holder">
 				</div><!-- latex_output_holder -->
-				<form id="option_holder">
-					<input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox">Test mass action kinetics only</label>
+				<form id="option_holder" action=".">
 					<h3>Tests:</h3>
-					<p>
+					<p>Tick/untick the checkboxes to enable/disable each test.</p>
+					<table summary="Control whether each test is enabled or disabled">
+						<thead>
+							<tr>
+								<th>&#x2713;</th>
+								<th>Test name</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>&#x2713;</th>
+								<th>Test name</th>
+								<th>Description</th>
+							</tr>
+						</tfoot>
+						<tbody>
 <?php
 if(count($standardTests))
 {
 	foreach($standardTests as $test)
 	{
+		echo "							<tr>\n";
 		//echo '<input type="checkbox" checked="checked" name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" onChange="if(this.checked == \'checked\') document.getElementById(\'test_', sanitise($test->getShortName()), '\').value = 1; else document.getElementById(\'test_', sanitise($test->getShortName()), '\').value = 0;" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";
 		if (!isset($_SESSION['tests'][$test->getShortName()])) $_SESSION['tests'][$test->getShortName()]=true;
-		echo '<input type="checkbox"';
+		echo '								<td><input type="checkbox"';
 		if( $_SESSION['tests'][$test->getShortName()]) echo ' checked="checked"';
-		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label>\n";
+		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /></td>', PHP_EOL;
+		echo '								<td><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label></td>\n"; 
+		echo '								<td>', $test->getDescription(), "</td>\n							</tr>\n";
 	}
 }
 ?>
-					</p>
+						</tbody>
+					</table>
+					<h3>Other options:</h3>
+					<p><input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox">Test mass action kinetics only</label></p>
 				</form><!-- option_holder -->
 			</div><!-- reaction_input_holder -->
 			<div id="hidden_character_warning">
-				<p>
-					You entered the following invalid character: <span id="invalid_character_span"></span>
-				</p>
+				<p>You entered the following invalid character: <span id="invalid_character_span"></span></p>
 			</div><!-- hidden_character_warning -->
 			<div id="missing_reactant_warning">
-				<p>
-					There is a reactant missing.
-				</p>
+				<p>There is a reactant missing.</p>
 			</div><!-- missing_reactant_warning -->
 <?php
 require_once('includes/footer.php');

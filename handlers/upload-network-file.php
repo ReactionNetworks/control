@@ -90,7 +90,7 @@ if(!count($errors))
 			break;
 	}
 	fclose($fhandle);
-	$_SESSION['reactionNetwork']=$reactionNetwork;
+	$_SESSION['reactionNetwork'] = $reactionNetwork;
 }
 
 if(CRNDEBUG)
@@ -108,5 +108,4 @@ if(CRNDEBUG)
 else
 {
 	header('Location: '.SITE_URL);
-	//header('Location: '.SITE_URL);
 }

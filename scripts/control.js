@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   07/02/2013
+ * @modified   11/02/2013
  */
 
 /**
@@ -393,8 +393,10 @@ $(document).ready(function()
 			var attributes = {
 				codebase:siteURL,
 				code:'dsr.DsrDraw.class',
+				//archive:'applets/dsr_1.2.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
 				archive:'dsr_1.0.jar',
-				width:popupWidth, height:popupHeight
+				width:popupWidth,
+				height:popupHeight
 			};
 			var textOutput='';
 			$('.reaction_input_row').each(function()

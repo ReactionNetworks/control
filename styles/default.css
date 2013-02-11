@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   14/01/2013
+ * @modified   11/02/2013
  */
 
 *
@@ -53,6 +53,67 @@ ul.tabs li :link.active
 	border-top: 1px solid #999;
 	border-bottom: 1px solid white;
 	margin-bottom: -1px;
+}
+
+.align_right 
+{
+ 	float: right;
+}
+
+.blink
+{
+	text-decoration: blink;
+}
+
+.left_centred
+{
+	text-align: left;
+	margin: auto;
+	width: 20em;
+}
+
+.button
+{
+	text-decoration: none;
+	color: black;
+	background-color: #ddd;
+	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+	border: 1px solid #999;
+	border-radius: 2px;
+	padding: 2px 8px;
+	box-shadow: 1px 1px 1px #333;
+	font-size: 100%;
+}
+
+.button:hover
+{
+	background-color: #eee;
+	background-image: -ms-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: -moz-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: -o-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);
+	background-image: linear-gradient(to bottom, #fff 0%, #ddd 100%);
+}
+
+.button.disabled
+{
+	color: #bbb;
+	box-shadow: none;
+}
+
+.button.disabled:hover
+{
+	background-color: #ddd;	
+	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
+	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+	cursor: default;
 }
 
 #reaction_input_holder, #reaction_input_form, #reaction_upload_form
@@ -158,66 +219,10 @@ ul.tabs li :link.active
 	margin: 1em;
 	padding: 1em;
 	border: 1px solid #999;
-	font-family: monospace;
+/*	font-family: monospace;*/
 	font-size: 125%;
-	background-color: black;
-	color: white;
-}
-
-.blink
-{
-	text-decoration: blink;
-}
-
-.left_centred
-{
-	text-align: left;
-	margin: auto;
-	width: 20em;
-}
-
-.button
-{
-	text-decoration: none;
-	color: black;
-	background-color: #ddd;
-	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
-	border: 1px solid #999;
-	border-radius: 2px;
-	padding: 2px 8px;
-	box-shadow: 1px 1px 1px #333;
-	font-size: 100%;
-}
-
-.button:hover
-{
-	background-color: #eee;
-	background-image: -ms-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: -moz-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: -o-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: linear-gradient(to bottom, #fff 0%, #ddd 100%);
-}
-
-.button.disabled
-{
-	color: #bbb;
-	box-shadow: none;
-}
-
-.button.disabled:hover
-{
-	background-color: #ddd;	
-	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
-	cursor: default;
+/*	background-color: black;
+	color: white;*/
 }
 
 #hidden_character_warning, #missing_reactant_warning
@@ -265,7 +270,41 @@ ul.tabs li :link.active
 	margin: 1em 0 0;
 }
 
-.align_right 
+/*#option_holder
 {
- 	float: right;
+	text-align: center;
+}*/
+
+#option_holder > h3
+{
+	margin: 0.7em 0;
+}
+
+#option_holder > table
+{
+	margin: 1em 0 2em;
+}
+
+#option_holder > table th
+{
+	background-color: #eee;
+}
+
+#option_holder > table td, #option_holder > table th
+{
+	padding: 0.3em;
+	border: 1px solid #ccc;
+	text-align: left;
+}
+
+#latex_output_holder
+{
+	text-align: center;
+	margin-top: 1em;
+}
+
+#latex_output_holder > textarea
+{
+	/*width: 95%;*/
+	font-size: 100%;
 }

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   14/01/2013
+ * @modified   11/02/2013
  */
 
 class Reaction
@@ -479,4 +479,3 @@ class NetworkTest
 		return $this->isEnabled;
 	}
 }
-
