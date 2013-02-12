@@ -393,8 +393,8 @@ $(document).ready(function()
 			var attributes = {
 				codebase:siteURL,
 				code:'dsr.DsrDraw.class',
-				//archive:'applets/dsr_1.2.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
-				archive:'dsr_1.0.jar',
+				archive:'applets/dsr.1.2.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
+				//archive:'dsr_1.0.jar',
 				width:popupWidth,
 				height:popupHeight
 			};
