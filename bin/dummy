@@ -1,0 +1,49 @@
+#!/usr/bin/php
+<?php
+/**
+ * Dummy script to process CRN data
+ *
+ * Written for illustrative purposes only, to help writing wrappers
+ * for more complicated tests e.g. octave, MatLab etc.
+ *
+ * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
+ * @copyright  University of Portsmouth 2013
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @created    14/02/2013
+ * @modified   14/02/2013
+ */
+
+if($argc > 1 && $argc < 4)
+{
+	$filename = '';
+	$mass_action_only = false;
+
+	for($i = 1; $i < $argc; ++$i)
+	{
+		if($argv[$i] === '--mass-action-only') $mass_action_only = true;
+		elseif(substr($argv[$i], 0, 2) === '--') die("dummy: invalid option -- '".substr($argv[$i], 2)."'\n");
+		else $filename = $argv[$i];
+	}
+
+	if($filename)
+	{
+		echo 'Dummy test complete. File format was ';
+		switch(end(explode('.', $filename)))
+		{
+			case 'hmn':
+				echo 'human-readable';
+				break;
+			case 'sto':
+				echo 'stoichiometry';
+				break;
+			default:
+				echo 'unknown';
+				break;
+		}
+		echo '. Test run assuming ';
+		if($mass_action_only) echo 'mass-action kinetics only.';
+		else echo 'general kinetics.';
+	}
+	else die("Usage: dummy [--mass-action-only] FILENAME\nRun dummy calculation on chemical reaction network described in FILENAME\n  --mass-action-only    Run calculation assuming mass action kinetics only\n");
+}
+else die("Usage: dummy [--mass-action-only] FILENAME\nRun dummy calculation on chemical reaction network described in FILENAME\n  --mass-action-only	Run calculation assuming mass action kinetics only\n");
