@@ -17,12 +17,11 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 
-if(!isset($_SESSION['tests'])) $_SESSION['tests']=array();
+if(!isset($_SESSION['tests'])) $_SESSION['tests'] = array();
 
 foreach($standardTests as $test)
 {
-
-	if (isset($_POST['testName']) and $_POST['testName'] === $test->getShortName())
+	if(isset($_POST['testName']) and $_POST['testName'] === $test->getShortName())
 	{
 		$_SESSION['tests'][$test->getShortName()] = (bool) $_POST['active'];
 	}

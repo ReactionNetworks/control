@@ -165,7 +165,7 @@ if(count($standardTests))
 						</tbody>
 					</table>
 					<h3>Other options:</h3>
-					<p><input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox">Test mass action kinetics only</label></p>
+					<p><input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?>>Test mass action kinetics only</label></p>
 				</form><!-- option_holder -->
 			</div><!-- reaction_input_holder -->
 			<div id="hidden_character_warning">

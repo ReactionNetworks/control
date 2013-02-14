@@ -41,7 +41,7 @@ foreach($_SESSION['testoutput'] as $name => $result)
 			if ($name === $standardTest->getShortName())
 			{
 				echo '<h3>Test ', $currentTest, ': ', sanitise($standardTest->getLongName()), "</h3>\n" ;
-				echo '<p>', sanitise($standardTest->getDescription()), "</p>\n";
+				echo '<p>', $standardTest->getDescription(), "</p>\n";
 			}
 	
 

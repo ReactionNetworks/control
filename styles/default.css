@@ -216,10 +216,10 @@ ul.tabs li :link.active
 #calculation_output_holder p
 {
 	text-align: left;
-	margin: 1em;
-	padding: 1em;
+	margin: 1em 0;
+/*	padding: 1em;
 	border: 1px solid #999;
-/*	font-family: monospace;*/
+	font-family: monospace;*/
 	font-size: 125%;
 /*	background-color: black;
 	color: white;*/

@@ -478,4 +478,8 @@ class NetworkTest
 	{
 		return $this->isEnabled;
 	}
+	public function getInputFileFormats()
+	{
+		return $this->inputFileFormats;
+	}
 }

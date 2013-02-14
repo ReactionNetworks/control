@@ -239,6 +239,12 @@ function toggleTest(testName, newStatus)
 	$.post(url, {testName: testName, active: newStatus});
 }
 
+function toggleMassAction(newStatus)
+{
+	var url = 'handlers/toggle-mass-action.php';
+	$.post(url, {mass_action_only: newStatus});
+}
+
 $(document).ready(function()
 {
 	var buttonDivOffset=-Math.floor($('#reaction_input_submit_buttons').height()/2);
@@ -448,5 +454,12 @@ $(document).ready(function()
 		toggleTest(testName, activated);
 		//alert(testName);
 		//alert('testName = ' + testName + ', activated = ' + activated);
+	})
+
+	$('#mass_action_checkbox').change(function()
+	{
+		var activated = 0;
+		if($(this).is(':checked')) activated = 1;
+		toggleMassAction(activated);
 	})
 });

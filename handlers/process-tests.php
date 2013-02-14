@@ -34,16 +34,31 @@ if (isset($_SESSION['reactionNetwork']))
 
 	if($currentTest)
 	{
-		$filename = $_SESSION['tempfile'].'.hmn';	
-		$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
-		$output = array();
-		$returnValue = 0;
-		exec('./'.$binary.' '.$filename.' 2>&1', $output, $returnValue);
+		$extension = '';
 		$temp = '';
-		foreach($output as $line) $temp .= "\n$line";
-		$_SESSION['testoutput'][$currentTest->getShortName()]=$temp;
-	 echo '<p>Completed test ',$_SESSION['currenttest'],' of ',$_SESSION['numberOfTests'], '.</p>';
- }
- 
- else echo '<p>All tests completed. Redirecting to results.</p>';
+
+		// Need to split this into net stoichiometry versus source/target stoichiometry?
+		// How best to treat reversible vs irreversible reactions in stoichiometry case?
+		if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto'; 
+		if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
+
+		if(!$extension) $temp = 'This test does not support any valid file formats. Test aborted.';
+		else
+		{
+			$filename = $_SESSION['tempfile'].$extension;	
+			$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
+			$output = array();
+			$returnValue = 0;
+			$exec_string = './'.$binary;
+			if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) $exec_string .= ' --mass-action-only';
+			$exec_string .= ' '.$filename.' 2>&1';
+			exec($exec_string, $output, $returnValue);
+			foreach($output as $line) $temp .= "\n$line";
+		}
+
+		$_SESSION['testoutput'][$currentTest->getShortName()] = $temp;
+		echo '<p>Completed test ',$_SESSION['currenttest'],' of ',$_SESSION['numberOfTests'], '.</p>';
+	}
+
+	else echo '<p>All tests completed. Redirecting to results.</p>';
 }
