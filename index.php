@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/02/2013
+ * @modified   18/02/2013
  */
 
 require_once('includes/header.php');
@@ -80,7 +80,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER[
 				<a href="#" id="dsr_graph_close_button"><img src="styles/close.png" alt="X" /></a>
 				<div id="dsr_graph_applet">
 					<script type="text/javascript">
-						/* <![CDATA[ */
+						// <![CDATA[
 						var popupWidth = screen.width - 256;
 						var popupHeight = screen.height - 256;
 						var siteURL = '<?php echo SITE_URL; ?>';
@@ -94,7 +94,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER[
 						var version = '1.6';
 						if(deployJava.getJREs().length) deployJava.runApplet(attributes, parameters, version);*/
 						// else document.write('<p>The view DSR graph feature requires Java, which does not appear to be installed on your system.</p>')
-					/* ]]> */
+						// ]]>
 					</script>
 				</div><!-- applet_holder_inner -->
 			</div><!-- dsr_graph_applet_holder -->
@@ -165,7 +165,7 @@ if(count($standardTests))
 						</tbody>
 					</table>
 					<h3>Other options:</h3>
-					<p><input type="checkbox" name="mass_action" id="mass_action_checkbox" /> <label for="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?>>Test mass action kinetics only</label></p>
+					<p><input type="checkbox" name="mass_action" id="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?> /> <label for="mass_action_checkbox">Test mass action kinetics only (when supported)</label></p>
 				</form><!-- option_holder -->
 			</div><!-- reaction_input_holder -->
 			<div id="hidden_character_warning">

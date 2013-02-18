@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/02/2013
+ * @modified   18/02/2013
  */
 
 class Reaction
@@ -289,9 +289,9 @@ class ReactionNetwork
 	{
 		if (count($this->reactions))
 		{
-			foreach($this->reactions as $reaction) 
-			{			
-			echo '<fieldset class="reaction_input_row">
+			foreach($this->reactions as $reaction)
+			{
+				echo '<fieldset class="reaction_input_row">
 						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', $reaction->exportLHSAsText(), '" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
@@ -303,10 +303,10 @@ class ReactionNetwork
 							echo '>&rarr;</option>
 						</select>
 						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
-					</fieldset><!-- reaction_input_row -->';	
-			}					
+					</fieldset><!-- reaction_input_row -->';
+			}
 		}
-		else echo 	
+		else echo
 		'<fieldset class="reaction_input_row">
 						<input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 						<select class="reaction_direction" name="reaction_direction[]">
@@ -315,7 +315,7 @@ class ReactionNetwork
 							<option value="right">&rarr;</option>
 						</select>
 						<input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
-					</fieldset><!-- reaction_input_row -->';		
+					</fieldset><!-- reaction_input_row -->';
 	}
 
 	private function generateReactantList()
@@ -323,9 +323,9 @@ class ReactionNetwork
 		$reactantList=array();
 		foreach($this->reactions as $reaction)
 		{
-			$reactants = $reaction->getReactants(); 
+			$reactants = $reaction->getReactants();
 			if ($reactants) foreach($reactants as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
-		}	
+		}
 		return $reactantList;
 	}
 
@@ -336,15 +336,15 @@ class ReactionNetwork
 		$numberOfReactants=count($reactantList);
 		for($i=0;$i<$numberOfReactants; ++$i)
 		{
-			$sourceStoichiometryMatrix[]=array();	
-			
+			$sourceStoichiometryMatrix[]=array();
+
 			foreach($this->reactions as $reaction)
 			{
 				$matrixEntry=0;
 				foreach($reaction->getLeftHandSide() as $reactant => $stoichiometry)
 				{
 					if ($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
-				}	
+				}
 				$sourceStoichiometryMatrix[$i][]=$matrixEntry;
 			}
 		}
@@ -358,15 +358,15 @@ class ReactionNetwork
 		$numberOfReactants=count($reactantList);
 		for($i=0;$i<$numberOfReactants; ++$i)
 		{
-			$targetStoichiometryMatrix[]=array();	
-			
+			$targetStoichiometryMatrix[]=array();
+
 			foreach($this->reactions as $reaction)
 			{
 				$matrixEntry=0;
 				foreach($reaction->getRightHandSide() as $reactant => $stoichiometry)
 				{
 					if ($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
-				}	
+				}
 				$targetStoichiometryMatrix[$i][]=$matrixEntry;
 			}
 		}
@@ -426,15 +426,16 @@ class ReactionNetwork
 
 class NetworkTest
 {
-	private $shortName='';
-	private $longName='';
-	private $description='';
-	private $supportsMassAction= true;
-	private $supportsGeneralKinetics= true;
-	private $executableName= '';
-	private $inputFileFormats= array('human', 'stoichiometry');
-	private $isEnabled=true;
-/*
+	private $shortName = '';
+	private $longName = '';
+	private $description = '';
+	private $supportsMassAction = true;
+	private $supportsGeneralKinetics = true;
+	private $executableName = '';
+	private $inputFileFormats = array('human', 'stoichiometry');
+	private $isEnabled = true;
+
+	/**
 	 * Constructor
 	 */
 	function __construct($shortName, $longName, $description, $executableName, $inputFileFormats, $supportsMassAction = false, $supportsGeneralKinetics = true)
@@ -451,17 +452,17 @@ class NetworkTest
 	{
 		return $this->shortName;
 	}
-	
+
 	public function getLongName()
 	{
 		return $this->longName;
 	}
-	
+
 	public function getDescription()
 	{
 		return $this->description;
 	}
-	
+
 	public function getExecutableName()
 	{
 		return $this->executableName;
@@ -481,5 +482,10 @@ class NetworkTest
 	public function getInputFileFormats()
 	{
 		return $this->inputFileFormats;
+	}
+
+	public function supportsMassAction()
+	{
+		return $this->supportsMassAction;
 	}
 }

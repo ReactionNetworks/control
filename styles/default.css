@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   11/02/2013
+ * @modified   18/02/2013
  */
 
 *
@@ -161,26 +161,18 @@ ul.tabs li :link.active
 
 #reaction_input_form fieldset
 {
-	/*margin-top: 1em;*/
 	padding-bottom: 1em;
 }
 
 #add_reaction_button, #remove_reaction_button
 {
 	display: inline-block;
-	/*width: 2em;
-	height: 2em;*/
 }
 
 #reaction_input_form fieldset select, #reaction_input_form fieldset input, #add_reaction_button, #remove_reaction_button
 {
 	font-size: 150%;
 }
-
-/*#remove_reaction_button
-{
-	margin-top: 28em;
-}*/
 
 #reaction_input_form fieldset textarea
 {
@@ -189,22 +181,15 @@ ul.tabs li :link.active
 
 #dsr_graph_applet_holder
 {
-/*	text-align: center;*/
 	position: absolute;
 	z-index: 1;
 	top: 64px;
 	left: -10000px;
-  width: 800px;
-/*height: 500px;*/
+	width: 800px;
 	margin-left: -400px;
 	border: 1px solid #999;
 	background-color: white;
 	text-align: right;
-}
-
-#dsr_graph_close_button
-{
-
 }
 
 #popup_hider
@@ -216,13 +201,8 @@ ul.tabs li :link.active
 #calculation_output_holder p
 {
 	text-align: left;
-	margin: 1em 0;
-/*	padding: 1em;
-	border: 1px solid #999;
-	font-family: monospace;*/
+	margin: 1em;
 	font-size: 125%;
-/*	background-color: black;
-	color: white;*/
 }
 
 #hidden_character_warning, #missing_reactant_warning
@@ -270,11 +250,6 @@ ul.tabs li :link.active
 	margin: 1em 0 0;
 }
 
-/*#option_holder
-{
-	text-align: center;
-}*/
-
 #option_holder > h3
 {
 	margin: 0.7em 0;
@@ -305,6 +280,6 @@ ul.tabs li :link.active
 
 #latex_output_holder > textarea
 {
-	/*width: 95%;*/
+	max-width: 95%;
 	font-size: 100%;
 }
