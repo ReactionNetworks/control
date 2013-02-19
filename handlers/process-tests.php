@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   18/02/2013
+ * @modified   19/02/2013
  */
 
 require_once('../includes/config.php');
@@ -17,7 +17,7 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 
-if (isset($_SESSION['reactionNetwork']))
+if(isset($_SESSION['reactionNetwork']))
 {
 	$currentTest=null;
 
@@ -50,7 +50,15 @@ if (isset($_SESSION['reactionNetwork']))
 			$output = array();
 			$returnValue = 0;
 			$exec_string = './'.$binary;
-			if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only'] and $currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
+			if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only'])
+			{
+				if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
+				else $temp = "WARNING: you requested testing mass-action kinetics only, but this test always tests general kinetics.\n";
+			}
+			else
+			{
+				if(!$currentTest->supportsGeneralKinetics()) $temp = "WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.\n";
+			}
 			$exec_string .= ' '.$filename.' 2>&1';
 			exec($exec_string, $output, $returnValue);
 			foreach($output as $line) $temp .= "\n$line";

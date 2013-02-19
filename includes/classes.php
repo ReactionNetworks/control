@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   18/02/2013
+ * @modified   19/02/2013
  */
 
 class Reaction
@@ -156,6 +156,19 @@ class Reaction
 		return $reactants;*/
 	}
 
+	public function exportAsHTML()
+	{
+		$text = '';
+		$text.=$this->exportLHSAsText();
+		if($this->reversible) $text .= ' &#x21cc; ';
+		else $text .= ' &rarr; ';
+		$text.=$this->exportRHSAsText();
+
+		$text .= '<br />'.CLIENT_LINE_ENDING;
+
+		return $text;
+	}
+
 	public function exportAsText()
 	{
 		$text = '';
@@ -263,6 +276,19 @@ class ReactionNetwork
 		$equations = '';
 		$numberOfReactions = count($this->reactions);
 		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText();
+		return $equations;
+	}
+
+	/*
+	 * HTML export function for reaction network descriptor
+	 *
+	 * @return  string  $equations  HTML version of reaction network chemical equations
+	 */
+	public function exportAsHTML()
+	{
+		$equations = '';
+		$numberOfReactions = count($this->reactions);
+		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsHTML();
 		return $equations;
 	}
 
@@ -487,5 +513,9 @@ class NetworkTest
 	public function supportsMassAction()
 	{
 		return $this->supportsMassAction;
+	}
+	public function supportsGeneralKinetics()
+	{
+		return $this->supportsGeneralKinetics;
 	}
 }
