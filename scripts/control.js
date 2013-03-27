@@ -1,12 +1,11 @@
 /**
  * Main CoNtRol JavaScript file
  *
- *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/02/2013
+ * @modified   27/03/2013
  */
 
 /**
@@ -14,14 +13,12 @@
  */
 function validateKeyPress(inputElement)
 {
-	//if(inputElement.val()[0] == '+') alert('A set of reactants cannot begin with a +');
 	var invalidCharacters = new Array('<', '>', '-', '=');
 	for(i=0; i<invalidCharacters.length;++i)
 	{
 		if (inputElement.val().indexOf(invalidCharacters[i]) > -1)
 		{
 			inputElement.val( inputElement.val().replace(invalidCharacters[i], ''));
-			//alert('You entered the following invalid character: '+invalidCharacters[i]);
 			$('#invalid_character_span').html(invalidCharacters[i]);
 			var position = inputElement.position();
 			$('#hidden_character_warning').css('top', position.top + 48);
@@ -68,14 +65,6 @@ function validateKeyPress(inputElement)
 function addReaction()
 {
 	$('#remove_reaction_button').parent().before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
-
-	/*$('select.reaction_direction').each(function()
-	{
-		$(this).change(function()
-		{
-			enableButtons();
-		});
-	}); */
 
 	$('.reaction_left_hand_side').each(function()
 	{
@@ -142,7 +131,6 @@ function disableButtons()
 function enableButtons()
 {
 	// Remove reaction button doesn't need to be enabled, as it is automatically enabled/disabled based on the number of reactions
-	//if($('#reaction_input_form > fieldset').length > 1) $('#remove_reaction_button').removeClass('disabled');
 	$('#reset_reaction_button').removeClass('disabled');
 	$('#dsr_graph_button').removeClass('disabled');
 	$('#process_network_button').removeClass('disabled');
@@ -188,7 +176,6 @@ function generateLaTeX()
 	numberOfColumns *= 2;
 	numberOfRows += 2;
 	textOutput = '<textarea rows="' + numberOfRows + '" cols="' + numberOfColumns + '">\n' + textOutput + '\\end{array}</textarea>\n';
-	//alert(textOutput);
 	$('#latex_output_holder').html(textOutput);
 }
 
@@ -276,57 +263,10 @@ $(document).ready(function()
 		return false;
 	});
 
-	/*$('ul.tabs').each(function()
-	{
-		// For each set of tabs, we want to keep track of
-		// which tab is active and its associated content
-		var active, content, links = $(this).find('a');
-
-		// If the location.hash matches one of the links, use that as the active tab.
-		// If no match is found, use the first link as the initial active tab.
-		active = $(links.filter('[href="' + location.hash + '"]')[0] || links[0]);
-		active.addClass('active');
-		content = $(active.attr('href'));
-
-		// Hide the remaining content
-		links.not(active).each(function ()
-		{
-			$($(this).attr('href')).hide();
-		});
-
-		// Bind the click event handler
-		$(this).on('click', 'a', function(e)
-		{
-			// Make the old tab inactive.
-			active.removeClass('active');
-			content.hide();
-
-			// Update the variables with the new link and content
-			active = $(this);
-			content = $($(this).attr('href'));
-
-			// Make the tab active.
-			active.addClass('active');
-			content.show();
-
-			// Prevent the anchor's default click action
-			e.preventDefault();
-		});
-	});*/
-
-	/*$('select.reaction_direction').each(function()
-	{
-		$(this).change(function()
-		{
-			enableButtons();
-		});
-	});*/
-
 	$('.reaction_left_hand_side').each(function()
 	{
 		$(this).keyup(function()
 		{
-			//enableButtons();
 			validateKeyPress($(this));
 		});
 	});
@@ -335,7 +275,6 @@ $(document).ready(function()
 	{
 		$(this).keyup(function()
 		{
-			//enableButtons();
 			validateKeyPress($(this));
 		});
 	});
@@ -351,10 +290,10 @@ $(document).ready(function()
 		$('#upload_network_file_button').removeAttr('disabled');
 	});
 
-	if(screen.width > 800)var popupWidth = screen.width - 256;
-	else var popupWidth = screen.width - 64;
-	if(screen.height > 800)var popupHeight = screen.height - 256;
-	else var popupHeight = screen.height - 64;
+	if(window.innerWidth > 800) var popupWidth = window.innerWidth - 256;
+	else var popupWidth = window.innerWidth - 64;
+	if(window.innerHeight > 800) var popupHeight = window.innerHeight - 256;
+	else var popupHeight = window.innerHeight - 64;
 
 	var buttonSize = 0;
 	if($('#add_reaction_button').height() > buttonSize) buttonSize = $('#add_reaction_button').height();
@@ -425,7 +364,6 @@ $(document).ready(function()
 				textOutput += $('.reaction_right_hand_side', $(this)).val();
 				textOutput += '.';
 			});
-			//alert(textOutput);
 			var parameters = {content:textOutput};
 			var version = '1.6';
 			// Copied from https://forums.oracle.com/forums/thread.jspa?messageID=5521095
@@ -452,8 +390,6 @@ $(document).ready(function()
 		var activated = 0;
 		if($(this).is(':checked')) activated = 1;
 		toggleTest(testName, activated);
-		//alert(testName);
-		//alert('testName = ' + testName + ', activated = ' + activated);
 	})
 
 	$('#mass_action_checkbox').change(function()

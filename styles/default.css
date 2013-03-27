@@ -6,7 +6,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   19/02/2013
+ * @modified   27/03/2013
  */
 
 *
@@ -19,40 +19,6 @@ h1
 	text-align: center;
 	font-size: 150%;
 	padding: 1em;
-}
-
-ul.tabs
-{
-	width: 100%;
-	border-bottom: 1px solid #999;
-	background-color: #ccc;
-	text-align: center;
-/*	margin-bottom: 1em;*/
-}
-
-ul.tabs li
-{
-	display: inline-block;
-	text-align: center;
-	padding: 0;
-}
-
-ul.tabs li :link
-{
-	display: inline-block;
-	text-decoration: none;
-	color: black;
-	padding: 0.5em 1em;
-}
-
-ul.tabs li :link.active
-{
-	background-color: white;
-	border-left: 1px solid #999;
-	border-right: 1px solid #999;
-	border-top: 1px solid #999;
-	border-bottom: 1px solid white;
-	margin-bottom: -1px;
 }
 
 .align_right 
@@ -192,10 +158,11 @@ ul.tabs li :link.active
 	text-align: right;
 }
 
-#popup_hider
+#popup_hider, #credits_hider
 {
 	visibility: hidden;
 	height: 1px;
+	overflow: hidden;
 }
 
 #calculation_output_holder p
@@ -282,4 +249,21 @@ ul.tabs li :link.active
 {
 	max-width: 95%;
 	font-size: 100%;
+}
+
+#credits
+{
+	position: absolute;
+	bottom: 1em;
+	right: 1em;
+}
+
+#credits_holder > *
+{
+	margin: 0.5em 1em;
+}
+
+#credits_holder > ul > li
+{
+	padding: 0.2em;
 }

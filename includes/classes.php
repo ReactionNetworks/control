@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   19/02/2013
+ * @modified   27/03/2013
  */
 
 class Reaction
@@ -257,7 +257,7 @@ class ReactionNetwork
 	 */
 	public function addReaction($reaction)
 	{
-		if ($reaction)
+		if($reaction)
 		{
 			$this->reactions[] = $reaction;
 			return true;
@@ -313,7 +313,7 @@ class ReactionNetwork
 
 	public function generateFieldsetHTML()
 	{
-		if (count($this->reactions))
+		if(count($this->reactions))
 		{
 			foreach($this->reactions as $reaction)
 			{
@@ -322,10 +322,10 @@ class ReactionNetwork
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
 							<option value="both"';
-							if ($reaction->isReversible()) echo ' selected="selected"';
+							if($reaction->isReversible()) echo ' selected="selected"';
 							echo '>&#x21cc;</option>
 							<option value="right"';
-							if (!$reaction->isReversible()) echo ' selected="selected"';
+							if(!$reaction->isReversible()) echo ' selected="selected"';
 							echo '>&rarr;</option>
 						</select>
 						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
@@ -350,7 +350,7 @@ class ReactionNetwork
 		foreach($this->reactions as $reaction)
 		{
 			$reactants = $reaction->getReactants();
-			if ($reactants) foreach($reactants as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
+			if($reactants) foreach($reactants as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
 		}
 		return $reactantList;
 	}
@@ -391,7 +391,7 @@ class ReactionNetwork
 				$matrixEntry=0;
 				foreach($reaction->getRightHandSide() as $reactant => $stoichiometry)
 				{
-					if ($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
+					if($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
 				}
 				$targetStoichiometryMatrix[$i][]=$matrixEntry;
 			}
@@ -405,9 +405,9 @@ class ReactionNetwork
 		$sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
 		$numberOfReactants = count($stoichiometryMatrix);
 		$numberOfReactions = count($stoichiometryMatrix[0]);
-		for ($i=0;$i<$numberOfReactants;++$i)
+		for($i=0;$i<$numberOfReactants;++$i)
 		{
-			for ($j=0;$j<$numberOfReactions;++$j) $stoichiometryMatrix[$i][$j]-=$sourceStoichiometryMatrix[$i][$j];		
+			for($j=0;$j<$numberOfReactions;++$j) $stoichiometryMatrix[$i][$j]-=$sourceStoichiometryMatrix[$i][$j];		
 		}
 		return $stoichiometryMatrix;
 	}
@@ -447,6 +447,16 @@ class ReactionNetwork
 	public function generateReactionRateJacobianMatrix()
 	{
 		return;
+	}
+
+	/*
+	 * Get the number of reactions
+	 *
+	 * @return  int  $numberOfReactions  The number of reactions in the network
+	 */
+	public function getNumberOfReactions()
+	{
+		return count($this->reactions);
 	}
 }
 
