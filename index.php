@@ -40,13 +40,13 @@ else
 							<a class="button<?php if(!isset($_SESSION['reactionNetwork']) or $_SESSION['reactionNetwork']->getNumberOfReactions() === 1) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
 						</p>
 						<p id="reaction_input_submit_buttons">
-							<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View DSR graph</a>
-							<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
+							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View DSR graph</a>
+							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
 							<!--a class="button disabled" id="download_network_file_button" href="handlers/download-network-file.php">Download reaction network file</a-->
-							<button class="button disabled" id="download_network_file_button" type="submit" disabled="disabled">Download reaction network file</button>
-							<a class="button fancybox<?php 	if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
+							<button class="button<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="download_network_file_button" type="submit" disabled="disabled">Download reaction network file</button>
+							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
 							<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
-							<a class="button <?php 	if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
+							<a class="button <?php if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
 						</p><!-- reaction_input_submit_buttons -->
 						<p id="advanced_options"><a class="button fancybox" href="#option_holder">Advanced options</a></p>
 					</form>
