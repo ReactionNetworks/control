@@ -43,7 +43,7 @@ else
 							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View DSR graph</a>
 							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
 							<!--a class="button disabled" id="download_network_file_button" href="handlers/download-network-file.php">Download reaction network file</a-->
-							<button class="button<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="download_network_file_button" type="submit" disabled="disabled">Download reaction network file</button>
+							<button class="button<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled="disabled"'; ?>>Download reaction network file</button>
 							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
 							<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
 							<a class="button <?php if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
