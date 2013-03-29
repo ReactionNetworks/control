@@ -93,14 +93,19 @@ h1
 	margin-bottom: 1em;
 }
 
-#reaction_input_form, #reaction_upload_form
+#reaction_input_form, #reaction_upload_form, #batch_upload_form
 {
 	padding: 1em 0;
 }
 
-#reaction_upload_form p
+#reaction_upload_form p, #batch_upload_form p
 {
 	padding: 0.5em;
+}
+
+#upload_batch_file_email_error
+{
+	color: red;
 }
 
 #reaction_input_submit_buttons

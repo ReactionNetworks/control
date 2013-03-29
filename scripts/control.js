@@ -60,6 +60,17 @@ function validateKeyPress(inputElement)
 } 
  
 /**
+ * Validates an email address
+ */
+function validateEmailAddress(emailAddress)
+{
+	var atPos=emailAddress.indexOf('@');
+ if( atPos< 1) return false;
+ if( emailAddress.indexOf('.', atPos) > (atPos + 1) && emailAddress.charAt(emailAddress.length - 1) != '.') return true;
+ return false;
+ } 
+ 
+/**
  * Adds a row to the reaction input form
  */
 function addReaction()
@@ -398,4 +409,41 @@ $(document).ready(function()
 		if($(this).is(':checked')) activated = 1;
 		toggleMassAction(activated);
 	})
+	
+	$('#upload_batch_file_email').change(function()
+	{
+		if(validateEmailAddress($('#upload_batch_file_email').val()))
+		{
+		 $('#upload_batch_file_email_error').html('&nbsp;');
+		 if($('#upload_batch_file_input').val() != '') 
+		 {
+		 	$('#upload_network_file_button').removeClass('disabled');
+				$('#upload_network_file_button').removeAttr('disabled');
+			}
+		}
+		else $('#upload_batch_file_email_error').html('Invalid email address');		
+	})
+	
+	$('#upload_batch_file_email').keyup(function()
+	{
+		if(validateEmailAddress($('#upload_batch_file_email').val()))
+		{
+		 $('#upload_batch_file_email_error').html('&nbsp;');
+		 if($('#upload_batch_file_input').val() != '') 
+		 {
+		 	$('#upload_batch_file_button').removeClass('disabled');
+				$('#upload_batch_file_button').removeAttr('disabled');
+			}
+		}
+		else $('#upload_batch_file_email_error').html('Invalid email address');		
+	})
+	
+	$('#upload_batch_file_input').change(function()
+	{
+		if(validateEmailAddress($('#upload_batch_file_email').val()))
+		{
+			$('#upload_batch_file_button').removeClass('disabled');
+			$('#upload_batch_file_button').removeAttr('disabled');
+		}
+	});
 });

@@ -38,3 +38,17 @@ define('CRNDEBUG', false, false);
 define('TEMP_FILE_DIR', '/var/tmp/', false);
 
 define('BINARY_FILE_DIR', '../bin/', false);
+
+define('DB_TYPE', 'mysql', false);
+define('DB_HOST', 'localhost', false);
+define('DB_NAME', 'control', false);
+define('DB_USER', 'control', false);
+define('DB_PASS', '6Pdeq5wr7pCrGYEp', false);
+define('DB_PREFIX', '', false);
+
+define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
+
+$supported_batch_file_types = array(
+	array('extension' => 'zip', 'mimetype' => 'application/zip', 'binary' => '/usr/bin/unzip'),
+	array('extension' => 'rar', 'mimetype' => 'application/rar', 'binary' => '/usr/bin/unrar e')
+);

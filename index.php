@@ -46,6 +46,7 @@ else
 							<button class="button<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled="disabled"'; ?>>Download reaction network file</button>
 							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
 							<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
+														<a class="button fancybox" href="#batch_upload_form">Batch reaction file</a>
 							<a class="button <?php if(!isset($_SESSION['reactionNetwork'])) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
 						</p><!-- reaction_input_submit_buttons -->
 						<p id="advanced_options"><a class="button fancybox" href="#option_holder">Advanced options</a></p>
@@ -77,6 +78,35 @@ endif;
 							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
 						</p>
 					</form><!-- reaction_upload_form -->
+						<form id="batch_upload_form" action="handlers/upload-batch-file.php" method="post" enctype="multipart/form-data" class="left_centred">
+						<p>
+							<label for="upload_batch_file_input">Choose a file to upload:</label>
+							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" size="48" /><br />
+							Maximum file size:
+<?php
+if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
+else echo ini_get('upload_max_filesize');
+?> <br />
+							Supported file types: 
+<?php 
+echo $supported_batch_file_types[0]['extension']; 
+for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension']; 
+?>
+							</p>
+							<p>
+							<label for="upload_batch_file_email">Email address for results:</label>
+							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="48" /><br />
+							<span id="upload_batch_file_email_error">&nbsp;</span>
+						</p>
+						<p>
+							File format:<br />
+							<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"> Human readable, e.g. A + 2B --&gt; C</label> <br />
+							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"> Stoichiometry, e.g. -1 -2 1 </label>
+						</p>
+						<p>
+							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>
+						</p>
+					</form><!-- batch_upload_form -->
 					<div id="missing_java_warning_holder">
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== FALSE or strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') !== FALSE ) echo "						<p>The DSR graph requires Java to view, which is not available on your system.</p>\n";

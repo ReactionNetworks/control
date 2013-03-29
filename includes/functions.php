@@ -36,3 +36,28 @@ function printMatrix($matrix)
 	}
 	return $text;		
 }
+
+/**
+ * Convert file size to bytes
+ *
+ * Modified from http://php.net/manual/en/function.ini-get.php
+ *
+ * @param   string  $val  file size as a string, eg. 1M 
+ * @return  int           file size in bytes
+ */
+ function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+					$val = (int)substr($val,0,strlen($val) - 1);    
+    switch($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
+
+    return $val;
+}
