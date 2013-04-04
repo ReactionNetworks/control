@@ -73,6 +73,24 @@ if (count($_POST))
 		exit;
 	}
 	fclose($handle);
+	$filename = $_SESSION['tempfile'].'.s+v';
+
+	// In our example we're opening $filename in append mode.
+	// The file pointer is at the bottom of the file hence
+	// that's where $somecontent will go when we fwrite() it.
+	if(!$handle = fopen($filename, 'w'))
+	{
+		echo "<p>Cannot open file ($filename)</p>";
+		exit;
+	}
+
+	// Write $somecontent to our opened file.
+	if(fwrite($handle, $_SESSION['reactionNetwork']->exportStoichimetryAndVMatrix()) === false)
+	{
+		echo "<p>Cannot write to file ($filename)</p>";
+		exit;
+	}
+	fclose($handle);
 
 	foreach($_SESSION['tests'] as $testname => $test)
 	{

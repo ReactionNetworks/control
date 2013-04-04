@@ -280,6 +280,21 @@ class ReactionNetwork
 	}
 
 	/*
+	 * Export function for reaction network net stoichiometry and V matrix descriptor
+	 *
+	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
+	 * @return  string  $equations  Text version of reaction network chemical matrices
+	 */
+	public function exportStoichimetryAndVMatrix($LaTeX = false)
+	{
+		$equations = 'S MATRIX'.PHP_EOL;
+		$equations.=$this->exportStoichiometryMatrix();
+		//$numberOfReactions = count($this->reactions);
+		//for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText();
+		return $equations;
+	}
+
+	/*
 	 * HTML export function for reaction network descriptor
 	 *
 	 * @return  string  $equations  HTML version of reaction network chemical equations
@@ -294,7 +309,15 @@ class ReactionNetwork
 
 	public function exportStoichiometryMatrix()
 	{
-		return;
+	  $equations='';
+	  $stoichiometryMatrix = $this->generateStoichiometryMatrix();
+	  foreach ($stoichiometryMatrix as $row) 
+		     {
+		       $equations.= $row[0];
+		       for ($i=1;$i<count($row);++$i) $equations.= ' '. $row[$i];
+		       $equations.=PHP_EOL;
+		     }
+	  return $equations;
 	}
 
 	public function exportReactionRateJacobianMatrix()
@@ -444,9 +467,33 @@ class ReactionNetwork
 		return $success;
 	}
 
+	/*
+	 * Generate V^t
+	 *
+	 * @return  array $V The transpose of V matrix 
+	 */
 	public function generateReactionRateJacobianMatrix()
 	{
-		return;
+	  $sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
+	  $targetStoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
+	  $V=array();
+	  for($i=0;$i<count($sourceStoichiometryMatrix); ++$i)
+	    {
+	      $V[]=array();
+	      for ($j=0; $j<count($sourceStoichiometryMatrix[$i]); ++$j)
+		{
+		  if ($this->reactions[$j]->isReversible())
+		    {}
+		  else 
+		    {
+		      if ($sourceStoichiometryMatrix[$i][$j]>0)
+			$V[$i][]=1;
+		      else
+			$V[$i][]=0;
+		    }
+		}
+	    }
+	  return $V;
 	}
 
 	/*

@@ -40,6 +40,7 @@ if(isset($_SESSION['reactionNetwork']))
 		// Need to split this into net stoichiometry versus source/target stoichiometry?
 		// How best to treat reversible vs irreversible reactions in stoichiometry case?
 		if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
+		if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
 		if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
 
 		if(!$extension) $temp = 'This test does not support any valid file formats. Test aborted.';
