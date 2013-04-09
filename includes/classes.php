@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   27/03/2013
+ * @modified   09/04/2013
  */
 
 class Reaction
@@ -147,13 +147,6 @@ class Reaction
 			}
 		 }
 	 	return new Reaction($lhs,$rhs,$reversible);
-	/*	if((strpos($reactantString, '>') !== false) or (strpos($reactantString, '-') !== false) or
-		   (strpos($reactantString, '<') !== false) or (strpos($reactantString, '=') !== false)) $reactants = false;
-		else
-		{
-			$reactants = explode('+', $temp);
-		}
-		return $reactants;*/
 	}
 
 	public function exportAsHTML()
@@ -288,9 +281,9 @@ class ReactionNetwork
 	public function exportStoichimetryAndVMatrix($LaTeX = false)
 	{
 		$equations = 'S MATRIX'.PHP_EOL;
-		$equations.=$this->exportStoichiometryMatrix();
-		//$numberOfReactions = count($this->reactions);
-		//for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText();
+		$equations .= $this->exportStoichiometryMatrix();
+		$equations .= 'V MATRIX'.PHP_EOL;
+		$equations .= $this->exportVMatrix();
 		return $equations;
 	}
 
@@ -312,12 +305,25 @@ class ReactionNetwork
 	  $equations='';
 	  $stoichiometryMatrix = $this->generateStoichiometryMatrix();
 	  foreach ($stoichiometryMatrix as $row) 
-		     {
-		       $equations.= $row[0];
-		       for ($i=1;$i<count($row);++$i) $equations.= ' '. $row[$i];
-		       $equations.=PHP_EOL;
-		     }
+		{
+			$equations.= $row[0];
+			for ($i=1;$i<count($row);++$i) $equations.= ' '. $row[$i];
+			$equations.=PHP_EOL;
+		}
 	  return $equations;
+	}
+
+	public function exportVMatrix()
+	{
+		$equations='';
+		$VMatrix = $this->generateReactionRateJacobianMatrix();
+		foreach ($VMatrix as $row) 
+		{
+			$equations.= $row[0];
+			for ($i=1;$i<count($row);++$i) $equations.= ' '. $row[$i];
+			$equations.=PHP_EOL;
+		}
+		return $equations;
 	}
 
 	public function exportReactionRateJacobianMatrix()
@@ -470,30 +476,33 @@ class ReactionNetwork
 	/*
 	 * Generate V^t
 	 *
-	 * @return  array $V The transpose of V matrix 
+	 * @return  array  $V  The transpose of V matrix as an array of arrays 
 	 */
 	public function generateReactionRateJacobianMatrix()
 	{
-	  $sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
-	  $targetStoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
-	  $V=array();
-	  for($i=0;$i<count($sourceStoichiometryMatrix); ++$i)
-	    {
-	      $V[]=array();
-	      for ($j=0; $j<count($sourceStoichiometryMatrix[$i]); ++$j)
+		$sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
+		$targetStoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
+		$V = array();
+		for($i = 0; $i < count($sourceStoichiometryMatrix); ++$i)
 		{
-		  if ($this->reactions[$j]->isReversible())
-		    {}
-		  else 
-		    {
-		      if ($sourceStoichiometryMatrix[$i][$j]>0)
-			$V[$i][]=1;
-		      else
-			$V[$i][]=0;
-		    }
+			$V[] = array();
+			for ($j = 0; $j<count($sourceStoichiometryMatrix[$i]); ++$j)
+			{
+				if($this->reactions[$j]->isReversible())
+				{
+					if($sourceStoichiometryMatrix[$i][$j] > 0 && $targetStoichiometryMatrix[$i][$j] > 0) $V[$i][] = 2;
+					elseif($sourceStoichiometryMatrix[$i][$j] > 0) $V[$i][] = 1;
+					elseif($targetStoichiometryMatrix[$i][$j] > 0) $V[$i][] = -1;
+					else $V[$i][] = 0;
+				}
+				else 
+				{
+					if($sourceStoichiometryMatrix[$i][$j] > 0) $V[$i][] = 1;
+					else $V[$i][] = 0;
+				}
+			}
 		}
-	    }
-	  return $V;
+		return $V;
 	}
 
 	/*
