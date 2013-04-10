@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    17/01/2013
- * @modified   07/02/2013
+ * @modified   10/04/2013
  */
 
 require_once('../includes/config.php');
@@ -55,6 +55,8 @@ if (count($_POST))
 	$_SESSION['reactionNetwork']=$reactions;
 	if (strlen($output)) echo $output;
 	if (CRNDEBUG) print_r($_SESSION['reactionNetwork']);
+
+	// Create human-readable descriptor file
 	$filename = $_SESSION['tempfile'].'.hmn';
 
 	// In our example we're opening $filename in append mode.
@@ -73,6 +75,28 @@ if (count($_POST))
 		exit;
 	}
 	fclose($handle);
+
+	// Create net stoichiometry descriptor file
+	$filename = $_SESSION['tempfile'].'.sto';
+
+	// In our example we're opening $filename in append mode.
+	// The file pointer is at the bottom of the file hence
+	// that's where $somecontent will go when we fwrite() it.
+	if(!$handle = fopen($filename, 'w'))
+	{
+		echo "<p>Cannot open file ($filename)</p>";
+		exit;
+	}
+
+	// Write $somecontent to our opened file.
+	if(fwrite($handle, $_SESSION['reactionNetwork']->exportStoichiometryMatrix()) === false)
+	{
+		echo "<p>Cannot write to file ($filename)</p>";
+		exit;
+	}
+	fclose($handle);
+
+	// Create net stoichiometry + V matrix descriptor file
 	$filename = $_SESSION['tempfile'].'.s+v';
 
 	// In our example we're opening $filename in append mode.
@@ -85,7 +109,27 @@ if (count($_POST))
 	}
 
 	// Write $somecontent to our opened file.
-	if(fwrite($handle, $_SESSION['reactionNetwork']->exportStoichimetryAndVMatrix()) === false)
+	if(fwrite($handle, $_SESSION['reactionNetwork']->exportStoichiometryAndVMatrix()) === false)
+	{
+		echo "<p>Cannot write to file ($filename)</p>";
+		exit;
+	}
+	fclose($handle);
+
+	// Create source stoichiometry + target stoichiometry + V matrix descriptor file
+	$filename = $_SESSION['tempfile'].'.stv';
+
+	// In our example we're opening $filename in append mode.
+	// The file pointer is at the bottom of the file hence
+	// that's where $somecontent will go when we fwrite() it.
+	if(!$handle = fopen($filename, 'w'))
+	{
+		echo "<p>Cannot open file ($filename)</p>";
+		exit;
+	}
+
+	// Write $somecontent to our opened file.
+	if(fwrite($handle, $_SESSION['reactionNetwork']->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;

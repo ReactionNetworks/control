@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   09/04/2013
+ * @modified   10/04/2013
  */
 
 class Reaction
@@ -149,6 +149,11 @@ class Reaction
 	 	return new Reaction($lhs,$rhs,$reversible);
 	}
 
+	/*
+	 * Export Reaction as HTML
+	 *
+	 * @return  string  $text  HTML markup describing the reaction.
+	 */
 	public function exportAsHTML()
 	{
 		$text = '';
@@ -162,6 +167,11 @@ class Reaction
 		return $text;
 	}
 
+	/*
+	 * Export Reaction as plain text
+	 *
+	 * @return  string  $text  Text describing the reaction.
+	 */
 	public function exportAsText()
 	{
 		$text = '';
@@ -175,6 +185,11 @@ class Reaction
 		return $text;
 	}
 
+	/*
+	 * Export the left hand side of the reaction as plain text
+	 *
+	 * @return  string  $text  Text describing the reaction's LHS.
+	 */
 	public function exportLHSAsText()
 	{
 		$text = '';
@@ -189,6 +204,11 @@ class Reaction
 		return $text;
 	}
 
+	/*
+	 * Export the right hand side of the reaction as plain text
+	 *
+	 * @return  string  $text  Text describing the reaction's RHS.
+	 */
 	public function exportRHSAsText()
 	{
 		$text = '';
@@ -203,11 +223,25 @@ class Reaction
 		return $text;
 	}
 
+	/*
+	 * Check whether the Reaction is reversible
+	 *
+	 * @return  bool  TRUE if the reaction is reversible, FALSE otherwise.
+	 */
 	public function isReversible()
 	{
 		return $this->reversible;
 	}
 
+	/*
+	 * Get the reactants as an array
+	 *
+	 * @return  array  $reactants  An associative array with each reactant name/label
+	 *                             as a key, and its stoichiometry as the value.
+	 
+TO DO: this function isn't correct for reactions where a reactant appears on both sides	 
+	 
+	 */
 	public function getReactants()
 	{
 		$reactants=array();
@@ -278,11 +312,28 @@ class ReactionNetwork
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
 	 * @return  string  $equations  Text version of reaction network chemical matrices
 	 */
-	public function exportStoichimetryAndVMatrix($LaTeX = false)
+	public function exportStoichiometryAndVMatrix($LaTeX = false)
 	{
 		$equations = 'S MATRIX'.PHP_EOL;
 		$equations .= $this->exportStoichiometryMatrix();
-		$equations .= 'V MATRIX'.PHP_EOL;
+		$equations .= PHP_EOL.'V MATRIX'.PHP_EOL;
+		$equations .= $this->exportVMatrix();
+		return $equations;
+	}
+
+	/*
+	 * Export function for reaction network source and target stoichiometry and V matrix descriptor
+	 *
+	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
+	 * @return  string  $equations  Text version of reaction network chemical matrices
+	 */
+	public function exportSourceAndTargetStoichiometryAndVMatrix($LaTeX = false)
+	{
+		$equations = 'S MATRIX'.PHP_EOL;
+		$equations .= $this->exportSourceStoichiometryMatrix();
+		$equations .= PHP_EOL.'T MATRIX'.PHP_EOL;
+		$equations .= $this->exportTargetStoichiometryMatrix();
+		$equations .= PHP_EOL.'V MATRIX'.PHP_EOL;
 		$equations .= $this->exportVMatrix();
 		return $equations;
 	}
@@ -300,35 +351,62 @@ class ReactionNetwork
 		return $equations;
 	}
 
+	/*
+	 * Export function for reaction network net stoichiometry
+	 *
+	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
+	 * @return  string  $equations  Text version of reaction network chemical matrix
+	 */
 	public function exportStoichiometryMatrix()
 	{
-	  $equations='';
+	  $equations = '';
 	  $stoichiometryMatrix = $this->generateStoichiometryMatrix();
-	  foreach ($stoichiometryMatrix as $row) 
+	  foreach($stoichiometryMatrix as $row)
 		{
-			$equations.= $row[0];
-			for ($i=1;$i<count($row);++$i) $equations.= ' '. $row[$i];
-			$equations.=PHP_EOL;
+			$equations .= $row[0];
+			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
+			$equations .= PHP_EOL;
+		}
+	  return $equations;
+	}
+
+	public function exportSourceStoichiometryMatrix()
+	{
+	  $equations = '';
+	  $stoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
+	  foreach($stoichiometryMatrix as $row)
+		{
+			$equations .= $row[0];
+			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
+			$equations .= PHP_EOL;
+		}
+	  return $equations;
+	}
+
+	public function exportTargetStoichiometryMatrix()
+	{
+	  $equations = '';
+	  $stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
+	  foreach($stoichiometryMatrix as $row)
+		{
+			$equations .= $row[0];
+			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
+			$equations .= PHP_EOL;
 		}
 	  return $equations;
 	}
 
 	public function exportVMatrix()
 	{
-		$equations='';
+		$equations = '';
 		$VMatrix = $this->generateReactionRateJacobianMatrix();
-		foreach ($VMatrix as $row) 
+		foreach($VMatrix as $row)
 		{
-			$equations.= $row[0];
-			for ($i=1;$i<count($row);++$i) $equations.= ' '. $row[$i];
-			$equations.=PHP_EOL;
+			$equations .= $row[0];
+			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
+			$equations .= PHP_EOL;
 		}
 		return $equations;
-	}
-
-	public function exportReactionRateJacobianMatrix()
-	{
-		return;
 	}
 
 	public function exportTextFile()
