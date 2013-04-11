@@ -150,11 +150,11 @@ if (count($_POST))
 		}
 	}
 
-	$_SESSION['numberOfTests']=0;
-	$_SESSION['testoutput']=array();
-	$_SESSION['currenttest']=0;
+	$_SESSION['numberOfTests'] = 0;
+	$_SESSION['testoutput'] = array();
+	$_SESSION['currenttest'] = 0;
 
-	for($i=0; $i<count($_SESSION['standardtests']); ++$i)
+	for($i = 0; $i < count($_SESSION['standardtests']); ++$i)
 	{
 		if($_SESSION['standardtests'][$i]->getIsEnabled()) ++$_SESSION['numberOfTests'];
 	}

@@ -39,11 +39,12 @@ define('TEMP_FILE_DIR', '/var/tmp/', false);
 
 define('BINARY_FILE_DIR', '../bin/', false);
 
-define('DB_TYPE', 'mysql', false);
-define('DB_HOST', 'localhost', false);
-define('DB_NAME', 'control', false);
+define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
 define('DB_USER', 'control', false);
 define('DB_PASS', '6Pdeq5wr7pCrGYEp', false);
+//Include the following two lines if you're using mysql for the database. 
+if(!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306) $db_options=array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
+else $db_options=null;
 define('DB_PREFIX', '', false);
 
 define('ADMIN_EMAIL', 'control@reaction-networks.net', false);

@@ -37,7 +37,7 @@ else
 }
 ?>
 						<p>
-							<a class="button<?php if(!isset($_SESSION['reactionNetwork']) or $_SESSION['reactionNetwork']->getNumberOfReactions() === 1) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
+							<a class="button<?php if(!isset($_SESSION['reactionNetwork']) or $_SESSION['reactionNetwork']->getNumberOfReactions() <2) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
 						</p>
 						<p id="reaction_input_submit_buttons">
 							<a class="button fancybox<?php if(!isset($_SESSION['reactionNetwork'])) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View DSR graph</a>

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 3.4.11.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 09, 2013 at 06:32 PM
+-- Generation Time: Apr 11, 2013 at 05:25 PM
 -- Server version: 5.5.29
--- PHP Version: 5.3.10-1ubuntu3.6
+-- PHP Version: 5.4.6-1ubuntu1.2
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `filename` varchar(255) NOT NULL,
   `file_format` tinyint(3) unsigned NOT NULL,
   `email` varchar(255) NOT NULL,
-  `status` tinyint(3) unsigned NOT NULL,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `mass_action_only` tinyint(3) unsigned NOT NULL,
-  `tests_enabled` varchar(255) NOT NULL,
+  `tests_enabled` varchar(2047) NOT NULL,
   `error_text` varchar(1023) NOT NULL,
   `remote_ip` varchar(40) NOT NULL COMMENT 'Length 40 to allow IPv6',
   `remote_user_agent` varchar(2047) NOT NULL,

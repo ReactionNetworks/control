@@ -424,7 +424,7 @@ class ReactionNetwork
 		{
 			foreach($this->reactions as $reaction)
 			{
-				echo '<fieldset class="reaction_input_row">
+				echo '					<fieldset class="reaction_input_row">
 						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', $reaction->exportLHSAsText(), '" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
@@ -436,19 +436,19 @@ class ReactionNetwork
 							echo '>&rarr;</option>
 						</select>
 						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
-					</fieldset><!-- reaction_input_row -->';
+					</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
 		else echo
 		'<fieldset class="reaction_input_row">
-						<input type="text" size="32" maxlength="128" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
+						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
 							<option value="both" selected="selected">&#x21cc;</option>
 							<option value="right">&rarr;</option>
 						</select>
-						<input type="text" size="32" maxlength="128" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
-					</fieldset><!-- reaction_input_row -->';
+						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
+					</fieldset><!-- reaction_input_row -->', PHP_EOL;
 	}
 
 	private function generateReactantList()
