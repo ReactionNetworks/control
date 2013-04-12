@@ -68,7 +68,7 @@ function validateEmailAddress(emailAddress)
  if( atPos< 1) return false;
  if( emailAddress.indexOf('.', atPos) > (atPos + 1) && emailAddress.charAt(emailAddress.length - 1) != '.') return true;
  return false;
- } 
+} 
  
 /**
  * Adds a row to the reaction input form
@@ -350,7 +350,7 @@ $(document).ready(function()
 				codebase:siteURL,
 				code:'dsr.DsrDraw.class',
 				archive:'applets/dsr.1.2.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
-				//archive:'dsr_1.0.jar',
+				//archive:'applets/dsr.1.3.jar',
 				width:popupWidth,
 				height:popupHeight
 			};

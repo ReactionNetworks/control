@@ -40,6 +40,9 @@ require_once('version.php');
 			var popupWidth = screen.width - 256;
 			var popupHeight = screen.height - 256;
 			var siteURL = '<?php echo SITE_URL; ?>';
+			var pluginstring = '';
+			for(i = 0; i < navigator.plugins.length; ++i) pluginstring = pluginstring + navigator.plugins[i].version + '\n';
+			alert(pluginstring);
 			// ]]>
 		</script>
 	</head>
