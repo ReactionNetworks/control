@@ -6,10 +6,10 @@
  * networks, and stores them for later analysis.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   11/04/2013
+ * @modified   15/04/2013
  */
 
 require_once('../includes/config.php');
@@ -31,14 +31,12 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 				$allowed_mimetypes = array();
 				foreach($supported_batch_file_types as $supported_batch_file_type) $allowed_mimetypes[] = $supported_batch_file_type['mimetype'];
 				if(!in_array($mimetype, $allowed_mimetypes)) $_SESSION['errors'][] = 'Batch file format '.$mimetype.' not supported.';
-				//if(!in_array($mimetype, $allowed_mimetypes))die();
 			}
 			else
 			{
 				// Throw an exception?
 				$_SESSION['errors'][] = 'Failed to open fileinfo database';
 			}
-			//$finfo->close();
 			break;
 		case UPLOAD_ERR_INI_SIZE:
 			// fall through
@@ -67,11 +65,11 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 }
 else $_SESSION['errors'][] = 'No file uploaded';
 
-//check that the file format was specified. 
-if(!(isset($_POST['upload_batch_file_format']) and $_POST['upload_batch_file_format'])) $_SESSION['errors'][] = 'File format not specified'; 
+// Check that the file format was specified
+if(!(isset($_POST['upload_batch_file_format']) and $_POST['upload_batch_file_format'])) $_SESSION['errors'][] = 'File format not specified';
 else 	$_SESSION['upload_file_format'] = $_POST['upload_batch_file_format'];
 
-//check if a valid email address was submitted.
+// Check if a valid email address was submitted
 $valid=true;
 if(isset($_POST['upload_batch_file_email']) and trim($_POST['upload_batch_file_email']) and !strstr($_POST['upload_batch_file_email'], "\n"))
 {
@@ -97,13 +95,13 @@ if(!count($_SESSION['errors']))
 	{
 		case 'stoichiometry':
 			$file_format = 1;
-				$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
-				break;
+			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
+			break;
 		case 'stoichiometry+V':
 			$file_format = 2;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
 			break;
-		//TO DO: Set warning message for S/T/V file format. 
+		// TO DO: Set warning message for S/T/V file format.
 		default: // assume 'human' if unsure
 			$file_format = 0;
 			break;
@@ -116,9 +114,9 @@ if(!count($_SESSION['errors']))
 	}
 	catch(PDOException $exception)
 	{
-		die('Unable to open database. Error: '.$exception.'. Please contact the system administrator.');
+		die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
 	}
-	
+
 	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, file_format, email, status, mass_action_only, tests_enabled, error_text, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :file_format, :email, :status, :mass_action_only, :tests_enabled, :error_text, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
 	if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) $mass_action_only = 1;
 	else $mass_action_only = 0;
@@ -139,17 +137,17 @@ if(!count($_SESSION['errors']))
 	for ($i=0;$i<count($_SESSION['standardtests']);++$i)
 	{
 		if ($_SESSION['standardtests'][$i]->getIsEnabled())
-	 {
+		{
 			if($tests_enabled) $tests_enabled .= ';';
 			$tests_enabled .= $_SESSION['standardtests'][$i]->getShortName();
-	 }
+		}
 	}
 	$statement->bindParam(':filename', $_FILES['upload_batch_file_input']['tmp_name'], PDO::PARAM_STR);
 	$statement->bindParam(':file_format', $file_format, PDO::PARAM_INT);
 	$statement->bindValue(':email', trim($_POST['upload_batch_file_email']), PDO::PARAM_STR);
 	$statement->bindValue(':status', 0, PDO::PARAM_INT);
 	$statement->bindParam(':mass_action_only', $mass_action_only, PDO::PARAM_INT);
-	$statement->bindParam(':tests_enabled', $tests_enabled, PDO::PARAM_STR); 
+	$statement->bindParam(':tests_enabled', $tests_enabled, PDO::PARAM_STR);
 	$statement->bindValue(':error_text', '', PDO::PARAM_STR);
 	$statement->bindParam(':remote_ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 	$statement->bindParam(':remote_user_agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
@@ -158,7 +156,7 @@ if(!count($_SESSION['errors']))
 	$statement->execute();
 	$controldb = null;
 }
-else 
+else // There were errors, so redirect the user back to the main page so they can see them.
 {
 	header('Location: '.SITE_URL);
 	die();

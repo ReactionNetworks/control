@@ -2,10 +2,10 @@
  * Main CoNtRol JavaScript file
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   27/03/2013
+ * @modified   15/04/2013
  */
 
 /**
@@ -122,6 +122,7 @@ function resetReactions()
 	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
 	disableButtons();
 	while($('#reaction_input_form fieldset').length -1) removeReaction();
+	$('#remove_reaction_button').addClass('disabled');
 }
 
 /*
@@ -357,7 +358,8 @@ $(document).ready(function()
 			var textOutput='';
 			$('.reaction_input_row').each(function()
 			{
-				textOutput += $('.reaction_left_hand_side', $(this)).val();
+				if($('.reaction_left_hand_side', $(this)).val().length == 0) textOutput += '0';
+				else textOutput += $('.reaction_left_hand_side', $(this)).val();
 				switch($('select.reaction_direction option:selected', $(this)).val())
 				{
 					case 'left':
@@ -372,7 +374,8 @@ $(document).ready(function()
 					default:
 						textOutput += '?';
 				}
-				textOutput += $('.reaction_right_hand_side', $(this)).val();
+				if($('.reaction_right_hand_side', $(this)).val().length == 0) textOutput += '0';
+				else textOutput += $('.reaction_right_hand_side', $(this)).val();
 				textOutput += '.';
 			});
 			var parameters = {content:textOutput};

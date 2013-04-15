@@ -7,20 +7,14 @@
  * use with offline CRN analysis tools.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   10/10/2012
+ * @modified   15/04/2012
  */
 
 require_once('../includes/config.php');
 require_once('../includes/classes.php');
-
-/*if(!count($_POST))
-{
-	header('Location: '.SITE_URL);
-	die();
-}*/
 
 $reactions = new ReactionNetwork();
 
@@ -54,13 +48,12 @@ for($i = 0; $i < $numberOfReactions; ++$i)
 	}
 
 	$reactions->addReaction(new Reaction($leftHandSide, $rightHandSide, $reversible));
-	$_SESSION['reactionNetwork']=$reactions;
+	$_SESSION['reactionNetwork'] = $reactions;
 }
 
 if(CRNDEBUG)
 {
-	echo '<pre>', PHP_EOL;
-	echo '$_POST:', PHP_EOL;
+	echo '<pre>', PHP_EOL, '$_POST:', PHP_EOL;
 	print_r($_POST);
 	echo PHP_EOL, PHP_EOL, '$reactions:', PHP_EOL;
 	print_r($reactions);

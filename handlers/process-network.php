@@ -5,10 +5,10 @@
  * Saves the reaction network to the session
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    17/01/2013
- * @modified   10/04/2013
+ * @modified   15/04/2013
  */
 
 require_once('../includes/config.php');

@@ -5,10 +5,10 @@
  * For the current reaction network, runs each enabled test in turn.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-13
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   19/02/2013
+ * @modified   14/04/2013
  */
 
 require_once('../includes/config.php');

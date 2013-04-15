@@ -5,10 +5,10 @@
  * Assorted classes used within CoNtRol.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   10/04/2013
+ * @modified   14/04/2013
  */
 
 class Reaction
@@ -161,9 +161,7 @@ class Reaction
 		if($this->reversible) $text .= ' &#x21cc; ';
 		else $text .= ' &rarr; ';
 		$text.=$this->exportRHSAsText();
-
 		$text .= '<br />'.CLIENT_LINE_ENDING;
-
 		return $text;
 	}
 
@@ -179,9 +177,7 @@ class Reaction
 		if($this->reversible) $text .= ' <--> ';
 		else $text .= ' --> ';
 		$text.=$this->exportRHSAsText();
-
 		$text .= CLIENT_LINE_ENDING;
-
 		return $text;
 	}
 
@@ -238,9 +234,9 @@ class Reaction
 	 *
 	 * @return  array  $reactants  An associative array with each reactant name/label
 	 *                             as a key, and its stoichiometry as the value.
-	 
-TO DO: this function isn't correct for reactions where a reactant appears on both sides	 
-	 
+
+TO DO: this function isn't correct for reactions where a reactant appears on both sides
+
 	 */
 	public function getReactants()
 	{
@@ -331,10 +327,13 @@ class ReactionNetwork
 	{
 		$equations = 'S MATRIX'.PHP_EOL;
 		$equations .= $this->exportSourceStoichiometryMatrix();
-		$equations .= PHP_EOL.'T MATRIX'.PHP_EOL;
+		$equations .= PHP_EOL.PHP_EOL.'T MATRIX'.PHP_EOL;
 		$equations .= $this->exportTargetStoichiometryMatrix();
-		$equations .= PHP_EOL.'V MATRIX'.PHP_EOL;
+		$equations .= PHP_EOL.PHP_EOL.'V MATRIX'.PHP_EOL;
 		$equations .= $this->exportVMatrix();
+/* TO DO: add REVERSIBLE section to output
+		$equations .= PHP_EOL.PHP_EOL.'REVERSIBLE'.PHP_EOL;
+		foreach($this->reactions)*/
 		return $equations;
 	}
 
@@ -359,41 +358,41 @@ class ReactionNetwork
 	 */
 	public function exportStoichiometryMatrix()
 	{
-	  $equations = '';
-	  $stoichiometryMatrix = $this->generateStoichiometryMatrix();
-	  foreach($stoichiometryMatrix as $row)
+		$equations = '';
+		$stoichiometryMatrix = $this->generateStoichiometryMatrix();
+		foreach($stoichiometryMatrix as $row)
 		{
 			$equations .= $row[0];
 			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
 			$equations .= PHP_EOL;
 		}
-	  return $equations;
+		return $equations;
 	}
 
 	public function exportSourceStoichiometryMatrix()
 	{
-	  $equations = '';
-	  $stoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
-	  foreach($stoichiometryMatrix as $row)
+		$equations = '';
+		$stoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
+		foreach($stoichiometryMatrix as $row)
 		{
 			$equations .= $row[0];
 			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
 			$equations .= PHP_EOL;
 		}
-	  return $equations;
+		return $equations;
 	}
 
 	public function exportTargetStoichiometryMatrix()
 	{
-	  $equations = '';
-	  $stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
-	  foreach($stoichiometryMatrix as $row)
+		$equations = '';
+		$stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
+		foreach($stoichiometryMatrix as $row)
 		{
 			$equations .= $row[0];
 			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
 			$equations .= PHP_EOL;
 		}
-	  return $equations;
+		return $equations;
 	}
 
 	public function exportVMatrix()
@@ -439,8 +438,7 @@ class ReactionNetwork
 					</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
-		else echo
-		'<fieldset class="reaction_input_row">
+		else echo '<fieldset class="reaction_input_row">
 						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
@@ -467,18 +465,18 @@ class ReactionNetwork
 		$sourceStoichiometryMatrix=array();
 		$reactantList=$this->generateReactantList();
 		$numberOfReactants=count($reactantList);
-		for($i=0;$i<$numberOfReactants; ++$i)
+		for($i = 0; $i < $numberOfReactants; ++$i)
 		{
 			$sourceStoichiometryMatrix[]=array();
 
 			foreach($this->reactions as $reaction)
 			{
-				$matrixEntry=0;
+				$matrixEntry = 0;
 				foreach($reaction->getLeftHandSide() as $reactant => $stoichiometry)
 				{
-					if ($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
+					if ($reactantList[$i] === $reactant) $matrixEntry = $stoichiometry;
 				}
-				$sourceStoichiometryMatrix[$i][]=$matrixEntry;
+				$sourceStoichiometryMatrix[$i][] = $matrixEntry;
 			}
 		}
 		return $sourceStoichiometryMatrix;
@@ -486,21 +484,21 @@ class ReactionNetwork
 
 	public function generateTargetStoichiometryMatrix()
 	{
-		$targetStoichiometryMatrix=array();
-		$reactantList=$this->generateReactantList();
-		$numberOfReactants=count($reactantList);
-		for($i=0;$i<$numberOfReactants; ++$i)
+		$targetStoichiometryMatrix = array();
+		$reactantList = $this->generateReactantList();
+		$numberOfReactants = count($reactantList);
+		for($i = 0; $i < $numberOfReactants; ++$i)
 		{
-			$targetStoichiometryMatrix[]=array();
+			$targetStoichiometryMatrix[] = array();
 
 			foreach($this->reactions as $reaction)
 			{
-				$matrixEntry=0;
+				$matrixEntry = 0;
 				foreach($reaction->getRightHandSide() as $reactant => $stoichiometry)
 				{
-					if($reactantList[$i]===$reactant) $matrixEntry=$stoichiometry;
+					if($reactantList[$i] === $reactant) $matrixEntry = $stoichiometry;
 				}
-				$targetStoichiometryMatrix[$i][]=$matrixEntry;
+				$targetStoichiometryMatrix[$i][] = $matrixEntry;
 			}
 		}
 		return $targetStoichiometryMatrix;
@@ -512,9 +510,9 @@ class ReactionNetwork
 		$sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
 		$numberOfReactants = count($stoichiometryMatrix);
 		$numberOfReactions = count($stoichiometryMatrix[0]);
-		for($i=0;$i<$numberOfReactants;++$i)
+		for($i = 0; $i < $numberOfReactants; ++$i)
 		{
-			for($j=0;$j<$numberOfReactions;++$j) $stoichiometryMatrix[$i][$j]-=$sourceStoichiometryMatrix[$i][$j];		
+			for($j = 0; $j < $numberOfReactions; ++$j) $stoichiometryMatrix[$i][$j] -= $sourceStoichiometryMatrix[$i][$j];
 		}
 		return $stoichiometryMatrix;
 	}
@@ -552,9 +550,9 @@ class ReactionNetwork
 	}
 
 	/*
-	 * Generate V^t
+	 * Generate V^T
 	 *
-	 * @return  array  $V  The transpose of V matrix as an array of arrays 
+	 * @return  array  $V  The transpose of V matrix as an array of arrays
 	 */
 	public function generateReactionRateJacobianMatrix()
 	{
@@ -573,7 +571,7 @@ class ReactionNetwork
 					elseif($targetStoichiometryMatrix[$i][$j] > 0) $V[$i][] = -1;
 					else $V[$i][] = 0;
 				}
-				else 
+				else
 				{
 					if($sourceStoichiometryMatrix[$i][$j] > 0) $V[$i][] = 1;
 					else $V[$i][] = 0;

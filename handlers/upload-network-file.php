@@ -6,10 +6,10 @@
  * network, and attempts to analyse it.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   14/01/2013
+ * @modified   14/04/2013
  */
 
 require_once('../includes/config.php');

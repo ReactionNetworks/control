@@ -5,10 +5,10 @@
  * This is the results page for CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   19/02/2013
+ * @modified   15/04/2013
  */
 
 require_once('includes/header.php');
@@ -45,21 +45,14 @@ foreach($_SESSION['testoutput'] as $name => $result)
 {
 	++$currentTest;
 	echo '						<div id="test_', $name, '">', PHP_EOL;
-		
-			foreach($_SESSION['standardtests'] as &$standardTest)
-			if ($name === $standardTest->getShortName())
-			{
-				echo '							<h3>Test ', $currentTest, ': ', sanitise($standardTest->getLongName()), "</h3>\n" ;
-				echo '<p>', $standardTest->getDescription(), "</p>\n";
-			}
-	
-
-	echo '							<h4>Results:</h4>
-<pre>', $result, '</pre>
-						</div>', PHP_EOL; 
+	foreach($_SESSION['standardtests'] as &$standardTest)
+	if ($name === $standardTest->getShortName())
+	{
+		echo '							<h3>Test ', $currentTest, ': ', sanitise($standardTest->getLongName()), "</h3>\n" ;
+		echo '<p>', $standardTest->getDescription(), "</p>\n";
+	}
+	echo '							<h4>Results:</h4>', PHP_EOL, '<pre>', $result, '</pre>', PHP_EOL, '						</div>', PHP_EOL;
 }
-
 echo "					</div><!-- results -->\n";
-
 
 require_once('includes/footer.php');
