@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    17/01/2013
- * @modified   15/04/2013
+ * @modified   16/04/2013
  */
 
 require_once('../includes/config.php');
@@ -49,12 +49,14 @@ if (count($_POST))
 				// Throw exception?
 				break;
 		}
+		if(trim($leftHandSide) === '0') $leftHandSide = '';
+		if(trim($rightHandSide) === '0') $rightHandSide = '';
 		$reaction = new Reaction($leftHandSide, $rightHandSide, $reversible);
 		if (!$reactions->addReaction($reaction) or !$reaction->getReactants()) $output .= 'Reaction '.($i+1).' is invalid.<br />';
 	}
-	$_SESSION['reactionNetwork']=$reactions;
-	if (strlen($output)) echo $output;
-	if (CRNDEBUG) print_r($_SESSION['reactionNetwork']);
+	$_SESSION['reaction_network'] = $reactions;
+	if(strlen($output)) echo $output;
+	if(CRNDEBUG) print_r($_SESSION['reaction_network']);
 
 	// Create human-readable descriptor file
 	$filename = $_SESSION['tempfile'].'.hmn';
@@ -69,7 +71,7 @@ if (count($_POST))
 	}
 
 	// Write $somecontent to our opened file.
-	if(fwrite($handle, $_SESSION['reactionNetwork']->exportReactionNetworkEquations()) === false)
+	if(fwrite($handle, $_SESSION['reaction_network']->exportReactionNetworkEquations()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;
@@ -89,7 +91,7 @@ if (count($_POST))
 	}
 
 	// Write $somecontent to our opened file.
-	if(fwrite($handle, $_SESSION['reactionNetwork']->exportStoichiometryMatrix()) === false)
+	if(fwrite($handle, $_SESSION['reaction_network']->exportStoichiometryMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;
@@ -109,7 +111,7 @@ if (count($_POST))
 	}
 
 	// Write $somecontent to our opened file.
-	if(fwrite($handle, $_SESSION['reactionNetwork']->exportStoichiometryAndVMatrix()) === false)
+	if(fwrite($handle, $_SESSION['reaction_network']->exportStoichiometryAndVMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;
@@ -129,7 +131,7 @@ if (count($_POST))
 	}
 
 	// Write $somecontent to our opened file.
-	if(fwrite($handle, $_SESSION['reactionNetwork']->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
+	if(fwrite($handle, $_SESSION['reaction_network']->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;
@@ -140,22 +142,22 @@ if (count($_POST))
 	{
 		if($test)
 		{
-			foreach($_SESSION['standardtests'] as &$standardTest)
+			foreach($_SESSION['standard_tests'] as &$standardTest)
 			if ($testname === $standardTest->getShortName()) $standardTest->enableTest();
 		}
 		else
 		{
-			foreach($_SESSION['standardtests'] as &$standardTest)
+			foreach($_SESSION['standard_tests'] as &$standardTest)
 			if($testname === $standardTest->getShortName()) $standardTest->disableTest();
 		}
 	}
 
-	$_SESSION['numberOfTests'] = 0;
-	$_SESSION['testoutput'] = array();
-	$_SESSION['currenttest'] = 0;
+	$_SESSION['number_of_tests'] = 0;
+	$_SESSION['test_output'] = array();
+	$_SESSION['current_test'] = 0;
 
-	for($i = 0; $i < count($_SESSION['standardtests']); ++$i)
+	for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
 	{
-		if($_SESSION['standardtests'][$i]->getIsEnabled()) ++$_SESSION['numberOfTests'];
+		if($_SESSION['standard_tests'][$i]->getIsEnabled()) ++$_SESSION['number_of_tests'];
 	}
 }

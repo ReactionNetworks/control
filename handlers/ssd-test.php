@@ -6,10 +6,10 @@
  * to test whether the Jacobian matrix is strongly sign determined.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   02/11/2012
+ * @modified   16/04/2013
  */
 
 require_once('../includes/config.php');
@@ -17,7 +17,7 @@ require_once('../includes/classes.php');
 require_once('../includes/functions.php');
 require_once('../includes/session.php');
 
-if (isset($_SESSION['reactionNetwork']))
+if (isset($_SESSION['reaction_network']))
 {
 	$filename = $_SESSION['tempfile'].'.SSDonly';
 	$ssdBinary = BINARY_FILE_DIR.'test';
@@ -34,7 +34,7 @@ if (isset($_SESSION['reactionNetwork']))
 	}
 
 	// Write $somecontent to our opened file.
-	if (fwrite($handle, $_SESSION['reactionNetwork']->exportReactionNetworkEquations()) === false)
+	if (fwrite($handle, $_SESSION['reaction_network']->exportReactionNetworkEquations()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;

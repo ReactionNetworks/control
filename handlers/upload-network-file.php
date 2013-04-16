@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   14/04/2013
+ * @modified   16/04/2013
  */
 
 require_once('../includes/config.php');
@@ -69,28 +69,40 @@ if(!count($errors))
 {
 	unset($_SESSION['errors']);
 	$_SESSION['upload_file_format'] = $_POST['upload_network_file_format'];
-	$reactionNetwork = new ReactionNetwork();
+	$reaction_network = new ReactionNetwork();
 	$fhandle = fopen($_FILES['upload_network_file_input']['tmp_name'], 'r');
 	switch($_POST['upload_network_file_format'])
 	{
 		case 'stoichiometry':
 			$matrix = array();
 			$_SESSION['errors'][] = 'Warning: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.';
-			while(!feof($fhandle)) $matrix[]=explode(' ', trim(fgets($fhandle)));
-			if(!$reactionNetwork->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+			while(!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+				if($row) $matrix[] = explode(' ', $row);
+			}
+			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
 		default: // assume 'human' if unsure
+			$error = false;
 			while(!feof($fhandle))
 			{
 				$reactionString = fgets($fhandle);
-				$newReaction = Reaction::parseReaction($reactionString);
-				if($newReaction) $reactionNetwork->addReaction($newReaction);
-				else $_SESSION['errors'][] = 'An error occurred while adding a reaction from the file. Please check that the output below is as expected.';
+				if($reactionString)
+				{
+					$newReaction = Reaction::parseReaction($reactionString);
+					if($newReaction) $reaction_network->addReaction($newReaction);
+					elseif(!$error)
+					{
+						$_SESSION['errors'][] = 'An error occurred while adding a reaction from the file. Please check that the output below is as expected.';
+						$error = true;
+					}
+				}
 			}
 			break;
 	}
 	fclose($fhandle);
-	$_SESSION['reactionNetwork'] = $reactionNetwork;
+	$_SESSION['reaction_network'] = $reaction_network;
 }
 
 if(CRNDEBUG)

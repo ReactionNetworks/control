@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   14/04/2013
+ * @modified   16/04/2013
  */
 
 class Reaction
@@ -157,10 +157,10 @@ class Reaction
 	public function exportAsHTML()
 	{
 		$text = '';
-		$text.=$this->exportLHSAsText();
+		$text .= $this->exportLHSAsText();
 		if($this->reversible) $text .= ' &#x21cc; ';
 		else $text .= ' &rarr; ';
-		$text.=$this->exportRHSAsText();
+		$text .= $this->exportRHSAsText();
 		$text .= '<br />'.CLIENT_LINE_ENDING;
 		return $text;
 	}
@@ -178,6 +178,7 @@ class Reaction
 		else $text .= ' --> ';
 		$text.=$this->exportRHSAsText();
 		$text .= CLIENT_LINE_ENDING;
+		$text = str_replace('&empty;', '0', $text);
 		return $text;
 	}
 
@@ -192,10 +193,11 @@ class Reaction
 
 		foreach($this->leftHandSide as $reactant => $stoichiometry)
 		{
-			if (strlen($text)) $text .= ' + ';
-			if ($stoichiometry == 1) $text .= $reactant;
+			if(strlen($text)) $text .= ' + ';
+			if($stoichiometry == 1) $text .= $reactant;
 			else if($stoichiometry) $text = $text.$stoichiometry.$reactant;
 		}
+		if(!$text) $text = '&empty;';
 
 		return $text;
 	}
@@ -215,6 +217,7 @@ class Reaction
 			if ($stoichiometry == 1) $text .= $reactant;
 			else if($stoichiometry) $text = $text.$stoichiometry.$reactant;
 		}
+		if(!$text) $text = '&empty;';
 
 		return $text;
 	}
@@ -424,7 +427,7 @@ class ReactionNetwork
 			foreach($this->reactions as $reaction)
 			{
 				echo '					<fieldset class="reaction_input_row">
-						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', $reaction->exportLHSAsText(), '" />
+						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportLHSAsText()), '" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
 							<option value="both"';
@@ -434,7 +437,7 @@ class ReactionNetwork
 							if(!$reaction->isReversible()) echo ' selected="selected"';
 							echo '>&rarr;</option>
 						</select>
-						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', $reaction->exportRHSAsText(), '" />
+						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportRHSAsText()), '" />
 					</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
@@ -519,7 +522,7 @@ class ReactionNetwork
 
 	public function parseStoichiometry($matrix)
 	{
-		$success=true;
+		$success = true;
 		if(gettype($matrix) == 'array' and count($matrix))
 		{
 			$allReactants = array();
@@ -529,18 +532,22 @@ class ReactionNetwork
 			for($i = 0; $i < $numberOfReactants; ++$i)
 			{
 				if(count($matrix[$i]) !== $numberOfReactions) $success = false;
-				if(floor($i/26))$reactantPrefix = chr((floor($i/26)%26)+65);
+				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
 				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
 			}
-			for($i=0; $i<$numberOfReactions; ++$i)
+			for($i = 0; $i < $numberOfReactions; ++$i)
 			{
 				$lhs = array();
 				$rhs = array();
-				for($j=0; $j<$numberOfReactants; ++$j)
+				for($j = 0; $j < $numberOfReactants; ++$j)
 				{
-					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i])) $success = false;
-					else if($matrix[$j][$i] <0 ) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
-					else if($matrix[$j][$i] >0 ) $rhs[$allReactants[$j]] = $matrix[$j][$i];
+					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i]))
+					{
+						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($matrix): '.count($matrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$matrix[$j][$i]: '.$matrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						$success = false;
+					}
+					elseif($matrix[$j][$i] < 0) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
+					elseif($matrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $matrix[$j][$i];
 				}
 				$this->addReaction(new Reaction($lhs, $rhs, false));
 			}

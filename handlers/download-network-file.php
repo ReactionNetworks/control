@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   15/04/2012
+ * @modified   16/04/2013
  */
 
 require_once('../includes/config.php');
@@ -48,7 +48,7 @@ for($i = 0; $i < $numberOfReactions; ++$i)
 	}
 
 	$reactions->addReaction(new Reaction($leftHandSide, $rightHandSide, $reversible));
-	$_SESSION['reactionNetwork'] = $reactions;
+	$_SESSION['reaction_network'] = $reactions;
 }
 
 if(CRNDEBUG)

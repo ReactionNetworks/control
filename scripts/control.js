@@ -5,71 +5,9 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   15/04/2013
+ * @modified   16/04/2013
  */
 
-/**
- * Warns about invalid character input
- */
-function validateKeyPress(inputElement)
-{
-	var invalidCharacters = new Array('<', '>', '-', '=');
-	for(i=0; i<invalidCharacters.length;++i)
-	{
-		if (inputElement.val().indexOf(invalidCharacters[i]) > -1)
-		{
-			inputElement.val( inputElement.val().replace(invalidCharacters[i], ''));
-			$('#invalid_character_span').html(invalidCharacters[i]);
-			var position = inputElement.position();
-			$('#hidden_character_warning').css('top', position.top + 48);
-			$('#hidden_character_warning').css('left', position.left);
-			$('#hidden_character_warning').show();
-			setTimeout(function() {$('#hidden_character_warning').hide();}, 1500);
-		}
-	}
-	var validInput = true;
-	$('#missing_reactant_warning').hide();
-	$('.reaction_left_hand_side').each(function()
-	{
-		$(this).css('border-color', '');
-		if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
-		{
-			validInput = false;
-			$(this).css('border-color', 'red');
-			var position = inputElement.position();
-			$('#missing_reactant_warning').css('top', position.top + 48);
-			$('#missing_reactant_warning').css('left', position.left);
-			$('#missing_reactant_warning').show();
-		}
-	});
-	$('.reaction_right_hand_side').each(function()
-	{
-		$(this).css('border-color', '');
-		if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
-		{
-			validInput = false;
-			$(this).css('border-color', 'red');
-			var position = inputElement.position();
-			$('#missing_reactant_warning').css('top', position.top + 48);
-			$('#missing_reactant_warning').css('left', position.left);
-			$('#missing_reactant_warning').show();
-		}
-	});
-	if(validInput) enableButtons();
-	else disableButtons();
-} 
- 
-/**
- * Validates an email address
- */
-function validateEmailAddress(emailAddress)
-{
-	var atPos=emailAddress.indexOf('@');
- if( atPos< 1) return false;
- if( emailAddress.indexOf('.', atPos) > (atPos + 1) && emailAddress.charAt(emailAddress.length - 1) != '.') return true;
- return false;
-} 
- 
 /**
  * Adds a row to the reaction input form
  */
@@ -79,78 +17,56 @@ function addReaction()
 
 	$('.reaction_left_hand_side').each(function()
 	{
-		$(this).keyup(function()
-		{
-			//enableButtons();
-			validateKeyPress($(this));
-		});
+		$(this).keyup(function() { validateKeyPress($(this));	});
 	});
 
 	$('.reaction_right_hand_side').each(function()
 	{
-		$(this).keyup(function()
-		{
-			//enableButtons();
-			validateKeyPress($(this));
-		});
+		$(this).keyup(function() { validateKeyPress($(this)); });
 	});
+	$('#reset_reaction_button').removeClass('disabled');
 }
 
 /**
- * Removes a row from the reaction input form
- *
- * N.B. This function does NOT check whether there is only one reaction left.
- * Consequently, calling it when there is only one reaction left will result
- * no reactions being left. Calling it again may trigger a JavaScript error
- * in the user's browser.
+ * Get the size of the visible area of the browser
  */
-function removeReaction()
+function detectWindowSize()
 {
-	$('#reaction_input_form fieldset').filter(':last').remove();
+	if($(window).innerWidth() > 800) popupWidth = $(window).innerWidth() - 256;
+	else popupWidth = $(window).innerWidth() - 64;
+	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
+	else popupHeight = $(window).innerHeight() - 64;
 }
 
 /**
- * Resets all reactions in the input form
- *
- * Does not change the number of reactions in the input form, just clears
- * each reaction's LHS and RHS, and sets the direction to reversible. It
- * also disables the various reaction network processing buttons.
- */
-function resetReactions()
-{
-	$('#reaction_input_form fieldset input').val('');
-	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
-	disableButtons();
-	while($('#reaction_input_form fieldset').length -1) removeReaction();
-	$('#remove_reaction_button').addClass('disabled');
-}
-
-/*
  * Disables reaction reset, DSR graph and analysis buttons
  */
 function disableButtons()
 {
-	$('#reset_reaction_button').addClass('disabled');
 	$('#dsr_graph_button').addClass('disabled');
 	$('#process_network_button').addClass('disabled');
 	$('#download_network_file_button').addClass('disabled');
 	$('#latex_output_button').addClass('disabled');
+	$('#reset_reaction_button').addClass('disabled');
 }
 
-/*
+/**
  * Enables reaction reset, DSR graph and analysis buttons
  */
 function enableButtons()
 {
 	// Remove reaction button doesn't need to be enabled, as it is automatically enabled/disabled based on the number of reactions
-	$('#reset_reaction_button').removeClass('disabled');
 	$('#dsr_graph_button').removeClass('disabled');
 	$('#process_network_button').removeClass('disabled');
 	$('#download_network_file_button').removeClass('disabled');
 	$('#download_network_file_button').removeAttr('disabled');
 	$('#latex_output_button').removeClass('disabled');
+	$('#reset_reaction_button').removeClass('disabled');
 }
 
+/**
+ * Generates LaTeX markup for a set of reactions and displays it in a popover
+ */
 function generateLaTeX()
 {
 	var numberOfRows=0;
@@ -159,7 +75,8 @@ function generateLaTeX()
 	$('.reaction_input_row').each(function()
 	{
 		++numberOfRows;
-		textOutput += $('.reaction_left_hand_side', $(this)).val().replace('&', '\&');
+		if($('.reaction_left_hand_side', $(this)).val() == '' || $('.reaction_left_hand_side', $(this)).val() == ' ' || $('.reaction_left_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
+		else textOutput += $('.reaction_left_hand_side', $(this)).val().replace('&', '\\&amp;');
 		textOutput += ' &amp; ';
 		switch($('select.reaction_direction option:selected', $(this)).val())
 		{
@@ -176,11 +93,12 @@ function generateLaTeX()
 				textOutput += ' ? ';
 		}
 		textOutput += ' &amp; ';
-		textOutput += $('.reaction_right_hand_side', $(this)).val().replace('&', '\\&');
+		if($('.reaction_right_hand_side', $(this)).val() == '' || $('.reaction_right_hand_side', $(this)).val() == ' ' || $('.reaction_right_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
+		else textOutput += $('.reaction_right_hand_side', $(this)).val().replace('&', '\\&');
 		textOutput = textOutput.replace('$', '\\$');
 		textOutput += ' \\\\\n';
 	});
-	var allLines= textOutput.split('\n');
+	var allLines = textOutput.split('\n');
 	for(i=0;i<allLines.length;++i)
 	{
 		if(allLines[i].length > numberOfColumns) numberOfColumns = allLines[i].length;
@@ -191,6 +109,9 @@ function generateLaTeX()
 	$('#latex_output_holder').html(textOutput);
 }
 
+/**
+ * Calls the test handler for all selected tests and then redirects to the results
+ */
 function processTests()
 {
 	var url = 'handlers/process-tests.php';
@@ -199,26 +120,51 @@ function processTests()
 	else processTests()});
 }
 
-function testTests()
+/**
+ * Removes a row from the reaction input form
+ *
+ * N.B. This function does NOT check whether there is only one reaction left.
+ * Consequently, calling it when there is only one reaction left will result
+ * no reactions being left. Calling it again may trigger a JavaScript error
+ * in the user's browser.
+ */
+function removeReaction()
 {
-	var url = 'handlers/test.php';
-	$.get(url, null, function(returndata) {showTestOutput(returndata);});
+	$('#reaction_input_form fieldset').filter(':last').remove();
 }
 
-function showTestOutput(output)
-{
-	$('#calculation_output_holder').append(output);
-}
-
+/**
+ * Clears the results popup.
+ */
 function resetPopup()
 {
 	$('#calculation_output_holder').html('<p>Processing...<span class="blink">_</span></p>');
 }
 
-var validNetwork=true;
+/**
+ * Resets all reactions in the input form
+ *
+ * Disables the various reaction network processing buttons, clears all reactions in the form,
+ * removes all reactions except the first, and clears any saved reactions from the session.
+ */
+function resetReactions()
+{
+	$('#reaction_input_form fieldset input').val('');
+	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
+	disableButtons();
+	while($('#reaction_input_form fieldset').length -1) removeReaction();
+	$('#remove_reaction_button').addClass('disabled');
+	var url = 'handlers/reset-reactions.php';
+	$.post(url, {reset_reactions: 1});
+}
+
+/**
+ * Saves the network in the session via AJAX
+ */
+var validNetwork = true;
 function saveNetwork()
 {
-	validNetwork=true;
+	validNetwork = true;
 	var url = 'handlers/process-network.php';
 	var reactionsLeftHandSide = new Array();
 	$.each($('.reaction_left_hand_side'), function(index,value){reactionsLeftHandSide.push(value.value)}); 		
@@ -227,27 +173,116 @@ function saveNetwork()
   var reactionsDirection = new Array();
 	$.each($('.reaction_direction :selected'), function(index,value){reactionsDirection.push(value.value)});
 	var testSettings = new Array();
-	$.each($('.test'), function(index, v){testSettings.push({name: $(this).attr('name'), value: $(this).val()})});
-	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection, 'test_settings':testSettings}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>');validNetwork=false;}});
+	$.each($('.test'), function(index, v) {testSettings.push({name: $(this).attr('name'), value: $(this).val()})});
+	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection, 'test_settings':testSettings}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>'); validNetwork=false;}});
 	return validNetwork;
 }
 
-function toggleTest(testName, newStatus)
+/**
+ * Adds output from a test to the progress popover
+ */
+function showTestOutput(output)
 {
-	var url = 'handlers/toggle-test.php';
-	$.post(url, {testName: testName, active: newStatus});
+	$('#calculation_output_holder').append(output);
 }
 
+/**
+ * Enables/disables the --mass-action-only flag via AJAX
+ */
 function toggleMassAction(newStatus)
 {
 	var url = 'handlers/toggle-mass-action.php';
 	$.post(url, {mass_action_only: newStatus});
 }
 
+/**
+ * Enables/disables the specified test via AJAX
+ */
+function toggleTest(testName, newStatus)
+{
+	var url = 'handlers/toggle-test.php';
+	$.post(url, {testName: testName, active: newStatus});
+}
+
+/**
+ * Validates an email address
+ */
+function validateEmailAddress(emailAddress)
+{
+	var atPos=emailAddress.indexOf('@');
+ if( atPos< 1) return false;
+ if( emailAddress.indexOf('.', atPos) > (atPos + 1) && emailAddress.charAt(emailAddress.length - 1) != '.') return true;
+ return false;
+} 
+ 
+/**
+ * Warns about invalid character input
+ */
+function validateKeyPress(inputElement)
+{
+	var invalidCharacters = new Array('<', '>', '-', '=');
+	for(i = 0; i < invalidCharacters.length; ++i)
+	{
+		if (inputElement.val().indexOf(invalidCharacters[i]) > -1)
+		{
+			inputElement.val( inputElement.val().replace(invalidCharacters[i], ''));
+			$('#invalid_character_span').html(invalidCharacters[i]);
+			var position = inputElement.position();
+			$('#hidden_character_warning').css('top', position.top + 48);
+			$('#hidden_character_warning').css('left', position.left);
+			$('#hidden_character_warning').show();
+			setTimeout(function() {$('#hidden_character_warning').hide();}, 1500);
+		}
+	}
+	var validInput = true;
+	var totalChars = 0;
+	$('#missing_reactant_warning').hide();
+	$('.reaction_left_hand_side').each(function()
+	{
+		$(this).css('border-color', '');
+		totalChars += $(this).val().length;
+		if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
+		{
+			validInput = false;
+			$(this).css('border-color', 'red');
+			var position = inputElement.position();
+			$('#missing_reactant_warning').css('top', position.top + 48);
+			$('#missing_reactant_warning').css('left', position.left);
+			$('#missing_reactant_warning').show();
+		}
+	});
+	$('.reaction_right_hand_side').each(function()
+	{
+		$(this).css('border-color', '');
+		totalChars += $(this).val().length;
+		if($(this).val().indexOf('+') == 0 || $(this).val()[$(this).val().length - 1] == '+' || $(this).val().indexOf('++') > -1 || $(this).val().indexOf('+ +') > -1 || $(this).val().indexOf('+  +') > -1)
+		{
+			validInput = false;
+			$(this).css('border-color', 'red');
+			var position = inputElement.position();
+			$('#missing_reactant_warning').css('top', position.top + 48);
+			$('#missing_reactant_warning').css('left', position.left);
+			$('#missing_reactant_warning').show();
+		}
+	});
+	if(validInput && totalChars) enableButtons();
+	else disableButtons();
+} 
+
 $(document).ready(function()
 {
+	// Set some useful variables
+	if($(window).innerWidth() > 800) var popupWidth = $(window).innerWidth() - 256;
+	else var popupWidth = $(window).innerWidth() - 64;
+	if($(window).innerHeight() > 800) var popupHeight = $(window).innerHeight() - 256;
+	else var popupHeight = $(window).innerHeight() - 64;
+	var buttonSize = 0;
+
+	// Move the buttons to the middle of the page
 	var buttonDivOffset=-Math.floor($('#reaction_input_submit_buttons').height()/2);
 	$('#reaction_input_submit_buttons').css('margin-top', buttonDivOffset.toString() + 'px');
+
+	// Enable DSR applet for browsers with Java installed
 	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
 	
 	$('#add_reaction_button').click(function()
@@ -291,23 +326,6 @@ $(document).ready(function()
 		});
 	});
 
-	$('#download_network_file_button').click(function(e)
-	{
-		if($(this).hasClass('disabled')) e.preventDefault();
-	});
-
-	$('#upload_network_file_input').change(function()
-	{
-		$('#upload_network_file_button').removeClass('disabled');
-		$('#upload_network_file_button').removeAttr('disabled');
-	});
-
-	if(window.innerWidth > 800) var popupWidth = window.innerWidth - 256;
-	else var popupWidth = window.innerWidth - 64;
-	if(window.innerHeight > 800) var popupHeight = window.innerHeight - 256;
-	else var popupHeight = window.innerHeight - 64;
-
-	var buttonSize = 0;
 	if($('#add_reaction_button').height() > buttonSize) buttonSize = $('#add_reaction_button').height();
 	if($('#add_reaction_button').width() > buttonSize) buttonSize = $('#add_reaction_button').width();
 	if($('#remove_reaction_button').height() > buttonSize) buttonSize = $('#remove_reaction_button').height();
@@ -321,25 +339,15 @@ $(document).ready(function()
 	$('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);
 	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
 
-	$('#process_network_button').click(function()
+	$('#dsr_graph_close_button').click(function(e)
 	{
-		if(!$(this).hasClass('disabled')) 
-		{		
-			resetPopup();
-			if (saveNetwork())
-			{				
-				processTests();
-			}
-		}
-		return false;
-	});	
+		e.preventDefault();
+		$('#dsr_graph_applet_holder').css('left', '-10000px');
+	});
 
-	$('#latex_output_button').click(function(e)
+	$('#download_network_file_button').click(function(e)
 	{
-		if(!$(this).hasClass('disabled'))
-		{
-			generateLaTeX();
-		}
+		if($(this).hasClass('disabled')) e.preventDefault();
 	});
 
 	$('#dsr_graph_button').click(function(e)
@@ -392,19 +400,13 @@ $(document).ready(function()
 		}
 	});
 
-	$('#dsr_graph_close_button').click(function(e)
+	$('#latex_output_button').click(function(e)
 	{
-		e.preventDefault();
-		$('#dsr_graph_applet_holder').css('left', '-10000px');
+		if(!$(this).hasClass('disabled'))
+		{
+			generateLaTeX();
+		}
 	});
-
-	$('#option_holder input[name*="test_checkbox"]').change(function()
-	{
-		var testName = $(this).attr('name').slice(14, -1);
-		var activated = 0;
-		if($(this).is(':checked')) activated = 1;
-		toggleTest(testName, activated);
-	})
 
 	$('#mass_action_checkbox').change(function()
 	{
@@ -413,6 +415,27 @@ $(document).ready(function()
 		toggleMassAction(activated);
 	})
 	
+	$('#option_holder input[name*="test_checkbox"]').change(function()
+	{
+		var testName = $(this).attr('name').slice(14, -1);
+		var activated = 0;
+		if($(this).is(':checked')) activated = 1;
+		toggleTest(testName, activated);
+	})
+
+	$('#process_network_button').click(function()
+	{
+		if(!$(this).hasClass('disabled')) 
+		{		
+			resetPopup();
+			if (saveNetwork())
+			{				
+				processTests();
+			}
+		}
+		return false;
+	});	
+
 	$('#upload_batch_file_email').change(function()
 	{
 		if(validateEmailAddress($('#upload_batch_file_email').val()))
@@ -449,4 +472,13 @@ $(document).ready(function()
 			$('#upload_batch_file_button').removeAttr('disabled');
 		}
 	});
+
+	$('#upload_network_file_input').change(function()
+	{
+		$('#upload_network_file_button').removeClass('disabled');
+		$('#upload_network_file_button').removeAttr('disabled');
+	});
+
+	$(window).resize(function() { detectWindowSize(); });
+	$('.reaction_left_hand_side').first().select();
 });

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   14/04/2013
+ * @modified   16/04/2013
  */
 
 require_once('../includes/config.php');
@@ -17,17 +17,17 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 
-if(isset($_SESSION['reactionNetwork']))
+if(isset($_SESSION['reaction_network']))
 {
-	$currentTest=null;
+	$currentTest = null;
 
-	for ($i=0;$i<count($_SESSION['standardtests']);++$i)
+	for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
 	{
-		if ($_SESSION['standardtests'][$i]->getIsEnabled())
+		if ($_SESSION['standard_tests'][$i]->getIsEnabled())
 	 {
-	 	$_SESSION['standardtests'][$i]->disableTest();
-	 	$currentTest=$_SESSION['standardtests'][$i];
-	 	++$_SESSION['currenttest'];
+	 	$_SESSION['standard_tests'][$i]->disableTest();
+	 	$currentTest=$_SESSION['standard_tests'][$i];
+	 	++$_SESSION['current_test'];
 	  break;
 	 }
 	}
@@ -65,8 +65,8 @@ if(isset($_SESSION['reactionNetwork']))
 			foreach($output as $line) $temp .= "\n$line";
 		}
 
-		$_SESSION['testoutput'][$currentTest->getShortName()] = $temp;
-		echo '<p>Completed test ',$_SESSION['currenttest'],' of ',$_SESSION['numberOfTests'], '.</p>';
+		$_SESSION['test_output'][$currentTest->getShortName()] = $temp;
+		echo '<p>Completed test ',$_SESSION['current_test'],' of ',$_SESSION['number_of_tests'], '.</p>';
 	}
 
 	else echo '<p>All tests completed. Redirecting to results.</p>';

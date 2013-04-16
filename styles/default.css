@@ -1,12 +1,11 @@
 /**
  * Default stylesheet for CoNtRol
  *
- *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   27/03/2013
+ * @modified   16/04/2013
  */
 
 *
@@ -29,13 +28,6 @@ h1
 .blink
 {
 	text-decoration: blink;
-}
-
-.left_centred
-{
-	text-align: left;
-	margin: auto;
-	width: 22em;
 }
 
 .button
@@ -82,38 +74,21 @@ h1
 	cursor: default;
 }
 
-#reaction_input_holder, #reaction_input_form, #reaction_upload_form
+.left_centred
 {
-	text-align: center;
+	text-align: left;
 	margin: auto;
+	width: 22em;
 }
 
-#reaction_input_holder p:first-child
+#add_reaction_button, #remove_reaction_button
 {
-	margin-bottom: 1em;
+	display: inline-block;
 }
 
-#reaction_input_form, #reaction_upload_form, #batch_upload_form
+#add_reaction_button, #reaction_input_form fieldset input, #reaction_input_form fieldset select, #remove_reaction_button
 {
-	padding: 1em 0;
-}
-
-#reaction_upload_form p, #batch_upload_form p
-{
-	padding: 0.5em;
-}
-
-#upload_batch_file_email_error
-{
-	color: red;
-}
-
-#reaction_input_submit_buttons
-{
-	position:absolute;
-	left:0; 
-	top: 50%;
-	margin-top: -4em;
+	font-size: 150%;
 }
 
 #advanced_options
@@ -124,30 +99,51 @@ h1
 	margin-top: -0.5em;
 }
 
-#reaction_input_submit_buttons a, #reaction_input_submit_buttons button
+#advanced_options a, #advanced_options button, #reaction_input_submit_buttons a, #reaction_input_submit_buttons button
 {
 	display:block;
 	margin: 5px 0;
 }
 
-#reaction_input_form fieldset
+#batch_upload_form, #reaction_input_form, #reaction_upload_form
 {
-	padding-bottom: 1em;
+	padding: 1em 0;
 }
 
-#add_reaction_button, #remove_reaction_button
+#batch_upload_form p, #reaction_upload_form p
 {
-	display: inline-block;
+	padding: 0.5em;
 }
 
-#reaction_input_form fieldset select, #reaction_input_form fieldset input, #add_reaction_button, #remove_reaction_button
+#calculation_output_holder p
 {
-	font-size: 150%;
+	text-align: left;
+	margin: 1em;
+	font-size: 125%;
 }
 
-#reaction_input_form fieldset textarea
+#credits
 {
-	width: 40%;
+	position: absolute;
+	bottom: 1em;
+	right: 1em;
+}
+
+#credits_hider, #popup_hider
+{
+	visibility: hidden;
+	height: 1px;
+	overflow: hidden;
+}
+
+#credits_holder > *
+{
+	margin: 0.5em 1em;
+}
+
+#credits_holder > ul > li
+{
+	padding: 0.2em;
 }
 
 #dsr_graph_applet_holder
@@ -160,21 +156,31 @@ h1
 	margin-left: -400px;
 	border: 1px solid #999;
 	background-color: white;
-	text-align: right;
+	text-align: center;
 }
 
-#popup_hider, #credits_hider
+#dsr_graph_close_button
 {
-	visibility: hidden;
-	height: 1px;
-	overflow: hidden;
+	float: right;
 }
 
-#calculation_output_holder p
+#dsr_graph_title
 {
-	text-align: left;
-	margin: 1em;
-	font-size: 125%;
+	font-size: 150%;
+	font-weight: bolder;
+	position: relative;
+	top: 0.2em;
+}
+
+#error_message_holder
+{
+	text-align: center;
+	color: red;
+}
+
+#error_message_holder p
+{
+	margin-bottom: 0.5em;
 }
 
 #hidden_character_warning, #missing_reactant_warning
@@ -190,36 +196,16 @@ h1
 	background-color: #EEE;
 }
 
-#error_message_holder
+#latex_output_holder
 {
 	text-align: center;
-	color: red;
+	margin-top: 1em;
 }
 
-#error_message_holder p
+#latex_output_holder > textarea
 {
-	margin-bottom: 0.5em;
-}
-
-#results 
-{
-	margin: 0 2em 2em; 
-}
-
-#results > div
-{
-	border: 1px solid #ccc;
-	padding: 1em; 
-}
-
-#results > div > pre 
-{
-	white-space: pre-wrap;
-}
-
-#results > div, #results > div > pre, #results > div > p, #results > div > h4
-{
-	margin: 1em 0 0;
+	max-width: 95%;
+	font-size: 100%;
 }
 
 #option_holder > h3
@@ -244,31 +230,63 @@ h1
 	text-align: left;
 }
 
-#latex_output_holder
+#reaction_input_form, #reaction_input_holder, #reaction_upload_form
 {
 	text-align: center;
-	margin-top: 1em;
+	margin: auto;
 }
 
-#latex_output_holder > textarea
+#reaction_input_form fieldset
 {
-	max-width: 95%;
-	font-size: 100%;
+	padding-bottom: 1em;
 }
 
-#credits
+#reaction_input_form fieldset textarea
 {
-	position: absolute;
-	bottom: 1em;
-	right: 1em;
+	width: 40%;
 }
 
-#credits_holder > *
+#reaction_input_holder p:first-child
 {
-	margin: 0.5em 1em;
+	margin-bottom: 1em;
 }
 
-#credits_holder > ul > li
+#reaction_input_submit_buttons
 {
-	padding: 0.2em;
+	position:absolute;
+	left:0; 
+	top: 50%;
+	margin-top: -4em;
+}
+
+#results 
+{
+	margin: 0 2em 2em; 
+}
+
+#results > div
+{
+	border: 1px solid #ccc;
+	padding: 1em; 
+}
+
+#results > div > pre 
+{
+	white-space: pre-wrap;
+}
+
+#results > div, #results > div > h4, #results > div > p, #results > div > pre
+{
+	margin: 1em 0 0;
+}
+
+#results_link
+{
+	text-align: right;
+	margin-right: 2em;
+}
+
+#upload_batch_file_email_error
+{
+	color: red;
 }

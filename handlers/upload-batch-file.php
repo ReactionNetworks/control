@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   15/04/2013
+ * @modified   16/04/2013
  */
 
 require_once('../includes/config.php');
@@ -125,21 +125,21 @@ if(!count($_SESSION['errors']))
 	{
 		if($test)
 		{
-			foreach($_SESSION['standardtests'] as &$standardTest)
-			if ($testname === $standardTest->getShortName()) $standardTest->enableTest();
+			foreach($_SESSION['standard_tests'] as &$standardTest)
+			if($testname === $standardTest->getShortName()) $standardTest->enableTest();
 		}
 		else
 		{
-			foreach($_SESSION['standardtests'] as &$standardTest)
+			foreach($_SESSION['standard_tests'] as &$standardTest)
 			if($testname === $standardTest->getShortName()) $standardTest->disableTest();
 		}
 	}
-	for ($i=0;$i<count($_SESSION['standardtests']);++$i)
+	for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
 	{
-		if ($_SESSION['standardtests'][$i]->getIsEnabled())
+		if($_SESSION['standard_tests'][$i]->getIsEnabled())
 		{
 			if($tests_enabled) $tests_enabled .= ';';
-			$tests_enabled .= $_SESSION['standardtests'][$i]->getShortName();
+			$tests_enabled .= $_SESSION['standard_tests'][$i]->getShortName();
 		}
 	}
 	$statement->bindParam(':filename', $_FILES['upload_batch_file_input']['tmp_name'], PDO::PARAM_STR);

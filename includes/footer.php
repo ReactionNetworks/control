@@ -5,10 +5,10 @@
  * Standard footer included on all pages within CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-13
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   27/03/2013
+ * @modified   16/04/2013
  */
 ?>
 			</div><!-- content -->
@@ -18,7 +18,7 @@
 						<h2>Credits, Acknowledgments &amp; Licensing</h2>
 						<h3>Credits</h3>
 						<ul>
-							<li>Concept, layout and web programming: Pete Donnell</li>
+							<li>Web programming: Pete Donnell &amp; Kitson Consulting</li>
 							<li>DSR graph applet: Anca Marginean &amp; Casian Pantea</li>
 							<li>SSD test: Murad Banaji</li>
 							<li>Graphic design: Olaf Mayer &amp; Kitson Consulting</li>
@@ -38,7 +38,9 @@
 						</ul>
 					</div><!-- credits_holder -->
 				</div><!-- credits_hider -->
-				<p id="credits"><a href="#credits_holder" class="fancybox">Credits</a></p>
+				<p id="credits">
+					<a href="http://reaction-networks.net/wiki/CoNtRol" title="View documentation for CoNtRol in a new tab" target="_blank">Documentation</a>
+					<a href="#credits_holder" class="fancybox">Credits</a></p>
 			</div><!-- footer -->
 		</div><!-- container -->
 	</body>
