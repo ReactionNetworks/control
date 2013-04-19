@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/04/2013
+ * @modified   19/04/2013
  */
 
 class Reaction
@@ -170,14 +170,14 @@ class Reaction
 	 *
 	 * @return  string  $text  Text describing the reaction.
 	 */
-	public function exportAsText()
+	public function exportAsText($line_ending = PHP_EOL)
 	{
 		$text = '';
 		$text.=$this->exportLHSAsText();
 		if($this->reversible) $text .= ' <--> ';
 		else $text .= ' --> ';
 		$text.=$this->exportRHSAsText();
-		$text .= CLIENT_LINE_ENDING;
+		$text .= $line_ending;
 		$text = str_replace('&empty;', '0', $text);
 		return $text;
 	}
@@ -297,11 +297,11 @@ class ReactionNetwork
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
 	 * @return  string  $equations  Text version of reaction network chemical equations
 	 */
-	public function exportReactionNetworkEquations($LaTeX = false)
+	public function exportReactionNetworkEquations($line_ending = PHP_EOL, $LaTeX = false)
 	{
 		$equations = '';
 		$numberOfReactions = count($this->reactions);
-		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText();
+		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText($line_ending);
 		return $equations;
 	}
 
@@ -411,13 +411,13 @@ class ReactionNetwork
 		return $equations;
 	}
 
-	public function exportTextFile()
+	public function exportTextFile($line_ending = PHP_EOL)
 	{
 		// Send headers for download
 		header('Content-Type: text/plain');
 		header('Content-Disposition: Attachment; filename=crn.txt');
 		header('Pragma: no-cache');
-		echo $this->exportReactionNetworkEquations();
+		echo $this->exportReactionNetworkEquations($line_ending);
 	}
 
 	public function generateFieldsetHTML()

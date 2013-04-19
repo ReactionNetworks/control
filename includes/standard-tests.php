@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   19/02/2013
+ * @modified   19/04/2013
  */
 
 $standardTests = array(
@@ -29,7 +29,8 @@ $standardTests = array(
 	(
 		'dummy',
 		'Dummy',
-		'Dummy test for development purposes. This test will be removed in a later version of CoNtRol. Implemented by Pete Donnell.', 'dummy',
+		'Dummy test for development purposes. This test will be removed in a later version of CoNtRol. Implemented by Pete Donnell.',
+		'dummy',
 		array('human', 'stoichiometry'),
 		true,
 		true

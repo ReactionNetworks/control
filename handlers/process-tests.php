@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   16/04/2013
+ * @modified   19/04/2013
  */
 
 require_once('../includes/config.php');
@@ -26,7 +26,7 @@ if(isset($_SESSION['reaction_network']))
 		if ($_SESSION['standard_tests'][$i]->getIsEnabled())
 	 {
 	 	$_SESSION['standard_tests'][$i]->disableTest();
-	 	$currentTest=$_SESSION['standard_tests'][$i];
+	 	$currentTest = $_SESSION['standard_tests'][$i];
 	 	++$_SESSION['current_test'];
 	  break;
 	 }
@@ -41,6 +41,7 @@ if(isset($_SESSION['reaction_network']))
 		// How best to treat reversible vs irreversible reactions in stoichiometry case?
 		if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
 		if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
+		if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
 		if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
 
 		if(!$extension) $temp = 'This test does not support any valid file formats. Test aborted.';
@@ -50,7 +51,7 @@ if(isset($_SESSION['reaction_network']))
 			$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
 			$output = array();
 			$returnValue = 0;
-			$exec_string = './'.$binary;
+			$exec_string = $binary;
 			if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only'])
 			{
 				if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
