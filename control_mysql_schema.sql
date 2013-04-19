@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 11, 2013 at 05:25 PM
+-- Generation Time: Apr 19, 2013 at 04:09 PM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.6-1ubuntu1.2
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(255) NOT NULL,
-  `file_format` tinyint(3) unsigned NOT NULL,
+  `file_format` tinyint(3) unsigned NOT NULL COMMENT '0 = net stoichiometry, 1 = human, 2 = net stoichiometry + V, 3 = source + target + V',
   `email` varchar(255) NOT NULL,
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `mass_action_only` tinyint(3) unsigned NOT NULL,
