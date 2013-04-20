@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/04/2013
+ * @modified   20/04/2013
  */
 ?>
 			</div><!-- content -->
@@ -26,7 +26,7 @@
 						<h3>Acknowledgments</h3>
 						<ul>
 							<li>This work was supported by grants XXXX, YYYY, ZZZZ, and also by <a href="http://kitson-consulting.co.uk/" title="Science and IT Consultants">Kitson Consulting Limited</a>.</li>
-							<li>PD wishes to acknowledge Mark Donnell, Casian Pantea, Polly Hember and Olaf Mayer for their assistance with typing.</li>
+							<li>PD wishes to acknowledge Matt Kingston, Mark Donnell, Casian Pantea, Polly Hember and Olaf Mayer for their assistance with typing.</li>
 							<!--li>PD wishes to acknowledge Barnaby Menage, Oliver Butterfield, Andrew Burbanks, James Burridge, Elisenda Feliu, Kirk Jackson, Matt Kingston, Joe Parker, Kate Oliver and Nick Hatter for testing and feature requests.</li-->
 						</ul>
 						<h3>Licensing &amp; Copyright</h3>

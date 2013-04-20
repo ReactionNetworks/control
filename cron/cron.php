@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?php 
+<?php
 /**
  * CoNtR ol batch processing script
  *
@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   19/04/2013
+ * @modified   20/04/2013
  */
 
 require_once('../includes/config.php');
@@ -58,13 +58,17 @@ for($i=0; $i < $number_of_jobs; ++$i)
 	$mail .= "CoNtRol Version ".CONTROL_VERSION."\r\n";
 	$mail .= "\r\n";
 
-	// Initialise some other variables.
-	$tests_enabled = explode($jobs[$i]['tests_enabled'], ';');
+	// Initialise some variables
+	$line_ending = "\n";
+       	if(strpos($jobs[$i]['remote_user_agent'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
+       	if(strpos($jobs[$i]['remote_user_agent'], 'Macintosh;') !== false) $line_ending = "\r";
+
+	$tests_enabled = explode(';', $jobs[$i]['tests_enabled']);
 	$mail .= "Tests enabled:";
 	foreach($tests_enabled as $test) $mail .= " $test";
 	$mail .= "\r\nMass action only: ";
 	$mass_action_only = false;
-	if($jobs[$i]['mass_action_only'] == 1) 
+	if($jobs[$i]['mass_action_only'] == 1)
 	{
 		$mass_action_only = true;
 		$mail .= "True";
@@ -91,8 +95,8 @@ for($i=0; $i < $number_of_jobs; ++$i)
 	if (!$success) $mail .= "ERROR: Failed to open archive $filename\r\n";
 	else
 	{
-		$success = mkdir($dirname,'0700',true);
-		if ($success) 
+		$success = mkdir($dirname,'0777',true);
+		if ($success)
 		{
 			$archive->extractTo($dirname);
 			$archive->close();
@@ -128,7 +132,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 									$row = trim($line);
 									if($row) $matrix[] = explode(' ', $row);
 								}
-								if(!$reaction_network->parseStoichiometry($matrix)) 
+								if(!$reaction_network->parseStoichiometry($matrix))
 								{
 									$mail .= "ERROR: An error was detected in the stoichiometry file.\r\n";
 									$success = false;
@@ -163,7 +167,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 						{
 							// Create human-readable descriptor file
 							$filename = $filename.'.hmn';
-						
+
 							// In our example we're opening $filename in append mode.
 							// The file pointer is at the bottom of the file hence
 							// that's where $somecontent will go when we fwrite() it.
@@ -172,7 +176,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$mail .= "ERROR: Cannot open file ($temp_filename)\r\n";
 								$success = false;
 							}
-						
+
 							// Write $somecontent to our opened file.
 							if(fwrite($handle, $reaction_network->exportReactionNetworkEquations()) === false)
 							{
@@ -180,10 +184,10 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$success = false;
 							}
 							fclose($handle);
-						
+
 							// Create net stoichiometry descriptor file
 							$temp_filename = $filename.'.sto';
-						
+
 							// In our example we're opening $filename in append mode.
 							// The file pointer is at the bottom of the file hence
 							// that's where $somecontent will go when we fwrite() it.
@@ -192,7 +196,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$mail .= "ERROR: Cannot open file ($temp_filename)\r\n";
 								$success = false;
 							}
-						
+
 							// Write $somecontent to our opened file.
 							if(fwrite($handle, $reaction_network->exportStoichiometryMatrix()) === false)
 							{
@@ -200,10 +204,10 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$success = false;
 							}
 							fclose($handle);
-						
+
 							// Create net stoichiometry + V matrix descriptor file
 							$temp_filename = $filename.'.s+v';
-						
+
 							// In our example we're opening $filename in append mode.
 							// The file pointer is at the bottom of the file hence
 							// that's where $somecontent will go when we fwrite() it.
@@ -212,7 +216,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$mail .= "ERROR: Cannot open file ($temp_filename)\r\n";
 								$success = false;
 							}
-						
+
 							// Write $somecontent to our opened file.
 							if(fwrite($handle, $reaction_network->exportStoichiometryAndVMatrix()) === false)
 							{
@@ -220,10 +224,10 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$success = false;
 							}
 							fclose($handle);
-						
+
 							// Create source stoichiometry + target stoichiometry + V matrix descriptor file
 							$temp_filename = $filename.'.stv';
-						
+
 							// In our example we're opening $filename in append mode.
 							// The file pointer is at the bottom of the file hence
 							// that's where $somecontent will go when we fwrite() it.
@@ -232,7 +236,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$mail .= "ERROR: Cannot open file ($temp_filename)\r\n";
 								$success = false;
 							}
-						
+
 							// Write $somecontent to our opened file.
 							if(fwrite($handle, $reaction_network->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
 							{
@@ -240,13 +244,13 @@ for($i=0; $i < $number_of_jobs; ++$i)
 								$success = false;
 							}
 							fclose($handle);
-							
+
 							if($success)
 							{
 								$number_of_tests = 0;
 								$test_output = array();
 								$current_test = 0;
-							
+
 								for($i = 0; $i < count($standard_tests); ++$i)
 								{
 									if($standard_tests[$i]->getIsEnabled()) ++$number_of_tests;
@@ -260,14 +264,14 @@ for($i=0; $i < $number_of_jobs; ++$i)
 									$extension = '';
 									$temp = '';
 									$mail .= "\r\n### TEST: ".$currentTest->getShortName()." ###\r\n\r\nTest start time: ".date('Y-m-d H:i:s')."\r\n\r\n";
-							
+
 									// Need to split this into net stoichiometry versus source/target stoichiometry?
 									// How best to treat reversible vs irreversible reactions in stoichiometry case?
 									if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
 									if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
 									if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
 									if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
-							
+
 									if(!$extension) $mail .= "ERROR: This test does not support any valid file formats. Test aborted.\r\n";
 									else
 									{
@@ -288,7 +292,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 										$exec_string .= ' '.$filename.' 2>&1';
 										exec($exec_string, $output, $returnValue);
 										foreach($output as $line) $mail .= "\r\n$line";
-									}						
+									}
 									$mail .= "\r\n\r\n### END OF TEST: ".$currentTest->getShortName()." ###\r\n\r\n";
 								} //foreach($tests_enabled as $currentTest)
 							} //if($success)
@@ -299,6 +303,13 @@ for($i=0; $i < $number_of_jobs; ++$i)
 			} //foreach($extracted_files as $file)
 		} //if($extracted_files !== false)
 	} //if($success)
-	$mail .= "\r\nThis auto-generated message was sent to you because someone requested processing of a batch job via ".SITE_URL." from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".\r\n";
-	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $mail, $extra_headers, $sendmail_params)) die("\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail");
+	$mail .= "\r\nThis auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".\r\n";
+	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $mail, $extra_headers, $sendmail_params)) echo "\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail";
+	elseif($success)
+	{
+		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 2 WHERE id = :id';
+		$statement = $controldb->prepare($query);
+		$statement->bindParam(':id', $jobs[$i]['id'], PDO::PARAM_INT);
+		$statement->execute();
+	}
 } //for($i=0; $i < $number_of_jobs; ++$i)

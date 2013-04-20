@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   16/04/2013
+ * @modified   20/04/2013
  */
 
 require_once('../includes/config.php');
@@ -18,6 +18,7 @@ require_once('../includes/session.php');
 
 $_SESSION['errors'] = array();
 $mimetype = '';
+$filename = '';
 
 if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input']) and count($_FILES['upload_batch_file_input']))
 {
@@ -31,6 +32,11 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 				$allowed_mimetypes = array();
 				foreach($supported_batch_file_types as $supported_batch_file_type) $allowed_mimetypes[] = $supported_batch_file_type['mimetype'];
 				if(!in_array($mimetype, $allowed_mimetypes)) $_SESSION['errors'][] = 'Batch file format '.$mimetype.' not supported.';
+				else
+				{
+					$filename = TEMP_FILE_DIR.end(explode('/', $_FILES['upload_batch_file_input']['tmp_name']));
+					move_uploaded_file($_FILES['upload_batch_file_input']['tmp_name'], $filename);
+				}
 			}
 			else
 			{
@@ -67,10 +73,10 @@ else $_SESSION['errors'][] = 'No file uploaded';
 
 // Check that the file format was specified
 if(!(isset($_POST['upload_batch_file_format']) and $_POST['upload_batch_file_format'])) $_SESSION['errors'][] = 'File format not specified';
-else 	$_SESSION['upload_file_format'] = $_POST['upload_batch_file_format'];
+else $_SESSION['upload_file_format'] = $_POST['upload_batch_file_format'];
 
 // Check if a valid email address was submitted
-$valid=true;
+$valid = true;
 if(isset($_POST['upload_batch_file_email']) and trim($_POST['upload_batch_file_email']) and !strstr($_POST['upload_batch_file_email'], "\n"))
 {
 	$sender_address = trim($_POST['upload_batch_file_email']);
@@ -85,7 +91,7 @@ if(isset($_POST['upload_batch_file_email']) and trim($_POST['upload_batch_file_e
 		}
 	}
 }
-else $valid=false;
+else $valid = false;
 if(!$valid) $_SESSION['errors'][] = 'Invalid email address';
 else $_SESSION['email'] = $_POST['upload_batch_file_email'];
 
@@ -142,7 +148,7 @@ if(!count($_SESSION['errors']))
 			$tests_enabled .= $_SESSION['standard_tests'][$i]->getShortName();
 		}
 	}
-	$statement->bindParam(':filename', $_FILES['upload_batch_file_input']['tmp_name'], PDO::PARAM_STR);
+	$statement->bindParam(':filename', $filename, PDO::PARAM_STR);
 	$statement->bindParam(':file_format', $file_format, PDO::PARAM_INT);
 	$statement->bindValue(':email', trim($_POST['upload_batch_file_email']), PDO::PARAM_STR);
 	$statement->bindValue(':status', 0, PDO::PARAM_INT);

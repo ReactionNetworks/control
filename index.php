@@ -80,7 +80,7 @@ endif;
 							<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_network_file_format_stoichiometry" /> <label for="upload_network_file_format_stoichiometry"> Stoichiometry, e.g. -1 -2 1 </label>
 						</p>
 						<p>
-							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload and process reaction network</button>
+							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload reaction network</button>
 						</p>
 					</form><!-- reaction_upload_form -->
 						<form id="batch_upload_form" action="handlers/upload-batch-file.php" method="post" enctype="multipart/form-data" class="left_centred">
