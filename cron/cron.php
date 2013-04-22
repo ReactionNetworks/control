@@ -42,7 +42,7 @@ $statement->execute();
 $jobs = $statement->fetchAll(PDO::FETCH_ASSOC);
 $number_of_jobs = count($jobs);
 
-for($i=0; $i < $number_of_jobs; ++$i)
+for($i = 0; $i < $number_of_jobs; ++$i)
 {
 	$query = 'UPDATE '.DB_PREFIX. 'batch_jobs SET status = 1, update_timestamp = :timestamp WHERE id = :id';
 	$statement = $controldb->prepare($query);
@@ -51,7 +51,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 	$statement->execute();
 }
 
-for($i=0; $i < $number_of_jobs; ++$i)
+for($i = 0; $i < $number_of_jobs; ++$i)
 {
 	$mail = "CoNtRol Output\r\n";
 	$mail .= "\r\n";
@@ -95,7 +95,7 @@ for($i=0; $i < $number_of_jobs; ++$i)
 	if (!$success) $mail .= "ERROR: Failed to open archive $filename\r\n";
 	else
 	{
-		$success = mkdir($dirname,'0777',true);
+		$success = mkdir($dirname, 0777, true);
 		if ($success)
 		{
 			$archive->extractTo($dirname);
