@@ -113,7 +113,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			{
 				if(!is_dir($file))
 				{
-					$mimetype = get_mime($file);
+					$mimetype = get_mime($dirname.'/'.$file);
 					if ($mimetype === 'text/plain')
 					{
 						$file_found = true;
