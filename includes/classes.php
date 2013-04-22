@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   19/04/2013
+ * @modified   22/04/2013
  */
 
 class Reaction
@@ -300,8 +300,7 @@ class ReactionNetwork
 	public function exportReactionNetworkEquations($line_ending = PHP_EOL, $LaTeX = false)
 	{
 		$equations = '';
-		$numberOfReactions = count($this->reactions);
-		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsText($line_ending);
+		foreach($this->reactions as $reaction) $equations .= $reaction->exportAsText($line_ending);
 		return $equations;
 	}
 

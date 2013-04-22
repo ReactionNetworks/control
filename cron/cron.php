@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   20/04/2013
+ * @modified   22/04/2013
  */
 
 require_once('../includes/config.php');
@@ -54,14 +54,13 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 for($i = 0; $i < $number_of_jobs; ++$i)
 {
 	$mail = "CoNtRol Output\r\n";
-	$mail .= "\r\n";
-	$mail .= "CoNtRol Version ".CONTROL_VERSION."\r\n";
-	$mail .= "\r\n";
+	$mail .= "==============\r\n\r\n";
+	$mail .= "Version: ".CONTROL_VERSION."\r\n";
 
 	// Initialise some variables
 	$line_ending = "\n";
-       	if(strpos($jobs[$i]['remote_user_agent'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
-       	if(strpos($jobs[$i]['remote_user_agent'], 'Macintosh;') !== false) $line_ending = "\r";
+	if(strpos($jobs[$i]['remote_user_agent'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
+	if(strpos($jobs[$i]['remote_user_agent'], 'Macintosh;') !== false) $line_ending = "\r";
 
 	$tests_enabled = explode(';', $jobs[$i]['tests_enabled']);
 	$mail .= "Tests enabled:";
@@ -74,7 +73,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		$mail .= "True";
 	}
 	else $mail .= "False";
-	$mail .= "\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."\r\n";
+	$mail .= "\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."\r\n\r\n";
 	$filename = $jobs[$i]['filename'];
 	$dirname = TEMP_FILE_DIR.'control/'.$jobs[$i]['id'];
 	$mimetype = get_mime($filename);
@@ -85,9 +84,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$archive = new ZipArchive;
 			$success = $archive->open($filename);
 			break;
-		case 'application/rar':
-			// To do: support this archive type
-			break;
 		default:
 			$mail .= "ERROR: Unsupported archive type: $mimetype\r\n";
 			break;
@@ -95,7 +91,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	if (!$success) $mail .= "ERROR: Failed to open archive $filename\r\n";
 	else
 	{
-		$success = mkdir($dirname, 0777, true);
+		$success = mkdir($dirname, 0700, true);
 		if ($success)
 		{
 			$archive->extractTo($dirname);
@@ -117,18 +113,18 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					if ($mimetype === 'text/plain')
 					{
 						$file_found = true;
-						$mail .= "\r\n## FILE: $filename ##\r\n\r\nProcessing start time: ".date('Y-m-d H:i:s')."\r\nFile contents:\r\n\r\n";
+						$mail .= "\r\n## FILE: ".end(explode('/', $file))." ##\r\n\r\nProcessing start time: ".date('Y-m-d H:i:s')."\r\nFile contents:\r\n";
 						$reaction_network = new ReactionNetwork();
-						$fhandle = fopen($file, 'r');
+						$fhandle = fopen($dirname.'/'.$file, 'r');
 						switch($jobs[$i]['file_format'])
 						{
-							case 0: //Net stoichiometry
+							case 1: //Net stoichiometry
 								$matrix = array();
 								$mail .= "WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.\r\n";
 								while(!feof($fhandle))
 								{
-									$line = fgets($handle);
-									$mail .= "$line\r\n";
+									$line = fgets($fhandle);
+									$mail .= "\r\n$line";
 									$row = trim($line);
 									if($row) $matrix[] = explode(' ', $row);
 								}
@@ -140,13 +136,13 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								break;
 							case 2: //Net stoichiometry + V
 							case 3: //Source + target + V
-							case 1: //Human
+							case 0: //Human
 								//Fall through
 							default: //Assume 'human' if unsure
 								while(!feof($fhandle))
 								{
 									$reactionString = fgets($fhandle);
-									$mail .= "$reactionString\r\n";
+									$mail .= "\r\n$reactionString";
 									if($reactionString)
 									{
 										$newReaction = Reaction::parseReaction($reactionString);
@@ -162,7 +158,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						}
 						fclose($fhandle);
 						$mail .= "\r\nReaction network:\r\n";
-						$reaction_network->exportAsText("\r\n");
+						$mail .= $reaction_network->exportReactionNetworkEquations("\r\n");
 						if ($success)
 						{
 							// Create human-readable descriptor file
@@ -247,14 +243,14 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 							if($success)
 							{
-								$number_of_tests = 0;
+								/*$number_of_tests = 0;
 								$test_output = array();
 								$current_test = 0;
 
 								for($i = 0; $i < count($standard_tests); ++$i)
 								{
 									if($standard_tests[$i]->getIsEnabled()) ++$number_of_tests;
-								}
+								}*/
 								foreach($standardTests as $test)
 								{
 									foreach($tests_enabled as &$enabled_test) if($enabled_test === $test->getShortName()) $enabled_test = $test;
@@ -289,6 +285,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										{
 											if(!$currentTest->supportsGeneralKinetics()) $mail .= "WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.\r\n";
 										}
+										$mail .= "Output:\r\n-------\r\n";
 										$exec_string .= ' '.$filename.' 2>&1';
 										exec($exec_string, $output, $returnValue);
 										foreach($output as $line) $mail .= "\r\n$line";
@@ -297,7 +294,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								} //foreach($tests_enabled as $currentTest)
 							} //if($success)
 						} //if($success)
-						$mail .= "## END OF FILE: ".$filename." ##\r\n\r\n";
+						$mail .= "## END OF FILE: ".end(explode('/', $file))." ##\r\n\r\n";
 					}	//if($mimetype === 'text/plain')
 				} //if(!is_dir($file))
 			} //foreach($extracted_files as $file)
@@ -307,9 +304,15 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $mail, $extra_headers, $sendmail_params)) echo "\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail";
 	elseif($success)
 	{
-		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 2 WHERE id = :id';
+		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 2, update_timestamp = :timestamp WHERE id = :id';
 		$statement = $controldb->prepare($query);
 		$statement->bindParam(':id', $jobs[$i]['id'], PDO::PARAM_INT);
+		$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 		$statement->execute();
+		// Remove temporary files
+		$mask = $filename.'*';
+		array_map('unlink', glob($mask));
 	}
+	// Remove decompressed files
+	recursive_remove_directory($dirname);
 } //for($i=0; $i < $number_of_jobs; ++$i)
