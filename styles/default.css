@@ -209,7 +209,7 @@ h1
 #error_message_holder
 {
 	color: red;
-	text-align: center;
+	margin: 0 10em;
 }
 
 #error_message_holder p

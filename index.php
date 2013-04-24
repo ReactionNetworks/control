@@ -18,17 +18,17 @@ if(isset($_SESSION['test_output'])) echo '				<div id="results_link"><a href="re
 ?>
 				<div id="reaction_input_holder">
 					<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
-<?php
-if(isset($_SESSION['reaction_network'])) echo $_SESSION['reaction_network']->generateFieldsetHTML();
-else
-{
-?>
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<a class="button" id="add_reaction_button" href="#" title="Add New Reaction">+</a>
 							<a class="button<?php if(!isset($_SESSION['reaction_network']) or $_SESSION['reaction_network']->getNumberOfReactions() < 2) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove Last Reaction">&ndash;</a>
 							<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo 'disabled'; ?>" id="reset_reaction_button" href="#" title="Reset All Reactions">--</a>
 						</p>
+<?php
+if(isset($_SESSION['reaction_network'])) echo $_SESSION['reaction_network']->generateFieldsetHTML();
+else
+{
+?>
 						<fieldset class="reaction_input_row">
 							<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 							<select class="reaction_direction" name="reaction_direction[]">
@@ -45,7 +45,6 @@ else
 							<h2>Tools</h2>
 							<p>
 								<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?>>Download<br />CRN File</button>
-								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate<br />LaTeX</a>
 								<a class="button fancybox" href="#reaction_upload_form">Upload<br />CRN File</a>
 								<a class="button fancybox" href="#batch_upload_form">Upload Batch<br />CRN File</a>
 								<a class="button fancybox" href="#option_holder">Advanced<br />Options</a>
@@ -54,6 +53,7 @@ else
 						<div id="actions_holder">
 							<h2>Actions</h2>
 							<p>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate<br />LaTeX</a>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View CRN<br />DSR Graph</a>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse<br />CRN</a>
 							</p>
