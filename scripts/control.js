@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/04/2013
+ * @modified   24/04/2013
  */
 
 /**
@@ -13,7 +13,7 @@
  */
 function addReaction()
 {
-	$('#remove_reaction_button').parent().before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	$('#remove_reaction_button').parent().after('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
 	$('.reaction_left_hand_side').each(function()
 	{
@@ -115,7 +115,8 @@ function generateLaTeX()
 function processTests()
 {
 	var url = 'handlers/process-tests.php';
-	$.get(url, null, function(returndata) {showTestOutput(returndata);
+	data = {csrf_token: csrf_token};
+	$.post(url, data, function(returndata) {showTestOutput(returndata);
 	if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='results.php';
 	else processTests()});
 }
@@ -155,7 +156,9 @@ function resetReactions()
 	while($('#reaction_input_form fieldset').length -1) removeReaction();
 	$('#remove_reaction_button').addClass('disabled');
 	var url = 'handlers/reset-reactions.php';
-	$.post(url, {reset_reactions: 1});
+	var data = {reset_reactions: 1, csrf_token: csrf_token};
+	$.post(url, data);
+	if($('#results_link')) $('#results_link').hide();
 }
 
 /**
@@ -174,7 +177,8 @@ function saveNetwork()
 	$.each($('.reaction_direction :selected'), function(index,value){reactionsDirection.push(value.value)});
 	var testSettings = new Array();
 	$.each($('.test'), function(index, v) {testSettings.push({name: $(this).attr('name'), value: $(this).val()})});
-	$.post(url, {'reaction_left_hand_side[]':reactionsLeftHandSide, 'reaction_right_hand_side[]':reactionsRightHandSide, 'reaction_direction[]':reactionsDirection, 'test_settings':testSettings}, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>'); validNetwork=false;}});
+	var data = {'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'test_settings': testSettings, csrf_token: csrf_token};
+	$.post(url, data, function(returndata) {if (returndata.length) {showTestOutput('<p>' + returndata + '</p>'); validNetwork=false;}});
 	return validNetwork;
 }
 
@@ -192,7 +196,8 @@ function showTestOutput(output)
 function toggleMassAction(newStatus)
 {
 	var url = 'handlers/toggle-mass-action.php';
-	$.post(url, {mass_action_only: newStatus});
+	var data = {mass_action_only: newStatus, csrf_token: csrf_token};
+	$.post(url, data);
 }
 
 /**
@@ -201,7 +206,8 @@ function toggleMassAction(newStatus)
 function toggleTest(testName, newStatus)
 {
 	var url = 'handlers/toggle-test.php';
-	$.post(url, {testName: testName, active: newStatus});
+	var data = {testName: testName, active: newStatus, csrf_token: csrf_token};
+	$.post(url, data);
 }
 
 /**
@@ -301,6 +307,7 @@ $(document).ready(function()
 			if($('#reaction_input_form > fieldset').length == 1) $(this).addClass('disabled');
 			else $(this).removeClass('disabled');
 		}
+		if($('#reaction_input_form > fieldset').length == 1 && $('#reaction_input_form > fieldset .reaction_left_hand_side').val() == '' && $('#reaction_input_form > fieldset .reaction_right_hand_side').val() == '') $('#reset_reaction_button').addClass('disabled');
 		return false;
 	});
 
@@ -330,10 +337,14 @@ $(document).ready(function()
 	if($('#add_reaction_button').width() > buttonSize) buttonSize = $('#add_reaction_button').width();
 	if($('#remove_reaction_button').height() > buttonSize) buttonSize = $('#remove_reaction_button').height();
 	if($('#remove_reaction_button').width() > buttonSize) buttonSize = $('#remove_reaction_button').width();
+	if($('#reset_reaction_button').height() > buttonSize) buttonSize = $('#reset_reaction_button').height();
+	if($('#reset_reaction_button').width() > buttonSize) buttonSize = $('#reset_reaction_button').width();
 	$('#add_reaction_button').height(buttonSize);
 	$('#add_reaction_button').width(buttonSize);
 	$('#remove_reaction_button').height(buttonSize);
 	$('#remove_reaction_button').width(buttonSize);
+	$('#reset_reaction_button').height(buttonSize);
+	$('#reset_reaction_button').width(buttonSize);
 
 	$('#dsr_graph_applet_holder').css('width', popupWidth);
 	$('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);

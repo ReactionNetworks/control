@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   19/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('../includes/config.php');
@@ -17,7 +17,7 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 
-if(isset($_SESSION['reaction_network']))
+if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
 	$currentTest = null;
 
@@ -51,7 +51,7 @@ if(isset($_SESSION['reaction_network']))
 			$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
 			$output = array();
 			$returnValue = 0;
-			$exec_string = $binary;
+			$exec_string = NICENESS.$binary;
 			if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only'])
 			{
 				if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
@@ -70,5 +70,15 @@ if(isset($_SESSION['reaction_network']))
 		echo '<p>Completed test ',$_SESSION['current_test'],' of ',$_SESSION['number_of_tests'], '.</p>';
 	}
 
-	else echo '<p>All tests completed. Redirecting to results.</p>';
+	else
+	{
+		// Delete temporary files
+		array_map('unlink', glob($_SESSION['tempfile'].'*'));
+		echo '<p>All tests completed. Redirecting to results.</p>';
+	}
+}
+else
+{
+	error_log('CSRF failed in process-tests'.PHP_EOL, 3, '/var/tmp/crn.log');
+	die();
 }

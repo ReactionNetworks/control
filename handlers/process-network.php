@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    17/01/2013
- * @modified   16/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('../includes/config.php');
@@ -17,7 +17,7 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 
-if (count($_POST))
+if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
 	$reactions = new ReactionNetwork();
 	$output = '';
@@ -52,7 +52,7 @@ if (count($_POST))
 		if(trim($leftHandSide) === '0') $leftHandSide = '';
 		if(trim($rightHandSide) === '0') $rightHandSide = '';
 		$reaction = new Reaction($leftHandSide, $rightHandSide, $reversible);
-		if (!$reactions->addReaction($reaction) or !$reaction->getReactants()) $output .= 'Reaction '.($i+1).' is invalid.<br />';
+		if(!$reactions->addReaction($reaction) or !$reaction->getReactants()) $output .= 'Reaction '.($i+1).' is invalid.<br />';
 	}
 	$_SESSION['reaction_network'] = $reactions;
 	if(strlen($output)) echo $output;

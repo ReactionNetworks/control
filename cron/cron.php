@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * CoNtR ol batch processing script
+ * CoNtRol batch processing script
  *
  * This script checks the database for unprocessed batch jobs and processes them.
  * The results are then emailed to the batch originator. It is intended to be called via a cron job.
@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   22/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('../includes/config.php');
@@ -18,13 +18,6 @@ require_once('../includes/classes.php');
 require_once('../includes/functions.php');
 require_once('../includes/version.php');
 require_once('../includes/standard-tests.php');
-
-// Set email headers.
-$extra_headers =  "From: CoNtRol <".ADMIN_EMAIL.">\r\n";
-$extra_headers .= "MIME-Version: 1.0\r\n";
-$extra_headers .= "Content-type: text/plain; charset=utf-8; format=flowed\r\n";
-$extra_headers .= "Content-Transfer-Encoding: 8bit\r\n";
-$sendmail_params = '-f'.ADMIN_EMAIL;
 
 // Attempt to open the database and throw an exception if unable to do so
 try
@@ -275,7 +268,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
 										$output = array();
 										$returnValue = 0;
-										$exec_string = $binary;
+										$exec_string = NICENESS.$binary;
 										if(isset($mass_action_only) and $mass_action_only)
 										{
 											if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
@@ -301,6 +294,15 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		} //if($extracted_files !== false)
 	} //if($success)
 	$mail .= "\r\nThis auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".\r\n";
+
+	// Set email headers.
+	$extra_headers =  "From: CoNtRol <".ADMIN_EMAIL.">\r\n";
+	$extra_headers .= "MIME-Version: 1.0\r\n";
+	$extra_headers .= "Content-type: text/plain; charset=utf-8; format=flowed\r\n";
+	$extra_headers .= "Content-Transfer-Encoding: 8bit\r\n";
+	$extra_headers .= "Message-ID: <".time().'-'.substr(hash('sha512', ADMIN_EMAIL.$jobs[$i]['email']), -10).'@'.end(explode('@', ADMIN_EMAIL)).">\r\n";
+	$sendmail_params = '-f'.ADMIN_EMAIL;
+
 	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $mail, $extra_headers, $sendmail_params)) echo "\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail";
 	elseif($success)
 	{
@@ -310,8 +312,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 		$statement->execute();
 		// Remove temporary files
-		$mask = $filename.'*';
-		array_map('unlink', glob($mask));
+		array_map('unlink', glob($jobs[$i]['filename'].'*'));
 	}
 	// Remove decompressed files
 	recursive_remove_directory($dirname);

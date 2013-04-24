@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   20/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('../includes/config.php');
@@ -20,7 +20,7 @@ $_SESSION['errors'] = array();
 $mimetype = '';
 $filename = '';
 
-if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input']) and count($_FILES['upload_batch_file_input']))
+if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input']) and count($_FILES['upload_batch_file_input']) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
 	switch($_FILES['upload_batch_file_input']['error'])
 	{

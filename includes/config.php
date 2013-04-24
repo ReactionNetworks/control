@@ -12,20 +12,62 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/04/2013
+ * @modified   24/04/2013
  */
 
+/////////////////////////////////////////
+// THINGS YOU SHOULD DEFINITELY CHANGE //
+/////////////////////////////////////////
+
+// Database connection information. You definitely need to change this.
+define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
+define('DB_USER', 'control', false);
+define('DB_PASS', 'password', false);
+define('DB_PREFIX', '', false);
+
+// Email address for the site admin. All emails sent by CoNtRol are sent from this address.
+define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
+
+
+
+/////////////////////////////////////
+// THINGS YOU MIGHT WANT TO CHANGE //
+/////////////////////////////////////
+
+// Location for temporary files. The default should work but you may wish to change it.
+define('TEMP_FILE_DIR', '/var/tmp/', false);
+
+// Location for the executables used by CoNtRol. You may want to change this for extra security.
+define('BINARY_FILE_DIR', '../bin/', false);
+
+// Debugging variable. Set to true when debugging.
+define('CRNDEBUG', false, false);
+
+// Niceness command to use when running tests. Note trailing space.
+// Value for dedicated server, i.e. normal priority okay
+//define('NICENESS', '', false);
+// Value for shared server without ionice. N.B. trailing space!
+//define('NICENESS', 'nice -n 19 ', false);
+// Value for shared server with ionice. N.B. trailing space!
+define('NICENESS', 'nice -n 19 ionice -c3 ', false);
+
+
+
+//////////////////////////////////////////////////
+// THINGS YOU ALMOST CERTAINLY SHOULDN'T CHANGE //
+//////////////////////////////////////////////////
+
+// Get the site URL. You shouldn't need to change this.
 $protocol = 'http';
 if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] and $_SERVER['HTTPS'] != 'off') $protocol .= 's';
-
 define('SITE_DIR', 'control', false);
-
 if(isset($_SERVER['HTTP_HOST'])) define('SITE_URL', $protocol.'://'.$_SERVER['HTTP_HOST'].'/'.SITE_DIR.'/', false);
 
+// Default page information. You shouldn't need to change this.
 define('DEFAULT_PAGE_TITLE', 'CoNtRol - Chemical Reaction Network analysis tool', false);
-
 define('DEFAULT_PAGE_DESCRIPTION', 'Allows the user to input a chemical reaction network. Produces a DSR graph and carries out mathematical analysis of network.', false);
 
+// Work out which line ending to use for file exports. Don't change this.
 // Default to UNIX line ending
 $line_ending = "\n";
 if(isset($_SERVER['HTTP_USER_AGENT']))
@@ -33,25 +75,13 @@ if(isset($_SERVER['HTTP_USER_AGENT']))
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Macintosh;') !== false) $line_ending = "\r";
 }
-
 define('CLIENT_LINE_ENDING', $line_ending, false);
 
-define('CRNDEBUG', false, false);
+// Extra database options. It shouldn't be necessary to change this.
+if(!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306) $db_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+else $db_options = null;
 
-define('TEMP_FILE_DIR', '/var/tmp/', false);
-
-define('BINARY_FILE_DIR', '../bin/', false);
-
-define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
-define('DB_USER', 'control', false);
-define('DB_PASS', 'password', false);
-//Include the following two lines if you're using mysql for the database.
-if(!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306) $db_options=array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-else $db_options=null;
-define('DB_PREFIX', '', false);
-
-define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
-
+// Probably obsolete, will be autodetected in future. Don't change this.
 $supported_batch_file_types = array(
 	array('extension' => 'zip', 'mimetype' => 'application/zip', 'binary' => '/usr/bin/unzip'),
 //	array('extension' => 'rar', 'mimetype' => 'application/rar', 'binary' => '/usr/bin/unrar e')

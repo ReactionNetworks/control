@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('includes/header.php');
@@ -40,7 +40,7 @@ foreach($_SESSION['tests'] as $testname => $test)
 echo $_SESSION['reaction_network']->exportAsHTML();
 echo "							</p>
 						</div><!-- reaction_network -->\n";
-$currentTest=0;
+$currentTest = 0;
 foreach($_SESSION['test_output'] as $name => $result)
 {
 	++$currentTest;
@@ -51,7 +51,7 @@ foreach($_SESSION['test_output'] as $name => $result)
 		echo '							<h3>Test ', $currentTest, ': ', sanitise($standardTest->getLongName()), "</h3>\n" ;
 		echo '<p>', $standardTest->getDescription(), "</p>\n";
 	}
-	echo '							<h4>Results:</h4>', PHP_EOL, '<pre>', $result, '</pre>', PHP_EOL, '						</div>', PHP_EOL;
+	echo '							<h4>Results:</h4>', PHP_EOL, '<pre>', sanitise($result), '</pre>', PHP_EOL, '						</div>', PHP_EOL;
 }
 echo "					</div><!-- results -->\n";
 

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    14/02/2013
- * @modified   14/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('../includes/config.php');
@@ -19,7 +19,7 @@ require_once('../includes/standard-tests.php');
 
 if(!isset($_SESSION['mass_action_only'])) $_SESSION['mass_action_only'] = false;
 
-if(isset($_POST['mass_action_only']))
+if(isset($_POST['mass_action_only']) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
 	$_SESSION['mass_action_only'] = (bool) $_POST['mass_action_only'];
 }

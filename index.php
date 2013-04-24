@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/04/2013
+ * @modified   24/04/2013
  */
 
 require_once('includes/header.php');
@@ -18,14 +18,17 @@ if(isset($_SESSION['test_output'])) echo '				<div id="results_link"><a href="re
 ?>
 				<div id="reaction_input_holder">
 					<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
-						<p>
-							<a class="button" id="add_reaction_button" href="#" title="Add new reaction">+</a>
-						</p>
 <?php
 if(isset($_SESSION['reaction_network'])) echo $_SESSION['reaction_network']->generateFieldsetHTML();
 else
 {
 ?>
+						<p>
+							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
+							<a class="button" id="add_reaction_button" href="#" title="Add New Reaction">+</a>
+							<a class="button<?php if(!isset($_SESSION['reaction_network']) or $_SESSION['reaction_network']->getNumberOfReactions() < 2) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove Last Reaction">&ndash;</a>
+							<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo 'disabled'; ?>" id="reset_reaction_button" href="#" title="Reset All Reactions">--</a>
+						</p>
 						<fieldset class="reaction_input_row">
 							<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 							<select class="reaction_direction" name="reaction_direction[]">
@@ -38,22 +41,23 @@ else
 <?php
 }
 ?>
-						<p>
-							<a class="button<?php if(!isset($_SESSION['reaction_network']) or $_SESSION['reaction_network']->getNumberOfReactions() < 2) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">-</a>
-						</p>
-						<p id="reaction_input_submit_buttons">
-							<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View DSR graph</a>
-							<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse reaction network</a>
-							<!--a class="button disabled" id="download_network_file_button" href="handlers/download-network-file.php">Download reaction network file</a-->
-							<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?>>Download reaction network file</button>
-							<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate LaTeX</a>
-							<a class="button fancybox" href="#reaction_upload_form">Upload reaction file</a>
-														<a class="button fancybox" href="#batch_upload_form">Batch reaction file</a>
-							<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo 'disabled'; ?>" id="reset_reaction_button" href="#">Reset all reactions</a>
-						</p><!-- reaction_input_submit_buttons -->
-						<p id="advanced_options">
-							<a class="button fancybox" href="#option_holder">Advanced options</a>
-						</p>
+						<div id="tools_holder">
+							<h2>Tools</h2>
+							<p>
+								<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?>>Download<br />CRN File</button>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button">Generate<br />LaTeX</a>
+								<a class="button fancybox" href="#reaction_upload_form">Upload<br />CRN File</a>
+								<a class="button fancybox" href="#batch_upload_form">Upload Batch<br />CRN File</a>
+								<a class="button fancybox" href="#option_holder">Advanced<br />Options</a>
+							</p>
+						</div><!-- tools_holder -->
+						<div id="actions_holder">
+							<h2>Actions</h2>
+							<p>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder">View CRN<br />DSR Graph</a>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder">Analyse<br />CRN</a>
+							</p>
+						</div><!-- actions_holder -->
 					</form>
 				</div><!-- reaction_input_holder -->
 <?php
@@ -71,6 +75,7 @@ endif;
 				<div id="popup_hider">
 					<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
 						<p>
+							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_network_file_input">Choose a file to upload:</label>
 							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
 						</p>
@@ -83,8 +88,9 @@ endif;
 							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload reaction network</button>
 						</p>
 					</form><!-- reaction_upload_form -->
-						<form id="batch_upload_form" action="handlers/upload-batch-file.php" method="post" enctype="multipart/form-data" class="left_centred">
+					<form id="batch_upload_form" action="handlers/upload-batch-file.php" method="post" enctype="multipart/form-data" class="left_centred">
 						<p>
+							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_batch_file_input">Choose a file to upload:</label>
 							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" size="48" /><br />
 							Maximum file size:
@@ -100,7 +106,7 @@ for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported
 							</p>
 							<p>
 							<label for="upload_batch_file_email">Email address for results:</label>
-							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="48" /><br />
+							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="48" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?>/><br />
 							<span id="upload_batch_file_email_error">&nbsp;</span>
 						</p>
 						<p>
@@ -125,7 +131,10 @@ else echo '						<p>The DSR graph requires Java to view, which is not installed 
 					</div><!-- latex_output_holder -->
 					<form id="option_holder" action=".">
 						<h2>Tests:</h2>
-						<p>Tick/untick the checkboxes to enable/disable each test.</p>
+						<p>
+							Tick/untick the checkboxes to enable/disable each test.
+							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
+						</p>
 						<table summary="Control whether each test is enabled or disabled">
 							<thead>
 								<tr>

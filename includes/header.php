@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/04/2013
+ * @modified   24/04/2013
  */
 require_once('config.php');
 require_once('functions.php');
@@ -25,7 +25,7 @@ require_once('version.php');
 		<link href="styles/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="styles/default.css" rel="stylesheet" type="text/css" media="screen" />
 		<meta name="author" content="Murad Banaji, Pete Donnell, Anca Marginean, Casian Pantea" />
-		<meta name="date" content="2013-04-16T18:38:51+0100" />
+		<meta name="date" content="2013-04-24T15:59:06+0100" />
 		<meta name="language" content="en" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
 		<meta name="description" content="<?php if(isset($description) and $description) echo sanitise($description); else echo sanitise(DEFAULT_PAGE_DESCRIPTION); ?>" />
@@ -38,6 +38,7 @@ require_once('version.php');
 		<script type="text/javascript">
 			// <![CDATA[
 			var siteURL = '<?php echo SITE_URL; ?>';
+			var csrf_token = '<?php echo $_SESSION['csrf_token']; ?>';
 			// ]]>
 		</script>
 	</head>
