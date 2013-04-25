@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   24/04/2013
+ * @modified   25/04/2013
  */
 
 /**
@@ -284,10 +284,6 @@ $(document).ready(function()
 	else var popupHeight = $(window).innerHeight() - 64;
 	var buttonSize = 0;
 
-	// Move the buttons to the middle of the page
-	var buttonDivOffset=-Math.floor($('#reaction_input_submit_buttons').height()/2);
-	$('#reaction_input_submit_buttons').css('margin-top', buttonDivOffset.toString() + 'px');
-
 	// Enable DSR applet for browsers with Java installed
 	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
 	
@@ -295,7 +291,6 @@ $(document).ready(function()
 	{
 		addReaction();
 		$('#remove_reaction_button').removeClass('disabled');
-		//$(this).preventDefault();
 		return false;
 	});
 

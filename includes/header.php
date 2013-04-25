@@ -46,11 +46,11 @@ require_once('version.php');
 		<div id="container">
 			<div id="header">
 				<h1 title="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>"><?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?></h1>
-				<!--p id="version">
+				<p id="version">
 <?php
 echo '					Version ', CONTROL_VERSION;
-?> 
-				</p--><!-- version -->
+?>
+				</p><!-- version -->
 			</div>
 			<div id="content">
 				<noscript><p>Sorry, this page requires JavaScript to work correctly.</p></noscript>
