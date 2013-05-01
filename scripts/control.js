@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   25/04/2013
+ * @modified   01/05/2013
  */
 
 /**
@@ -17,12 +17,16 @@ function addReaction()
 
 	$('.reaction_left_hand_side').each(function()
 	{
-		$(this).keyup(function() { validateKeyPress($(this));	});
+		$(this).keyup(function() { validateKeyPress($(this)); });
+		$(this).change(function() { validateKeyPress($(this)); });
+		$(this).blur(function() { validateKeyPress($(this)); });
 	});
 
 	$('.reaction_right_hand_side').each(function()
 	{
 		$(this).keyup(function() { validateKeyPress($(this)); });
+		$(this).change(function() { validateKeyPress($(this)); });
+		$(this).blur(function() { validateKeyPress($(this)); });
 	});
 	$('#reset_reaction_button').removeClass('disabled');
 }
