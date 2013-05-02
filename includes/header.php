@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   24/04/2013
+ * @modified   02/05/2013
  */
 require_once('config.php');
 require_once('functions.php');
@@ -24,6 +24,7 @@ require_once('version.php');
 		<link href="styles/reset.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="styles/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="styles/default.css" rel="stylesheet" type="text/css" media="screen" />
+		<!--[if IE gt 8]>--><link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" /><!--<![endif]-->
 		<meta name="author" content="Murad Banaji, Pete Donnell, Anca Marginean, Casian Pantea" />
 		<meta name="date" content="2013-04-24T15:59:06+0100" />
 		<meta name="language" content="en" />

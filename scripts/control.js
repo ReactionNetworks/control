@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   01/05/2013
+ * @modified   01/06/2013
  */
 
 /**
@@ -13,7 +13,7 @@
  */
 function addReaction()
 {
-	$('#remove_reaction_button').parent().after('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	$('#tools_holder').before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
 	$('.reaction_left_hand_side').each(function()
 	{
@@ -279,13 +279,16 @@ function validateKeyPress(inputElement)
 	else disableButtons();
 } 
 
+var popupWidth = 800;
+var popupHeight = 600;
+
 $(document).ready(function()
 {
 	// Set some useful variables
-	if($(window).innerWidth() > 800) var popupWidth = $(window).innerWidth() - 256;
-	else var popupWidth = $(window).innerWidth() - 64;
-	if($(window).innerHeight() > 800) var popupHeight = $(window).innerHeight() - 256;
-	else var popupHeight = $(window).innerHeight() - 64;
+	if($(window).innerWidth() > 800) popupWidth = $(window).innerWidth() - 256;
+	else popupWidth = $(window).innerWidth() - 64;
+	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
+	else popupHeight = $(window).innerHeight() - 64;
 	var buttonSize = 0;
 
 	// Enable DSR applet for browsers with Java installed
@@ -347,7 +350,7 @@ $(document).ready(function()
 
 	$('#dsr_graph_applet_holder').css('width', popupWidth);
 	$('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);
-	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
+	$('.fancybox').fancybox({autoDimensions: true/*false, width: popupWidth, height: popupHeight*/});
 
 	$('#dsr_graph_close_button').click(function(e)
 	{
