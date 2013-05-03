@@ -79,16 +79,27 @@ if(!count($errors))
 			while(!feof($fhandle))
 			{
 				$row = trim(fgets($fhandle));
-				if($row) $matrix[] = explode(' ', $row);
+				if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
 			}
 			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+			break;
+		case 'S+T+V':
+			$file = array();
+			while (!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+				if($row and strpos($row, '#') !== 0)
+				{
+				//TO DO: Implement this import		
+				} 
+			}	
 			break;
 		default: // assume 'human' if unsure
 			$error = false;
 			while(!feof($fhandle))
 			{
 				$reactionString = fgets($fhandle);
-				if($reactionString)
+				if($reactionString and strpos($reactionString, '#') !== 0)
 				{
 					$newReaction = Reaction::parseReaction($reactionString);
 					if($newReaction) $reaction_network->addReaction($newReaction);

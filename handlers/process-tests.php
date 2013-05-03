@@ -48,10 +48,10 @@ if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_PO
 		else
 		{
 			$filename = $_SESSION['tempfile'].$extension;
-			$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
+			$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'./'.$currentTest->getExecutableName();
 			$output = array();
 			$returnValue = 0;
-			$exec_string = NICENESS.$binary;
+		    //  $exec_string = NICENESS.$binary;
 			if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only'])
 			{
 				if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
