@@ -265,10 +265,10 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									else
 									{
 										$test_filename = $filename.$extension;
-										$binary = BINARY_FILE_DIR.$currentTest->getExecutableName();
+										$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'./'.$currentTest->getExecutableName();
 										$output = array();
 										$returnValue = 0;
-										$exec_string = NICENESS.$binary;
+										//$exec_string = NICENESS.$binary;
 										if(isset($mass_action_only) and $mass_action_only)
 										{
 											if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
