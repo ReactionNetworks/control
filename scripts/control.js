@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   01/06/2013
+ * @modified   06/06/2013
  */
 
 /**
@@ -371,7 +371,7 @@ $(document).ready(function()
 			var attributes = {
 				codebase:siteURL,
 				code:'dsr.DsrDraw.class',
-				archive:'applets/dsr.1.2.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
+				archive:'applets/dsr.1.3.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
 				//archive:'applets/dsr.1.3.jar',
 				width:popupWidth,
 				height:popupHeight
