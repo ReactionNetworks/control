@@ -54,7 +54,7 @@ else
 							<h2>Actions</h2>
 							<p>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
-								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="dsr_graph_button" href="#missing_java_warning_holder" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
+								<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="dsr_graph_button" href="jnlp.php" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
 							</p>
 						</div><!-- actions_holder -->

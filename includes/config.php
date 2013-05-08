@@ -21,6 +21,7 @@
 
 // Database connection information. You definitely need to change this.
 define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
+//define('DB_STRING', 'sqlite:///dev/null', false);
 define('DB_USER', 'control', false);
 define('DB_PASS', 'password', false);
 define('DB_PREFIX', '', false);
@@ -78,7 +79,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']))
 define('CLIENT_LINE_ENDING', $line_ending, false);
 
 // Extra database options. It shouldn't be necessary to change this.
-if(!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306) $db_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+if(strpos('mysql', DB_STRING) === 0 and (!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306)) $db_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 else $db_options = null;
 
 // Probably obsolete, will be autodetected in future. Don't change this.
