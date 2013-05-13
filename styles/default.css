@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   02/05/2013
+ * @modified   13/05/2013
  */
 
 *
@@ -86,6 +86,12 @@ h1
 	margin: auto;
 	text-align: left;
 	width: 22em;
+}
+
+.scroll
+{
+	overflow: auto;
+	margin-bottom: 2em;
 }
 
 #add_reaction_button, #remove_reaction_button, #reset_reaction_button

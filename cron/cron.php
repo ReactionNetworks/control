@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   24/04/2013
+ * @modified   13/05/2013
  */
 
 require_once('../includes/config.php');
@@ -301,6 +301,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$extra_headers .= "Content-type: text/plain; charset=utf-8; format=flowed\r\n";
 	$extra_headers .= "Content-Transfer-Encoding: 8bit\r\n";
 	$extra_headers .= "Message-ID: <".time().'-'.substr(hash('sha512', ADMIN_EMAIL.$jobs[$i]['email']), -10).'@'.end(explode('@', ADMIN_EMAIL)).">\r\n";
+	$extra_headers .= 'X-Originating-IP: ['.$jobs[$i]['remote_ip']."]\r\n";
 	$sendmail_params = '-f'.ADMIN_EMAIL;
 
 	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $mail, $extra_headers, $sendmail_params)) echo "\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail";

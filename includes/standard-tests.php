@@ -8,23 +8,12 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   19/04/2013
+ * @modified   13/05/2013
  */
 
 $standardTests = array(
 /*
- * Add new tests here, in the following format:
-	new NetworkTest
-	(
-		'shortname' (no spaces or unusual characters allowed),
-		'Human Readable Name',
-		'Full description' (may include HTML, but make sure it's valid!),
-		'executable filename' (i.e. the name of the binary or shell script in bin/ that belongs to this test),
-		array('human') (supported file formats, currently 'human' or 'stoichiometry'),
-		true (if the binary supports --mass-action-only option),
-		true (if the binary supports general kinetics)
-	),
- */
+ Fake test for debugging purposes
 	new NetworkTest
 	(
 		'dummy',
@@ -35,6 +24,7 @@ $standardTests = array(
 		true,
 		true
 	),
+*/
 	new NetworkTest
 	(
 		'ssdonly',
@@ -48,11 +38,23 @@ $standardTests = array(
 	(
 		'dsrtest',
 		'DSR test',
-		'Checks condition (*) for the DSR graph. Implemented by Casian Pantea, based on M. Banaji and G. Craciun, Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements',
+		'Checks condition (*) for the DSR graph. Implemented by Casian Pantea, based on <a href="http://projecteuclid.org/euclid.cms/1264434136">M. Banaji and G. Craciun, Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements</a>.',
 		'dsrTest.sh',
 		array('stoichiometry+V'),
 		false,
 		true
 	),
-
+/*
+ Add new tests here, in the following format:
+	new NetworkTest
+	(
+		'shortname' (no spaces or unusual characters allowed),
+		'Human Readable Name',
+		'Full description' (may include HTML, but make sure it's valid!),
+		'executable filename' (i.e. the name of the binary or shell script in bin/ that belongs to this test),
+		array('human') (supported file formats, currently 'human' or 'stoichiometry'),
+		true (if the binary supports --mass-action-only option),
+		true (if the binary supports general kinetics)
+	),
+ */
 );

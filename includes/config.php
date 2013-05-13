@@ -12,7 +12,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   24/04/2013
+ * @modified   13/05/2013
  */
 
 /////////////////////////////////////////
@@ -20,8 +20,16 @@
 /////////////////////////////////////////
 
 // Database connection information. You definitely need to change this.
+
+// MySQL on the same server
 define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
-//define('DB_STRING', 'sqlite:///dev/null', false);
+
+// MySQL on a different server
+//define('DB_STRING', 'mysql:host=1.2.3.4;port=3306;dbname=control;charset=utf8', false);
+
+// SQLite
+//define('DB_STRING', 'sqlite:sql/control.sqlite', false);
+
 define('DB_USER', 'control', false);
 define('DB_PASS', 'password', false);
 define('DB_PREFIX', '', false);

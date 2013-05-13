@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   24/04/2013
+ * @modified   13/05/2013
  */
 ?>
 			</div><!-- content -->
@@ -20,6 +20,7 @@
 						<ul>
 							<li>Web programming: Pete Donnell &amp; Kitson Consulting</li>
 							<li>DSR graph applet: Anca Marginean &amp; Casian Pantea</li>
+							<li>DSR test: Casian Pantea</li>
 							<li>SSD test: Murad Banaji</li>
 							<li>Graphic design: Olaf Mayer &amp; Kitson Consulting</li>
 						</ul>

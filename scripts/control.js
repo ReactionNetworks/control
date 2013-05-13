@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   06/06/2013
+ * @modified   13/05/2013
  */
 
 /**
@@ -281,6 +281,7 @@ function validateKeyPress(inputElement)
 
 var popupWidth = 800;
 var popupHeight = 600;
+var popupMargin = 64;
 
 $(document).ready(function()
 {
@@ -289,6 +290,8 @@ $(document).ready(function()
 	else popupWidth = $(window).innerWidth() - 64;
 	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
 	else popupHeight = $(window).innerHeight() - 64;
+	/*if(Math.max(popupHeight, popupWidth) == 64) popupMargin = 64;
+	else popupMargin = 256;*/
 	var buttonSize = 0;
 
 	// Enable DSR applet for browsers with Java installed
@@ -350,7 +353,7 @@ $(document).ready(function()
 
 	$('#dsr_graph_applet_holder').css('width', popupWidth);
 	$('#dsr_graph_applet_holder').css('margin-left', -popupWidth/2);
-	$('.fancybox').fancybox({autoDimensions: true/*false, width: popupWidth, height: popupHeight*/});
+	$('.fancybox').fancybox({autoDimensions: true, width: popupWidth, height: popupHeight});
 
 	$('#dsr_graph_close_button').click(function(e)
 	{
@@ -372,7 +375,6 @@ $(document).ready(function()
 				codebase:siteURL,
 				code:'dsr.DsrDraw.class',
 				archive:'applets/dsr.1.3.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
-				//archive:'applets/dsr.1.3.jar',
 				width:popupWidth,
 				height:popupHeight
 			};
