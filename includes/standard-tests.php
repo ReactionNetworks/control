@@ -29,7 +29,7 @@ $standardTests = array(
 	(
 		'ssdonly',
 		'SSD test',
-		'Tests if the stoichiometric matrix is strongly sign determined (SSD). Implemented by Murad Banaji, based on <a href="http://discovery.ucl.ac.uk/149053/" title="Publication details of research paper">P matrix properties, injectivity and stability in chemical reaction systems</a>.',
+		'Runs a number of matrix-related tests on the system, for example if the stoichiometric matrix is strongly sign determined (SSD). Implemented by Murad Banaji, based on <a href="http://discovery.ucl.ac.uk/149053/" title="Publication details of research paper">P matrix properties, injectivity and stability in chemical reaction systems</a>.',
 		'test',
 		array('human')
 	),
