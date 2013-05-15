@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/05/2013
- * @modified   13/05/2013
+ * @modified   15/05/2013
  */
 
 require_once('../includes/config.php');
@@ -32,12 +32,13 @@ if(isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_toke
 			if(!(strpos($sender_domain, '.'))) $valid = false;
 			elseif(function_exists('checkdnsrr'))
 			{
-				if(!(checkdnsrr($sender_domain.'.', 'MX') or checkdnsrr($sender_domain.'.', 'A'))) $valid = false;				
+				if(!(checkdnsrr($sender_domain.'.', 'MX') or checkdnsrr($sender_domain.'.', 'A'))) $valid = false;
 			}
 		}
 	}
 	else $valid = false;
-	if(!$valid) die('Invalid email address');
+	if($valid) $_SESSION['email'] = $_POST['email'];
+	else die('Invalid email address');
 
 	$mail = "CoNtRol Output\r\n";
 	$mail .= "==============\r\n\r\n";
@@ -73,6 +74,6 @@ if(isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_toke
 	$sendmail_params = '-f'.ADMIN_EMAIL;
 
 	if (!mail('<'.trim($_POST['email']).'>', 'CoNtRol Results', $mail, $extra_headers, $sendmail_params)) die('Failed to send email');
-	else die('Mail sent successfully');	  
+	else die('Mail sent successfully');
 }
 else die('CSRF attempt detected');
