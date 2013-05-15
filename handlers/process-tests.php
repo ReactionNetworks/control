@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   24/04/2013
+ * @modified   15/05/2013
  */
 
 require_once('../includes/config.php');
@@ -17,19 +17,31 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 
+/**
+ * Warn on timeout
+ */
+function timeout_error_message()
+{
+	$last_error = error_get_last();
+	if(connection_status() === CONNECTION_TIMEOUT) echo '<p>Test ',$_SESSION['current_test'],' of ',$_SESSION['number_of_tests'], ' failed due to timeout</p>';
+	elseif($last_error === E_ERROR) echo '<p>Test ',$_SESSION['current_test'],' of ',$_SESSION['number_of_tests'], ' failed due to error '.$last_error['message'].'</p>';
+}
+
+register_shutdown_function('timeout_error_message');
+
 if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
 	$currentTest = null;
 
 	for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
 	{
-		if ($_SESSION['standard_tests'][$i]->getIsEnabled())
-	 {
-	 	$_SESSION['standard_tests'][$i]->disableTest();
-	 	$currentTest = $_SESSION['standard_tests'][$i];
-	 	++$_SESSION['current_test'];
-	  break;
-	 }
+		if($_SESSION['standard_tests'][$i]->getIsEnabled())
+		{
+			$_SESSION['standard_tests'][$i]->disableTest();
+			$currentTest = $_SESSION['standard_tests'][$i];
+			++$_SESSION['current_test'];
+			break;
+		}
 	}
 
 	if($currentTest)
@@ -72,6 +84,11 @@ if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_PO
 
 	else
 	{
+		// Re-enable tests
+		for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
+		{
+			$_SESSION['standard_tests'][$i]->enableTest();
+		}
 		// Delete temporary files
 		array_map('unlink', glob($_SESSION['tempfile'].'*'));
 		echo '<p>All tests completed. Redirecting to results.</p>';
@@ -79,6 +96,6 @@ if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_PO
 }
 else
 {
-	error_log('CSRF failed in process-tests'.PHP_EOL, 3, '/var/tmp/crn.log');
-	die();
+	//error_log('CSRF failed in process-tests'.PHP_EOL, 3, '/var/tmp/crn.log');
+	die('<p>Error: CSRF detected or CRN not set up.</p>');
 }

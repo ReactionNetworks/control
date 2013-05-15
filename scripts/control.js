@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   13/05/2013
+ * @modified   15/05/2013
  */
 
 /**
@@ -443,7 +443,7 @@ $(document).ready(function()
 		if(!$(this).hasClass('disabled')) 
 		{		
 			resetPopup();
-			if (saveNetwork())
+			if(saveNetwork())
 			{				
 				processTests();
 			}
