@@ -35,9 +35,20 @@ h1
 	margin: 0;
 }
 
+#popup_hider input
+{
+	max-width: 50%;
+	/*display: block;*/
+}
+
 #reaction_input_holder
 {
 	border: none;
+}
+
+#reaction_input_holder input[type=text]
+{
+	max-width: 35%;
 }
 
 #results

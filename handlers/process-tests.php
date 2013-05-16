@@ -85,10 +85,10 @@ if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_PO
 	else
 	{
 		// Re-enable tests
-		for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
-		{
-			$_SESSION['standard_tests'][$i]->enableTest();
-		}
+		//for($i = 0; $i < count($_SESSION['standard_tests']); ++$i)
+		//	{
+			//$_SESSION['standard_tests'][$i]->enableTest();
+		//}
 		// Delete temporary files
 		array_map('unlink', glob($_SESSION['tempfile'].'*'));
 		echo '<p>All tests completed. Redirecting to results.</p>';

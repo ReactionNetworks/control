@@ -37,9 +37,9 @@ function addReaction()
 function detectWindowSize()
 {
 	if($(window).innerWidth() > 800) popupWidth = $(window).innerWidth() - 256;
-	else popupWidth = $(window).innerWidth() - 64;
+	else popupWidth = $(window).innerWidth() - 16;
 	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
-	else popupHeight = $(window).innerHeight() - 64;
+	else popupHeight = $(window).innerHeight() - 16;
 }
 
 /**
@@ -281,16 +281,16 @@ function validateKeyPress(inputElement)
 
 var popupWidth = 800;
 var popupHeight = 600;
-var popupMargin = 64;
+var popupMargin = 16;
 
 $(document).ready(function()
 {
 	// Set some useful variables
 	if($(window).innerWidth() > 800) popupWidth = $(window).innerWidth() - 256;
-	else popupWidth = $(window).innerWidth() - 64;
+	else popupWidth = $(window).innerWidth() - 16;
 	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
-	else popupHeight = $(window).innerHeight() - 64;
-	/*if(Math.max(popupHeight, popupWidth) == 64) popupMargin = 64;
+	else popupHeight = $(window).innerHeight() - 16;
+	/*if(Math.max(popupHeight, popupWidth) == 64) popupMargin = 16;
 	else popupMargin = 256;*/
 	var buttonSize = 0;
 

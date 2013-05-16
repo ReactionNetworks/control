@@ -28,6 +28,7 @@ require_once('version.php');
 		<meta name="author" content="Murad Banaji, Pete Donnell, Anca Marginean, Casian Pantea" />
 		<meta name="date" content="2013-04-24T15:59:06+0100" />
 		<meta name="language" content="en" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
 		<meta name="description" content="<?php if(isset($description) and $description) echo sanitise($description); else echo sanitise(DEFAULT_PAGE_DESCRIPTION); ?>" />
 		<!--[if gt IE 8]><!-->
