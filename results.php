@@ -51,7 +51,7 @@ foreach($_SESSION['test_output'] as $name => $result)
 		echo '							<h3>Test ', $currentTest, ': ', sanitise($standardTest->getLongName()), "</h3>\n" ;
 		echo '<p>', $standardTest->getDescription(), "</p>\n";
 	}
-	echo '							<h4>Results:</h4>', PHP_EOL, '<pre>', sanitise($result), '</pre>', PHP_EOL, '						</div>', PHP_EOL;
+	echo '							<h4>Results:</h4>', PHP_EOL, '<pre>', $result, '</pre>', PHP_EOL, '						</div>', PHP_EOL;
 }
 echo "					</div><!-- results -->\n";
 
