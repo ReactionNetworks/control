@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   13/05/2013
+ * @modified   28/05/2013
  */
 
 $standardTests = array(
@@ -27,15 +27,6 @@ $standardTests = array(
 */
 	new NetworkTest
 	(
-		'ssdonly',
-		'SSD test',
-		'Runs a number of matrix-related tests on the system, for example if the stoichiometric matrix is strongly sign determined (SSD). Implemented by Murad Banaji, based on <a href="http://discovery.ucl.ac.uk/149053/" title="Publication details of research paper">P matrix properties, injectivity and stability in chemical reaction systems</a>.',
-		'test --html',
-		array('human')
-	),
-
-	new NetworkTest
-	(
 		'dsrtest',
 		'DSR test',
 		'Checks condition (*) for the DSR graph. Implemented by Casian Pantea, based on <a href="http://projecteuclid.org/euclid.cms/1264434136">M. Banaji and G. Craciun, Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements</a>.',
@@ -44,6 +35,16 @@ $standardTests = array(
 		false,
 		true
 	),
+
+	new NetworkTest
+	(
+		'ssdonly',
+		'SSD test',
+		'Runs a number of matrix-related tests on the system, for example if the stoichiometric matrix is strongly sign determined (SSD). Implemented by Murad Banaji, based on <a href="http://discovery.ucl.ac.uk/149053/" title="Publication details of research paper">P matrix properties, injectivity and stability in chemical reaction systems</a>.',
+		'test --html',
+		array('human')
+	),
+
 /*
  Add new tests here, in the following format:
 	new NetworkTest

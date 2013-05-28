@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/10/2012
- * @modified   15/05/2013
+ * @modified   28/05/2013
  */
 
 require_once('../includes/config.php');
@@ -73,7 +73,8 @@ if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_PO
 			{
 				if(!$currentTest->supportsGeneralKinetics()) $temp = "WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.\n";
 			}
-			$exec_string .= ' '.$filename.' 2>&1';
+			$exec_string .= ' '.$filename;
+			if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) $exec_string .= ' 2>&1';
 			exec($exec_string, $output, $returnValue);
 			foreach($output as $line) $temp .= "\n$line";
 		}

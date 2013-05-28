@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   24/04/2013
+ * @modified   28/05/2013
  */
 
 require_once('../includes/config.php');
@@ -123,7 +123,9 @@ if(!count($_SESSION['errors']))
 		die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
 	}
 
-	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, file_format, email, status, mass_action_only, tests_enabled, error_text, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :file_format, :email, :status, :mass_action_only, :tests_enabled, :error_text, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
+	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, file_format, email, status, detailed_output, mass_action_only, tests_enabled, error_text, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :file_format, :email, :status, :detailed_output, :mass_action_only, :tests_enabled, :error_text, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
+	if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) $detailed_output = 1;
+	else $detailed_output = 0;
 	if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) $mass_action_only = 1;
 	else $mass_action_only = 0;
 	$tests_enabled= '';
@@ -152,6 +154,7 @@ if(!count($_SESSION['errors']))
 	$statement->bindParam(':file_format', $file_format, PDO::PARAM_INT);
 	$statement->bindValue(':email', trim($_POST['upload_batch_file_email']), PDO::PARAM_STR);
 	$statement->bindValue(':status', 0, PDO::PARAM_INT);
+	$statement->bindParam(':detailed_output', $detailed_output, PDO::PARAM_INT);
 	$statement->bindParam(':mass_action_only', $mass_action_only, PDO::PARAM_INT);
 	$statement->bindParam(':tests_enabled', $tests_enabled, PDO::PARAM_STR);
 	$statement->bindValue(':error_text', '', PDO::PARAM_STR);

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   13/05/2013
+ * @modified   28/05/2013
  */
 
 require_once('includes/header.php');
@@ -170,6 +170,7 @@ if(count($standardTests))
 						</table>
 						<h2>Other options:</h2>
 						<p><input type="checkbox" name="mass_action" id="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?> /> <label for="mass_action_checkbox">Test mass action kinetics only (when supported)</label></p>
+						<p><input type="checkbox" name="detailed_output" id="detailed_output_checkbox"<?php if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) echo ' checked="checked"'; ?> /> <label for="detailed_output_checkbox">Show detailed test output</label></p>
 					</form><!-- option_holder -->
 				</div><!-- reaction_input_holder -->
 				<div id="hidden_character_warning">

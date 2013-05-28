@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   15/05/2013
+ * @modified   28/05/2013
  */
 
 /**
@@ -195,6 +195,16 @@ function showTestOutput(output)
 }
 
 /**
+ * Enables/disables detailed test output via AJAX
+ */
+function toggleDetailedOutput(newStatus)
+{
+	var url = 'handlers/toggle-detailed-output.php';
+	var data = {detailed_output: newStatus, csrf_token: csrf_token};
+	$.post(url, data);
+}
+
+/**
  * Enables/disables the --mass-action-only flag via AJAX
  */
 function toggleMassAction(newStatus)
@@ -361,6 +371,13 @@ $(document).ready(function()
 		$('#dsr_graph_applet_holder').css('left', '-10000px');
 	});
 
+	$('#detailed_output_checkbox').change(function()
+	{
+		var activated = 0;
+		if($(this).is(':checked')) activated = 1;
+		toggleDetailedOutput(activated);
+	})
+	
 	$('#download_network_file_button').click(function(e)
 	{
 		if($(this).hasClass('disabled')) e.preventDefault();
@@ -371,10 +388,13 @@ $(document).ready(function()
 		e.preventDefault();
 		if(!$(this).hasClass('disabled') && deployJava.getJREs().length)
 		{
-			var attributes = {
+			/*if(saveNetwork()) window.location.replace('jnlp.php');
+			else alert('Invalid reaction network');*/
+			saveNetwork();
+			/*var attributes = {
 				codebase:siteURL,
 				code:'dsr.DsrDraw.class',
-				archive:'applets/dsr.1.3.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
+				archive:'applets/dsr.1.4.jar,applets/jung-algorithms-2.0.1.jar,applets/jung-api-2.0.1.jar,applets/jung-graph-impl-2.0.1.jar,applets/jung-visualization-2.0.1.jar',
 				width:popupWidth,
 				height:popupHeight
 			};
@@ -411,7 +431,7 @@ $(document).ready(function()
 			document.write = got;
 			// End of copied code
 			$('#dsr_graph_applet').html(intercepted);
-			$('#dsr_graph_applet_holder').css('left', '50%');
+			$('#dsr_graph_applet_holder').css('left', '50%');*/
 		}
 	});
 
