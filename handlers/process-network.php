@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    17/01/2013
- * @modified   24/04/2013
+ * @modified   30/05/2013
  */
 
 require_once('../includes/config.php');
@@ -143,7 +143,7 @@ if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_
 		if($test)
 		{
 			foreach($_SESSION['standard_tests'] as &$standardTest)
-			if ($testname === $standardTest->getShortName()) $standardTest->enableTest();
+			if($testname === $standardTest->getShortName()) $standardTest->enableTest();
 		}
 		else
 		{

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   22/04/2013
+ * @modified   30/05/2013
  */
 
 class Reaction
@@ -65,7 +65,10 @@ class Reaction
 	 */
 	private static function parseReactants($reactantString)
 	{
+		// Remove preceding/trailing whitespace
 		$reactantString = trim($reactantString);
+
+		// Check there are no invalid characters
 		if((strpos($reactantString, '>') !== false) or (strpos($reactantString, '-') !== false) or
 		   (strpos($reactantString, '<') !== false) or (strpos($reactantString, '=') !== false)) return false;
 		else
@@ -81,20 +84,35 @@ class Reaction
 		}
 		$numberOfReactants = count($reactants);
 		$reactantStoichiometries = array();
-		for ($i=0;$i<$numberOfReactants;++$i)
+		for($i = 0; $i < $numberOfReactants; ++$i)
 		{
-			if (is_numeric($reactants[$i])) return false;
-			else if ($reactants[$i] and !is_numeric($reactants[$i][0])) $reactantStoichiometries[$reactants[$i]] = 1;
+			if(is_numeric($reactants[$i])) return false;
+			else if($reactants[$i] and !is_numeric($reactants[$i][0]))
+			{
+				$reactant_found = false;
+				foreach($reactantStoichiometries as $reactant => $stoichiometry)
+				{
+					if($reactants[$i] == $reactant) $reactant_found = true;
+				}
+				if($reactant_found) $reactantStoichiometries[$reactants[$i]] += 1;
+				else $reactantStoichiometries[$reactants[$i]] = 1;
+			}
 			else
 			{
 				$reactantLength = strlen($reactants[$i]);
 				$characterPos = 0;
-				for ($j=0;$j<$reactantLength;++$j)
+				for($j = 0; $j < $reactantLength; ++$j)
 				{
-					if (!is_numeric($reactants[$i][$j])) $characterPos = $j;
-					if ($characterPos) break;
+					if(!is_numeric($reactants[$i][$j])) $characterPos = $j;
+					if($characterPos) break;
 				}
-				$reactantStoichiometries[substr($reactants[$i],$characterPos)] = substr($reactants[$i],0,$characterPos);
+				$reactant_found = false;
+				foreach($reactantStoichiometries as $reactant => $stoichiometry)
+				{
+					if(substr($reactants[$i], $characterPos) == $reactant) $reactant_found = true;
+				}
+				if($reactant_found) $reactantStoichiometries[substr($reactants[$i], $characterPos)] += substr($reactants[$i], 0, $characterPos);
+				else $reactantStoichiometries[substr($reactants[$i], $characterPos)] = substr($reactants[$i], 0, $characterPos);
 			}
 		}
 		return $reactantStoichiometries;
@@ -128,21 +146,21 @@ class Reaction
 			{
 				if ($leftArrowPos === $rightArrowPos-1)
 				{
-					$lhs = Reaction::parseReactants(substr($temp,0,$leftArrowPos));
-					$rhs = Reaction::parseReactants(substr($temp,$rightArrowPos+1));
+					$lhs = Reaction::parseReactants(substr($temp, 0, $leftArrowPos));
+					$rhs = Reaction::parseReactants(substr($temp, $rightArrowPos + 1));
 				}
 				else return false;
 			}
 			else if ($leftArrowPos!==false)
 			{
-				$rhs = Reaction::parseReactants(substr($temp,0,$leftArrowPos));
-				$lhs = Reaction::parseReactants(substr($temp,$leftArrowPos+1));
+				$rhs = Reaction::parseReactants(substr($temp, 0, $leftArrowPos));
+				$lhs = Reaction::parseReactants(substr($temp, $leftArrowPos + 1));
 				$reversible = false;
 			}
 			else
 			{
-				$lhs = Reaction::parseReactants(substr($temp,0,$rightArrowPos));
-				$rhs = Reaction::parseReactants(substr($temp,$rightArrowPos+1));
+				$lhs = Reaction::parseReactants(substr($temp, 0, $rightArrowPos));
+				$rhs = Reaction::parseReactants(substr($temp, $rightArrowPos + 1));
 				$reversible = false;
 			}
 		 }
@@ -243,10 +261,24 @@ TO DO: this function isn't correct for reactions where a reactant appears on bot
 	 */
 	public function getReactants()
 	{
-		$reactants=array();
-		if ($this->leftHandSide) foreach($this->leftHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+		$reactants = array();
+
+		if($this->leftHandSide)
+		{
+			foreach($this->leftHandSide as $reactant => $stoichiometry)
+			{
+				$reactants[] = $reactant;
+			}
+		}
 		else return false;
-		if ($this->rightHandSide) foreach($this->rightHandSide as $reactant => $stoichiometry) $reactants[]=$reactant;
+
+		if($this->rightHandSide)
+		{
+			foreach($this->rightHandSide as $reactant => $stoichiometry)
+			{
+				$reactants[] = $reactant;
+			}
+		}
 		else return false;
 		return $reactants;
 	}
@@ -425,19 +457,19 @@ class ReactionNetwork
 		{
 			foreach($this->reactions as $reaction)
 			{
-				echo '					<fieldset class="reaction_input_row">
-						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportLHSAsText()), '" />
-						<select class="reaction_direction" name="reaction_direction[]">
-							<option value="left">&larr;</option>
-							<option value="both"';
+				echo '						<fieldset class="reaction_input_row">
+							<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportLHSAsText()), '" />
+							<select class="reaction_direction" name="reaction_direction[]">
+								<option value="left">&larr;</option>
+								<option value="both"';
 							if($reaction->isReversible()) echo ' selected="selected"';
 							echo '>&#x21cc;</option>
-							<option value="right"';
+								<option value="right"';
 							if(!$reaction->isReversible()) echo ' selected="selected"';
 							echo '>&rarr;</option>
-						</select>
-						<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportRHSAsText()), '" />
-					</fieldset><!-- reaction_input_row -->', PHP_EOL;
+							</select>
+							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportRHSAsText()), '" />
+						</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
 		else echo '<fieldset class="reaction_input_row">

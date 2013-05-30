@@ -8,12 +8,18 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   13/05/2013
+ * @modified   30/05/2013
  */
 ?>
 			</div><!-- content -->
 			<div id="footer">
 				<div id="credits_hider">
+					<div id="privacy_holder">
+						<h2>Privacy Statement</h2>
+						<p>
+							CoNtRol requires the use of temporary session cookies to provide functionality. It does not store any identifiable user information when used in interactive mode (all data displayed in browser). Some user data is stored when using the batch processing mode. Please do not use batch processing if you are concerned about this.
+						</p>
+					</div>
 					<div id="credits_holder">
 						<h2>Credits, Acknowledgments &amp; Licensing</h2>
 						<h3>Credits</h3>
@@ -40,8 +46,12 @@
 					</div><!-- credits_holder -->
 				</div><!-- credits_hider -->
 				<p id="credits">
+					<a href="#privacy_holder" class="fancybox">Privacy</a>
+					&bull;
 					<a href="http://reaction-networks.net/wiki/CoNtRol" title="View documentation for CoNtRol in a new tab">Documentation</a>
-					<a href="#credits_holder" class="fancybox">Credits</a></p>
+					&bull;
+					<a href="#credits_holder" class="fancybox">Credits</a>
+				</p><!-- credits -->
 			</div><!-- footer -->
 		</div><!-- container -->
 	</body>

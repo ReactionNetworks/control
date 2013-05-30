@@ -12,12 +12,15 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   13/05/2013
+ * @modified   30/05/2013
  */
 
 /////////////////////////////////////////
 // THINGS YOU SHOULD DEFINITELY CHANGE //
 /////////////////////////////////////////
+
+// Email address for the site admin. All emails sent by CoNtRol are sent from this address.
+define('ADMIN_EMAIL', 'control@example.com', false);
 
 // Database connection information. You definitely need to change this.
 
@@ -34,17 +37,11 @@ define('DB_USER', 'control', false);
 define('DB_PASS', 'password', false);
 define('DB_PREFIX', '', false);
 
-// Email address for the site admin. All emails sent by CoNtRol are sent from this address.
-define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
-
 
 
 /////////////////////////////////////
 // THINGS YOU MIGHT WANT TO CHANGE //
 /////////////////////////////////////
-
-// Location for temporary files. The default should work but you may wish to change it.
-define('TEMP_FILE_DIR', '/var/tmp/', false);
 
 // Location for the executables used by CoNtRol. You may want to change this for extra security.
 define('BINARY_FILE_DIR', '../bin/', false);
@@ -60,13 +57,20 @@ define('CRNDEBUG', false, false);
 // Value for shared server with ionice. N.B. trailing space!
 define('NICENESS', 'nice -n 19 ionice -c3 ', false);
 
+// Location for temporary files. The default should work but you may wish to change it.
+define('TEMP_FILE_DIR', '/var/tmp/', false);
+
+// The maximum amount of time a test will run before being cancelled. This is required because
+// tests are run via calls to exec(), which doesn't count towards max_execution_time.
+define('TEST_TIMEOUT_LIMIT', 60, false);
+
 
 
 //////////////////////////////////////////////////
 // THINGS YOU ALMOST CERTAINLY SHOULDN'T CHANGE //
 //////////////////////////////////////////////////
 
-// Get the site URL. You shouldn't need to change this.
+// Get the site URL. You shouldn't need to change this unless you're running behind a proxy.
 $protocol = 'http';
 if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] and $_SERVER['HTTPS'] != 'off') $protocol .= 's';
 define('SITE_DIR', 'control', false);

@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   13/05/2013
+ * @modified   30/05/2013
  */
 
 *
@@ -169,6 +169,11 @@ h1
 	right: 1em;
 }
 
+#credits > :link
+{
+	margin: 0 0.2em;
+}
+
 #credits_hider, #popup_hider
 {
 	height: 1px;
@@ -176,7 +181,7 @@ h1
 	visibility: hidden;
 }
 
-#credits_holder > *
+#credits_holder > *, #privacy_holder > *
 {
 	margin: 0.5em 1em;
 }
@@ -256,6 +261,11 @@ h1
 	max-width: 95%;
 }
 
+#missing_java_warning_holder
+{
+	padding: 1em;
+}
+
 #option_holder > h3
 {
 	margin: 0.7em 0;
@@ -324,6 +334,11 @@ h1
 #results > div, #results > div > h4, #results > div > p, #results > div > pre
 {
 	margin: 1em 0 0;
+}
+
+#results > p > :link
+{
+	margin-left: 0.3em;
 }
 
 #results_link

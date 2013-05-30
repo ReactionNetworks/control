@@ -8,13 +8,13 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   28/05/2013
+ * @modified   30/05/2013
  */
 
 require_once('includes/header.php');
 require_once('includes/standard-tests.php');
 
-if(isset($_SESSION['test_output'])) echo '				<div id="results_link"><a href="results.php">Back to existing results</a></div>', PHP_EOL;
+if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '				<div id="results_link"><a href="results.php">Back to existing results</a></div>', PHP_EOL;
 ?>
 				<div id="reaction_input_holder">
 					<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
@@ -54,8 +54,8 @@ else
 							<h2>Actions</h2>
 							<p>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
-								<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="dsr_graph_button" href="jnlp.php" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
-								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="process_network_button" href="#calculation_output_holder" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
 							</p>
 						</div><!-- actions_holder -->
 					</form>
@@ -63,12 +63,12 @@ else
 <?php
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') === FALSE):
 ?>
-				<div id="dsr_graph_applet_holder">
+				<!--div id="dsr_graph_applet_holder">
 					<span id="dsr_graph_title">DSR Graph</span>
 					<a href="#" id="dsr_graph_close_button"><img src="styles/close.png" alt="X" /></a>
 					<div id="dsr_graph_applet">
 					</div><!-- applet_holder_inner -->
-				</div><!-- dsr_graph_applet_holder -->
+				<!--/div><!-- dsr_graph_applet_holder -->
 <?php
 endif;
 ?>
@@ -81,8 +81,8 @@ endif;
 						</p>
 						<p class="left_centred">
 							File format:<br />
-							<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_network_file_format_human" /> <label for="upload_network_file_format_human"> Human readable, e.g. A + 2B --&gt; C</label> <br />
-							<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_network_file_format_stoichiometry" /> <label for="upload_network_file_format_stoichiometry"> Stoichiometry, e.g. -1 -2 1 </label>
+							<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_network_file_format_human" /> <label for="upload_network_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
+							<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_network_file_format_stoichiometry" /> <label for="upload_network_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label>
 						</p>
 						<p>
 							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload reaction network</button>
@@ -103,16 +103,16 @@ else echo ini_get('upload_max_filesize');
 echo $supported_batch_file_types[0]['extension'];
 for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
 ?>
-							</p>
-							<p>
+						</p>
+						<p>
 							<label for="upload_batch_file_email">Email address for results:</label>
 							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="48" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?>/><br />
 							<span id="upload_batch_file_email_error">&nbsp;</span>
 						</p>
 						<p>
 							File format:<br />
-							<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"> Human readable, e.g. A + 2B --&gt; C</label> <br />
-							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"> Stoichiometry, e.g. -1 -2 1 </label>
+							<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
+							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label>
 						</p>
 						<p>
 							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>
@@ -172,7 +172,7 @@ if(count($standardTests))
 						<p><input type="checkbox" name="mass_action" id="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?> /> <label for="mass_action_checkbox">Test mass action kinetics only (when supported)</label></p>
 						<p><input type="checkbox" name="detailed_output" id="detailed_output_checkbox"<?php if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) echo ' checked="checked"'; ?> /> <label for="detailed_output_checkbox">Show detailed test output</label></p>
 					</form><!-- option_holder -->
-				</div><!-- reaction_input_holder -->
+				</div><!-- popup_hider -->
 				<div id="hidden_character_warning">
 					<p>You entered the following invalid character: <span id="invalid_character_span"></span></p>
 				</div><!-- hidden_character_warning -->

@@ -8,8 +8,15 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   02/05/2013
+ * @modified   30/05/2013
  */
+
+header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: '.gmdate( 'D, d M Y H:i:s' ).' GMT');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
 require_once('config.php');
 require_once('functions.php');
 require_once('session.php');
@@ -26,7 +33,7 @@ require_once('version.php');
 		<link href="styles/default.css" rel="stylesheet" type="text/css" media="screen" />
 		<!--[if IE gt 8]>--><link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" /><!--<![endif]-->
 		<meta name="author" content="Murad Banaji, Pete Donnell, Anca Marginean, Casian Pantea" />
-		<meta name="date" content="2013-04-24T15:59:06+0100" />
+		<meta name="date" content="2013-05-30T15:42:51+0100" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />

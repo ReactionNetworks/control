@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   28/05/2013
+ * @modified   30/05/2013
  */
 
 require_once('../includes/config.php');
@@ -90,7 +90,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$mail .= "<p>ERROR: Unsupported archive type: $mimetype</p>\r\n";
 			break;
 	}
-	if (!$success) $mail .= "<p>ERROR: Failed to open archive $filename</p>\r\n";
+	if(!$success) $mail .= "<p>ERROR: Failed to open archive $filename</p>\r\n";
 	else
 	{
 		$success = mkdir($dirname, 0700, true);
@@ -101,11 +101,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		}
 		else $mail .= "<p>ERROR: Failed to create temporary directory</p>\r\n";
 	}
-	if ($success)
+	if($success)
 	{
 		$extracted_files = scandir($dirname);
 		$file_found = false;
-		if ($extracted_files !== false)
+		if($extracted_files !== false)
 		{
 			foreach($extracted_files as $file)
 			{
@@ -130,7 +130,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$mail .= "\r\n$line";
 									$mail .= '</pre>';
 									$row = trim($line);
-									if($row) $matrix[] = explode(' ', $row);
+									if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
 								}
 								if(!$reaction_network->parseStoichiometry($matrix))
 								{
@@ -149,7 +149,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$mail .= '<pre>';
 									$mail .= "\r\n$reactionString";
 									$mail .= '</pre>';
-									if($reactionString)
+									if($reactionString and strpos($reactionString, '#') !== 0)
 									{
 										$newReaction = Reaction::parseReaction($reactionString);
 										if($newReaction) $reaction_network->addReaction($newReaction);
@@ -169,12 +169,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						if ($success)
 						{
 							// Create human-readable descriptor file
-							$filename = $filename.'.hmn';
+							$temp_filename = $filename.'.hmn';
 
 							// In our example we're opening $filename in append mode.
 							// The file pointer is at the bottom of the file hence
 							// that's where $somecontent will go when we fwrite() it.
-							if(!$handle = fopen($filename, 'w'))
+							if(!$handle = fopen($temp_filename, 'w'))
 							{
 								$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 								$success = false;
@@ -271,7 +271,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									else
 									{
 										$test_filename = $filename.$extension;
-										$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'./'.$currentTest->getExecutableName();
+										$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'timeout '.TEST_TIMEOUT_LIMIT.' ./'.$currentTest->getExecutableName();
 										$output = array();
 										$returnValue = 0;
 										//$exec_string = NICENESS.$binary;
@@ -285,7 +285,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 											if(!$currentTest->supportsGeneralKinetics()) $mail .= "<p>WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.</p>\r\n";
 										}
 										$mail .= "<p>Output:</p>\r\n-------\r\n";
-										$exec_string .= ' '.$filename;
+										$exec_string .= ' '.$test_filename;
 										if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
 										else $exec_string .= ' 2> /dev/null';
 										exec($exec_string, $output, $returnValue);
@@ -306,10 +306,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$mail .= "\r\n<p>This auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".</p>\r\n";
 
 	// Set email headers.
+	$admin_email_split = explode('@', ADMIN_EMAIL);
 	$extra_headers =  "From: CoNtRol <".ADMIN_EMAIL.">\r\n";
 	$extra_headers .= "MIME-Version: 1.0\r\n";
 	$extra_headers .= "Content-Type: multipart/alternative;\r\n boundary=\"$boundary\"\r\n";
-	$extra_headers .= "Message-ID: <".time().'-'.substr(hash('sha512', ADMIN_EMAIL.$jobs[$i]['email']), -10).'@'.end(explode('@', ADMIN_EMAIL)).">\r\n";
+	$extra_headers .= "Message-ID: <".time().'-'.substr(hash('sha512', ADMIN_EMAIL.$jobs[$i]['email']), -10).'@'.end($admin_email_split).">\r\n";
 	$extra_headers .= 'X-Originating-IP: ['.$jobs[$i]['remote_ip']."]\r\n";
 	$sendmail_params = '-f'.ADMIN_EMAIL;
 
