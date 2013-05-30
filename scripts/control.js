@@ -73,12 +73,12 @@ function enableButtons()
  */
 function generateLaTeX()
 {
-	var numberOfRows = 0;
+	var numberOfRows = $('.reaction_input_row').length;
 	var numberOfColumns = 0;
 	var textOutput = '\\begin{array}{rcl}\n';
-	$('.reaction_input_row').each(function()
+	$('.reaction_input_row').each(function(index, element)
 	{
-		++numberOfRows;
+		//++numberOfRows;
 		if($('.reaction_left_hand_side', $(this)).val() == '' || $('.reaction_left_hand_side', $(this)).val() == ' ' || $('.reaction_left_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
 		else textOutput += $('.reaction_left_hand_side', $(this)).val().replace('&', '\\&amp;');
 		textOutput += ' &amp; ';
@@ -100,7 +100,9 @@ function generateLaTeX()
 		if($('.reaction_right_hand_side', $(this)).val() == '' || $('.reaction_right_hand_side', $(this)).val() == ' ' || $('.reaction_right_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
 		else textOutput += $('.reaction_right_hand_side', $(this)).val().replace('&', '\\&');
 		textOutput = textOutput.replace('$', '\\$');
-		textOutput += ' \\\\\n';
+		textOutput += ' ';
+		if(index < numberOfRows - 1) textOutput += '\\\\';
+		textOutput += '\n';
 	});
 	var allLines = textOutput.split('\n');
 	for(i = 0; i < allLines.length; ++i)
@@ -108,9 +110,20 @@ function generateLaTeX()
 		if(allLines[i].length > numberOfColumns) numberOfColumns = allLines[i].length;
 	}
 	numberOfColumns *= 2;
-	numberOfRows += 2;
-	textOutput = '<textarea rows="' + numberOfRows + '" cols="' + numberOfColumns + '">\n' + textOutput + '\\end{array}</textarea>\n';
-	$('#latex_output_holder').html(textOutput);
+	numberOfRows += 3;
+	textOutput = '<p>Reactions:</p><textarea rows="' + numberOfRows + '" cols="' + numberOfColumns + '">\n' + textOutput + '\\end{array}</textarea><p>Stoichiometry matrix:</p><textarea rows="' + numberOfRows*2 + '" cols="' + numberOfColumns + '">\\Gamma = ';
+	var url = 'handlers/get-net-stoichiometry.php';
+	var data = {csrf_token: csrf_token};
+	$.post(url, data, function(returndata)
+	{
+		textOutput += returndata.replace('&', '&amp;') + '\n</textarea>\n<p>Reaction rate Jacobian:</p><textarea rows="' + numberOfRows*2 + '" cols="' + numberOfColumns + '">V^T = ';
+		url = 'handlers/get-v-matrix.php';
+		$.post(url, data, function(returndata)
+		{
+			textOutput += returndata.replace('&', '&amp;') + '\n</textarea>\n';
+			$('#latex_output_holder').html(textOutput);
+		});
+	});
 }
 
 /**
@@ -124,7 +137,7 @@ function processTests()
 	{
 		showTestOutput(returndata);
 		if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='results.php';
-		else processTests()
+		else processTests();
 	});
 }
 

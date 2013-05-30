@@ -390,16 +390,30 @@ class ReactionNetwork
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
 	 * @return  string  $equations  Text version of reaction network chemical matrix
 	 */
-	public function exportStoichiometryMatrix()
+	public function exportStoichiometryMatrix($LaTeX = false)
 	{
 		$equations = '';
 		$stoichiometryMatrix = $this->generateStoichiometryMatrix();
-		foreach($stoichiometryMatrix as $row)
+		if($LaTeX)
 		{
+			$equations .= '\\left(\\begin{array}{';
+			for($i = 0; $i < count($stoichiometryMatrix[0]); ++$i) $equations .= 'r';
+			$equations .= "}\n";
+		}
+		for($i = 0; $i < count($stoichiometryMatrix); ++$i)
+		{
+			$row = $stoichiometryMatrix[$i];
 			$equations .= $row[0];
-			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
+			for($j = 1; $j < count($row); ++$j)
+			{
+				$equations .= ' ';
+				if($LaTeX) $equations .= '& ';
+				$equations .= $row[$j];
+			}
+			if($LaTeX and ($i < (count($stoichiometryMatrix) - 1))) $equations .= ' \\\\';
 			$equations .= PHP_EOL;
 		}
+		if($LaTeX) $equations .= "\\end{array}\\right)\n";
 		return $equations;
 	}
 
@@ -429,16 +443,72 @@ class ReactionNetwork
 		return $equations;
 	}
 
-	public function exportVMatrix()
+	public function exportVMatrix($LaTeX = false)
 	{
 		$equations = '';
 		$VMatrix = $this->generateReactionRateJacobianMatrix();
-		foreach($VMatrix as $row)
+		if($LaTeX)
 		{
-			$equations .= $row[0];
-			for($i = 1; $i < count($row); ++$i) $equations .= ' '.$row[$i];
+			$equations .= '\\left(\\begin{array}{';
+			for($i = 0; $i < count($VMatrix[0]); ++$i) $equations .= 'r';
+			$equations .= "}\n";
+		}
+		for($i = 0; $i < count($VMatrix); ++$i)
+		{
+			$row = $VMatrix[$i];
+			if($LaTeX)
+			{
+				switch($row[0])
+				{
+					case 0:
+						$equations .= '0';
+						break;
+					case -1:
+						$equations .= '-';
+						break;
+					case 1:
+						$equations .= '+';
+						break;
+					case 2:
+						$equations .= '\\pm';
+						break;
+					default:
+						$equations .= '?';
+						break;
+				}
+			}
+			else $equations .= $row[0];
+			for($j = 1; $j < count($row); ++$j)
+			{
+				$equations .= ' ';
+				if($LaTeX)
+				{
+					$equations .= '& ';
+					switch($row[$j])
+					{
+						case 0:
+							$equations .= '0';
+							break;
+						case -1:
+							$equations .= '-';
+							break;
+						case 1:
+							$equations .= '+';
+							break;
+						case 2:
+							$equations .= '\\pm';
+							break;
+						default:
+							$equations .= '?';
+							break;
+					}
+				}
+				else $equations .= $row[$j];
+			}
+			if($LaTeX and ($i < (count($VMatrix) - 1))) $equations .= ' \\\\';
 			$equations .= PHP_EOL;
 		}
+		if($LaTeX) $equations .= "\\end{array}\\right)\n";
 		return $equations;
 	}
 
