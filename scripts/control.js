@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   30/05/2013
+ * @modified   02/06/2013
  */
 
 /**
@@ -397,7 +397,7 @@ $(document).ready(function()
 	$('#reset_reaction_button').height(buttonSize);
 	$('#reset_reaction_button').width(buttonSize);
 
-	$('.fancybox').fancybox({autoDimensions: true, width: popupWidth, height: popupHeight});
+	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
 
 	$('#detailed_output_checkbox').change(function()
 	{
@@ -460,7 +460,10 @@ $(document).ready(function()
 
 	$('#latex_output_button').click(function(e)
 	{
-		if(!$(this).hasClass('disabled')) generateLaTeX();
+		if(!$(this).hasClass('disabled'))
+		{
+			$.when(saveNetwork()).then(generateLaTeX());
+		}
 	});
 
 	$('#mass_action_checkbox').change(function()
