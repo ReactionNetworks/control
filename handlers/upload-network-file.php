@@ -91,7 +91,7 @@ if(!count($errors))
 			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
 			  {
 			    $row = fgets($fhandle);
-			    error_log($row,3,'/var/tmp/crn.log');
+			    error_log($row."\n",3,'/var/tmp/crn.log');
 			    // do nothing
 			  }
 
@@ -99,15 +99,20 @@ if(!count($errors))
 			{
 				$row = trim(fgets($fhandle));
 				if($row and strpos($row, '#') !== 0) $sourceMatrix[] = explode(' ', $row);
-			    error_log($row,3,'/var/tmp/crn.log');
+			    error_log($row."\n",3,'/var/tmp/crn.log');
 			}
 			while(!feof($fhandle))
 			{
 				$row = trim(fgets($fhandle));
 				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
-			    error_log($row,3,'/var/tmp/crn.log');
+			    error_log($row."\n",3,'/var/tmp/crn.log');
 			}
-			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
+			{
+			  $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+			  error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+			  error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+			}
 			break;
 
 		case 'S+T+V':
