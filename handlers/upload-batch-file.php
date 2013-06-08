@@ -107,6 +107,11 @@ if(!count($_SESSION['errors']))
 			$file_format = 2;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
 			break;
+		case 'SourceTarget':
+			$file_format = 4;
+			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
+			break;
+
 		// TO DO: Set warning message for S/T/V file format.
 		default: // assume 'human' if unsure
 			$file_format = 0;

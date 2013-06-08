@@ -140,6 +140,43 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								break;
 							case 2: //Net stoichiometry + V
 							case 3: //Source + target + V
+							case 4: //Source + target
+			    					$mail .= '<pre>';
+		       //die ('error');
+			$sourceMatrix = array(); 
+			$targetMatrix = array();
+			$row = '';
+			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
+			  {
+			    $row = fgets($fhandle);
+			    $mail .= "\r\n$row";
+			    error_log($row."\n",3,'/var/tmp/crn.log');
+			    // do nothing
+			  }
+
+			while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
+			{
+				$row = trim(fgets($fhandle));
+				$mail .= "\r\n$row";
+				if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
+			    error_log($row."\n",3,'/var/tmp/crn.log');
+			}
+			while(!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+	         		$mail .= "\r\n$row";
+				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
+			    error_log($row."\n",3,'/var/tmp/crn.log');
+			}
+			$mail .= "\r\n</pre>";
+			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
+			{
+			  $mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
+			  error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+			  error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+			}
+			break;
+
 							case 0: //Human
 								//Fall through
 							default: //Assume 'human' if unsure
