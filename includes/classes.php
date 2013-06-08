@@ -681,7 +681,7 @@ class ReactionNetwork
 					if(!(is_numeric($sourceMatrix[$j][$i]) and (int)$sourceMatrix[$j][$i] == $sourceMatrix[$j][$i] and $sourceMatrix[$j][$i]>=0))
 					{
 						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($sourceMatrix): '.count($sourceMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$sourceMatrix[$j][$i]: '.$sourceMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
-						$success = false;
+						//						$success = false;
 					}
 					elseif(!(is_numeric($targetMatrix[$j][$i]) and (int)$targetMatrix[$j][$i] == $targetMatrix[$j][$i] and $targetMatrix[$j][$i]>=0))
 					{
@@ -698,7 +698,7 @@ class ReactionNetwork
 				$this->addReaction(new Reaction($lhs, $rhs, false));
 			}
 		}
-		//		else $success = false;
+				else $success = false;
 		return $success;
 	}
 
