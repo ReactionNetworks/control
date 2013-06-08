@@ -87,8 +87,10 @@ if(!count($errors))
 		       //die ('error');
 			$sourceMatrix = array(); 
 			$targetMatrix = array();
+			$row = '';
 			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
 			  {
+			    $row = fgets($fhandle);
 			    error_log($row,3,'/var/tmp/crn.log');
 			    // do nothing
 			  }
