@@ -98,7 +98,7 @@ if(!count($errors))
 			while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 			{
 				$row = trim(fgets($fhandle));
-				if($row and strpos($row, '#') !== 0) $sourceMatrix[] = explode(' ', $row);
+				if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
 			    error_log($row."\n",3,'/var/tmp/crn.log');
 			}
 			while(!feof($fhandle))
