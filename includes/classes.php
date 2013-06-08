@@ -698,7 +698,7 @@ class ReactionNetwork
 				$this->addReaction(new Reaction($lhs, $rhs, false));
 			}
 		}
-		else $success = false;
+		//		else $success = false;
 		return $success;
 	}
 
