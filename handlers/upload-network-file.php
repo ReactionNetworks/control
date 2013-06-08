@@ -86,20 +86,23 @@ if(!count($errors))
 		case 'S+T':
 			$sourceMatrix = array(); 
 			$targetMatrix = array();
-			while (mb_strtoupper(trim($row)) !== 'S MATRIX' and !feof($fhandle)) 
+			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
 			  {
+			    error_log($row,3,'/var/tmp/crn.log');
 			    // do nothing
 			  }
 
-			while(mb_strtoupper($row) !== 'T MATRIX' and !feof($fhandle))
+			while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 			{
 				$row = trim(fgets($fhandle));
 				if($row and strpos($row, '#') !== 0) $sourceMatrix[] = explode(' ', $row);
+			    error_log($row,3,'/var/tmp/crn.log');
 			}
 			while(!feof($fhandle))
 			{
 				$row = trim(fgets($fhandle));
 				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
+			    error_log($row,3,'/var/tmp/crn.log');
 			}
 			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
