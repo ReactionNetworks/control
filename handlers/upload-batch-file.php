@@ -167,7 +167,7 @@ if(!count($_SESSION['errors']))
 	$statement->bindParam(':remote_user_agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
 	$statement->bindValue(':creation_timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 	$statement->bindValue(':update_timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
-	if (!$statement->execute()) die($controldb->errorInfo());
+	if (!$statement->execute()) die(print_r($controldb->errorInfo(),true));
 	$controldb = null;
 }
 else // There were errors, so redirect the user back to the main page so they can see them.
