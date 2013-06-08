@@ -84,7 +84,7 @@ if(!count($errors))
 			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
 		case 'SourceTarget':
-		  die ('error');
+		       //die ('error');
 			$sourceMatrix = array(); 
 			$targetMatrix = array();
 			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
