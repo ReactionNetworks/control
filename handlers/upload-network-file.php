@@ -86,12 +86,12 @@ if(!count($errors))
 		case 'S+T':
 			$sourceMatrix = array(); 
 			$targetMatrix = array();
-			while (mb_strtoupper(trim($row)) !== 'S MATRIX') 
+			while (mb_strtoupper(trim($row)) !== 'S MATRIX' and !feof($fhandle)) 
 			  {
 			    // do nothing
 			  }
 
-			while(mb_strtoupper($row) !== 'T MATRIX')
+			while(mb_strtoupper($row) !== 'T MATRIX' and !feof($fhandle))
 			{
 				$row = trim(fgets($fhandle));
 				if($row and strpos($row, '#') !== 0) $sourceMatrix[] = explode(' ', $row);
