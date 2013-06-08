@@ -83,6 +83,27 @@ if(!count($errors))
 			}
 			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
+		case 'S+T':
+			$sourceMatrix = array(); 
+			$targetMatrix = array();
+			while (mb_strtoupper(trim($row)) !== 'S MATRIX') 
+			  {
+			    // do nothing
+			  }
+
+			while(mb_strtoupper($row) !== 'T MATRIX')
+			{
+				$row = trim(fgets($fhandle));
+				if($row and strpos($row, '#') !== 0) $sourceMatrix[] = explode(' ', $row);
+			}
+			while(!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
+			}
+			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+			break;
+
 		case 'S+T+V':
 			$file = array();
 			while (!feof($fhandle))

@@ -657,6 +657,52 @@ class ReactionNetwork
 		return $success;
 	}
 
+	public function parseSourceTargetStoichiometry($sourceMatrix,$targetMatrix)
+	{
+		$success = true;
+		if(gettype($sourceMatrix) == 'array' and count($sourceMatrix) and gettype($targetMatrix) == 'array' and count($targetMatrix) === count($sourceMatrix) and count($sourceMatrix[0])===count($targetMatrix[0]))
+		{
+			$allReactants = array();
+			$reactantPrefix = '';
+			$numberOfReactants = count($sourceMatrix);
+			$numberOfReactions = count($sourceMatrix[0]);
+			for($i = 0; $i < $numberOfReactants; ++$i)
+			{
+				if(count($matrix[$i]) !== $numberOfReactions) $success = false;
+				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
+				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
+			}
+			for($i = 0; $i < $numberOfReactions; ++$i)
+			{
+				$lhs = array();
+				$rhs = array();
+				for($j = 0; $j < $numberOfReactants; ++$j)
+				{
+					if(!(is_numeric($sourceMatrix[$j][$i]) and (int)$sourceMatrix[$j][$i] == $sourceMatrix[$j][$i] and $sourceMatrix[$j][$i]>=0))
+					{
+						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($sourceMatrix): '.count($sourceMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$sourceMatrix[$j][$i]: '.$sourceMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						$success = false;
+					}
+					elseif(!(is_numeric($targetMatrix[$j][$i]) and (int)$targetMatrix[$j][$i] == $targetMatrix[$j][$i] and $targetMatrix[$j][$i]>=0))
+					{
+						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($targetMatrix): '.count($targerMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$targetMatrix[$j][$i]: '.$targetMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						$success = false;
+					}
+
+					else
+					  {					    
+					    if ($sourceMatrix[$j][$i] > 0) $lhs[$allReactants[$j]] = $sourceMatrix[$j][$i];
+					    if($targetMatrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $targetMatrix[$j][$i];
+					  }
+				}
+				$this->addReaction(new Reaction($lhs, $rhs, false));
+			}
+		}
+		else $success = false;
+		return $success;
+	}
+
+
 	/*
 	 * Generate V^T
 	 *
