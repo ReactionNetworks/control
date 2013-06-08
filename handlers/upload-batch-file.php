@@ -15,7 +15,7 @@
 require_once('../includes/config.php');
 require_once('../includes/classes.php');
 require_once('../includes/session.php');
-die(print_r($_POST),true);
+die(print_r($_POST,true));
 
 $_SESSION['errors'] = array();
 $mimetype = '';
