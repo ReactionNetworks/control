@@ -668,7 +668,7 @@ class ReactionNetwork
 			$numberOfReactions = count($sourceMatrix[0]);
 			for($i = 0; $i < $numberOfReactants; ++$i)
 			{
-				if(count($matrix[$i]) !== $numberOfReactions) $success = false;
+				if(count($sourceMatrix[$i]) !== $numberOfReactions) $success = false;
 				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
 				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
 			}
@@ -686,7 +686,7 @@ class ReactionNetwork
 					elseif(!(is_numeric($targetMatrix[$j][$i]) and (int)$targetMatrix[$j][$i] == $targetMatrix[$j][$i] and $targetMatrix[$j][$i]>=0))
 					{
 						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($targetMatrix): '.count($targerMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$targetMatrix[$j][$i]: '.$targetMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
-						//$success = false;
+						$success = false;
 					}
 
 					else
