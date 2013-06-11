@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   28/05/2013
+ * @modified   11/06/2013
  */
 
 require_once('../includes/config.php');

@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   30/05/2013
+ * @modified   11/06/2013
  */
 
 require_once('../includes/config.php');
@@ -115,67 +115,65 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					if ($mimetype === 'text/plain')
 					{
 						$file_found = true;
-						$mail .= "\r\n## FILE: ".end(explode('/', $file))." ##\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
+						$mail .= "\r\n<h2>FILE: ".end(explode('/', $file))."</h2>\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
 						$reaction_network = new ReactionNetwork();
 						$fhandle = fopen($dirname.'/'.$file, 'r');
 						switch($jobs[$i]['file_format'])
 						{
 							case 1: //Net stoichiometry
 								$matrix = array();
-								$mail .= "<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
+								$mail .= "\r\n<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
+								$mail .= '<pre>';
 								while(!feof($fhandle))
 								{
 									$line = fgets($fhandle);
-									$mail .= '<pre>';
 									$mail .= "\r\n$line";
-									$mail .= '</pre>';
-									$row = trim($line);
+									$row = trim(preg_replace('/\s+/', ' ', $line));
 									if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
 								}
+								$mail .= '</pre>';
 								if(!$reaction_network->parseStoichiometry($matrix))
 								{
-									$mail .= "<p>ERROR: An error was detected in the stoichiometry file.</p>\r\n";
+									$mail .= "\r\n<p>ERROR: An error was detected in the stoichiometry file.</p>\r\n";
 									$success = false;
 								}
-								break;
+								break; // End of case 1, net stoichiometry
 							case 2: //Net stoichiometry + V
 							case 3: //Source + target + V
 							case 4: //Source + target
-			    					$mail .= '<pre>';
-		       //die ('error');
-			$sourceMatrix = array(); 
-			$targetMatrix = array();
-			$row = '';
-			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
-			  {
-			    $row = fgets($fhandle);
-			    $mail .= "\r\n$row";
-			    error_log($row."\n",3,'/var/tmp/crn.log');
-			    // do nothing
-			  }
-
-			while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
-			{
-				$row = trim(fgets($fhandle));
-				$mail .= "\r\n$row";
-				if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
-			    error_log($row."\n",3,'/var/tmp/crn.log');
-			}
-			while(!feof($fhandle))
-			{
-				$row = trim(fgets($fhandle));
-	         		$mail .= "\r\n$row";
-				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
-			    error_log($row."\n",3,'/var/tmp/crn.log');
-			}
-			$mail .= "\r\n</pre>";
-			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
-			{
-			  $mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
-			  error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
-			  error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
-			}
-			break;
+								$mail .= '<pre>';
+								$sourceMatrix = array();
+								$targetMatrix = array();
+								$row = '';
+								while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
+								{
+									$row = fgets($fhandle);
+									$mail .= "\r\n$row";
+									//error_log($row."\n",3,'/var/tmp/crn.log');
+								}
+					
+								while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
+								{
+									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+									$mail .= "\r\n$row";
+									if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
+									//error_log($row."\n",3,'/var/tmp/crn.log');
+								}
+								while(!feof($fhandle))
+								{
+									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+									$mail .= "\r\n$row";
+									if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
+									//error_log($row."\n",3,'/var/tmp/crn.log');
+								}
+								$mail .= "\r\n</pre>";
+								if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
+								{
+									$mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
+									//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+									//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+								}
+								break; // End of case 4, source + target stoichiometry
 
 							case 0: //Human
 								//Fall through
@@ -192,7 +190,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										if($newReaction) $reaction_network->addReaction($newReaction);
 										elseif($success)
 										{
-											$mail .= "<p>ERROR: An error occurred while adding a reaction from the file.\r\n</p>";
+											$mail .= "<p>ERROR: An error occurred while adding a reaction from the file.</p>\r\n";
 											$success = false;
 										}
 									}
@@ -295,7 +293,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$extension = '';
 									$temp = '';
-									$mail .= "\r\n### TEST: ".$currentTest->getShortName()." ###\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
+									$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
 
 									// Need to split this into net stoichiometry versus source/target stoichiometry?
 									// How best to treat reversible vs irreversible reactions in stoichiometry case?
@@ -330,11 +328,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										foreach($output as $line) $mail .= "\r\n$line";
 										$mail .= "\r\n</pre>";
 									}
-									$mail .= "\r\n\r\n### END OF TEST: ".$currentTest->getShortName()." ###\r\n\r\n";
+									$mail .= "\r\n\r\n<h3>END OF TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n";
 								} // foreach($tests_enabled as $currentTest)
 							} // if($success)
 						} // if($success)
-						$mail .= "## END OF FILE: ".end(explode('/', $file))." ##\r\n\r\n";
+						$mail .= "<h2>END OF FILE: ".end(explode('/', $file))."</h2>\r\n\r\n";
 					}	// if($mimetype === 'text/plain')
 				} // if(!is_dir($file))
 			} // foreach($extracted_files as $file)
@@ -352,14 +350,20 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$sendmail_params = '-f'.ADMIN_EMAIL;
 
 	// Create HTML and plain text versions of mail
+	$plain_text_search = array('<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>');
+	$plain_text_replace = array('', '', '## ', '### ', '', '', '', ' ##', ' ###', '', '');
+	$html_search = array('<-->', '<--', '-->', "\r\n-------\r\n", "\r\n==============\r\n\r\n");
+	$html_replace = array('&lt;--&gt;', '&lt;--', '--&gt;', "\r\n", "\r\n");
 	$body = "--$boundary\r\n";
 	$body .= "Content-Type: text/plain; charset=utf-8;\r\n format=flowed\r\n";
 	$body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-	$body .= str_replace('<br />', '', str_replace('<h1>', '', str_replace('</h1>', '', str_replace('<p>', '', str_replace('</p>', '', str_replace('<pre>', '', str_replace('</pre>', '', $mail)))))));
+	// Remove HTML tags and replace links with bare URLs
+	$body .= preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', str_replace($plain_text_search, $plain_text_replace, $mail));
 	$body .= "\r\n\r\n--$boundary\r\n";
 	$body .= "Content-Type: text/html; charset=utf-8;\r\n format=flowed\r\n";
 	$body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-	$body .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'."\r\n".'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">'."\r\n<head>\r\n".'<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />'."\r\n<title>CoNtRol output</title>\r\n</head>\r\n<body>\r\n".str_replace(ADMIN_EMAIL, '<a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>', str_replace('## ', '<h2>', str_replace(' ##', '</h2>', str_replace('### ', '<h3>', str_replace(' ###', '</h3>', str_replace('<-->', '&lt;--&gt;', str_replace('<--', '&lt;--', str_replace('-->', '--&gt;', str_replace("\r\n-------\r\n", "\r\n", str_replace("\r\n==============\r\n\r\n", "\r\n", $mail))))))))))."</body>\r\n</html>\r\n";
+	// Remove problematic plain text code and replace admin email with link
+	$body .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'."\r\n".'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">'."\r\n<head>\r\n".'<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />'."\r\n<title>CoNtRol output</title>\r\n</head>\r\n<body>\r\n".str_replace(ADMIN_EMAIL, '<a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>', str_replace($html_search, $html_replace, $mail))."</body>\r\n</html>\r\n";
 
 	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $body, $extra_headers, $sendmail_params)) echo "\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail";
 	elseif($success)

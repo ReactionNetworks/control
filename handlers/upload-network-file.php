@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   24/04/2013
+ * @modified   11/06/2013
  */
 
 require_once('../includes/config.php');
@@ -78,40 +78,38 @@ if(!count($errors))
 			$_SESSION['errors'][] = 'Warning: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.';
 			while(!feof($fhandle))
 			{
-				$row = trim(fgets($fhandle));
+				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 				if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
 			}
 			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
 		case 'SourceTarget':
-		       //die ('error');
-			$sourceMatrix = array(); 
+			$sourceMatrix = array();
 			$targetMatrix = array();
 			$row = '';
-			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX') 
-			  {
-			    $row = fgets($fhandle);
-			    error_log($row."\n",3,'/var/tmp/crn.log');
-			    // do nothing
-			  }
+			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
+			{
+				$row = fgets($fhandle);
+				//error_log($row."\n",3,'/var/tmp/crn.log');
+			}
 
 			while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 			{
-				$row = trim(fgets($fhandle));
+				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 				if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
-			    error_log($row."\n",3,'/var/tmp/crn.log');
+				//error_log($row."\n",3,'/var/tmp/crn.log');
 			}
 			while(!feof($fhandle))
 			{
-				$row = trim(fgets($fhandle));
+				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
-			    error_log($row."\n",3,'/var/tmp/crn.log');
+				//error_log($row."\n",3,'/var/tmp/crn.log');
 			}
 			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
 			{
-			  $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
-			  error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
-			  error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+				$_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+				//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+				//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
 			}
 			break;
 
@@ -122,9 +120,9 @@ if(!count($errors))
 				$row = trim(fgets($fhandle));
 				if($row and strpos($row, '#') !== 0)
 				{
-				//TO DO: Implement this import		
-				} 
-			}	
+					//TO DO: Implement this import
+				}
+			}
 			break;
 		default: // assume 'human' if unsure
 			$error = false;

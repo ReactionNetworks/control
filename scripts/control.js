@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   02/06/2013
+ * @modified   11/06/2013
  */
 
 /**
@@ -159,7 +159,7 @@ function removeReaction()
  */
 function resetPopup()
 {
-	$('#calculation_output_holder').html('<p>Processing...<span class="blink">_</span></p>');
+	$('#calculation_output_holder').html('<p>Processing selected tests. This may take some time, please be patient.</p>');
 }
 
 /**
@@ -173,7 +173,7 @@ function resetReactions()
 	$('#reaction_input_form fieldset input').val('');
 	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
 	disableButtons();
-	while($('#reaction_input_form fieldset').length -1) removeReaction();
+	while($('#reaction_input_form fieldset').length - 1) removeReaction();
 	$('#remove_reaction_button').addClass('disabled');
 	var url = 'handlers/reset-reactions.php';
 	var data = {reset_reactions: 1, csrf_token: csrf_token};
@@ -531,8 +531,8 @@ $(document).ready(function()
 			$('#upload_batch_file_email_error').html('&nbsp;');
 			if($('#upload_batch_file_input').val() != '') 
 			{
-				$('#upload_network_file_button').removeClass('disabled');
-				$('#upload_network_file_button').removeAttr('disabled');
+				$('#upload_batch_file_button').removeClass('disabled');
+				$('#upload_batch_file_button').removeAttr('disabled');
 			}
 		}
 		else $('#upload_batch_file_email_error').html('Invalid email address');		
@@ -545,11 +545,16 @@ $(document).ready(function()
 			$('#upload_batch_file_email_error').html('&nbsp;');
 			if($('#upload_batch_file_input').val() != '') 
 			{
-				$('#upload_network_file_button').removeClass('disabled');
-				$('#upload_network_file_button').removeAttr('disabled');
+				$('#upload_batch_file_button').removeClass('disabled');
+				$('#upload_batch_file_button').removeAttr('disabled');
 			}
 		}
-		else $('#upload_batch_file_email_error').html('Invalid email address');		
+		else
+		{
+			$('#upload_batch_file_email_error').html('Invalid email address');
+			$('#upload_batch_file_button').addClass('disabled');
+			$('#upload_batch_file_button').attr('disabled', 'disabled');
+		}		
 	});
 	
 	$('#upload_batch_file_input').change(function()

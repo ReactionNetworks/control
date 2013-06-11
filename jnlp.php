@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   22/05/2013
+ * @modified   11/06/2013
  */
 
 header('Content-Type: application/x-java-jnlp-file');

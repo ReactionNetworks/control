@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   30/05/2013
+ * @modified   11/06/2013
  */
 
 require_once('includes/header.php');
@@ -83,7 +83,7 @@ endif;
 							File format:<br />
 							<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_network_file_format_human" /> <label for="upload_network_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
 							<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_network_file_format_stoichiometry" /> <label for="upload_network_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label> <br />
-<input type="radio" name="upload_network_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_network_file_format_source_target" /> <label for="upload_network_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>
+							<input type="radio" name="upload_network_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_network_file_format_source_target" /> <label for="upload_network_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>
 						</p>
 						<p>
 							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload reaction network</button>
@@ -114,8 +114,7 @@ for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported
 							File format:<br />
 							<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
 							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label> <br />
-<input type="radio" name="upload_batch_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_batch_file_format_source_target" /> <label for="upload_batch_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>
-
+							<input type="radio" name="upload_batch_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_batch_file_format_source_target" /> <label for="upload_batch_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>
 						</p>
 						<p>
 							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>

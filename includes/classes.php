@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   30/05/2013
+ * @modified   11/06/2013
  */
 
 class Reaction
@@ -680,25 +680,24 @@ class ReactionNetwork
 				{
 					if(!(is_numeric($sourceMatrix[$j][$i]) and (int)$sourceMatrix[$j][$i] == $sourceMatrix[$j][$i] and $sourceMatrix[$j][$i]>=0))
 					{
-						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($sourceMatrix): '.count($sourceMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$sourceMatrix[$j][$i]: '.$sourceMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
-      						$success = false;
+						//error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($sourceMatrix): '.count($sourceMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$sourceMatrix[$j][$i]: '.$sourceMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						$success = false;
 					}
 					elseif(!(is_numeric($targetMatrix[$j][$i]) and (int)$targetMatrix[$j][$i] == $targetMatrix[$j][$i] and $targetMatrix[$j][$i]>=0))
 					{
-						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($targetMatrix): '.count($targerMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$targetMatrix[$j][$i]: '.$targetMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						//error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($targetMatrix): '.count($targerMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$targetMatrix[$j][$i]: '.$targetMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
 						$success = false;
 					}
-
 					else
-					  {					    
-					    if ($sourceMatrix[$j][$i] > 0) $lhs[$allReactants[$j]] = $sourceMatrix[$j][$i];
-					    if($targetMatrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $targetMatrix[$j][$i];
-					  }
+					{
+						if($sourceMatrix[$j][$i] > 0) $lhs[$allReactants[$j]] = $sourceMatrix[$j][$i];
+						if($targetMatrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $targetMatrix[$j][$i];
+					}
 				}
 				$this->addReaction(new Reaction($lhs, $rhs, false));
 			}
 		}
-				else $success = false;
+		else $success = false;
 		return $success;
 	}
 
