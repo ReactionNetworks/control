@@ -20,7 +20,7 @@
 /////////////////////////////////////////
 
 // Email address for the site admin. All emails sent by CoNtRol are sent from this address.
-define('ADMIN_EMAIL', 'control@example.com', false);
+define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
 
 // Database connection information. You definitely need to change this.
 
