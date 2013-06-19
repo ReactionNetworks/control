@@ -5,10 +5,11 @@
  * List of standard tests and their options
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
+ * @author     Murad Banaji <murad dot banaji at port dot ac dot uk>
  * @copyright  University of Portsmouth 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   28/05/2013
+ * @modified   19/06/2013
  */
 
 $standardTests = array(
@@ -28,7 +29,7 @@ $standardTests = array(
 	new NetworkTest
 	(
 		'dsrtest',
-		'DSR test',
+		'DSR',
 		'Checks condition (*) for the DSR graph. Implemented by Casian Pantea, based on <a href="http://projecteuclid.org/euclid.cms/1264434136">M. Banaji and G. Craciun, Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements</a>.',
 		'dsrTest.sh',
 		array('stoichiometry+V'),
@@ -39,8 +40,8 @@ $standardTests = array(
 	new NetworkTest
 	(
 		'ssdonly',
-		'SSD test',
-		'Runs a number of matrix-related tests on the system, for example if the stoichiometric matrix is strongly sign determined (SSD). Implemented by Murad Banaji, based on <a href="http://discovery.ucl.ac.uk/149053/" title="Publication details of research paper">P matrix properties, injectivity and stability in chemical reaction systems</a>.',
+		'General analysis',
+		'Runs a number of tests on the system. These are mainly matrix-tests, and relate to multistationarity, stability and persistence. Implemented by Murad Banaji.',
 		'test --html',
 		array('human')
 	),
