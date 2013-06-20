@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/06/2013
+ * @modified   20/06/2013
  */
 
 /**
@@ -159,7 +159,7 @@ function removeReaction()
  */
 function resetPopup()
 {
-	$('#calculation_output_holder').html('<p>Processing selected tests. This may take some time, please be patient.</p>');
+	$('#calculation_output_holder').html('<p>Processing selected tests. This may take some time, please be patient. Do not close this popup window!</p>');
 }
 
 /**
