@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/06/2013
+ * @modified   20/06/2013
  */
 
 header('Content-Type: application/x-java-jnlp-file');
@@ -24,7 +24,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 	</information>
 	<resources>
 		<j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-		<jar href="applets/dsr.1.5.jar" main="true"/>
+		<jar href="applets/dsr.jar" main="true"/>
 		<jar href="applets/jung-algorithms-2.0.1.jar" main="false"/>
 		<jar href="applets/jung-api-2.0.1.jar" main="false"/>
 		<jar href="applets/jung-graph-impl-2.0.1.jar" main="false" />

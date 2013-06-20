@@ -6,10 +6,10 @@
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @author     Murad Banaji <murad dot banaji at port dot ac dot uk>
- * @copyright  University of Portsmouth 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   19/06/2013
+ * @modified   20/06/2013
  */
 
 $standardTests = array(
@@ -28,10 +28,10 @@ $standardTests = array(
 */
 	new NetworkTest
 	(
-		'dsrtest',
+		'dsr',
 		'DSR',
 		'Checks condition (*) for the DSR graph. Implemented by Casian Pantea, based on <a href="http://projecteuclid.org/euclid.cms/1264434136">M. Banaji and G. Craciun, Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements</a>.',
-		'dsrTest.sh',
+		'dsr',
 		array('stoichiometry+V'),
 		false,
 		true
@@ -39,10 +39,10 @@ $standardTests = array(
 
 	new NetworkTest
 	(
-		'ssdonly',
+		'analysereacs',
 		'General analysis',
 		'Runs a number of tests on the system. These are mainly matrix-tests, and relate to multistationarity, stability and persistence. Implemented by Murad Banaji.',
-		'test --html',
+		'analysereacs --html',
 		array('human')
 	),
 
