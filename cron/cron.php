@@ -539,7 +539,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	{
 	    exit("cannot open <$zipfilename>\n");
 	}
-	$zip->addFile(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
+	$zip->addFile(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt','control_output.txt');
 	$zip->close();
+	unlink(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
 
 } // for($i = 0; $i < $number_of_jobs; ++$i)
