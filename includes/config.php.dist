@@ -12,12 +12,16 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   30/05/2013
+ * @modified   19/07/2013
  */
 
 /////////////////////////////////////////
 // THINGS YOU SHOULD DEFINITELY CHANGE //
 /////////////////////////////////////////
+
+// site URL
+define('SITE_DIR', 'control', false);
+if('http://reaction-networks.net/'.SITE_DIR.'/', false);
 
 // Email address for the site admin. All emails sent by CoNtRol are sent from this address.
 define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
@@ -69,12 +73,6 @@ define('TEST_TIMEOUT_LIMIT', 60, false);
 //////////////////////////////////////////////////
 // THINGS YOU ALMOST CERTAINLY SHOULDN'T CHANGE //
 //////////////////////////////////////////////////
-
-// Get the site URL. You shouldn't need to change this unless you're running behind a proxy.
-$protocol = 'http';
-if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] and $_SERVER['HTTPS'] != 'off') $protocol .= 's';
-define('SITE_DIR', 'control', false);
-if(isset($_SERVER['HTTP_HOST'])) define('SITE_URL', $protocol.'://'.$_SERVER['HTTP_HOST'].'/'.SITE_DIR.'/', false);
 
 // Default page information. You shouldn't need to change this.
 define('DEFAULT_PAGE_TITLE', 'CoNtRol - Chemical Reaction Network analysis tool', false);

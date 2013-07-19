@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   11/06/2013
+ * @modified   19/07/2013
  */
 
 require_once('../includes/config.php');
@@ -46,6 +46,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 for($i = 0; $i < $number_of_jobs; ++$i)
 {
+	$output_filename = TEMP_FILE_DIR.'/'.$jobs[$i]['key'].'.txt';
+	if(!$ohandle = fopen($output_filename, 'w'))
+	{
+		$mail .= "<p>ERROR: Cannot open file ($output_filename)</p>\r\n";
+		$success = false;
+	}
 	$boundary = hash("sha256", uniqid(time()));
 	$mail = "<h1>CoNtRol Output</h1>\r\n";
 	$mail .= "==============\r\n\r\n";
@@ -56,26 +62,99 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	if(strpos($jobs[$i]['remote_user_agent'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
 	if(strpos($jobs[$i]['remote_user_agent'], 'Macintosh;') !== false) $line_ending = "\r";
 
+	// Write $somecontent to our opened file.
+	if(fwrite($ohandle, "CoNtRol Output$line_ending==============$line_ending$line_ending Version: ".CONTROL_VERSION.$line_ending) === false)
+	{
+		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+		$success = false;
+	}
+	
 	$tests_enabled = explode(';', $jobs[$i]['tests_enabled']);
 	$mail .= 'Tests enabled:';
-	foreach($tests_enabled as $test) $mail .= " $test";
+
+	// Write $somecontent to our opened file.
+	if(fwrite($ohandle, "Tests enabled:")===false)
+	{
+		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+		$success = false;
+	}
+
+	foreach($tests_enabled as $test) 
+	{
+		$mail .= " $test";
+		// Write $somecontent to our opened file.
+		if(fwrite($ohandle, " $test") === false)
+		{
+			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+			$success = false;
+		}
+	}
 	$mail .= "<br />\r\nDetailed test output: ";
+	// Write $somecontent to our opened file.
+	if(fwrite($ohandle, "$line_ending Detailed test output: ") === false)
+	{
+		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+		$success = false;
+	}
 	$detailed_output = false;
 	if($jobs[$i]['detailed_output'] == 1)
 	{
 		$detailed_output = true;
 		$mail .= 'True';
+		// Write $somecontent to our opened file.
+		if(fwrite($ohandle, "true") === false)
+		{
+			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+			$success = false;
+		}
 	}
-	else $mail .= 'False';
+	else 
+	{	
+		$mail .= 'False';
+		// Write $somecontent to our opened file.
+		if(fwrite($ohandle, "false") === false)
+		{
+			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+			$success = false;
+		}
+	}
 	$mail .= "<br />\r\nMass action only: ";
+	// Write $somecontent to our opened file.
+	if(fwrite($ohandle, $line_ending ."Mass action only: ") === false)
+	{
+		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+		$success = false;
+	}
 	$mass_action_only = false;
 	if($jobs[$i]['mass_action_only'] == 1)
 	{
 		$mass_action_only = true;
 		$mail .= 'True';
+		// Write $somecontent to our opened file.
+		if(fwrite($ohandle, "true") === false)
+		{
+			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+			$success = false;
+		}
 	}
-	else $mail .= 'False';
-	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";
+	else 
+	{	
+		$mail .= 'False';
+		// Write $somecontent to our opened file.
+		if(fwrite($ohandle, "false") === false)
+		{
+			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+			$success = false;
+		}
+	}
+	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";	
+	// Write $somecontent to our opened file.
+	if(fwrite($ohandle, $line_ending .'Batch submission time: '.$jobs[$i]['creation_timestamp'].$line_ending.$line_ending) === false)
+	{
+		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+		$success = false;
+	}
+
 	$filename = $jobs[$i]['filename'];
 	$dirname = TEMP_FILE_DIR.'control/'.$jobs[$i]['id'];
 	$mimetype = get_mime($filename);
@@ -115,7 +194,13 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					if ($mimetype === 'text/plain')
 					{
 						$file_found = true;
-						$mail .= "\r\n<h2>FILE: ".end(explode('/', $file))."</h2>\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
+						// Write $somecontent to our opened file.
+						if(fwrite($ohandle, "$line_ending ##FILE: ".end(explode('/', $file))."##$line_ending$line_ending Processing start time: ".date('Y-m-d H:i:s')."$line_ending File contents:") === false)
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+							$success = false;
+						}
+						//$mail .= "\r\n<h2>FILE: ".end(explode('/', $file))."</h2>\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
 						$reaction_network = new ReactionNetwork();
 						$fhandle = fopen($dirname.'/'.$file, 'r');
 						switch($jobs[$i]['file_format'])
@@ -123,15 +208,21 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							case 1: //Net stoichiometry
 								$matrix = array();
 								$mail .= "\r\n<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
-								$mail .= '<pre>';
+								//$mail .= '<pre>';
 								while(!feof($fhandle))
 								{
 									$line = fgets($fhandle);
-									$mail .= "\r\n$line";
+									// Write $somecontent to our opened file.
+									if(fwrite($ohandle, "$line_ending$line") === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n$line";
 									$row = trim(preg_replace('/\s+/', ' ', $line));
 									if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
 								}
-								$mail .= '</pre>';
+								//$mail .= '</pre>';
 								if(!$reaction_network->parseStoichiometry($matrix))
 								{
 									$mail .= "\r\n<p>ERROR: An error was detected in the stoichiometry file.</p>\r\n";
@@ -141,32 +232,50 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							case 2: //Net stoichiometry + V
 							case 3: //Source + target + V
 							case 4: //Source + target
-								$mail .= '<pre>';
+								//$mail .= '<pre>';
 								$sourceMatrix = array();
 								$targetMatrix = array();
 								$row = '';
 								while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
 								{
 									$row = fgets($fhandle);
-									$mail .= "\r\n$row";
+									// Write $somecontent to our opened file.
+									if(fwrite($ohandle, "$line_ending$row") === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n$row";
 									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
 					
 								while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									$mail .= "\r\n$row";
+									// Write $somecontent to our opened file.
+									if(fwrite($ohandle, "$line_ending$row") === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n$row";
 									if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
 									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
 								while(!feof($fhandle))
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									$mail .= "\r\n$row";
+									// Write $somecontent to our opened file.
+									if(fwrite($ohandle, "$line_ending$row") === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n$row";
 									if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
 									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
-								$mail .= "\r\n</pre>";
+								//$mail .= "\r\n</pre>";
 								if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
 								{
 									$mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
@@ -181,9 +290,15 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								while(!feof($fhandle))
 								{
 									$reactionString = fgets($fhandle);
-									$mail .= '<pre>';
-									$mail .= "\r\n$reactionString";
-									$mail .= '</pre>';
+									//$mail .= '<pre>';
+									// Write $somecontent to our opened file.
+									if(fwrite($ohandle, "$line_ending$reactionString") === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n$reactionString";
+									//$mail .= '</pre>';
 									if($reactionString and strpos($reactionString, '#') !== 0)
 									{
 										$newReaction = Reaction::parseReaction($reactionString);
@@ -198,9 +313,15 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								break;
 						}
 						fclose($fhandle);
-						$mail .= "\r\n<p>Reaction network:</p>\r\n<pre>";
-						$mail .= $reaction_network->exportReactionNetworkEquations("\r\n");
-						$mail .= '</pre>';
+						// Write $somecontent to our opened file.
+						if(fwrite($ohandle, "$line_ending Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)) === false)
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+							$success = false;
+						}
+						//$mail .= "\r\n<p>Reaction network:</p>\r\n<pre>";
+						//$mail .= $reaction_network->exportReactionNetworkEquations("\r\n");
+						//$mail .= '</pre>';
 						if ($success)
 						{
 							// Create human-readable descriptor file
@@ -293,7 +414,13 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$extension = '';
 									$temp = '';
-									$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
+									// Write $somecontent to our opened file.
+									if(fwrite($ohandle, "$line_ending ### TEST: ".$currentTest->getShortName()." ###$line_ending$line_ending Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
 
 									// Need to split this into net stoichiometry versus source/target stoichiometry?
 									// How best to treat reversible vs irreversible reactions in stoichiometry case?
@@ -319,26 +446,52 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										{
 											if(!$currentTest->supportsGeneralKinetics()) $mail .= "<p>WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.</p>\r\n";
 										}
-										$mail .= "<p>Output:</p>\r\n-------\r\n";
+										// Write $somecontent to our opened file.
+										if(fwrite($ohandle, "Output:$line_ending-------$line_ending") === false)
+										{
+											$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+											$success = false;
+										}
+										//$mail .= "<p>Output:</p>\r\n-------\r\n";
 										$exec_string .= ' '.$test_filename;
 										if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
 										else $exec_string .= ' 2> /dev/null';
 										exec($exec_string, $output, $returnValue);
-										$mail .= '<pre>';
-										foreach($output as $line) $mail .= "\r\n$line";
-										$mail .= "\r\n</pre>";
+										//$mail .= '<pre>';
+										foreach($output as $line)
+										{
+											if(fwrite($ohandle, $line_ending.$line) === false)
+											{
+												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+												$success = false;
+											}	
+										}
+
+										//foreach($output as $line) $mail .= "\r\n$line";
+										// Write $somecontent to our opened file.						
+										//$mail .= "\r\n</pre>";
 									}
-									$mail .= "\r\n\r\n<h3>END OF TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n";
+									if(fwrite($ohandle, $line_ending.$line_ending.'### END OF TEST: '.$currentTest->getShortName().' ###'.$line_ending.$line_ending) === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}
+									//$mail .= "\r\n\r\n<h3>END OF TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n";
 								} // foreach($tests_enabled as $currentTest)
 							} // if($success)
 						} // if($success)
-						$mail .= "<h2>END OF FILE: ".end(explode('/', $file))."</h2>\r\n\r\n";
+						if(fwrite($ohandle, '## END OF FILE: '.end(explode('/', $file)).' ##'.$line_ending.$line_ending) === false)
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+							$success = false;
+						}
+						//$mail .= "<h2>END OF FILE: ".end(explode('/', $file))."</h2>\r\n\r\n";
 					}	// if($mimetype === 'text/plain')
 				} // if(!is_dir($file))
 			} // foreach($extracted_files as $file)
 		} // if($extracted_files !== false)
 	} // if($success)
-	$mail .= "\r\n<p>This auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".</p>\r\n";
+	$mail .= "\r\n<p>CoNtRol batch output is ready for download from <a href=\"".SITE_URL."download.php?key=$key\">".SITE_URL."download.php?key=$key</a>. Your results will be stored for one week. </p>\r\n<p>This auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".</p>\r\n";
 
 	// Set email headers.
 	$admin_email_split = explode('@', ADMIN_EMAIL);

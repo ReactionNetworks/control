@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   11/06/2013
+ * @modified   19/07/2013
  */
 
 require_once('../includes/config.php');
@@ -20,6 +20,7 @@ require_once('../includes/session.php');
 $_SESSION['errors'] = array();
 $mimetype = '';
 $filename = '';
+$key = uniqid();
 
 if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input']) and count($_FILES['upload_batch_file_input']) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
@@ -128,7 +129,7 @@ if(!count($_SESSION['errors']))
 		die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
 	}
 
-	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, file_format, email, status, detailed_output, mass_action_only, tests_enabled, error_text, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :file_format, :email, :status, :detailed_output, :mass_action_only, :tests_enabled, :error_text, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
+	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, file_format, email, status, detailed_output, mass_action_only, tests_enabled, key, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :file_format, :email, :status, :detailed_output, :mass_action_only, :tests_enabled, :key, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
 	if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) $detailed_output = 1;
 	else $detailed_output = 0;
 	if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) $mass_action_only = 1;
@@ -162,7 +163,7 @@ if(!count($_SESSION['errors']))
 	$statement->bindParam(':detailed_output', $detailed_output, PDO::PARAM_INT);
 	$statement->bindParam(':mass_action_only', $mass_action_only, PDO::PARAM_INT);
 	$statement->bindParam(':tests_enabled', $tests_enabled, PDO::PARAM_STR);
-	$statement->bindValue(':error_text', '', PDO::PARAM_STR);
+	$statement->bindParam(':key', $key, PDO::PARAM_STR);
 	$statement->bindParam(':remote_ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 	$statement->bindParam(':remote_user_agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
 	$statement->bindValue(':creation_timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);

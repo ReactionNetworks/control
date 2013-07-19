@@ -31,17 +31,18 @@ CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `filename` varchar(255) NOT NULL,
   `file_format` tinyint(3) unsigned NOT NULL COMMENT '0 = human, 1 = net stoichiometry, 2 = net stoichiometry + V, 3 = source + target + V',
   `email` varchar(255) NOT NULL,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0 = not started, 1 = in progress, 2 = complete',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0 = not started, 1 = in progress, 2 = complete, 3 = output file expired',
   `detailed_output` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `mass_action_only` tinyint(3) unsigned NOT NULL,
   `tests_enabled` varchar(2047) NOT NULL,
-  `error_text` text NOT NULL,
+  `key` varchar(14) NOT NULL,
   `remote_ip` varchar(40) NOT NULL COMMENT 'Length 40 to allow IPv6',
   `remote_user_agent` varchar(2047) NOT NULL,
   `creation_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_timestamp` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `filename` (`filename`)
+  UNIQUE KEY `filename` (`filename`),
+  UNIQUE KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
