@@ -491,7 +491,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			} // foreach($extracted_files as $file)
 		} // if($extracted_files !== false)
 	} // if($success)
-	$mail .= "\r\n<p>CoNtRol batch output is ready for download from <a href=\"".SITE_URL."download.php?filekey=$filekey\">".SITE_URL."download.php?filekey=$filekey</a>. Your results will be stored for one week. </p>\r\n<p>This auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".</p>\r\n";
+	$mail .= "\r\n<p>CoNtRol batch output is ready for download from <a href=\"".SITE_URL."download.php?filekey=".$jobs[$i]['filekey']."\">".SITE_URL."download.php?filekey=".$jobs[$i]['filekey']."</a>. Your results will be stored for one week. </p>\r\n<p>This auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".</p>\r\n";
 
 	// Set email headers.
 	$admin_email_split = explode('@', ADMIN_EMAIL);
