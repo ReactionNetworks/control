@@ -79,7 +79,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		$success = false;
 	}
 
-	foreach($tests_enabled as $test) 
+	foreach($tests_enabled as $test)
 	{
 		$mail .= " $test";
 		// Write $somecontent to our opened file.
@@ -147,7 +147,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$success = false;
 		}
 	}
-	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";	
+	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";
 	// Write $somecontent to our opened file.
 	if(fwrite($ohandle, $line_ending .'Batch submission time: '.$jobs[$i]['creation_timestamp'].$line_ending.$line_ending) === false)
 	{
@@ -464,7 +464,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 											{
 												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 												$success = false;
-											}	
+											}
 										}
 
 										//foreach($output as $line) $mail .= "\r\n$line";
@@ -535,12 +535,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 	$zip = new ZipArchive();
 	$zipfilename = TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.zip';
-	if ($zip->open($zipfilename, ZipArchive::CREATE)!==TRUE) 
+	if ($zip->open($zipfilename, ZipArchive::CREATE)!==TRUE)
 	{
 	    exit("cannot open <$zipfilename>\n");
 	}
 	$zip->addFile(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt','control_output.txt');
 	$zip->close();
 	unlink(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
-
 } // for($i = 0; $i < $number_of_jobs; ++$i)

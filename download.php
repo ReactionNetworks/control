@@ -31,15 +31,15 @@ if (isset($_GET['filekey']) and $_GET['filekey'])
 	$number_of_results = count($results);
 	switch ($number_of_results)
 	{
-		case 0:	
+		case 0:
 			require_once('includes/header.php');
 			echo '			<div id="results">
 						<h2>Error</h2>
 						<p>The key you requested could not be found. Please email the site admin at ';
-			echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); 
+			echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL));
 			echo ' if you are sure you have requested a valid key. <a href=".">Back to main page</a>.</p>
 				</div><!-- results -->', PHP_EOL;
-			require_once('includes/footer.php');			
+			require_once('includes/footer.php');
 			break;
 		case 1:
 			if ($results[0]['status']>2)
@@ -48,11 +48,10 @@ if (isset($_GET['filekey']) and $_GET['filekey'])
 	 			echo '			<div id="results">
 					<h2>Error</h2>
 					<p>The file you requested is no longer available. Files are removed after seven days. If you believe the file should still be available, please email the site admin at ';
-				echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); 
+				echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL));
 				echo '. <a href=".">Back to main page</a>.</p>
 			</div><!-- results -->', PHP_EOL;
-				require_once('includes/footer.php');			
-
+				require_once('includes/footer.php');
 			}
 			else
 			{
@@ -69,11 +68,10 @@ if (isset($_GET['filekey']) and $_GET['filekey'])
 			echo '			<div id="results">
 						<h2>Error</h2>
 						<p>Multiple keys were found. Please email the site admin at ';
-			echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); 
+			echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL));
 			echo ' to report this error. <a href=".">Back to main page</a>.</p>
 				</div><!-- results -->', PHP_EOL;
-			require_once('includes/footer.php');			
-
+			require_once('includes/footer.php');
 			break;
 	}
 }
