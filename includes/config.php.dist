@@ -21,7 +21,7 @@
 
 // site URL
 define('SITE_DIR', 'control', false);
-if('http://reaction-networks.net/'.SITE_DIR.'/', false);
+define('http://reaction-networks.net/'.SITE_DIR.'/', false);
 
 // Email address for the site admin. All emails sent by CoNtRol are sent from this address.
 define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
