@@ -63,7 +63,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	if(strpos($jobs[$i]['remote_user_agent'], 'Macintosh;') !== false) $line_ending = "\r";
 
 	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, "CoNtRol Output$line_ending==============$line_ending$line_ending Version: ".CONTROL_VERSION.$line_ending) === false)
+	if(fwrite($ohandle, "CoNtRol Output$line_ending==============".$line_ending.$line_ending."Version: ".CONTROL_VERSION.$line_ending) === false)
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
@@ -91,7 +91,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	}
 	$mail .= "<br />\r\nDetailed test output: ";
 	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, "$line_ending Detailed test output: ") === false)
+	if(fwrite($ohandle, $line_ending."Detailed test output: ") === false)
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
@@ -195,7 +195,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					{
 						$file_found = true;
 						// Write $somecontent to our opened file.
-						if(fwrite($ohandle, "$line_ending ##FILE: ".end(explode('/', $file))."##$line_ending$line_ending Processing start time: ".date('Y-m-d H:i:s')."$line_ending File contents:") === false)
+						if(fwrite($ohandle, $line_ending."## FILE: ".end(explode('/', $file))." ##".$line_ending.$line_ending."Processing start time: ".date('Y-m-d H:i:s').$line_ending."File contents:") === false)
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 							$success = false;
@@ -314,7 +314,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						}
 						fclose($fhandle);
 						// Write $somecontent to our opened file.
-						if(fwrite($ohandle, "$line_ending Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)) === false)
+						if(fwrite($ohandle, $line_ending."Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)) === false)
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 							$success = false;
@@ -415,7 +415,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$extension = '';
 									$temp = '';
 									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, "$line_ending ### TEST: ".$currentTest->getShortName()." ###$line_ending$line_ending Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
+									if(fwrite($ohandle, $line_ending. "### TEST: ".$currentTest->getShortName()." ###".$line_ending.$line_ending."Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
@@ -460,7 +460,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										//$mail .= '<pre>';
 										foreach($output as $line)
 										{
-											if(fwrite($ohandle, $line_ending.$line) === false)
+											if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', $line_ending.$line)) === false)
 											{
 												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 												$success = false;
