@@ -531,4 +531,15 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	}
 	// Remove decompressed files
 	recursive_remove_directory($dirname);
+	fclose($ohandle);
+
+	$zip = new ZipArchive();
+	$zipfilename = TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.zip';
+	if ($zip->open($zipfilename, ZipArchive::CREATE)!==TRUE) 
+	{
+	    exit("cannot open <$zipfilename>\n");
+	}
+	$zip->addFile(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
+	$zip->close();
+
 } // for($i = 0; $i < $number_of_jobs; ++$i)
