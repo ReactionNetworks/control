@@ -35,7 +35,9 @@ if (isset($_GET['filekey']) and $_GET['filekey'])
 			require_once('includes/header.php');
 			echo '			<div id="results">
 						<h2>Error</h2>
-						<p>The key you requested could not be found. Please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?> if you are sure you have requested a valid key. <a href=".">Back to main page</a>.</p>
+						<p>The key you requested could not be found. Please email the site admin at ';
+			echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); 
+			echo ' if you are sure you have requested a valid key. <a href=".">Back to main page</a>.</p>
 				</div><!-- results -->', PHP_EOL;
 			require_once('includes/footer.php');			
 			break;
@@ -45,7 +47,9 @@ if (isset($_GET['filekey']) and $_GET['filekey'])
 				require_once('includes/header.php');
 	 			echo '			<div id="results">
 					<h2>Error</h2>
-					<p>The file you requested is no longer available. Files are removed after seven days. If you believe the file should still be available, please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?>. <a href=".">Back to main page</a>.</p>
+					<p>The file you requested is no longer available. Files are removed after seven days. If you believe the file should still be available, please email the site admin at ';
+				echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); 
+				echo '. <a href=".">Back to main page</a>.</p>
 			</div><!-- results -->', PHP_EOL;
 				require_once('includes/footer.php');			
 
@@ -64,7 +68,9 @@ if (isset($_GET['filekey']) and $_GET['filekey'])
 			require_once('includes/header.php');
 			echo '			<div id="results">
 						<h2>Error</h2>
-						<p>Multiple keys were found. Please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?> to report this error. <a href=".">Back to main page</a>.</p>
+						<p>Multiple keys were found. Please email the site admin at ';
+			echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); 
+			echo ' to report this error. <a href=".">Back to main page</a>.</p>
 				</div><!-- results -->', PHP_EOL;
 			require_once('includes/footer.php');			
 
