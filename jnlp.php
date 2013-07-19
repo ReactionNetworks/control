@@ -31,7 +31,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 		<jar href="applets/jung-visualization-2.0.1.jar" main="false" />
 		<jar href="applets/collections-generic-4.01.jar" main="false" />
 	</resources>
-	<applet-desc name="DSR Graph" main-class="dsr.DsrDraw">
+	<applet-desc name="DSR Graph" main-class="dsr.DsrDraw" width="960" height="700">
 		<param name="content" value="<?php echo str_replace(' ', '', str_replace(PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations())); ?>"/>
 	</applet-desc>
 	<update check="background"/>
