@@ -35,14 +35,14 @@ CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `detailed_output` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `mass_action_only` tinyint(3) unsigned NOT NULL,
   `tests_enabled` varchar(2047) NOT NULL,
-  `key` varchar(14) NOT NULL,
+  `filekey` varchar(14) NOT NULL,
   `remote_ip` varchar(40) NOT NULL COMMENT 'Length 40 to allow IPv6',
   `remote_user_agent` varchar(2047) NOT NULL,
   `creation_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_timestamp` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `filename` (`filename`),
-  UNIQUE KEY `key` (`key`)
+  UNIQUE KEY `filekey` (`filekey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
