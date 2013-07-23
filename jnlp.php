@@ -32,7 +32,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 		<jar href="applets/collections-generic-4.01.jar" main="false" />
 	</resources>
 	<applet-desc name="DSR Graph" main-class="dsr.DsrDraw" width="960" height="700">
-		<param name="content" value="<?php echo str_replace(' ', '', str_replace(PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations())); ?>"/>
+		<argument><?php echo htmlspecialchars(str_replace(' ', '', str_replace(PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations()))); ?></argument>
 	</applet-desc>
 	<update check="background"/>
 </jnlp>

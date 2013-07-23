@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `filename` varchar(255) NOT NULL,
   `file_format` tinyint(3) unsigned NOT NULL COMMENT '0 = human, 1 = net stoichiometry, 2 = net stoichiometry + V, 3 = source + target + V',
   `email` varchar(255) NOT NULL,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0 = not started, 1 = in progress, 2 = complete, 3 = output file expired',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0 = not started, 1 = in progress, 2 = complete, 3 = output file downloaded, 4 = output file removed',
   `detailed_output` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `mass_action_only` tinyint(3) unsigned NOT NULL,
   `tests_enabled` varchar(2047) NOT NULL,

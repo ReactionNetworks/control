@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   19/07/2013
+ * @modified   23/07/2013
  */
 
 require_once('../includes/config.php');
@@ -543,3 +543,17 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$zip->close();
 	unlink(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
 } // for($i = 0; $i < $number_of_jobs; ++$i)
+
+$query = 'SELECT id, filekey FROM '.DB_PREFIX.'batch_jobs WHERE status = 3';
+$statement = $controldb->prepare($query);
+$statement->execute();
+$results = $statement->fetchAll(PDO::FETCH_ASSOC);
+foreach ($results as $result)
+{
+	unlink(TEMP_FILE_DIR."/".$result['filekey'].".zip");
+	$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 4, update_timestamp = :timestamp WHERE id = :id';
+	$statement = $controldb->prepare($query);
+	$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
+	$statement->bindParam(':id', $result['id'], PDO::PARAM_INT);
+	$statement->execute();
+}
