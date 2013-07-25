@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/06/2013
+ * @modified   25/07/2013
  */
 
 header('Content-Type: application/x-java-jnlp-file');
@@ -31,8 +31,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 		<jar href="applets/jung-visualization-2.0.1.jar" main="false" />
 		<jar href="applets/collections-generic-4.01.jar" main="false" />
 	</resources>
-	<applet-desc name="DSR Graph" main-class="dsr.DsrDraw" width="960" height="700">
+	<application-desc name="DSR Graph" main-class="dsr.DsrDraw" width="960" height="700">
 		<argument><?php echo htmlspecialchars(str_replace(' ', '', str_replace(PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations()))); ?></argument>
-	</applet-desc>
+	</application-desc>
 	<update check="background"/>
 </jnlp>
