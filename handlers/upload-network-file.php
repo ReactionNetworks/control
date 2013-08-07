@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   11/06/2013
+ * @modified   07/08/2013
  */
 
 require_once('../includes/config.php');
@@ -124,6 +124,22 @@ if(!count($errors))
 				}
 			}
 			break;
+			
+		case 'sauro':
+			$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+			while(!feof($fhandle))
+			{
+				if($row and strpos($row, '#') !== 0) break;
+				else $row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+			}
+			if(!$reaction_network->parseSauro($row))
+			{
+				$_SESSION['errors'][] = 'An error was detected in the sauro file. Please check that the output below is as expected.';
+				//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+				//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+			}
+			break;
+			
 		default: // assume 'human' if unsure
 			$error = false;
 			while(!feof($fhandle))

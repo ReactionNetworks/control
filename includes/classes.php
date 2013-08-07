@@ -656,6 +656,43 @@ class ReactionNetwork
 		else $success = false;
 		return $success;
 	}
+	
+	public function parseSauro($row)
+	{
+		$success = true;
+		if(gettype($row) == 'string' and $row)
+		{
+			$entries = explode(' ', $row);
+			if (count($entries)%2) $success = false;
+			$allReactants = array();
+			$reactantPrefix = '';
+			$numberOfReactants = (int)$row[1];
+			$numberOfReactions = (int)$row[0];
+			for($i = 0; $i < $numberOfReactants; ++$i)
+			{
+				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
+				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
+			}
+			for($i = 0; $i < $numberOfReactions; ++$i)
+			{
+				$lhs = array();
+				$rhs = array();
+				for($j = 0; $j < $numberOfReactants; ++$j)
+				{
+					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i]))
+					{
+						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($matrix): '.count($matrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$matrix[$j][$i]: '.$matrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						$success = false;
+					}
+					elseif($matrix[$j][$i] < 0) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
+					elseif($matrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $matrix[$j][$i];
+				}
+				$this->addReaction(new Reaction($lhs, $rhs, false));
+			}
+		}
+		else $success = false;
+		return $success;
+	}
 
 	public function parseSourceTargetStoichiometry($sourceMatrix,$targetMatrix)
 	{
