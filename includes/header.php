@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   30/05/2013
+ * @modified   15/08/2013
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -31,15 +31,15 @@ require_once('version.php');
 		<link href="styles/reset.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="styles/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
 		<link href="styles/default.css" rel="stylesheet" type="text/css" media="screen" />
-		<!--[if IE gt 8]>--><link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" /><!--<![endif]-->
+		<!--[if gt IE 8]><!-->
+		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
+		<!--<![endif]-->
 		<meta name="author" content="Murad Banaji, Pete Donnell, Anca Marginean, Casian Pantea" />
-		<meta name="date" content="2013-05-30T15:42:51+0100" />
+		<meta name="date" content="2013-08-15T14:58:38+0100" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
 		<meta name="description" content="<?php if(isset($description) and $description) echo sanitise($description); else echo sanitise(DEFAULT_PAGE_DESCRIPTION); ?>" />
-		<!--[if gt IE 8]><!-->
-		<!--<![endif]-->
 		<script type="text/javascript" src="scripts/deployJava.js"></script>
 		<script type="text/javascript" src="scripts/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="scripts/jquery.fancybox-1.3.4.js"></script>
@@ -57,7 +57,7 @@ require_once('version.php');
 				<h1 title="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>"><?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?></h1>
 				<p id="version">
 <?php
-echo '					Version ', CONTROL_VERSION;
+echo '					Version ', CONTROL_VERSION, PHP_EOL;
 ?>
 				</p><!-- version -->
 			</div>
