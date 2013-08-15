@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   19/07/2013
+ * @modified   15/08/2013
  */
 
 require_once('../includes/config.php');
@@ -36,7 +36,8 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 				if(!in_array($mimetype, $allowed_mimetypes)) $_SESSION['errors'][] = 'Batch file format '.$mimetype.' not supported.';
 				else
 				{
-					$filename = TEMP_FILE_DIR.end(explode('/', $_FILES['upload_batch_file_input']['tmp_name']));
+					$filepath = explode('/', $_FILES['upload_batch_file_input']['tmp_name']);
+					$filename = TEMP_FILE_DIR.end($filepath);
 					move_uploaded_file($_FILES['upload_batch_file_input']['tmp_name'], $filename);
 				}
 			}

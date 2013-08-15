@@ -1,0 +1,7 @@
+*~
+test.php
+includes/config.php
+applets/*.jar
+bin/analysereacs
+bin/dsr
+bin/*.m

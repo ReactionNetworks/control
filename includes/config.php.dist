@@ -12,7 +12,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   19/07/2013
+ * @modified   15/08/2013
  */
 
 /////////////////////////////////////////
@@ -97,3 +97,6 @@ $supported_batch_file_types = array(
 	array('extension' => 'zip', 'mimetype' => 'application/zip', 'binary' => '/usr/bin/unzip'),
 //	array('extension' => 'rar', 'mimetype' => 'application/rar', 'binary' => '/usr/bin/unrar e')
 );
+
+// Required to support cross-platform line endings
+ini_set('auto_detect_line_endings', '1');
