@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   07/08/2013
+ * @modified   15/08/2013
  */
 
 require_once('includes/header.php');
@@ -60,18 +60,6 @@ else
 						</div><!-- actions_holder -->
 					</form>
 				</div><!-- reaction_input_holder -->
-<?php
-if(strpos($_SERVER['HTTP_USER_AGENT'], 'Android') === FALSE and strpos($_SERVER['HTTP_USER_AGENT'], 'iOS') === FALSE):
-?>
-				<!--div id="dsr_graph_applet_holder">
-					<span id="dsr_graph_title">DSR Graph</span>
-					<a href="#" id="dsr_graph_close_button"><img src="styles/close.png" alt="X" /></a>
-					<div id="dsr_graph_applet">
-					</div><!-- applet_holder_inner -->
-				<!--/div><!-- dsr_graph_applet_holder -->
-<?php
-endif;
-?>
 				<div id="popup_hider">
 					<form id="reaction_upload_form" action="handlers/upload-network-file.php" method="post" enctype="multipart/form-data">
 						<p>

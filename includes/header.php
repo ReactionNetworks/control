@@ -36,9 +36,9 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Murad Banaji, Pete Donnell, Anca Marginean, Casian Pantea" />
-		<meta name="date" content="2013-08-15T15:03:51+0100" />
+		<meta name="date" content="2013-08-15T15:06:19+0100" />
 		<meta name="language" content="en" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
 		<meta name="description" content="<?php if(isset($description) and $description) echo sanitise($description); else echo sanitise(DEFAULT_PAGE_DESCRIPTION); ?>" />
 		<script type="text/javascript" src="scripts/deployJava.js"></script>
