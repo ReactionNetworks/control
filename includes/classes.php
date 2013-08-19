@@ -660,14 +660,15 @@ class ReactionNetwork
 	public function parseSauro($row)
 	{
 		$success = true;
+		$row = trim($row);
 		if(gettype($row) == 'string' and $row)
 		{
 			$entries = explode(' ', $row);
 			if (count($entries)%2) $success = false;
 			$allReactants = array();
 			$reactantPrefix = '';
-			$numberOfReactants = (int)$row[1];
-			$numberOfReactions = (int)$row[0];
+			$numberOfReactants = (int)$entries[1];
+			$numberOfReactions = (int)$entries[0];
 			for($i = 0; $i < $numberOfReactants; ++$i)
 			{
 				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
@@ -677,15 +678,23 @@ class ReactionNetwork
 			{
 				$lhs = array();
 				$rhs = array();
-				for($j = 0; $j < $numberOfReactants; ++$j)
+				for($j = 2; $j < count($entries); ++$j)
 				{
-					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i]))
+					if ($i == ($entries[$j])) 
 					{
-						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($matrix): '.count($matrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$matrix[$j][$i]: '.$matrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
-						$success = false;
+						if (($j % 2) == 0) // Reaction appears as LHS of pair, ie. reactant is on RHS of reaction
+						{
+							$reactantLabel = $allReactants[($entries[$j + 1] - $numberOfReactions)];
+							if (array_key_exists($reactantLabel, $rhs)) ++$rhs[$reactantLabel]; // Reactant already on RHS, so increment its stoichiometry
+							else $rhs[$reactantLabel] = 1; // Reactant not yet on RHS, so create an entry
+						}
+						else // Reaction appears as RHS of pair, ie. reactant is on LHS of reaction
+						{
+							$reactantLabel = $allReactants[($entries[$j - 1] - $numberOfReactions)];
+							if (array_key_exists($reactantLabel, $lhs)) ++$lhs[$reactantLabel]; // Reactant already on LHS, so increment its stoichiometry
+							else $lhs[$reactantLabel] = 1; // Reactant not yet on LHS, so create an entry
+						}
 					}
-					elseif($matrix[$j][$i] < 0) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
-					elseif($matrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $matrix[$j][$i];
 				}
 				$this->addReaction(new Reaction($lhs, $rhs, false));
 			}

@@ -83,6 +83,7 @@ if(!count($errors))
 			}
 			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
+			
 		case 'SourceTarget':
 			$sourceMatrix = array();
 			$targetMatrix = array();
@@ -110,6 +111,18 @@ if(!count($errors))
 				$_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 				//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
 				//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+			}
+			break;
+
+		case 'S+V':
+			$file = array();
+			while (!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+				if ($row and strpos($row, '#') !== 0)
+				{
+					// TODO: Implement				
+				}			
 			}
 			break;
 
