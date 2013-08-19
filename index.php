@@ -13,6 +13,7 @@
 
 require_once('includes/header.php');
 require_once('includes/standard-tests.php');
+require_once('includes/file-formats.php');
 
 if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '				<div id="results_link"><a href="results.php">Back to existing results</a></div>', PHP_EOL;
 ?>
@@ -68,13 +69,12 @@ else
 							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
 						</p>
 						<p class="left_centred">
-							File format:<br />
-							<input type="radio" name="upload_network_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_network_file_format_human" /> <label for="upload_network_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
-							<input type="radio" name="upload_network_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_network_file_format_stoichiometry" /> <label for="upload_network_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Net Stoichiometry</a>, e.g. -1 -2 1 </label> <br />
-							<input type="radio" name="upload_network_file_format" value="S + V"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'S+V') echo ' checked="checked"'; ?> id="upload_network_file_format_s_v" /> <label for="upload_network_file_format_sauro"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry_.2B_V_Matrix">Net Stoichiometry + V Matrix</a></label> <br />		
-							<input type="radio" name="upload_network_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_network_file_format_source_target" /> <label for="upload_network_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label> <br />
-							<input type="radio" name="upload_network_file_format" value="STV"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'S+T+V') echo ' checked="checked"'; ?> id="upload_network_file_format_stv" /> <label for="upload_network_file_format_stv"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry_.2B_V_Matrix">Source and target + V Matrix</a></label> <br />
-							<input type="radio" name="upload_network_file_format" value="sauro"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'sauro') echo ' checked="checked"'; ?> id="upload_network_file_format_sauro" /> <label for="upload_network_file_format_sauro">Sauro, e.g. 1 4 0 3 0 4 5 0 7 0</label> <br />				
+							File format:<br /><?php
+							foreach ($format_array as $format)
+							{
+								$format->getNetworkRadioButton();
+							}
+							?>
 						</p>
 						<p>
 							<button class="button disabled" id="upload_network_file_button" type="submit" disabled="disabled">Upload reaction network</button>
@@ -103,9 +103,14 @@ for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported
 						</p>
 						<p>
 							File format:<br />
-							<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
+<?php							
+							foreach ($format_array as $format)
+							{
+								$format->getBatchRadioButton();
+							}
+							/*<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
 							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label> <br />
-							<input type="radio" name="upload_batch_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_batch_file_format_source_target" /> <label for="upload_batch_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>
+							<input type="radio" name="upload_batch_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_batch_file_format_source_target" /> <label for="upload_batch_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>*/?>
 						</p>
 						<p>
 							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>

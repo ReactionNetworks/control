@@ -84,7 +84,7 @@ if(!count($errors))
 			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
 			
-		case 'SourceTarget':
+		case 'source_target':
 			$sourceMatrix = array();
 			$targetMatrix = array();
 			$row = '';
@@ -114,7 +114,31 @@ if(!count($errors))
 			}
 			break;
 
-		case 'S+V':
+		case 'sv':
+			$file = array();
+			while (!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+				if ($row and strpos($row, '#') !== 0)
+				{
+					// TODO: Implement				
+				}			
+			}
+			break;
+			
+		case 'feinberg1':
+			$file = array();
+			while (!feof($fhandle))
+			{
+				$row = trim(fgets($fhandle));
+				if ($row and strpos($row, '#') !== 0)
+				{
+					// TODO: Implement				
+				}			
+			}
+			break;
+			
+		case 'feinberg2':
 			$file = array();
 			while (!feof($fhandle))
 			{
@@ -126,7 +150,7 @@ if(!count($errors))
 			}
 			break;
 
-		case 'S+T+V':
+		case 'stv':
 			$file = array();
 			while (!feof($fhandle))
 			{

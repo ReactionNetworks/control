@@ -106,11 +106,11 @@ if(!count($_SESSION['errors']))
 			$file_format = 1;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
 			break;
-		case 'stoichiometry+V':
+		case 'sv':
 			$file_format = 2;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
 			break;
-		case 'SourceTarget':
+		case 'source_target':
 			$file_format = 4;
 			break;
 

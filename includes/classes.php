@@ -860,3 +860,39 @@ class NetworkTest
 		return $this->supportsGeneralKinetics;
 	}
 }
+
+class FileFormat
+{
+	private $longName;
+	private $shortName;
+	private $example;
+	private $link;
+	
+	public function FileFormat($long_name, $short_name, $eg, $href)
+	{
+		$this->longName = $long_name;
+		$this->shortName = $short_name;
+		$this->example = $eg;
+		$this->link = $href;
+	}
+	
+	public function getNetworkRadioButton()
+	{
+		echo '<input type="radio" name="upload_network_file_format" value="'.$this->shortName.'"';
+		if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"';
+		echo ' id="upload_network_file_format_'.$this->shortName.'" /> <label for="upload_network_file_format_'.$this->shortName.'">';
+		if ($this->link !== '') echo '<a href="'.$this->link.'">'.$this->longName.'</a> ';
+		else echo $this->longName.' ';
+		echo $this->example.'</label> <br />';
+	}
+
+	public function getBatchRadioButton()
+	{
+		echo '<input type="radio" name="upload_batch_file_format" value="'.$this->shortName;
+		if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"';
+		echo ' id="upload_batch_file_format_'.$this->shortName.'" /> <label for="upload_batch_file_format_'.$this->shortName.'">';
+		if ($this->link !== '') echo '<a href="'.$this->link.'">'.$this->longName.'</a> ';
+		else echo $this->longName.' ';
+		echo $this->example.'</label> <br />';
+	}
+}
