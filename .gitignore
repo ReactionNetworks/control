@@ -5,3 +5,4 @@ applets/*.jar
 bin/analysereacs
 bin/dsr
 bin/*.m
+bin/dummy*
