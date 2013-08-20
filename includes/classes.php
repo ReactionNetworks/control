@@ -703,6 +703,90 @@ class ReactionNetwork
 		return $success;
 	}
 
+	public function parseSBML($file_name)
+	{
+		$error = false;
+		$sbml_file = new DOMDocument();
+		if (!$sbml_file->load($file_name, LIBXML_DTDLOAD|LIBXML_DTDVALID))
+		{
+			$error = true;
+			$_SESSION['errors'][] = 'You didn\'t upload a valid SBML file.';
+		}
+		else 
+		{
+			$models = $sbml_file->getElementsByTagName('model');
+			if ($models->length !== 1)
+			{
+				$error = true;
+				$_SESSION['errors'][] = 'File does not contain one model.';
+			}
+			else 
+			{
+				$model_child_nodes = $models->item(0)->childNodes;
+				$reactions_found = false;
+				for($i = 0; $i < $model_child_nodes->length; ++$i) 
+				{
+					if ($model_child_nodes->item($i)->nodeName === 'listOfReactions')
+					{
+						$reactions_found = true;							
+						$model_reactions = $model_child_nodes->item($i)->childNodes;
+					}
+				}
+				if (!$reactions_found)
+				{
+					$error = true;
+					$_SESSION['errors'][] = 'No reactions found.';
+				}
+				else 
+				{
+					for ($i = 0; $i < $model_reactions->length; ++$i)
+					{
+						if ($model_reactions->item($i)->nodeName === 'reaction')
+						{
+							$lhs = array();
+							$rhs = array();		
+							$reaction_attributes = $model_reactions->item($i)->attributes;
+							if ($reaction_attributes->getNamedItem('reversible') and $reaction_attributes->getNamedItem('reversible')->nodeValue === 'false') $reversible = false;
+							else $reversible = true;
+							$reaction_nodes = $model_reactions->item($i)->childNodes;
+							for ($j = 0; $j < $reaction_nodes->length; ++$j)
+							{				
+								if ($reaction_nodes->item($j)->nodeName === 'listOfReactants')
+								{
+									$list_of_reactants = $reaction_nodes->item($j)->childNodes;
+									for ($k = 0; $k < $list_of_reactants->length; ++$k)
+									{
+										if ($list_of_reactants->item($k)->hasAttributes())
+										{
+											$reactant_attributes = $list_of_reactants->item($k)->attributes;
+											if ($reactant_attributes->getNamedItem('stoichiometry')) $lhs[$reactant_attributes->getNamedItem('species')->nodeValue] = $reactant_attributes->getNamedItem('stoichiometry')->nodeValue;
+											else $lhs[$reactant_attributes->getNamedItem('species')->nodeValue] = 1;
+										}
+									}
+								}
+								elseif ($reaction_nodes->item($j)->nodeName === 'listOfProducts')
+								{
+									$list_of_products = $reaction_nodes->item($j)->childNodes;
+									for ($k = 0; $k < $list_of_products->length; ++$k)
+									{
+										if ($list_of_products->item($k)->hasAttributes())
+										{
+											$product_attributes = $list_of_products->item($k)->attributes;
+											if ($product_attributes->getNamedItem('stoichiometry')) $rhs[$product_attributes->getNamedItem('species')->nodeValue] = $product_attributes->getNamedItem('stoichiometry')->nodeValue;
+											else $rhs[$product_attributes->getNamedItem('species')->nodeValue] = 1;
+										}
+									}
+								}		
+							}
+							$this->addReaction(new Reaction($lhs, $rhs, $reversible));
+						}
+					}
+				}
+			}
+		}
+		return !$error;
+	}
+
 	public function parseSourceTargetStoichiometry($sourceMatrix,$targetMatrix)
 	{
 		$success = true;
@@ -870,7 +954,7 @@ class FileFormat
 	
 	public function FileFormat($long_name, $short_name, $eg, $href)
 	{
-		$this->longName = $long_name;
+		$this->longName = sanitise($long_name);
 		$this->shortName = $short_name;
 		$this->example = $eg;
 		$this->link = $href;
@@ -879,7 +963,7 @@ class FileFormat
 	public function getNetworkRadioButton()
 	{
 		echo '<input type="radio" name="upload_network_file_format" value="'.$this->shortName.'"';
-		if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"';
+		if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === $this->shortName) echo ' checked="checked"';
 		echo ' id="upload_network_file_format_'.$this->shortName.'" /> <label for="upload_network_file_format_'.$this->shortName.'">';
 		if ($this->link !== '') echo '<a href="'.$this->link.'">'.$this->longName.'</a> ';
 		else echo $this->longName.' ';
@@ -888,8 +972,8 @@ class FileFormat
 
 	public function getBatchRadioButton()
 	{
-		echo '<input type="radio" name="upload_batch_file_format" value="'.$this->shortName;
-		if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"';
+		echo '<input type="radio" name="upload_batch_file_format" value="'.$this->shortName.'"';
+		if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === $this->shortName) echo ' checked="checked"';
 		echo ' id="upload_batch_file_format_'.$this->shortName.'" /> <label for="upload_batch_file_format_'.$this->shortName.'">';
 		if ($this->link !== '') echo '<a href="'.$this->link.'">'.$this->longName.'</a> ';
 		else echo $this->longName.' ';

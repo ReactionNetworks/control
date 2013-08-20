@@ -188,3 +188,16 @@ function recursive_remove_directory($directory, $empty = FALSE)
 		return TRUE;
 	}
 }
+
+function check_file_format($file, $expected_mimetype)
+{
+	$success = true;
+	$finfo = new finfo(FILEINFO_MIME_TYPE);
+	if($finfo)
+	{
+		$mimetype = $finfo->file($file);
+		if($mimetype !== $expected_mimetype) $success = false;
+	}
+	else $success = false;
+	return $success;
+}

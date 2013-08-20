@@ -15,6 +15,7 @@
 require_once('../includes/config.php');
 require_once('../includes/classes.php');
 require_once('../includes/session.php');
+require_once('../includes/functions.php');
 
 $errors = array();
 $mimetype = '';
@@ -24,17 +25,6 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_network_file_inpu
 	switch($_FILES['upload_network_file_input']['error'])
 	{
 		case UPLOAD_ERR_OK:
-			$finfo = new finfo(FILEINFO_MIME_TYPE);
-			if($finfo)
-			{
-				$mimetype = $finfo->file($_FILES['upload_network_file_input']['tmp_name']);
-				if($mimetype !== 'text/plain') $errors[] = 'File not in plain text format';
-			}
-			else
-			{
-				// Throw an exception?
-				$errors[] = 'Failed to open fileinfo database';
-			}
 			//$finfo->close();
 			break;
 		case UPLOAD_ERR_INI_SIZE:
@@ -74,122 +64,156 @@ if(!count($errors))
 	switch($_POST['upload_network_file_format'])
 	{
 		case 'stoichiometry':
-			$matrix = array();
-			$_SESSION['errors'][] = 'Warning: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.';
-			while(!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-				if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
+				$matrix = array();
+				$_SESSION['errors'][] = 'Warning: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.';
+				while(!feof($fhandle))
+				{
+					$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+					if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
+				}
+				if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			}
-			if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			break;
 			
 		case 'source_target':
-			$sourceMatrix = array();
-			$targetMatrix = array();
-			$row = '';
-			while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$row = fgets($fhandle);
-				//error_log($row."\n",3,'/var/tmp/crn.log');
-			}
-
-			while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
-			{
-				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-				if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
-				//error_log($row."\n",3,'/var/tmp/crn.log');
-			}
-			while(!feof($fhandle))
-			{
-				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-				if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
-				//error_log($row."\n",3,'/var/tmp/crn.log');
-			}
-			if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
-			{
-				$_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
-				//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
-				//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+				$sourceMatrix = array();
+				$targetMatrix = array();
+				$row = '';
+				while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
+				{
+					$row = fgets($fhandle);
+					//error_log($row."\n",3,'/var/tmp/crn.log');
+				}
+	
+				while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
+				{
+					$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+					if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
+					//error_log($row."\n",3,'/var/tmp/crn.log');
+				}
+				while(!feof($fhandle))
+				{
+					$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+					if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
+					//error_log($row."\n",3,'/var/tmp/crn.log');
+				}
+				if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
+				{
+					$_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
+					//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+					//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+				}
 			}
 			break;
 
 		case 'sv':
-			$file = array();
-			while (!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$row = trim(fgets($fhandle));
-				if ($row and strpos($row, '#') !== 0)
+				$file = array();
+				while (!feof($fhandle))
 				{
-					// TODO: Implement				
-				}			
+					$row = trim(fgets($fhandle));
+					if ($row and strpos($row, '#') !== 0)
+					{
+						// TODO: Implement				
+					}			
+				}
 			}
 			break;
 			
 		case 'feinberg1':
-			$file = array();
-			while (!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$row = trim(fgets($fhandle));
-				if ($row and strpos($row, '#') !== 0)
+				$file = array();
+				while (!feof($fhandle))
 				{
-					// TODO: Implement				
-				}			
+					$row = trim(fgets($fhandle));
+					if ($row and strpos($row, '#') !== 0)
+					{
+						// TODO: Implement				
+					}			
+				}
 			}
 			break;
 			
 		case 'feinberg2':
-			$file = array();
-			while (!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$row = trim(fgets($fhandle));
-				if ($row and strpos($row, '#') !== 0)
+				$file = array();
+				while (!feof($fhandle))
 				{
-					// TODO: Implement				
-				}			
+					$row = trim(fgets($fhandle));
+					if ($row and strpos($row, '#') !== 0)
+					{
+						// TODO: Implement				
+					}			
+				}
 			}
 			break;
 
 		case 'stv':
-			$file = array();
-			while (!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$row = trim(fgets($fhandle));
-				if($row and strpos($row, '#') !== 0)
+				$file = array();
+				while (!feof($fhandle))
 				{
-					//TO DO: Implement this import
+					$row = trim(fgets($fhandle));
+					if($row and strpos($row, '#') !== 0)
+					{
+						//TO DO: Implement this import
+					}
 				}
 			}
 			break;
 			
 		case 'sauro':
-			$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-			while(!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				if($row and strpos($row, '#') !== 0) break;
-				else $row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+				while(!feof($fhandle))
+				{
+					if($row and strpos($row, '#') !== 0) break;
+					else $row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
+				}
+				if(!$reaction_network->parseSauro($row))
+				{
+					$_SESSION['errors'][] = 'An error was detected in the sauro file. Please check that the output below is as expected.';
+					//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
+					//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+				}
 			}
-			if(!$reaction_network->parseSauro($row))
+			break;
+			
+		case 'sbml':
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'application/xml'))
 			{
-				$_SESSION['errors'][] = 'An error was detected in the sauro file. Please check that the output below is as expected.';
-				//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
-				//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+				if (!$reaction_network->parseSBML($_FILES['upload_network_file_input']['tmp_name']))
+				{
+					$_SESSION['errors'][] = 'An error occurred while parsing the SBML file. Please check that the output below is as expected.';
+				}
 			}
 			break;
 			
 		default: // assume 'human' if unsure
-			$error = false;
-			while(!feof($fhandle))
+			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
-				$reactionString = fgets($fhandle);
-				if($reactionString and strpos($reactionString, '#') !== 0)
+				$error = false;
+				while(!feof($fhandle))
 				{
-					$newReaction = Reaction::parseReaction($reactionString);
-					if($newReaction) $reaction_network->addReaction($newReaction);
-					elseif(!$error)
+					$reactionString = fgets($fhandle);
+					if($reactionString and strpos($reactionString, '#') !== 0)
 					{
-						$_SESSION['errors'][] = 'An error occurred while adding a reaction from the file. Please check that the output below is as expected.';
-						$error = true;
+						$newReaction = Reaction::parseReaction($reactionString);
+						if($newReaction) $reaction_network->addReaction($newReaction);
+						elseif(!$error)
+						{
+							$_SESSION['errors'][] = 'An error occurred while adding a reaction from the file. Please check that the output below is as expected.';
+							$error = true;
+						}
 					}
 				}
 			}

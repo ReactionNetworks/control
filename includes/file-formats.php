@@ -19,5 +19,6 @@ $stv = new FileFormat('Source and Target + V Matrix','stv','','http://reaction-n
 $sauro = new FileFormat('Sauro','sauro','e.g. 1 4 0 3 0 4 5 0 7 0','');
 $feinberg1 = new FileFormat('Martin Feinberg\'s CRN Toolbox Version 1.x','feinberg1','','');
 $feinberg2 = new FileFormat('Martin Feinberg\'s CRN Toolbox Version 2.x','feinberg2','','');
+$sbml = new FileFormat('Systems Biology Markup Language (SBML)','sbml','','');
 
-$format_array = array($human, $stoichiometry, $sv, $source_target, $stv, $sauro, $feinberg1, $feinberg2);
+$format_array = array($human, $stoichiometry, $sv, $source_target, $stv, $sauro, $feinberg1, $feinberg2, $sbml);
