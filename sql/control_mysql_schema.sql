@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(255) NOT NULL,
-  `file_format` tinyint(3) unsigned NOT NULL COMMENT '0 = human, 1 = net stoichiometry, 2 = net stoichiometry + V, 3 = source + target + V',
+  `file_format` tinyint(3) unsigned NOT NULL COMMENT '0 = human, 1 = net stoichiometry, 2 = net stoichiometry + V, 3 = source + target + V, 4 = s + v, 5 = SBML, 6 = sauro',
   `email` varchar(255) NOT NULL,
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0 = not started, 1 = in progress, 2 = complete, 3 = output file downloaded, 4 = output file removed',
   `detailed_output` tinyint(3) unsigned NOT NULL DEFAULT '0',

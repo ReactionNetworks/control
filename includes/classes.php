@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   11/06/2013
+ * @modified   30/08/2013
  */
 
 class Reaction
@@ -747,7 +747,7 @@ class ReactionNetwork
 							$rhs = array();		
 							$reaction_attributes = $model_reactions->item($i)->attributes;
 							if ($reaction_attributes->getNamedItem('reversible') and $reaction_attributes->getNamedItem('reversible')->nodeValue === 'false') $reversible = false;
-							else $reversible = true;
+							else $reversible = true; // If not explicitly stated, reversibility assumed by SBML specification Level 3
 							$reaction_nodes = $model_reactions->item($i)->childNodes;
 							for ($j = 0; $j < $reaction_nodes->length; ++$j)
 							{				

@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   15/08/2013
+ * @modified   30/08/2013
  */
 
 require_once('../includes/config.php');
@@ -110,9 +110,19 @@ if(!count($_SESSION['errors']))
 			$file_format = 2;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
 			break;
+		case 'stv':
+			$file_format = 3;
+			break;
 		case 'source_target':
 			$file_format = 4;
 			break;
+		case 'sbml':
+			$file_format = 5;
+			break;
+		case 'sauro':
+			$file_format = 6;
+			break;
+			
 
 		// TO DO: Set warning message for S/T/V file format.
 		default: // assume 'human' if unsure

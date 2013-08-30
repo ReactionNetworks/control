@@ -1,4 +1,5 @@
 *~
+*.bfproject
 test.php
 includes/config.php
 applets/*.jar

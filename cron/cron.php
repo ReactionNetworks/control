@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   23/07/2013
+ * @modified   30/08/2013
  */
 
 require_once('../includes/config.php');
@@ -181,8 +181,35 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		else $mail .= "<p>ERROR: Failed to create temporary directory</p>\r\n";
 	}
 	if($success)
-	{
+	{	
 		$extracted_files = scandir($dirname);
+		// Special case: Sauro (6) has a single file with one network per LINE
+		if ($jobs[$i]['file_format'] == 6)
+		{
+			if (count($extracted_files) !== 3) // 3 due to sauro file, . and ..
+			{
+				$mail .= "<p>ERROR: Found ".count($extracted_files)." files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
+				$success = false;
+			}
+			else 
+			{
+				$fhandle = fopen($dirname.'/'.$extracted_files[2], 'r');	
+				$fileLabel = 1;
+				while(!feof($fhandle))
+				{
+					$line = fgets($fhandle);
+					$networkString = trim(preg_replace('/\s+/', ' ', $line));
+					if($networkString and strpos($line, '#') !== 0) // If not empty line or comment create a file with this line
+					{
+						file_put_contents($dirname.'/'.$fileLabel, $networkString);
+						++$fileLabel;
+					}
+				}
+				fclose($fhandle);
+				unlink($dirname.'/'.$extracted_files[2]);
+				$extracted_files = scandir($dirname); // Refill the file array with the new files
+			}
+		}
 		$file_found = false;
 		if($extracted_files !== false)
 		{
@@ -190,22 +217,22 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			{
 				if(!is_dir($file))
 				{
-					$mimetype = get_mime($dirname.'/'.$file);
-					if ($mimetype === 'text/plain')
+					$file_found = true;
+					// Write $somecontent to our opened file.
+					if(fwrite($ohandle, $line_ending."## FILE: ".end(explode('/', $file))." ##".$line_ending.$line_ending."Processing start time: ".date('Y-m-d H:i:s').$line_ending."File contents:") === false)
 					{
-						$file_found = true;
-						// Write $somecontent to our opened file.
-						if(fwrite($ohandle, $line_ending."## FILE: ".end(explode('/', $file))." ##".$line_ending.$line_ending."Processing start time: ".date('Y-m-d H:i:s').$line_ending."File contents:") === false)
-						{
-							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-							$success = false;
-						}
-						//$mail .= "\r\n<h2>FILE: ".end(explode('/', $file))."</h2>\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
-						$reaction_network = new ReactionNetwork();
-						$fhandle = fopen($dirname.'/'.$file, 'r');
-						switch($jobs[$i]['file_format'])
-						{
-							case 1: //Net stoichiometry
+						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+						$success = false;
+					}						
+					$fhandle = fopen($dirname.'/'.$file, 'r');
+					//$mail .= "\r\n<h2>FILE: ".end(explode('/', $file))."</h2>\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
+					$reaction_network = new ReactionNetwork();		
+					switch($jobs[$i]['file_format'])
+					{
+						case 1: //Net stoichiometry
+							$mimetype = get_mime($dirname.'/'.$file);
+							if ($mimetype === 'text/plain')
+							{
 								$matrix = array();
 								$mail .= "\r\n<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
 								//$mail .= '<pre>';
@@ -228,10 +255,25 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$mail .= "\r\n<p>ERROR: An error was detected in the stoichiometry file.</p>\r\n";
 									$success = false;
 								}
-								break; // End of case 1, net stoichiometry
-							case 2: //Net stoichiometry + V
-							case 3: //Source + target + V
-							case 4: //Source + target
+							}
+							else $file_found = false;
+							break; // End of case 1, net stoichiometry
+						case 2: //Net stoichiometry + V
+							$mimetype = get_mime($dirname.'/'.$file);
+							if ($mimetype === 'text/plain')
+							{}
+							else $file_found = false;
+							break;
+						case 3: //Source + target + V
+							$mimetype = get_mime($dirname.'/'.$file);
+							if ($mimetype === 'text/plain')
+							{}
+							else $file_found = false;
+							break;
+						case 4: //Source + target
+							$mimetype = get_mime($dirname.'/'.$file);
+							if ($mimetype === 'text/plain')
+							{
 								//$mail .= '<pre>';
 								$sourceMatrix = array();
 								$targetMatrix = array();
@@ -281,12 +323,56 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
 									//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
 									//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
+									$success = false;
 								}
-								break; // End of case 4, source + target stoichiometry
+							}
+							else $file_found = false;
+							break; // End of case 4, source + target stoichiometry
 
-							case 0: //Human
-								//Fall through
-							default: //Assume 'human' if unsure
+						case 5: // SBML (all levels)
+							$mimetype = get_mime($dirname.'/'.$file);
+							if ($mimetype === 'application/xml')
+							{
+								while(!feof($fhandle))
+								{
+									$lineString = fgets($fhandle);
+									if(fwrite($ohandle, "$lineString") === false)
+									{
+										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+										$success = false;
+									}				
+								}
+								if (!$reaction_network->parseSBML($dirname.'/'.$file))
+								{
+									$mail .= "<p>An error was detected in the SBML file. </p>\r\n";
+								}
+							}
+							else $file_found = false;				
+							break;
+		
+						// NB Sauro also handled above as each LINE represents a network, not each file
+						case 6:
+							while(!feof($fhandle))
+							{
+								$lineString = fgets($fhandle);
+								if(fwrite($ohandle, "$line_ending$lineString") === false)
+								{
+									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+									$success = false;
+								}				
+							}
+							if (!$reaction_network->parseSauro($lineString))
+							{
+								$mail .= "<p>An error was detected in the Sauro file. </p>\r\n";
+							}
+							break;
+						
+						case 0: //Human
+							//Fall through
+						default: //Assume 'human' if unsure
+							$mimetype = get_mime($dirname.'/'.$file);
+							if ($mimetype === 'text/plain')
+							{
 								while(!feof($fhandle))
 								{
 									$reactionString = fgets($fhandle);
@@ -310,181 +396,182 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										}
 									}
 								}
-								break;
-						}
-						fclose($fhandle);
-						// Write $somecontent to our opened file.
-						if(fwrite($ohandle, $line_ending."Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)) === false)
+							}
+							else $file_found = false;		
+							break;
+					} // end of switch ($file_format)
+					fclose($fhandle);
+					// Write $somecontent to our opened file.
+					if(fwrite($ohandle, $line_ending."Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)) === false)
+					{
+						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+						$success = false;
+					}
+					//$mail .= "\r\n<p>Reaction network:</p>\r\n<pre>";
+					//$mail .= $reaction_network->exportReactionNetworkEquations("\r\n");
+					//$mail .= '</pre>';
+					if ($success)
+					{
+						// Create human-readable descriptor file
+						$temp_filename = $filename.'.hmn';
+
+						// In our example we're opening $filename in append mode.
+						// The file pointer is at the bottom of the file hence
+						// that's where $somecontent will go when we fwrite() it.
+						if(!$handle = fopen($temp_filename, 'w'))
 						{
-							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						//$mail .= "\r\n<p>Reaction network:</p>\r\n<pre>";
-						//$mail .= $reaction_network->exportReactionNetworkEquations("\r\n");
-						//$mail .= '</pre>';
-						if ($success)
+
+						// Write $somecontent to our opened file.
+						if(fwrite($handle, $reaction_network->exportReactionNetworkEquations()) === false)
 						{
-							// Create human-readable descriptor file
-							$temp_filename = $filename.'.hmn';
+							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+						fclose($handle);
 
-							// In our example we're opening $filename in append mode.
-							// The file pointer is at the bottom of the file hence
-							// that's where $somecontent will go when we fwrite() it.
-							if(!$handle = fopen($temp_filename, 'w'))
+						// Create net stoichiometry descriptor file
+						$temp_filename = $filename.'.sto';
+
+						// In our example we're opening $filename in append mode.
+						// The file pointer is at the bottom of the file hence
+						// that's where $somecontent will go when we fwrite() it.
+						if(!$handle = fopen($temp_filename, 'w'))
+						{
+							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+
+						// Write $somecontent to our opened file.
+						if(fwrite($handle, $reaction_network->exportStoichiometryMatrix()) === false)
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+						fclose($handle);
+
+						// Create net stoichiometry + V matrix descriptor file
+						$temp_filename = $filename.'.s+v';
+
+						// In our example we're opening $filename in append mode.
+						// The file pointer is at the bottom of the file hence
+						// that's where $somecontent will go when we fwrite() it.
+						if(!$handle = fopen($temp_filename, 'w'))
+						{
+							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+
+						// Write $somecontent to our opened file.
+						if(fwrite($handle, $reaction_network->exportStoichiometryAndVMatrix()) === false)
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+						fclose($handle);
+
+						// Create source stoichiometry + target stoichiometry + V matrix descriptor file
+						$temp_filename = $filename.'.stv';
+
+						// In our example we're opening $filename in append mode.
+						// The file pointer is at the bottom of the file hence
+						// that's where $somecontent will go when we fwrite() it.
+						if(!$handle = fopen($temp_filename, 'w'))
+						{
+							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+
+						// Write $somecontent to our opened file.
+						if(fwrite($handle, $reaction_network->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+						fclose($handle);
+
+						if($success)
+						{
+							foreach($standardTests as $test)
 							{
-								$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
-								$success = false;
+								foreach($tests_enabled as &$enabled_test) if($enabled_test === $test->getShortName()) $enabled_test = $test;
 							}
-
-							// Write $somecontent to our opened file.
-							if(fwrite($handle, $reaction_network->exportReactionNetworkEquations()) === false)
+							foreach($tests_enabled as $currentTest)
 							{
-								$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-							fclose($handle);
-
-							// Create net stoichiometry descriptor file
-							$temp_filename = $filename.'.sto';
-
-							// In our example we're opening $filename in append mode.
-							// The file pointer is at the bottom of the file hence
-							// that's where $somecontent will go when we fwrite() it.
-							if(!$handle = fopen($temp_filename, 'w'))
-							{
-								$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-
-							// Write $somecontent to our opened file.
-							if(fwrite($handle, $reaction_network->exportStoichiometryMatrix()) === false)
-							{
-								$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-							fclose($handle);
-
-							// Create net stoichiometry + V matrix descriptor file
-							$temp_filename = $filename.'.s+v';
-
-							// In our example we're opening $filename in append mode.
-							// The file pointer is at the bottom of the file hence
-							// that's where $somecontent will go when we fwrite() it.
-							if(!$handle = fopen($temp_filename, 'w'))
-							{
-								$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-
-							// Write $somecontent to our opened file.
-							if(fwrite($handle, $reaction_network->exportStoichiometryAndVMatrix()) === false)
-							{
-								$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-							fclose($handle);
-
-							// Create source stoichiometry + target stoichiometry + V matrix descriptor file
-							$temp_filename = $filename.'.stv';
-
-							// In our example we're opening $filename in append mode.
-							// The file pointer is at the bottom of the file hence
-							// that's where $somecontent will go when we fwrite() it.
-							if(!$handle = fopen($temp_filename, 'w'))
-							{
-								$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-
-							// Write $somecontent to our opened file.
-							if(fwrite($handle, $reaction_network->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
-							{
-								$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
-								$success = false;
-							}
-							fclose($handle);
-
-							if($success)
-							{
-								foreach($standardTests as $test)
+								$extension = '';
+								$temp = '';
+								// Write $somecontent to our opened file.
+								if(fwrite($ohandle, $line_ending. "### TEST: ".$currentTest->getShortName()." ###".$line_ending.$line_ending."Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
 								{
-									foreach($tests_enabled as &$enabled_test) if($enabled_test === $test->getShortName()) $enabled_test = $test;
+									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+									$success = false;
 								}
-								foreach($tests_enabled as $currentTest)
+								//$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
+
+								// Need to split this into net stoichiometry versus source/target stoichiometry?
+								// How best to treat reversible vs irreversible reactions in stoichiometry case?
+								if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
+								if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
+								if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
+								if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
+
+								if(!$extension) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
+								else
 								{
-									$extension = '';
-									$temp = '';
+									$test_filename = $filename.$extension;
+									$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'timeout '.TEST_TIMEOUT_LIMIT.' ./'.$currentTest->getExecutableName();
+									$output = array();
+									$returnValue = 0;
+									//$exec_string = NICENESS.$binary;
+									if(isset($mass_action_only) and $mass_action_only)
+									{
+										if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
+										else $mail .= "<p>WARNING: you requested testing mass-action kinetics only, but this test always tests general kinetics.</p>\r\n";
+									}
+									else
+									{
+										if(!$currentTest->supportsGeneralKinetics()) $mail .= "<p>WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.</p>\r\n";
+									}
 									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, $line_ending. "### TEST: ".$currentTest->getShortName()." ###".$line_ending.$line_ending."Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
+									if(fwrite($ohandle, "Output:$line_ending-------$line_ending") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}
-									//$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
-
-									// Need to split this into net stoichiometry versus source/target stoichiometry?
-									// How best to treat reversible vs irreversible reactions in stoichiometry case?
-									if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
-									if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
-									if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
-									if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
-
-									if(!$extension) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
-									else
+									//$mail .= "<p>Output:</p>\r\n-------\r\n";
+									$exec_string .= ' '.$test_filename;
+									if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
+									else $exec_string .= ' 2> /dev/null';
+									exec($exec_string, $output, $returnValue);
+									//$mail .= '<pre>';
+									foreach($output as $line)
 									{
-										$test_filename = $filename.$extension;
-										$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'timeout '.TEST_TIMEOUT_LIMIT.' ./'.$currentTest->getExecutableName();
-										$output = array();
-										$returnValue = 0;
-										//$exec_string = NICENESS.$binary;
-										if(isset($mass_action_only) and $mass_action_only)
-										{
-											if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
-											else $mail .= "<p>WARNING: you requested testing mass-action kinetics only, but this test always tests general kinetics.</p>\r\n";
-										}
-										else
-										{
-											if(!$currentTest->supportsGeneralKinetics()) $mail .= "<p>WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.</p>\r\n";
-										}
-										// Write $somecontent to our opened file.
-										if(fwrite($ohandle, "Output:$line_ending-------$line_ending") === false)
+										if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', $line_ending.$line)) === false)
 										{
 											$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 											$success = false;
 										}
-										//$mail .= "<p>Output:</p>\r\n-------\r\n";
-										$exec_string .= ' '.$test_filename;
-										if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
-										else $exec_string .= ' 2> /dev/null';
-										exec($exec_string, $output, $returnValue);
-										//$mail .= '<pre>';
-										foreach($output as $line)
-										{
-											if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', $line_ending.$line)) === false)
-											{
-												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-												$success = false;
-											}
-										}
+									}
 
-										//foreach($output as $line) $mail .= "\r\n$line";
-										// Write $somecontent to our opened file.						
-										//$mail .= "\r\n</pre>";
-									}
-									if(fwrite($ohandle, $line_ending.$line_ending.'### END OF TEST: '.$currentTest->getShortName().' ###'.$line_ending.$line_ending) === false)
-									{
-										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-										$success = false;
-									}
-									//$mail .= "\r\n\r\n<h3>END OF TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n";
-								} // foreach($tests_enabled as $currentTest)
-							} // if($success)
+									//foreach($output as $line) $mail .= "\r\n$line";
+									// Write $somecontent to our opened file.						
+									//$mail .= "\r\n</pre>";
+								}
+								if(fwrite($ohandle, $line_ending.$line_ending.'### END OF TEST: '.$currentTest->getShortName().' ###'.$line_ending.$line_ending) === false)
+								{
+									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+									$success = false;
+								}
+								//$mail .= "\r\n\r\n<h3>END OF TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n";
+							} // foreach($tests_enabled as $currentTest)
 						} // if($success)
-						if(fwrite($ohandle, '## END OF FILE: '.end(explode('/', $file)).' ##'.$line_ending.$line_ending) === false)
-						{
-							$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-							$success = false;
-						}
+					} // if($success)
+					if(fwrite($ohandle, '## END OF FILE: '.end(explode('/', $file)).' ##'.$line_ending.$line_ending) === false)
+					{
+						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+						$success = false;
 						//$mail .= "<h2>END OF FILE: ".end(explode('/', $file))."</h2>\r\n\r\n";
 					}	// if($mimetype === 'text/plain')
 				} // if(!is_dir($file))
