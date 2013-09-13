@@ -7,3 +7,4 @@ bin/analysereacs
 bin/dsr
 bin/*.m
 bin/dummy*
+sql/control.sqlite

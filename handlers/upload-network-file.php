@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   07/08/2013
+ * @modified   13/09/2013
  */
 
 require_once('../includes/config.php');
@@ -221,6 +221,10 @@ if(!count($errors))
 	}
 	fclose($fhandle);
 	$_SESSION['reaction_network'] = $reaction_network;
+	if (MAX_REACTIONS_PER_NETWORK and $reaction_network->getNumberOfReactions() > MAX_REACTIONS_PER_NETWORK)
+	{
+		$_SESSION['errors'][] = 'Warning: the CRN you have uploaded includes more than the recommended number of reactions. It is likely that tests will not successfully complete.';	
+	}
 }
 
 if(CRNDEBUG)

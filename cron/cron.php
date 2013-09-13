@@ -347,7 +347,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$mail .= "<p>An error was detected in the SBML file. </p>\r\n";
 								}
 							}
-							else $file_found = false;				
+							else $file_found = false;
 							break;
 		
 						// NB Sauro also handled above as each LINE represents a network, not each file
@@ -400,6 +400,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							else $file_found = false;		
 							break;
 					} // end of switch ($file_format)
+
 					fclose($fhandle);
 					// Write $somecontent to our opened file.
 					if(fwrite($ohandle, $line_ending."Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)) === false)
@@ -423,7 +424,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-
 						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportReactionNetworkEquations()) === false)
 						{
@@ -443,7 +443,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-
 						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportStoichiometryMatrix()) === false)
 						{
@@ -463,7 +462,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-
 						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportStoichiometryAndVMatrix()) === false)
 						{
@@ -509,14 +507,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$success = false;
 								}
 								//$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
-
 								// Need to split this into net stoichiometry versus source/target stoichiometry?
 								// How best to treat reversible vs irreversible reactions in stoichiometry case?
 								if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
 								if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
 								if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
 								if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
-
 								if(!$extension) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
 								else
 								{
@@ -554,7 +550,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 											$success = false;
 										}
 									}
-
 									//foreach($output as $line) $mail .= "\r\n$line";
 									// Write $somecontent to our opened file.						
 									//$mail .= "\r\n</pre>";
@@ -573,13 +568,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
 						//$mail .= "<h2>END OF FILE: ".end(explode('/', $file))."</h2>\r\n\r\n";
-					}	// if($mimetype === 'text/plain')
+					}
 				} // if(!is_dir($file))
 			} // foreach($extracted_files as $file)
 		} // if($extracted_files !== false)
 	} // if($success)
 	$mail .= "\r\n<p>CoNtRol batch output is ready for download from <a href=\"".SITE_URL."download.php?filekey=".$jobs[$i]['filekey']."\">".SITE_URL."download.php?filekey=".$jobs[$i]['filekey']."</a>. Your results will be stored for one week. </p>\r\n<p>This auto-generated message was sent to you because someone requested processing of a batch job from IP address ".$jobs[$i]['remote_ip'].". If you did not make the request yourself please delete this email. Queries should be addressed to ".ADMIN_EMAIL.".</p>\r\n";
-
 	// Set email headers.
 	$admin_email_split = explode('@', ADMIN_EMAIL);
 	$extra_headers =  "From: CoNtRol <".ADMIN_EMAIL.">\r\n";
