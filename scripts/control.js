@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/06/2013
+ * @modified   16/09/2013
  */
 
 /**
@@ -129,15 +129,32 @@ function generateLaTeX()
 /**
  * Calls the test handler for all selected tests and then redirects to the results
  */
-function processTests()
+function processTests(test_number)
 {
 	var url = 'handlers/process-tests.php';
 	data = {csrf_token: csrf_token};
+	var timeout_countdown = test_timeout_limit;
+	$('#calculation_output_holder').append('<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>');
+	var timer_id = setInterval(function()
+	{
+		if (timeout_countdown)
+		{
+			--timeout_countdown; 
+			$('#timeout_countdown').html(timeout_countdown);
+		}
+		else 
+		{
+			$('#calculation_output_holder').append('<p>Test timed out.</p>');
+			clearInterval(timer_id);
+		}
+	}, 1000);	
 	$.post(url, data, function(returndata)
 	{
-		showTestOutput(returndata);
+		$('#calculation_output_holder').append(returndata);
+		$('#timeout_countdown_holder').remove();	
+		//showTestOutput(returndata);
 		if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='results.php';
-		else processTests();
+		else processTests(++test_number);
 	});
 }
 
@@ -484,10 +501,10 @@ $(document).ready(function()
 	$('#process_network_button').click(function()
 	{
 		if(!$(this).hasClass('disabled')) 
-		{		
+		{
 			resetPopup();
 			saveNetwork();
-			processTests();
+			processTests(1);
 		}
 		return false;
 	});	
