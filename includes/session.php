@@ -41,3 +41,4 @@ if (!isset($_SESSION['tests'])) $_SESSION['tests'] = array();
 if (!isset($_SESSION['standard_tests'])) $_SESSION['standard_tests'] = $standardTests;
 $_SESSION['last_page_load'] = time();
 if(!isset($_SESSION['csrf_token'])) $_SESSION['csrf_token'] = sha1(dechex(mt_rand()).'v98uwgshiu');
+if(!isset($_SESSION['reaction_network'])) $_SESSION['reaction_network'] = new ReactionNetwork;

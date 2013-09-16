@@ -236,7 +236,7 @@ h1
 	width: 100%;
 }
 
-#hidden_character_warning, #missing_reactant_warning
+#hidden_character_warning, #missing_reactant_warning, #removed_reaction_warning
 {
 	background-color: #EEE;
 	border: 1px solid #333;

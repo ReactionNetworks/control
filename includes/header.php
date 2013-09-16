@@ -36,7 +36,7 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-09-16T12:39:44+0100" />
+		<meta name="date" content="2013-09-16T14:28:19+0100" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
@@ -50,6 +50,8 @@ require_once('version.php');
 			var siteURL = '<?php echo SITE_URL; ?>';
 			var csrf_token = '<?php echo $_SESSION['csrf_token']; ?>';
 			var test_timeout_limit = <?php echo TEST_TIMEOUT_LIMIT; ?>;
+			var number_of_reactions = <?php echo $_SESSION['reaction_network']->getNumberOfReactions(); ?>;
+			if (!number_of_reactions) ++number_of_reactions;
 			// ]]>
 		</script>
 	</head>

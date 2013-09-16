@@ -525,25 +525,25 @@ class ReactionNetwork
 	{
 		if(count($this->reactions))
 		{
-			foreach($this->reactions as $reaction)
+			for($i = 0; $i < count($this->reactions); ++$i)
 			{
 				echo '						<fieldset class="reaction_input_row">
-							<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportLHSAsText()), '" />
+							'.($i + 1).'. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', str_replace('&empty;', '', $this->reactions[$i]->exportLHSAsText()), '" />
 							<select class="reaction_direction" name="reaction_direction[]">
 								<option value="left">&larr;</option>
 								<option value="both"';
-							if($reaction->isReversible()) echo ' selected="selected"';
+							if($this->reactions[$i]->isReversible()) echo ' selected="selected"';
 							echo '>&#x21cc;</option>
 								<option value="right"';
-							if(!$reaction->isReversible()) echo ' selected="selected"';
+							if(!$this->reactions[$i]->isReversible()) echo ' selected="selected"';
 							echo '>&rarr;</option>
 							</select>
-							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace('&empty;', '', $reaction->exportRHSAsText()), '" />
+							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace('&empty;', '', $this->reactions[$i]->exportRHSAsText()), '" />
 						</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
-		else echo '<fieldset class="reaction_input_row">
-						<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
+		else echo '						<fieldset class="reaction_input_row">
+						1. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
 						<select class="reaction_direction" name="reaction_direction[]">
 							<option value="left">&larr;</option>
 							<option value="both" selected="selected">&#x21cc;</option>

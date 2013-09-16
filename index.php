@@ -26,21 +26,7 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 							<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo 'disabled'; ?>" id="reset_reaction_button" href="#" title="Reset All Reactions">--</a>
 						</p>
 <?php
-if(isset($_SESSION['reaction_network'])) echo $_SESSION['reaction_network']->generateFieldsetHTML();
-else
-{
-?>
-						<fieldset class="reaction_input_row">
-							<input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" />
-							<select class="reaction_direction" name="reaction_direction[]">
-								<option value="left">&larr;</option>
-								<option value="both" selected="selected">&#x21cc;</option>
-								<option value="right">&rarr;</option>
-							</select>
-							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" />
-						</fieldset><!-- reaction_input_row -->
-<?php
-}
+echo $_SESSION['reaction_network']->generateFieldsetHTML();
 ?>
 						<div id="tools_holder">
 							<h2>Tools</h2>
@@ -177,5 +163,8 @@ if(count($standardTests))
 				<div id="missing_reactant_warning">
 					<p>There is a reactant missing.</p>
 				</div><!-- missing_reactant_warning -->
+				<div id="removed_reaction_warning">
+					<p>Removed reaction <span id="removed_reaction_span"></span></p>
+				</div><!-- removed_reaction_warning -->
 <?php
 require_once('includes/footer.php');

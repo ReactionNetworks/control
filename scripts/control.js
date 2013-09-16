@@ -13,7 +13,9 @@
  */
 function addReaction()
 {
-	$('#tools_holder').before('<fieldset class="reaction_input_row"> <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	++number_of_reactions;	
+	
+	$('#tools_holder').before('<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
 	$('.reaction_left_hand_side').each(function()
 	{
@@ -166,9 +168,23 @@ function processTests(test_number)
  * no reactions being left. Calling it again may trigger a JavaScript error
  * in the user's browser.
  */
-function removeReaction()
+function removeReaction(notify_user)
 {
+	if (notify_user)
+	{
+		$('#removed_reaction_span').html(number_of_reactions);
+		var position = $('#remove_reaction_button').position();
+		$('#removed_reaction_warning').css('top', position.top + 24);
+		$('#removed_reaction_warning').css('left', position.left - 56);
+		$('#removed_reaction_warning').show();
+		setTimeout(function()
+		{
+			$('#removed_reaction_warning').hide();
+		}, 1500);
+	}
+
 	$('#reaction_input_form fieldset').filter(':last').remove();
+	--number_of_reactions;
 }
 
 /**
@@ -190,7 +206,7 @@ function resetReactions()
 	$('#reaction_input_form fieldset input').val('');
 	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
 	disableButtons();
-	while($('#reaction_input_form fieldset').length - 1) removeReaction();
+	while($('#reaction_input_form fieldset').length - 1) removeReaction(false);
 	$('#remove_reaction_button').addClass('disabled');
 	var url = 'handlers/reset-reactions.php';
 	var data = {reset_reactions: 1, csrf_token: csrf_token};
@@ -377,7 +393,7 @@ $(document).ready(function()
 	{
 		if(!$(this).hasClass('disabled'))
 		{
-			if($('#reaction_input_form > fieldset').length > 1) removeReaction();
+			if($('#reaction_input_form > fieldset').length > 1) removeReaction(true);
 			if($('#reaction_input_form > fieldset').length == 1) $(this).addClass('disabled');
 			else $(this).removeClass('disabled');
 		}

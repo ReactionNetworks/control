@@ -219,7 +219,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 				{
 					$file_found = true;
 					// Write $somecontent to our opened file.
-					if(fwrite($ohandle, $line_ending."## FILE: ".end(explode('/', $file))." ##".$line_ending.$line_ending."Processing start time: ".date('Y-m-d H:i:s').$line_ending."File contents:") === false)
+					if(fwrite($ohandle, $line_ending."## FILE: ".end(explode('/', $file))." ##".$line_ending.$line_ending."Processing start time: ".date('Y-m-d H:i:s')) === false)
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
@@ -240,11 +240,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$line = fgets($fhandle);
 									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, "$line_ending$line") === false)
+									/*if(fwrite($ohandle, "$line_ending$line") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
-									}
+									}*/
 									//$mail .= "\r\n$line";
 									$row = trim(preg_replace('/\s+/', ' ', $line));
 									if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
@@ -295,12 +295,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, "$line_ending$row") === false)
+									/*if(fwrite($ohandle, "$line_ending$row") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}
-									//$mail .= "\r\n$row";
+									//$mail .= "\r\n$row"; */
 									if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
 									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
@@ -308,12 +308,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, "$line_ending$row") === false)
+									/*if(fwrite($ohandle, "$line_ending$row") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}
-									//$mail .= "\r\n$row";
+									//$mail .= "\r\n$row";*/
 									if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
 									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
@@ -333,7 +333,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							$mimetype = get_mime($dirname.'/'.$file);
 							if ($mimetype === 'application/xml')
 							{
-								while(!feof($fhandle))
+								/*while(!feof($fhandle))
 								{
 									$lineString = fgets($fhandle);
 									if(fwrite($ohandle, "$lineString") === false)
@@ -341,7 +341,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}				
-								}
+								}*/
 								if (!$reaction_network->parseSBML($dirname.'/'.$file))
 								{
 									$mail .= "<p>An error was detected in the SBML file. </p>\r\n";
@@ -352,6 +352,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		
 						// NB Sauro also handled above as each LINE represents a network, not each file
 						case 6:
+							$mail .= $line_ending."File contents:";
 							while(!feof($fhandle))
 							{
 								$lineString = fgets($fhandle);
@@ -378,11 +379,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$reactionString = fgets($fhandle);
 									//$mail .= '<pre>';
 									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, "$line_ending$reactionString") === false)
+									/*if(fwrite($ohandle, "$line_ending$reactionString") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
-									}
+									}*/
 									//$mail .= "\r\n$reactionString";
 									//$mail .= '</pre>';
 									if($reactionString and strpos($reactionString, '#') !== 0)
@@ -542,12 +543,23 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									else $exec_string .= ' 2> /dev/null';
 									exec($exec_string, $output, $returnValue);
 									//$mail .= '<pre>';
-									foreach($output as $line)
+									if ($returnValue)
 									{
-										if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', $line_ending.$line)) === false)
+										if(fwrite($ohandle, 'ERROR: Test failed, probably due to timeout.') === false)
 										{
 											$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 											$success = false;
+										}
+									}
+									else
+									{
+										foreach($output as $line)
+										{
+											if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', $line_ending.$line)) === false)
+											{
+												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
+												$success = false;
+											}
 										}
 									}
 									//foreach($output as $line) $mail .= "\r\n$line";
