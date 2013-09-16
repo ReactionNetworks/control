@@ -40,11 +40,11 @@ h1
 .button
 {
 	background-color: #ddd;
-	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
+	/*background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
 	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
 	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
 	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);*/
 	border: 1px solid #999;
 	border-radius: 2px;
 	box-shadow: 1px 1px 1px #333;
@@ -57,11 +57,11 @@ h1
 .button:hover
 {
 	background-color: #eee;
-	background-image: -ms-linear-gradient(top, #fff 0%, #ddd 100%);
+	/*background-image: -ms-linear-gradient(top, #fff 0%, #ddd 100%);
 	background-image: -moz-linear-gradient(top, #fff 0%, #ddd 100%);
 	background-image: -o-linear-gradient(top, #fff 0%, #ddd 100%);
 	background-image: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: linear-gradient(to bottom, #fff 0%, #ddd 100%);
+	background-image: linear-gradient(to bottom, #fff 0%, #ddd 100%);*/
 }
 
 .button.disabled
@@ -73,11 +73,11 @@ h1
 .button.disabled:hover
 {
 	background-color: #ddd;	
-	background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
+	/*background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
 	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
 	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
 	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);
+	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);*/
 	cursor: default;
 }
 
@@ -110,7 +110,7 @@ h1
 	border: 1px solid #333;
 	position: absolute;
 	top: 4.5em;
-	min-width: 8em;
+	min-width: 9em;
 }
 
 #actions_holder
@@ -125,13 +125,16 @@ h1
 	padding: 0.5em 0;
 }
 
-#actions_holder a, #tools_holder a, #tools_holder button
+#actions_holder a, #tools_holder a, #actions_holder button
 {
+	text-align: left;
+	background-repeat: no-repeat;
+	background-position: 5px;
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
 	display:block;
-	padding: 0.3em;
+	padding: 0.3em 0.3em 0.3em 30px;
 }
 
 #batch_upload_form, #reaction_input_form, #reaction_upload_form
@@ -220,7 +223,7 @@ h1
 #error_message_holder
 {
 	color: red;
-	margin: 0 10em;
+	margin: 0 11em;
 }
 
 #error_message_holder p
@@ -308,7 +311,7 @@ h1
 #reaction_input_holder
 {
 	border: 1px dotted #999;
-	margin: 0 10em;
+	margin: 0 11em;
 }
 
 #reaction_input_holder p:first-child
@@ -355,14 +358,14 @@ h1
 	left: 0.9em;
 }
 
-#tools_holder button
+#actions_holder button
 {
 	cursor: pointer;
 	margin: 0;
 	width: 100%;
 }
 
-#tools_holder button.disabled
+#actions_holder button.disabled
 {
 	cursor: default;
 }
@@ -370,6 +373,61 @@ h1
 #upload_batch_file_email_error
 {
 	color: red;
+}
+
+#process_network_button
+{
+	background-image: url('../images/analyse.png');
+}
+
+#reaction_upload_button
+{
+	background-image: url('../images/upload.png');
+}
+
+#batch_upload_button
+{
+	background-image: url('../images/batch.png');
+}
+
+#options_button
+{
+	background-image: url('../images/options.png');
+}
+
+#download_network_file_button
+{
+	background-image: url('../images/download.png');
+}
+
+#latex_output_button
+{
+	background-image: url('../images/latex.png');
+}
+
+#dsr_graph_button
+{
+	background-image: url('../images/network.png');
+	background-repeat: no-repeat;
+	background-position: 10px;
+	padding-left: 30px;
+}
+
+#email_results_form_button
+{
+	background-image: url('../images/email.png');
+	background-repeat: no-repeat;
+	background-position: 10px;
+	padding-left: 30px;
+}
+
+#results_actions_buttons
+{
+	margin-top: 1.5em;
+	margin-bottom: -1.5em;
+	z-index: 1;
+	position: relative;
+	text-align: center;
 }
 
 #version

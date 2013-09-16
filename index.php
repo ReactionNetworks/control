@@ -29,20 +29,20 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 echo $_SESSION['reaction_network']->generateFieldsetHTML();
 ?>
 						<div id="tools_holder">
-							<h2>Tools</h2>
+							<h2>File Input</h2>
 							<p>
-								<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?> title="Download a text file describing the current CRN for later analysis">Download<br />CRN File</button>
-								<a class="button fancybox" href="#reaction_upload_form" title="Upload a text file describing a single CRN for immediate analysis">Upload<br />CRN File</a>
-								<a class="button fancybox" href="#batch_upload_form" title="Upload an archive containing several text files representing different CRNs for batch processing">Upload Batch<br />CRN File</a>
-								<a class="button fancybox" href="#option_holder" title="Configure options such as which tests to run during analysis">Advanced<br />Options</a>
+								<a class="button fancybox" href="#reaction_upload_form" id="reaction_upload_button" title="Upload a text file describing a single CRN for immediate analysis">Upload<br />CRN File</a>
+								<a class="button fancybox" href="#batch_upload_form" id="batch_upload_button" title="Upload an archive containing several text files representing different CRNs for batch processing">Upload Batch<br />CRN File</a>
 							</p>
 						</div><!-- tools_holder -->
 						<div id="actions_holder">
-							<h2>Actions</h2>
+							<h2>Analysis</h2>
 							<p>
+								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
+								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>
+								<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?> title="Download a text file describing the current CRN for later analysis">Download<br />CRN File</button>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
 								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
-								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
 							</p>
 						</div><!-- actions_holder -->
 					</form>

@@ -31,8 +31,6 @@ foreach($_SESSION['tests'] as $testname => $test)
 	}
 }
 ?>
-							<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN DSR Graph</a>
-							<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#email_results_form" id="email_results_form_button" title="Receive the test results for the current CRN via email">Email results</a>
 							<span class="align_right"><a href=".">Back to main</a></span>
 						</p>
 						<div>
@@ -57,8 +55,12 @@ foreach($_SESSION['test_output'] as $name => $result)
 	if(trim($result)) echo "<pre>$result</pre>\n						</div>\n";
 	else echo "							<pre>No results available, probably due to test timeout.</pre>\n						</div>\n";
 }
-echo "					</div><!-- results -->\n";
 ?>
+					<p id="results_actions_buttons">							
+						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN DSR Graph</a>
+						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#email_results_form" id="email_results_form_button" title="Receive the test results for the current CRN via email">Email results</a>
+					</p>
+				</div><!-- results -->
 				<div id="popup_hider">
 					<div id="missing_java_warning_holder">
 <?php
