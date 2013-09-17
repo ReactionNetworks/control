@@ -423,11 +423,12 @@ h1
 
 #results_actions_buttons
 {
-	margin-top: 1.5em;
+	margin-top: 0.5em;
 	margin-bottom: -1.5em;
 	z-index: 1;
 	position: relative;
 	text-align: center;
+	line-height: 2;
 }
 
 #version

@@ -606,5 +606,6 @@ $(document).ready(function()
 	});
 
 	$(window).resize(function() { detectWindowSize(); });
-	$('.reaction_left_hand_side').first().select();
+	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1)
+		$('.reaction_left_hand_side').first().select();
 });

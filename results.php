@@ -57,8 +57,8 @@ foreach($_SESSION['test_output'] as $name => $result)
 }
 ?>
 					<p id="results_actions_buttons">							
-						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN DSR Graph</a>
-						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#email_results_form" id="email_results_form_button" title="Receive the test results for the current CRN via email">Email results</a>
+						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View&nbsp;CRN&nbsp;DSR&nbsp;Graph</a>
+						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#email_results_form" id="email_results_form_button" title="Receive the test results for the current CRN via email">Email&nbsp;results</a>
 					</p>
 				</div><!-- results -->
 				<div id="popup_hider">
