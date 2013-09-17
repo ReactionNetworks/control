@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/09/2013
+ * @modified   17/09/2013
  */
 
 /**
@@ -381,6 +381,42 @@ $(document).ready(function()
 
 	// Enable DSR applet for browsers with Java installed
 	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
+	
+	// File inputs slide down out of the File Input header on clock
+	var toolsShown = false;
+	$('#tools_show').click(function()
+	{
+		if (!toolsShown)
+		{
+			$('#tools_buttons_slidedown').slideDown();
+			$('#tools_show').html('Hide');
+			toolsShown = true;
+		}
+		else 
+		{
+			$('#tools_buttons_slidedown').slideUp();
+			$('#tools_show').html('Show');
+			toolsShown = false;
+		}
+	});
+	
+	// Similarly, more analysis options slide down
+	var moreActionsShown = false;
+	$('#more_actions_show	').click(function()
+	{
+		if (!moreActionsShown)
+		{
+			$('#more_actions_slidedown').slideDown();
+			$('#more_actions_show	').html('Less');
+			moreActionsShown = true;
+		}
+		else 
+		{
+			$('#more_actions_slidedown').slideUp();
+			$('#more_actions_show	').html('More');
+			moreActionsShown = false;
+		}
+	});	
 	
 	$('#add_reaction_button').click(function()
 	{
