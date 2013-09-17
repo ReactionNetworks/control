@@ -13,6 +13,10 @@ h1
 	padding-bottom: 0;
 }
 
+.left_centred
+{
+}
+
 #actions_holder
 {
 	border-top: none;
@@ -85,10 +89,13 @@ h1
 	margin: 0.5em 0.5em 0 0.5em;
 }
 
-#results_link
+#results_link > a
 {
-	margin-bottom: 0;
-	margin-top: -1em;
+	color: transparent;
+	background-image: url('../images/return.png');
+	background-repeat: no-repeat;
+	background-position: 120px 40px;
+	padding-bottom: 80px;
 }
 
 #version

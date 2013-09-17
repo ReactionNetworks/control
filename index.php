@@ -41,11 +41,11 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 						<div id="actions_holder">
 							<h2>Analysis</h2>
 							<p>
-								<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
+								<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
 								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>			
 								<p id="more_actions_slidedown">									
 									<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?> title="Download a text file describing the current CRN for later analysis">Download<br />CRN File</button>
-									<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
+									<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
 									<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
 								</p>
 								<span id="more_actions_show">More</span>					

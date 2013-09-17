@@ -388,6 +388,7 @@ h1
 #upload_batch_file_email_error
 {
 	color: red;
+	font-size: 80%;
 }
 
 #process_network_button
@@ -435,6 +436,12 @@ h1
 	background-repeat: no-repeat;
 	background-position: 10px;
 	padding-left: 30px;
+}
+
+#email_results_error
+{
+	font-size: 80%;
+	color: red;
 }
 
 #results_actions_buttons

@@ -125,7 +125,8 @@ function generateLaTeX()
 			textOutput += returndata.replace('&', '&amp;') + '\n</textarea>\n';
 			$('#latex_output_holder').html(textOutput);
 		});
-	});
+	}
+	);
 }
 
 /**
@@ -466,7 +467,8 @@ $(document).ready(function()
 	$('#reset_reaction_button').height(buttonSize);
 	$('#reset_reaction_button').width(buttonSize);
 
-	$('.fancybox').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
+	$('.fancybox').fancybox({autoDimensions: true, width: popupWidth, height: popupHeight});
+	$('.fancybox_dynamic').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
 
 	$('#detailed_output_checkbox').change(function()
 	{
@@ -528,7 +530,7 @@ $(document).ready(function()
 	});
 
 	$('#latex_output_button').click(function(e)
-	{
+	{	
 		if(!$(this).hasClass('disabled'))
 		{
 			$.when(saveNetwork()).then(generateLaTeX());
