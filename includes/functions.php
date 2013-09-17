@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   22/04/2013
+ * @modified   17/09/2013
  */
 
 /**
@@ -201,3 +201,34 @@ function check_file_format($file, $expected_mimetype)
 	else $success = false;
 	return $success;
 }
+
+function batch_captcha()
+{
+	$output = '';
+	$_SESSION['batch-captcha'] = captcha_random_string(5);
+	$char_array = str_split($_SESSION['batch-captcha']);
+	// Encode in ASCII to trick bots
+	foreach ($char_array as $char)
+	{
+		$output .= '&shy;&#' . ord($char) . ';&shy;';
+	}
+	echo $output;
+}
+
+/**
+ * Based upon http://www.marksanborn.net/php/random-password-string-generator-for-php/
+ */
+function captcha_random_string($length = 10) 
+{
+	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+
+	$charLength = strlen($chars)-1;
+
+  for($i = 0 ; $i < $length ; $i++)
+  {
+      $randomString .= $chars[mt_rand(0,$charLength)];
+  }
+
+  return $randomString;
+}
+

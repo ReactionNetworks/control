@@ -82,7 +82,7 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
 else echo ini_get('upload_max_filesize');
 ?> <br />
-							Supported file types:
+							Supported archive types:
 <?php
 echo $supported_batch_file_types[0]['extension'];
 for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
@@ -104,6 +104,13 @@ for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported
 							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label> <br />
 							<input type="radio" name="upload_batch_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_batch_file_format_source_target" /> <label for="upload_batch_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>*/?>
 						</p>
+						<br />
+						<div>
+							<p>Enter security code (required):<br />
+								<label for="batch_security_code"><?php batch_captcha(); ?></label> 
+		            <input type="text" name="batch_security_code" id="batch_security_code"/>
+	            </p>
+            </div>
 						<p>
 							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>
 						</p>

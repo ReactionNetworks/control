@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   30/08/2013
+ * @modified   19/09/2013
  */
 
 require_once('../includes/config.php');
@@ -73,6 +73,9 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 	}
 }
 else $_SESSION['errors'][] = 'No file uploaded';
+
+// Check that the security code was entered correctly
+if (!(isset($_POST['batch_security_code'])) or ($_POST['batch_security_code'] !==  $_SESSION['batch-captcha'])) $_SESSION['errors'][] = 'The security code entered was not correct - please try again.';
 
 // Check that the file format was specified
 if(!(isset($_POST['upload_batch_file_format']) and $_POST['upload_batch_file_format'])) $_SESSION['errors'][] = 'File format not specified';

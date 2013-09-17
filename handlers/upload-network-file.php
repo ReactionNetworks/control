@@ -53,7 +53,7 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_network_file_inpu
 	}
 }
 else $errors[] = 'No file uploaded';
-if(!(isset($_POST['upload_network_file_format']) and $_POST['upload_network_file_format'])) $errors[] = 'File format not specified';
+if(!isset($_POST['upload_network_file_format']) and $_POST['upload_network_file_format']) $errors[] = 'File format not specified';
 
 if(!count($errors))
 {
