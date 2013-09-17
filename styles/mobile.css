@@ -30,6 +30,24 @@ h1
 	width: 100%;
 }
 
+#actions_holder a, #tools_holder a, #actions_holder button
+{
+	text-align: center;
+	background-repeat: no-repeat;
+	background-position: 20%;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	display:block;
+	padding: 0.3em;
+}
+
+#tools_show, #more_actions_show
+{
+	display: block;
+	padding: 0.8em;
+}
+
 #error_message_holder, #reaction_input_holder, #results
 {
 	margin: 0;
