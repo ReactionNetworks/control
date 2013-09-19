@@ -136,7 +136,7 @@ function processTests(test_number)
 {
 	var url = 'handlers/process-tests.php';
 	data = {csrf_token: csrf_token};
-	var timeout_countdown = test_timeout_limit;
+	timeout_countdown = test_timeout_limit;
 	$('#calculation_output_holder').append('<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>');
 	var timer_id = setInterval(function()
 	{
@@ -149,8 +149,6 @@ function processTests(test_number)
 		{
 			$('#calculation_output_holder').append('<p>Test timed out.</p>');
 			clearInterval(timer_id);
-			timeout_countdown = '';
-			return;
 		}
 	}, 1000);	
 	$.post(url, data, function(returndata)
