@@ -149,6 +149,8 @@ function processTests(test_number)
 		{
 			$('#calculation_output_holder').append('<p>Test timed out.</p>');
 			clearInterval(timer_id);
+			timeout_countdown = '';
+			return;
 		}
 	}, 1000);	
 	$.post(url, data, function(returndata)
