@@ -136,7 +136,7 @@ function processTests(test_number)
 {
 	var url = 'handlers/process-tests.php';
 	data = {csrf_token: csrf_token};
-	timeout_countdown = test_timeout_limit;
+	var timeout_countdown = test_timeout_limit;
 	$('#calculation_output_holder').append('<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>');
 	clearInterval(timer_id);
 	timer_id = setInterval(function()
