@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   16/09/2013
+ * @modified   19/09/2013
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -36,7 +36,7 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-09-19T14:51:35+0100" />
+		<meta name="date" content="2013-09-19T14:52:55+0100" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />

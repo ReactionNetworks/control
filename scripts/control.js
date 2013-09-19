@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   17/09/2013
+ * @modified   19/09/2013
  */
 
 /**
@@ -138,6 +138,7 @@ function processTests(test_number)
 	data = {csrf_token: csrf_token};
 	timeout_countdown = test_timeout_limit;
 	$('#calculation_output_holder').append('<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>');
+	if (timer_id) clearInterval(timer_id);	
 	var timer_id = setInterval(function()
 	{
 		if (timeout_countdown)
