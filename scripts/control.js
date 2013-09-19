@@ -138,8 +138,8 @@ function processTests(test_number)
 	data = {csrf_token: csrf_token};
 	timeout_countdown = test_timeout_limit;
 	$('#calculation_output_holder').append('<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>');
-	if (timer_id) clearInterval(timer_id);	
-	var timer_id = setInterval(function()
+	clearInterval(timer_id);
+	timer_id = setInterval(function()
 	{
 		if (timeout_countdown)
 		{
