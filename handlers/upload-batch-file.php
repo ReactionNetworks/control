@@ -121,6 +121,7 @@ if(!count($_SESSION['errors']))
 			break;
 		case 'sbml':
 			$file_format = 5;
+			$_SESSION['errors'][] = 'Please note that for SBML reactions, properties other than reactants and products, stoichiometry and direction of reactions are not currently supported. If your file contains e.g. kinetic laws or multiple compartments, this information will be lost during analysis.';
 			break;
 		case 'sauro':
 			$file_format = 6;
