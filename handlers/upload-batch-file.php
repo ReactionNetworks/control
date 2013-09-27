@@ -103,15 +103,18 @@ else $_SESSION['email'] = $_POST['upload_batch_file_email'];
 
 if(!count($_SESSION['errors']))
 {
+	$_SESSION['format_warning'] = false;
 	switch($_POST['upload_batch_file_format'])
 	{
 		case 'stoichiometry':
 			$file_format = 1;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
+			$_SESSION['format_warning'] = true;
 			break;
 		case 'sv':
 			$file_format = 2;
 			$_SESSION['errors'][] = 'Warning: You uploaded a net stoichiometry file. The output will not be correct if any reactants appear on both sides of a reaction.';
+			$_SESSION['format_warning'] = true;
 			break;
 		case 'stv':
 			$file_format = 3;
@@ -121,13 +124,12 @@ if(!count($_SESSION['errors']))
 			break;
 		case 'sbml':
 			$file_format = 5;
-			$_SESSION['errors'][] = 'Please note that for SBML reactions, properties other than reactants and products, stoichiometry and direction of reactions are not currently supported. If your file contains e.g. kinetic laws or multiple compartments, this information will be lost during analysis.';
+			$_SESSION['errors'][] = 'Warning: Please note that for SBML reactions, properties other than reactants and products, stoichiometry and direction of reactions are not currently supported. If your file contains e.g. kinetic laws or multiple compartments, this information will be lost during analysis.';
+			$_SESSION['format_warning'] = true;
 			break;
 		case 'sauro':
 			$file_format = 6;
 			break;
-			
-
 		// TO DO: Set warning message for S/T/V file format.
 		default: // assume 'human' if unsure
 			$file_format = 0;
@@ -184,6 +186,13 @@ if(!count($_SESSION['errors']))
 	$statement->bindValue(':creation_timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 	$statement->bindValue(':update_timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 	if (!$statement->execute()) die(print_r($statement->errorInfo(),true));
+	else // Keep the ID in the session so we can cancel the job on the acknowledgement page if we wish
+	{
+		$statement = $controldb->prepare('SELECT MAX(id) AS id FROM batch_jobs');
+		$statement->execute();
+		$record = $statement->fetchAll(PDO::FETCH_ASSOC);
+		$_SESSION['batch_job_id'] = $record[0]['id'];
+	}
 	$controldb = null;
 }
 else // There were errors, so redirect the user back to the main page so they can see them.

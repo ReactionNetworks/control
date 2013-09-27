@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   30/08/2013
+ * @modified   27/09/2013
  */
 
 require_once('../includes/config.php');
@@ -29,6 +29,7 @@ catch(PDOException $exception)
 	die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
 }
 
+// Set 'not started' jobs to 'in progress'
 $query = 'SELECT * FROM '.DB_PREFIX.'batch_jobs WHERE status = 0';
 $statement = $controldb->prepare($query);
 $statement->execute();
@@ -611,6 +612,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	// Remove problematic plain text code and replace admin email with link
 	$body .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'."\r\n".'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">'."\r\n<head>\r\n".'<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />'."\r\n<title>CoNtRol output</title>\r\n</head>\r\n<body>\r\n".str_replace(ADMIN_EMAIL, '<a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>', str_replace($html_search, $html_replace, $mail))."</body>\r\n</html>\r\n";
 
+	// Set the job to complete and remove the files
 	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $body, $extra_headers, $sendmail_params)) echo "\$sendmail_params: $sendmail_params\r\n\$extra_headers: $extra_headers\r\n\$mail: $mail";
 	elseif($success)
 	{
@@ -637,7 +639,9 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	unlink(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
 } // for($i = 0; $i < $number_of_jobs; ++$i)
 
-$query = 'SELECT id, filekey FROM '.DB_PREFIX.'batch_jobs WHERE status = 3';
+// Status 3 = output file downloaded; set them to status 4 once files removed
+// Status 5 = unconfirmed; also remove these files since the job isn't going to be run
+$query = 'SELECT id, filekey FROM '.DB_PREFIX.'batch_jobs WHERE status = 3 OR status = 5';
 $statement = $controldb->prepare($query);
 $statement->execute();
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
