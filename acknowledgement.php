@@ -23,9 +23,15 @@ if(isset($_POST['cancel']))
 		{
 			die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
 		}
-		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 3 WHERE id = '.$_SESSION['batch_job_id'];
+		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 4 WHERE id = '.$_SESSION['batch_job_id'];
 		$statement = $controldb->prepare($query);
 		$statement->execute();
+		// Delete the temporary files associated with this job
+		$query = 'SELECT * FROM '.DB_PREFIX.'batch_jobs WHERE id = '.$_SESSION['batch_job_id'];
+		$statement = $controldb->prepare($query);
+		$statement->execute();
+		$entry = $statement->fetch(PDO::FETCH_ASSOC);
+		array_map('unlink', glob($entry['filename'].'*'));
 		?>
 		<div id="results">
 				<h2>Batch job cancelled</h2>
