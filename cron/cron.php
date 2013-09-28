@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   27/09/2013
+ * @modified   28/09/2013
  */
 
 require_once('../includes/config.php');
@@ -187,9 +187,23 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		// Special case: Sauro (6) has a single file with one network per LINE
 		if ($jobs[$i]['file_format'] == 6)
 		{
+			// If the user is on a Mac, this folder might be present so we should ignore it to prevent errors
+			$mac_dir_pos = array_search('__MACOSX', $extracted_files);
+			if ($mac_dir_pos !== false)
+			{
+				array_map('unlink', glob($dirname.'/__MACOSX/{,.}*', GLOB_BRACE));				
+				unset($extracted_files[$mac_dir_pos]);
+				if (!rmdir($dirname.'/__MACOSX'))
+				{
+					$mail .= "<p>ERROR: Couldn't delete hidden files from zip created on Mac OS X.</p>";
+					$success = false;
+				}
+				// "Re-index" the array, as this isn't automatic, and our sauro file is now in $extracted_files[3], whereas code below assumes index 2
+				$extracted_files = array_values($extracted_files);
+			}
 			if (count($extracted_files) !== 3) // 3 due to sauro file, . and ..
 			{
-				$mail .= "<p>ERROR: Found ".count($extracted_files)." files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
+				$mail .= "<p>ERROR: Found ".(count($extracted_files) - 2)." files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
 				$success = false;
 			}
 			else 
@@ -353,7 +367,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		
 						// NB Sauro also handled above as each LINE represents a network, not each file
 						case 6:
-							$mail .= $line_ending."File contents:";
 							while(!feof($fhandle))
 							{
 								$lineString = fgets($fhandle);
