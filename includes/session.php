@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   16/04/2013
+ * @modified   22/10/2013
  */
 
 require_once('config.php');
@@ -26,7 +26,7 @@ ini_set('session.use_only_cookies', true);
 
 // Check if the client is on a secure connection
 $https = false;
-if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] != 'off') $https = true;
+if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== 'off') $https = true;
 
 // Set session cookie, restrict it to the CoNtRol directory and host, if client is on secure connection then restrict cookie to secure connections too, and disallow JavaScript access
 session_set_cookie_params(0, '/'.SITE_DIR.'/', $_SERVER['HTTP_HOST'], $https, true);

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   19/09/2013
+ * @modified   22/10/2013
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -18,6 +18,19 @@ header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
 require_once('config.php');
+// Force redirect if not being accessed on the correct URL
+$currentURL = explode('/', $_SERVER['REQUEST_URI']);
+$current_page = end($currentURL);
+if($current_page === 'index.php') $current_page = '';
+$protocol = 'http';
+if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== off) $protocol .= 's';
+if(SITE_URL.$current_page !== $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
+{
+	header('Location: '.SITE_URL.$current_page);
+	//echo SITE_URL.$current_page.PHP_EOL;
+	//echo (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== off ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].PHP_EOL;
+	die();
+}
 require_once('functions.php');
 require_once('session.php');
 require_once('version.php');
@@ -36,7 +49,7 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-09-19T15:07:07+0100" />
+		<meta name="date" content="2013-10-22T17:25:32+0100" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />

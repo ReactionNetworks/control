@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   28/09/2013
+ * @modified   22/10/2013
  */
 
 require_once('../includes/config.php');
@@ -69,7 +69,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
 	}
-	
+
 	$tests_enabled = explode(';', $jobs[$i]['tests_enabled']);
 	$mail .= 'Tests enabled:';
 
@@ -109,8 +109,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$success = false;
 		}
 	}
-	else 
-	{	
+	else
+	{
 		$mail .= 'False';
 		// Write $somecontent to our opened file.
 		if(fwrite($ohandle, "false") === false)
@@ -138,8 +138,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$success = false;
 		}
 	}
-	else 
-	{	
+	else
+	{
 		$mail .= 'False';
 		// Write $somecontent to our opened file.
 		if(fwrite($ohandle, "false") === false)
@@ -182,7 +182,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		else $mail .= "<p>ERROR: Failed to create temporary directory</p>\r\n";
 	}
 	if($success)
-	{	
+	{
 		$extracted_files = scandir($dirname);
 		// Special case: Sauro (6) has a single file with one network per LINE
 		if ($jobs[$i]['file_format'] == 6)
@@ -191,7 +191,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$mac_dir_pos = array_search('__MACOSX', $extracted_files);
 			if ($mac_dir_pos !== false)
 			{
-				array_map('unlink', glob($dirname.'/__MACOSX/{,.}*', GLOB_BRACE));				
+				array_map('unlink', glob($dirname.'/__MACOSX/{,.}*', GLOB_BRACE));
 				unset($extracted_files[$mac_dir_pos]);
 				if (!rmdir($dirname.'/__MACOSX'))
 				{
@@ -206,9 +206,9 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 				$mail .= "<p>ERROR: Found ".(count($extracted_files) - 2)." files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
 				$success = false;
 			}
-			else 
+			else
 			{
-				$fhandle = fopen($dirname.'/'.$extracted_files[2], 'r');	
+				$fhandle = fopen($dirname.'/'.$extracted_files[2], 'r');
 				$fileLabel = 1;
 				while(!feof($fhandle))
 				{
@@ -238,10 +238,9 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
-					}						
+					}
 					$fhandle = fopen($dirname.'/'.$file, 'r');
-					//$mail .= "\r\n<h2>FILE: ".end(explode('/', $file))."</h2>\r\n\r\n<p>Processing start time: ".date('Y-m-d H:i:s')."<br />\r\nFile contents:</p>";
-					$reaction_network = new ReactionNetwork();		
+					$reaction_network = new ReactionNetwork();
 					switch($jobs[$i]['file_format'])
 					{
 						case 1: //Net stoichiometry
@@ -250,21 +249,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							{
 								$matrix = array();
 								$mail .= "\r\n<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
-								//$mail .= '<pre>';
 								while(!feof($fhandle))
 								{
 									$line = fgets($fhandle);
-									// Write $somecontent to our opened file.
-									/*if(fwrite($ohandle, "$line_ending$line") === false)
-									{
-										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-										$success = false;
-									}*/
-									//$mail .= "\r\n$line";
 									$row = trim(preg_replace('/\s+/', ' ', $line));
 									if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
 								}
-								//$mail .= '</pre>';
 								if(!$reaction_network->parseStoichiometry($matrix))
 								{
 									$mail .= "\r\n<p>ERROR: An error was detected in the stoichiometry file.</p>\r\n";
@@ -302,42 +292,20 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}
-									//$mail .= "\r\n$row";
-									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
-					
 								while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									// Write $somecontent to our opened file.
-									/*if(fwrite($ohandle, "$line_ending$row") === false)
-									{
-										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-										$success = false;
-									}
-									//$mail .= "\r\n$row"; */
 									if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
-									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
 								while(!feof($fhandle))
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									// Write $somecontent to our opened file.
-									/*if(fwrite($ohandle, "$line_ending$row") === false)
-									{
-										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-										$success = false;
-									}
-									//$mail .= "\r\n$row";*/
 									if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
-									//error_log($row."\n",3,'/var/tmp/crn.log');
 								}
-								//$mail .= "\r\n</pre>";
 								if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
 								{
 									$mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
-									//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
-									//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
 									$success = false;
 								}
 							}
@@ -348,15 +316,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							$mimetype = get_mime($dirname.'/'.$file);
 							if ($mimetype === 'application/xml')
 							{
-								/*while(!feof($fhandle))
-								{
-									$lineString = fgets($fhandle);
-									if(fwrite($ohandle, "$lineString") === false)
-									{
-										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-										$success = false;
-									}				
-								}*/
 								if (!$reaction_network->parseSBML($dirname.'/'.$file))
 								{
 									$mail .= "<p>An error was detected in the SBML file. </p>\r\n";
@@ -364,7 +323,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							}
 							else $file_found = false;
 							break;
-		
+
 						// NB Sauro also handled above as each LINE represents a network, not each file
 						case 6:
 							while(!feof($fhandle))
@@ -374,14 +333,14 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 									$success = false;
-								}				
+								}
 							}
 							if (!$reaction_network->parseSauro($lineString))
 							{
 								$mail .= "<p>An error was detected in the Sauro file. </p>\r\n";
 							}
 							break;
-						
+
 						case 0: //Human
 							//Fall through
 						default: //Assume 'human' if unsure
@@ -391,15 +350,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								while(!feof($fhandle))
 								{
 									$reactionString = fgets($fhandle);
-									//$mail .= '<pre>';
-									// Write $somecontent to our opened file.
-									/*if(fwrite($ohandle, "$line_ending$reactionString") === false)
-									{
-										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-										$success = false;
-									}*/
-									//$mail .= "\r\n$reactionString";
-									//$mail .= '</pre>';
 									if($reactionString and strpos($reactionString, '#') !== 0)
 									{
 										$newReaction = Reaction::parseReaction($reactionString);
@@ -412,7 +362,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									}
 								}
 							}
-							else $file_found = false;		
+							else $file_found = false;
 							break;
 					} // end of switch ($file_format)
 
@@ -423,9 +373,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
 					}
-					//$mail .= "\r\n<p>Reaction network:</p>\r\n<pre>";
-					//$mail .= $reaction_network->exportReactionNetworkEquations("\r\n");
-					//$mail .= '</pre>';
 					if ($success)
 					{
 						// Create human-readable descriptor file
@@ -521,7 +468,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 									$success = false;
 								}
-								//$mail .= "\r\n<h3>TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n<p>Test start time: ".date('Y-m-d H:i:s')."</p>\r\n\r\n";
 								// Need to split this into net stoichiometry versus source/target stoichiometry?
 								// How best to treat reversible vs irreversible reactions in stoichiometry case?
 								if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
@@ -551,7 +497,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}
-									//$mail .= "<p>Output:</p>\r\n-------\r\n";
 									$exec_string .= ' '.$test_filename;
 									if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
 									else $exec_string .= ' 2> /dev/null';
@@ -576,16 +521,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 											}
 										}
 									}
-									//foreach($output as $line) $mail .= "\r\n$line";
-									// Write $somecontent to our opened file.						
-									//$mail .= "\r\n</pre>";
 								}
 								if(fwrite($ohandle, $line_ending.$line_ending.'### END OF TEST: '.$currentTest->getShortName().' ###'.$line_ending.$line_ending) === false)
 								{
 									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 									$success = false;
 								}
-								//$mail .= "\r\n\r\n<h3>END OF TEST: ".$currentTest->getShortName()."</h3>\r\n\r\n";
 							} // foreach($tests_enabled as $currentTest)
 						} // if($success)
 					} // if($success)
