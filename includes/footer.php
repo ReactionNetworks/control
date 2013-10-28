@@ -41,6 +41,8 @@
 							<li><a href="https://www.java.com/js/deployJava.txt"><code>deployJava.js</code></a> is &copy; 2006, 2011 Oracle. Used and distributed under Oracle's licence terms.</li>
 							<li><a href="http://jquery.com/">jQuery v1.8.3</a> is &copy; 2012 the jQuery Foundation et al. Used and distributed under the <a href="http://opensource.org/licenses/MIT">MIT licence</a>.</li>
 							<li><a href="http://fancybox.net/">Fancybox 1.3.4</a> is &copy; 2008&ndash;2010 Janis Skarnelis. Used and distributed under the <a href="http://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
+							<li><a href="http://jung.sourceforge.net/site/jung-graph-impl/project-summary.html">JUNG</a> is &copy; the JUNG development team. Used and distributed under the <a href="http://jung.sourceforge.net/site/jung-graph-impl/license.html">BSD Licence</a>.</li>
+							<li><a href="https://github.com/megamattron/collections-generic">Collections</a> is &copy; Matt Hall. Used and distributed under the <a href="https://github.com/megamattron/collections-generic/blob/master/LICENSE.txt">Apache Licence</a>.</li>
 							<li>Icons from the GNOME, KDE and XFCE desktop icon sets.</li>
 							<li>All other code and content is &copy; 2012&ndash;<?php echo date('Y'); ?> the authors and released under the <a href="http://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
 						</ul>
