@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   17/09/2013
+ * @modified   31/10/2013
  */
 
 /**
@@ -31,10 +31,10 @@ function printMatrix($matrix)
 	$text = '';
 	foreach($matrix as $row)
 	{
-		foreach($row as $element) $text = $text.' '.$element;	
-		$text.=PHP_EOL;	
+		foreach($row as $element) $text = $text.' '.$element;
+		$text.=PHP_EOL;
 	}
-	return $text;		
+	return $text;
 }
 
 /**
@@ -42,28 +42,28 @@ function printMatrix($matrix)
  *
  * Corrected from version on http://php.net/manual/en/function.ini-get.php
  *
- * @param   string  $val  File size as a string, eg. 1M 
+ * @param   string  $val  File size as a string, eg. 1M
  * @return  int           File size in bytes
  */
-	function return_bytes($val) 
+function return_bytes($val)
+{
+	$val = trim($val);
+	$last = strtolower($val[strlen($val) - 1]);
+	$val = (int)substr($val,0,strlen($val) - 1);
+	switch($last)
 	{
-		$val = trim($val);
-		$last = strtolower($val[strlen($val) - 1]);
-		$val = (int)substr($val,0,strlen($val) - 1);    
-		switch($last)
-		{
-			case 'g':
-				$val *= 1024;
-				// fall through
-			case 'm':
-				$val *= 1024;
-				// fall through
-			case 'k':
-				$val *= 1024;
-				// no default
-		}
-		return $val;
+		case 'g':
+			$val *= 1024;
+			// fall through
+		case 'm':
+			$val *= 1024;
+			// fall through
+		case 'k':
+			$val *= 1024;
+			// no default
 	}
+	return $val;
+}
 
 /**
  * Get the mime type of a file
@@ -73,7 +73,7 @@ function printMatrix($matrix)
  * @param   string  $file  The file name to check.
  * @return  mixed   $mime  If the mimetype could be determined, return the it as a string. Else return FALSE.
  */
-function get_mime($file) 
+function get_mime($file)
 {
 	if(function_exists("finfo_file"))
 	{
@@ -157,7 +157,7 @@ function recursive_remove_directory($directory, $empty = FALSE)
 				$path = $directory.'/'.$item;
 
 				// if the new path is a directory
-				if(is_dir($path)) 
+				if(is_dir($path))
 				{
 					// we call this function with the new path
 					recursive_remove_directory($path);
@@ -218,17 +218,16 @@ function batch_captcha()
 /**
  * Based upon http://www.marksanborn.net/php/random-password-string-generator-for-php/
  */
-function captcha_random_string($length = 10) 
+function captcha_random_string($length = 10)
 {
 	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 
 	$charLength = strlen($chars)-1;
 
-  for($i = 0 ; $i < $length ; $i++)
-  {
-      $randomString .= $chars[mt_rand(0,$charLength)];
-  }
+	for($i = 0 ; $i < $length ; $i++)
+	{
+		$randomString .= $chars[mt_rand(0,$charLength)];
+	}
 
-  return $randomString;
+	return $randomString;
 }
-

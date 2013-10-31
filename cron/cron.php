@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   22/10/2013
+ * @modified   31/10/2013
  */
 
 require_once('../includes/config.php');
@@ -191,13 +191,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$mac_dir_pos = array_search('__MACOSX', $extracted_files);
 			if ($mac_dir_pos !== false)
 			{
-				array_map('unlink', glob($dirname.'/__MACOSX/{,.}*', GLOB_BRACE));
+				recursive_remove_directory($dir_name.'/__MACOSX');
 				unset($extracted_files[$mac_dir_pos]);
-				if (!rmdir($dirname.'/__MACOSX'))
-				{
-					$mail .= "<p>ERROR: Couldn't delete hidden files from zip created on Mac OS X.</p>";
-					$success = false;
-				}
 				// "Re-index" the array, as this isn't automatic, and our sauro file is now in $extracted_files[3], whereas code below assumes index 2
 				$extracted_files = array_values($extracted_files);
 			}
