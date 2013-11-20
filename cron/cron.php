@@ -345,7 +345,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								while(!feof($fhandle))
 								{
 									$reactionString = fgets($fhandle);
-									if($reactionString and strpos($reactionString, '#') !== 0)
+									if($reactionString and strpos($reactionString, '#') !== 0 and strpos($reactionString, '//') !== 0)
 									{
 										$newReaction = Reaction::parseReaction($reactionString);
 										if($newReaction) $reaction_network->addReaction($newReaction);

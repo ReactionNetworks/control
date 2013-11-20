@@ -112,7 +112,7 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if ($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
 						// TODO: Implement
 					}
@@ -127,7 +127,7 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if ($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
 						// TODO: Implement
 					}
@@ -142,7 +142,7 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if ($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
 						// TODO: Implement
 					}
@@ -200,7 +200,7 @@ if(!count($errors))
 				while(!feof($fhandle))
 				{
 					$reactionString = fgets($fhandle);
-					if($reactionString and strpos($reactionString, '#') !== 0)
+					if($reactionString and strpos($reactionString, '#') !== 0 and strpos($reactionString, '//') !== 0)
 					{
 						$newReaction = Reaction::parseReaction($reactionString);
 						if($newReaction) $reaction_network->addReaction($newReaction);
