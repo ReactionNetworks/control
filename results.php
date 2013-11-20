@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   30/05/2013
+ * @modified   20/11/2013
  */
 
 require_once('includes/header.php');
@@ -56,7 +56,7 @@ foreach($_SESSION['test_output'] as $name => $result)
 	else echo "							<pre>No results available, probably due to test timeout.</pre>\n						</div>\n";
 }
 ?>
-					<p id="results_actions_buttons">							
+					<p id="results_actions_buttons">
 						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View&nbsp;CRN&nbsp;DSR&nbsp;Graph</a>
 						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#email_results_form" id="email_results_form_button" title="Receive the test results for the current CRN via email">Email&nbsp;results</a>
 					</p>

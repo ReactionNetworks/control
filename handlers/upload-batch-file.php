@@ -9,13 +9,12 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   19/09/2013
+ * @modified   20/11/2013
  */
 
 require_once('../includes/config.php');
 require_once('../includes/classes.php');
 require_once('../includes/session.php');
-//die(print_r($_POST,true).print_r($_FILES,true));
 
 $_SESSION['errors'] = array();
 $mimetype = '';
@@ -31,7 +30,7 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 			if($finfo)
 			{
 				$mimetype = $finfo->file($_FILES['upload_batch_file_input']['tmp_name']);
-				$allowed_mimetypes = array();
+				$allowed_mimetypes = array('application/zip');
 				foreach($supported_batch_file_types as $supported_batch_file_type) $allowed_mimetypes[] = $supported_batch_file_type['mimetype'];
 				if(!in_array($mimetype, $allowed_mimetypes)) $_SESSION['errors'][] = 'Batch file format '.$mimetype.' not supported.';
 				else
@@ -75,7 +74,7 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 else $_SESSION['errors'][] = 'No file uploaded';
 
 // Check that the security code was entered correctly
-if (!(isset($_POST['batch_security_code'])) or ($_POST['batch_security_code'] !==  $_SESSION['batch-captcha'])) $_SESSION['errors'][] = 'The security code entered was not correct - please try again.';
+if (!(isset($_POST['batch_security_code'])) or ($_POST['batch_security_code'] !== $_SESSION['batch-captcha'])) $_SESSION['errors'][] = 'The security code entered was not correct - please try again.';
 
 // Check that the file format was specified
 if(!(isset($_POST['upload_batch_file_format']) and $_POST['upload_batch_file_format'])) $_SESSION['errors'][] = 'File format not specified';

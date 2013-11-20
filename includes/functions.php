@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   31/10/2013
+ * @modified   20/11/2013
  */
 
 /**
@@ -104,19 +104,19 @@ function get_mime($file)
  *
  * Taken from http://lixlpixel.org/recursive_function/php/recursive_directory_delete/
  *
-	// ------------ lixlpixel recursive PHP functions -------------
-	// recursive_remove_directory( directory to delete, empty )
-	// expects path to directory and optional TRUE / FALSE to empty
-	// of course PHP has to have the rights to delete the directory
-	// you specify and all files and folders inside the directory
-	// ------------------------------------------------------------
-
-	// to use this function to totally remove a directory, write:
-	// recursive_remove_directory('path/to/directory/to/delete');
-
-	// to use this function to empty a directory, write:
-	// recursive_remove_directory('path/to/full_directory',TRUE);
-	*/
+ * ------------ lixlpixel recursive PHP functions -------------
+ * recursive_remove_directory( directory to delete, empty )
+ * expects path to directory and optional TRUE / FALSE to empty
+ * of course PHP has to have the rights to delete the directory
+ * you specify and all files and folders inside the directory
+ * ------------------------------------------------------------
+ *
+ * to use this function to totally remove a directory, write:
+ * recursive_remove_directory('path/to/directory/to/delete');
+ *
+ * to use this function to empty a directory, write:
+ * recursive_remove_directory('path/to/full_directory',TRUE);
+ */
 
 function recursive_remove_directory($directory, $empty = FALSE)
 {
@@ -189,6 +189,13 @@ function recursive_remove_directory($directory, $empty = FALSE)
 	}
 }
 
+/**
+ * Verify that a file has the correct mimetype
+ *
+ * @param   string  $file               Path to the file for testing
+ * @param   string  $expected_mimetype  The desired mimetype for the file
+ * @return  bool    $success            Return TRUE if the file was successfully opened and had the correct mimetype, FALSE otherwise.
+ */
 function check_file_format($file, $expected_mimetype)
 {
 	$success = true;
@@ -202,6 +209,9 @@ function check_file_format($file, $expected_mimetype)
 	return $success;
 }
 
+/**
+ * Generate a simple captcha and display it as HTML
+ */
 function batch_captcha()
 {
 	$output = '';
@@ -216,6 +226,8 @@ function batch_captcha()
 }
 
 /**
+ * Generate a random string to use as a captcha
+ *
  * Based upon http://www.marksanborn.net/php/random-password-string-generator-for-php/
  */
 function captcha_random_string($length = 10)

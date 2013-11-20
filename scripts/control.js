@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   19/09/2013
+ * @modified   20/11/2013
  */
 
 /**
@@ -13,8 +13,8 @@
  */
 function addReaction()
 {
-	++number_of_reactions;	
-	
+	++number_of_reactions;
+
 	$('#tools_holder').before('<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
 
 	$('.reaction_left_hand_side').each(function()
@@ -80,7 +80,6 @@ function generateLaTeX()
 	var textOutput = '\\begin{array}{rcl}\n';
 	$('.reaction_input_row').each(function(index, element)
 	{
-		//++numberOfRows;
 		if($('.reaction_left_hand_side', $(this)).val() == '' || $('.reaction_left_hand_side', $(this)).val() == ' ' || $('.reaction_left_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
 		else textOutput += $('.reaction_left_hand_side', $(this)).val().replace('&', '\\&amp;');
 		textOutput += ' &amp; ';
@@ -143,19 +142,19 @@ function processTests(test_number)
 	{
 		if (timeout_countdown)
 		{
-			--timeout_countdown; 
+			--timeout_countdown;
 			$('#timeout_countdown').html(timeout_countdown);
 		}
-		else 
+		else
 		{
 			$('#calculation_output_holder').append('<p>Test timed out.</p>');
 			clearInterval(timer_id);
 		}
-	}, 1000);	
+	}, 1000);
 	$.post(url, data, function(returndata)
 	{
 		$('#calculation_output_holder').append(returndata);
-		$('#timeout_countdown_holder').remove();	
+		$('#timeout_countdown_holder').remove();
 		//showTestOutput(returndata);
 		if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='results.php';
 		else processTests(++test_number);
@@ -229,12 +228,12 @@ function saveNetwork()
 	{
 		reactionsLeftHandSide.push(value.value);
 	});
-  var reactionsRightHandSide = new Array();
+	var reactionsRightHandSide = new Array();
 	$.each($('.reaction_right_hand_side'), function(index, value)
 	{
 		reactionsRightHandSide.push(value.value);
 	});
-  var reactionsDirection = new Array();
+	var reactionsDirection = new Array();
 	$.each($('.reaction_direction :selected'), function(index, value)
 	{
 		reactionsDirection.push(value.value);
@@ -303,8 +302,8 @@ function validateEmailAddress(emailAddress)
  if( atPos< 1) return false;
  if( emailAddress.indexOf('.', atPos) > (atPos + 1) && emailAddress.charAt(emailAddress.length - 1) != '.') return true;
  return false;
-} 
- 
+}
+
 /**
  * Warns about invalid character input
  */
@@ -366,7 +365,7 @@ function validateKeyPress(inputElement)
 		saveNetwork();
 	}
 	else disableButtons();
-} 
+}
 
 var popupWidth = 800;
 var popupHeight = 600;
@@ -383,7 +382,7 @@ $(document).ready(function()
 
 	// Enable DSR applet for browsers with Java installed
 	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
-	
+
 	// File inputs slide down out of the File Input header on clock
 	var toolsShown = false;
 	$('#tools_show').click(function()
@@ -394,14 +393,14 @@ $(document).ready(function()
 			$('#tools_show').html('Hide');
 			toolsShown = true;
 		}
-		else 
+		else
 		{
 			$('#tools_buttons_slidedown').slideUp();
 			$('#tools_show').html('Show');
 			toolsShown = false;
 		}
 	});
-	
+
 	// Similarly, more analysis options slide down
 	var moreActionsShown = false;
 	$('#more_actions_show	').click(function()
@@ -412,14 +411,14 @@ $(document).ready(function()
 			$('#more_actions_show	').html('Less');
 			moreActionsShown = true;
 		}
-		else 
+		else
 		{
 			$('#more_actions_slidedown').slideUp();
 			$('#more_actions_show	').html('More');
 			moreActionsShown = false;
 		}
-	});	
-	
+	});
+
 	$('#add_reaction_button').click(function()
 	{
 		addReaction();
@@ -477,7 +476,7 @@ $(document).ready(function()
 		if($(this).is(':checked')) activated = 1;
 		toggleDetailedOutput(activated);
 	});
-	
+
 	$('#download_network_file_button').click(function(e)
 	{
 		if($(this).hasClass('disabled')) e.preventDefault();
@@ -527,11 +526,11 @@ $(document).ready(function()
 			$('#email_results_error').html('Invalid email address');
 			$('#email_results_button').addClass('disabled');
 			$('#email_results_button').addAttr('disabled');
-		}		
+		}
 	});
 
 	$('#latex_output_button').click(function(e)
-	{	
+	{
 		if(!$(this).hasClass('disabled'))
 		{
 			$.when(saveNetwork()).then(generateLaTeX());
@@ -544,7 +543,7 @@ $(document).ready(function()
 		if($(this).is(':checked')) activated = 1;
 		toggleMassAction(activated);
 	});
-	
+
 	$('#option_holder input[name*="test_checkbox"]').change(function()
 	{
 		var testName = $(this).attr('name').slice(14, -1);
@@ -555,14 +554,14 @@ $(document).ready(function()
 
 	$('#process_network_button').click(function()
 	{
-		if(!$(this).hasClass('disabled')) 
+		if(!$(this).hasClass('disabled'))
 		{
 			resetPopup();
 			saveNetwork();
 			processTests(1);
 		}
 		return false;
-	});	
+	});
 
 	$('#results_email').change(function()
 	{
@@ -577,9 +576,9 @@ $(document).ready(function()
 			$('#email_results_error').html('Invalid email address');
 			$('#email_results_button').addClass('disabled');
 			$('#email_results_button').attr('disabled', 'disabled');
-		}		
+		}
 	});
-	
+
 	$('#results_email').keyup(function()
 	{
 		if(validateEmailAddress($('#results_email').val()))
@@ -593,29 +592,29 @@ $(document).ready(function()
 			$('#email_results_error').html('Invalid email address');
 			$('#email_results_button').addClass('disabled');
 			$('#email_results_button').attr('disabled', 'disabled');
-		}		
+		}
 	});
-	
+
 	$('#upload_batch_file_email').change(function()
 	{
 		if(validateEmailAddress($('#upload_batch_file_email').val()))
 		{
 			$('#upload_batch_file_email_error').html('&nbsp;');
-			if($('#upload_batch_file_input').val() != '') 
+			if($('#upload_batch_file_input').val() != '')
 			{
 				$('#upload_batch_file_button').removeClass('disabled');
 				$('#upload_batch_file_button').removeAttr('disabled');
 			}
 		}
-		else $('#upload_batch_file_email_error').html('Invalid email address');		
+		else $('#upload_batch_file_email_error').html('Invalid email address');
 	});
-	
+
 	$('#upload_batch_file_email').keyup(function()
 	{
 		if(validateEmailAddress($('#upload_batch_file_email').val()))
 		{
 			$('#upload_batch_file_email_error').html('&nbsp;');
-			if($('#upload_batch_file_input').val() != '') 
+			if($('#upload_batch_file_input').val() != '')
 			{
 				$('#upload_batch_file_button').removeClass('disabled');
 				$('#upload_batch_file_button').removeAttr('disabled');
@@ -626,9 +625,9 @@ $(document).ready(function()
 			$('#upload_batch_file_email_error').html('Invalid email address');
 			$('#upload_batch_file_button').addClass('disabled');
 			$('#upload_batch_file_button').attr('disabled', 'disabled');
-		}		
+		}
 	});
-	
+
 	$('#upload_batch_file_input').change(function()
 	{
 		if(validateEmailAddress($('#upload_batch_file_email').val()))

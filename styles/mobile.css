@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/05/2013
- * @modified   13/05/2013
+ * @modified   20/11/2013
  */
 
 h1
@@ -60,7 +60,6 @@ h1
 #popup_hider input
 {
 	max-width: 50%;
-	/*display: block;*/
 }
 
 #reaction_input_holder

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   17/09/2013
+ * @modified   20/11/2013
  */
 
 require_once('includes/header.php');
@@ -42,13 +42,13 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 							<h2>Analysis</h2>
 							<p>
 								<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
-								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>			
-								<p id="more_actions_slidedown">									
+								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>
+								<p id="more_actions_slidedown">
 									<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?> title="Download a text file describing the current CRN for later analysis">Download<br />CRN File</button>
 									<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
 									<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
 								</p>
-								<span id="more_actions_show">More</span>					
+								<span id="more_actions_show">More</span>
 							</p>
 						</div><!-- actions_holder -->
 					</form>
@@ -82,10 +82,9 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
 else echo ini_get('upload_max_filesize');
 ?> <br />
-							Supported archive types:
+							Supported archive types: zip
 <?php
-echo $supported_batch_file_types[0]['extension'];
-for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
+for($i = 0; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
 ?>
 						</p>
 						<p>
@@ -95,22 +94,20 @@ for($i = 1; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported
 						</p>
 						<p>
 							File format:<br />
-<?php							
-							foreach ($format_array as $format)
-							{
-								$format->getBatchRadioButton();
-							}
-							/*<input type="radio" name="upload_batch_file_format" value="human"<?php if(!isset($_SESSION['upload_file_format']) or $_SESSION['upload_file_format'] === 'human') echo ' checked="checked"'; ?> id="upload_batch_file_format_human" /> <label for="upload_batch_file_format_human"><a href="http://reaction-networks.net/wiki/CoNtRol#Human_Readable">Human readable</a>, e.g. A + 2B --&gt; C</label> <br />
-							<input type="radio" name="upload_batch_file_format" value="stoichiometry"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'stoichiometry') echo ' checked="checked"'; ?> id="upload_batch_file_format_stoichiometry" /> <label for="upload_batch_file_format_stoichiometry"><a href="http://reaction-networks.net/wiki/CoNtRol#Net_Stoichiometry">Stoichiometry</a>, e.g. -1 -2 1 </label> <br />
-							<input type="radio" name="upload_batch_file_format" value="SourceTarget"<?php if(isset($_SESSION['upload_file_format']) and $_SESSION['upload_file_format'] === 'SourceTarget') echo ' checked="checked"'; ?> id="upload_batch_file_format_source_target" /> <label for="upload_batch_file_format_source_target"><a href="http://reaction-networks.net/wiki/CoNtRol#Source_Stoichiometry_.2B_Target_Stoichiometry">Source and target stoichiometries</a> </label>*/?>
+<?php
+foreach ($format_array as $format)
+{
+	$format->getBatchRadioButton();
+}
+?>
 						</p>
 						<br />
 						<div>
 							<p>Enter security code (required):<br />
-								<label for="batch_security_code"><?php batch_captcha(); ?></label> 
-		            <input type="text" name="batch_security_code" id="batch_security_code"/>
-	            </p>
-            </div>
+								<label for="batch_security_code"><?php batch_captcha(); ?></label>
+								<input type="text" name="batch_security_code" id="batch_security_code"/>
+							</p>
+						</div>
 						<p>
 							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>
 						</p>

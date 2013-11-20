@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   17/09/2013
+ * @modified   20/11/2013
  */
 
 *
@@ -27,7 +27,7 @@ h1
 	text-align: center;
 }
 
-.align_right 
+.align_right
 {
  	float: right;
 }
@@ -40,11 +40,6 @@ h1
 .button
 {
 	background-color: #ddd;
-	/*background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);*/
 	border: 1px solid #999;
 	border-radius: 2px;
 	box-shadow: 1px 1px 1px #333;
@@ -57,11 +52,6 @@ h1
 .button:hover
 {
 	background-color: #eee;
-	/*background-image: -ms-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: -moz-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: -o-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);
-	background-image: linear-gradient(to bottom, #fff 0%, #ddd 100%);*/
 }
 
 .button.disabled
@@ -72,12 +62,7 @@ h1
 
 .button.disabled:hover
 {
-	background-color: #ddd;	
-	/*background-image: -ms-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -o-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
-	background-image: linear-gradient(to bottom, #eee 0%, #ccc 100%);*/
+	background-color: #ddd;
 	cursor: default;
 }
 
@@ -120,7 +105,6 @@ h1
 
 #actions_holder > h2, #tools_header > h2
 {
-	/*border-bottom: 1px solid #999;*/
 	color: #fff;
 	padding: 0.5em 0;
 }
@@ -244,7 +228,7 @@ h1
 	background-color: #EEE;
 	border: 1px solid #333;
 	box-shadow: 2px 2px #000;
-	display: none;	
+	display: none;
 	left: 100px;
 	padding: 4px;
 	position: absolute;
@@ -319,18 +303,18 @@ h1
 	margin-bottom: 1em;
 }
 
-#results 
+#results
 {
-	margin: 0 2em 2em; 
+	margin: 0 2em 2em;
 }
 
 #results > div
 {
 	border: 1px solid #ccc;
-	padding: 1em; 
+	padding: 1em;
 }
 
-#results > div > pre 
+#results > div > pre
 {
 	white-space: pre-wrap;
 }

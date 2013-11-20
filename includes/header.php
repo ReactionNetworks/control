@@ -27,8 +27,6 @@ if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== off) $protocol .= 's';
 if(SITE_URL.$current_page !== $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
 {
 	header('Location: '.SITE_URL.$current_page);
-	//echo SITE_URL.$current_page.PHP_EOL;
-	//echo (isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== off ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].PHP_EOL;
 	die();
 }
 require_once('functions.php');
@@ -49,7 +47,7 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-10-22T17:25:32+0100" />
+		<meta name="date" content="2013-11-20T17:42:10+0000" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />

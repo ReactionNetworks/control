@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    17/01/2013
- * @modified   30/05/2013
+ * @modified   20/11/2013
  */
 
 require_once('../includes/config.php');
@@ -60,17 +60,15 @@ if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_
 
 	// Create human-readable descriptor file
 	$filename = $_SESSION['tempfile'].'.hmn';
-
-	// In our example we're opening $filename in append mode.
+	// Open $filename in append mode.
 	// The file pointer is at the bottom of the file hence
-	// that's where $somecontent will go when we fwrite() it.
+	// that's where content will go when we fwrite() it.
 	if(!$handle = fopen($filename, 'w'))
 	{
 		echo "<p>Cannot open file ($filename)</p>";
 		exit;
 	}
-
-	// Write $somecontent to our opened file.
+	// Write content to the open file.
 	if(fwrite($handle, $_SESSION['reaction_network']->exportReactionNetworkEquations()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
@@ -80,17 +78,11 @@ if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_
 
 	// Create net stoichiometry descriptor file
 	$filename = $_SESSION['tempfile'].'.sto';
-
-	// In our example we're opening $filename in append mode.
-	// The file pointer is at the bottom of the file hence
-	// that's where $somecontent will go when we fwrite() it.
 	if(!$handle = fopen($filename, 'w'))
 	{
 		echo "<p>Cannot open file ($filename)</p>";
 		exit;
 	}
-
-	// Write $somecontent to our opened file.
 	if(fwrite($handle, $_SESSION['reaction_network']->exportStoichiometryMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
@@ -100,17 +92,11 @@ if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_
 
 	// Create net stoichiometry + V matrix descriptor file
 	$filename = $_SESSION['tempfile'].'.s+v';
-
-	// In our example we're opening $filename in append mode.
-	// The file pointer is at the bottom of the file hence
-	// that's where $somecontent will go when we fwrite() it.
 	if(!$handle = fopen($filename, 'w'))
 	{
 		echo "<p>Cannot open file ($filename)</p>";
 		exit;
 	}
-
-	// Write $somecontent to our opened file.
 	if(fwrite($handle, $_SESSION['reaction_network']->exportStoichiometryAndVMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
@@ -120,17 +106,11 @@ if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_
 
 	// Create source stoichiometry + target stoichiometry + V matrix descriptor file
 	$filename = $_SESSION['tempfile'].'.stv';
-
-	// In our example we're opening $filename in append mode.
-	// The file pointer is at the bottom of the file hence
-	// that's where $somecontent will go when we fwrite() it.
 	if(!$handle = fopen($filename, 'w'))
 	{
 		echo "<p>Cannot open file ($filename)</p>";
 		exit;
 	}
-
-	// Write $somecontent to our opened file.
 	if(fwrite($handle, $_SESSION['reaction_network']->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";

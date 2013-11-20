@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   03/09/2013
+ * @modified   20/11/2013
  */
 
 class Reaction
@@ -17,7 +17,7 @@ class Reaction
 	private $rightHandSide = array();
 	private $reversible = true;
 
-	/*
+	/**
 	 * Constructor
 	 *
 	 * @param  mixed  $leftHandSide   The left hand side of the reaction, either a string to parse, or an array of pre-parsed strings
@@ -57,7 +57,7 @@ class Reaction
 
 
 
-	/*
+	/**
 	 * Parse a string describing one side of a reaction
 	 *
 	 * @param   string  $reactionString  The string describing the reaction.
@@ -119,7 +119,7 @@ class Reaction
 	}
 
 
-	/*
+	/**
 	 * Parse a string describing both sides of a reaction
 	 *
 	 * @param   string  $reactionString  The string describing the reaction.
@@ -167,7 +167,7 @@ class Reaction
 	 	return new Reaction($lhs,$rhs,$reversible);
 	}
 
-	/*
+	/**
 	 * Export Reaction as HTML
 	 *
 	 * @return  string  $text  HTML markup describing the reaction.
@@ -183,7 +183,7 @@ class Reaction
 		return $text;
 	}
 
-	/*
+	/**
 	 * Export Reaction as plain text
 	 *
 	 * @return  string  $text  Text describing the reaction.
@@ -200,7 +200,7 @@ class Reaction
 		return $text;
 	}
 
-	/*
+	/**
 	 * Export the left hand side of the reaction as plain text
 	 *
 	 * @return  string  $text  Text describing the reaction's LHS.
@@ -220,7 +220,7 @@ class Reaction
 		return $text;
 	}
 
-	/*
+	/**
 	 * Export the right hand side of the reaction as plain text
 	 *
 	 * @return  string  $text  Text describing the reaction's RHS.
@@ -240,7 +240,7 @@ class Reaction
 		return $text;
 	}
 
-	/*
+	/**
 	 * Check whether the Reaction is reversible
 	 *
 	 * @return  bool  TRUE if the reaction is reversible, FALSE otherwise.
@@ -250,7 +250,7 @@ class Reaction
 		return $this->reversible;
 	}
 
-	/*
+	/**
 	 * Get the reactants as an array
 	 *
 	 * @return  array  $reactants  An associative array with each reactant name/label
@@ -283,6 +283,10 @@ TO DO: this function isn't correct for reactions where a reactant appears on bot
 		return $reactants;
 	}
 
+
+	/**
+	 * Assorted get methods
+	 */
 	public function getLeftHandSide()
 	{
 		return $this->leftHandSide;
@@ -293,12 +297,17 @@ TO DO: this function isn't correct for reactions where a reactant appears on bot
 		return $this->rightHandSide;
 	}
 }
+// End of class Reaction
+
+
+
+
 
 class ReactionNetwork
 {
 	private $reactions = array();
 
-	/*
+	/**
 	 * Constructor
 	 *
 	 * @param  array  $reactions   An array of Reactions
@@ -308,7 +317,7 @@ class ReactionNetwork
 		$this->reactions = $reactions;
 	}
 
-	/*
+	/**
 	 * Add a reaction
 	 *
 	 * @param  Reaction  $reaction   The Reaction to add
@@ -323,7 +332,7 @@ class ReactionNetwork
 		else return false;
 	}
 
-	/*
+	/**
 	 * Export function for reaction network descriptor
 	 *
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
@@ -336,7 +345,7 @@ class ReactionNetwork
 		return $equations;
 	}
 
-	/*
+	/**
 	 * Export function for reaction network net stoichiometry and V matrix descriptor
 	 *
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
@@ -351,7 +360,7 @@ class ReactionNetwork
 		return $equations;
 	}
 
-	/*
+	/**
 	 * Export function for reaction network source and target stoichiometry and V matrix descriptor
 	 *
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
@@ -371,7 +380,7 @@ class ReactionNetwork
 		return $equations;
 	}
 
-	/*
+	/**
 	 * HTML export function for reaction network descriptor
 	 *
 	 * @return  string  $equations  HTML version of reaction network chemical equations
@@ -384,11 +393,11 @@ class ReactionNetwork
 		return $equations;
 	}
 
-	/*
+	/**
 	 * Export function for reaction network net stoichiometry
 	 *
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
-	 * @return  string  $equations  Text version of reaction network chemical matrix
+	 * @return  string  $equations  Text version of reaction network net stoichiometry matrix
 	 */
 	public function exportStoichiometryMatrix($LaTeX = false)
 	{
@@ -417,6 +426,11 @@ class ReactionNetwork
 		return $equations;
 	}
 
+	/**
+	 * Export function for reaction network input stoichiometry
+	 *
+	 * @return  string  $equations  Text version of reaction network input stoichiometry matrix
+	 */
 	public function exportSourceStoichiometryMatrix()
 	{
 		$equations = '';
@@ -430,6 +444,11 @@ class ReactionNetwork
 		return $equations;
 	}
 
+	/**
+	 * Export function for reaction network output stoichiometry
+	 *
+	 * @return  string  $equations  Text version of reaction network output stoichiometry matrix
+	 */
 	public function exportTargetStoichiometryMatrix()
 	{
 		$equations = '';
@@ -443,6 +462,12 @@ class ReactionNetwork
 		return $equations;
 	}
 
+	/**
+	 * Export function for reaction rate Jacobian matrix
+	 *
+	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
+	 * @return  string  $equations  Text version of reaction rate Jacobian matrix
+	 */
 	public function exportVMatrix($LaTeX = false)
 	{
 		$equations = '';
@@ -512,6 +537,12 @@ class ReactionNetwork
 		return $equations;
 	}
 
+	/**
+	 * Export function for reaction network description
+	 *
+	 * @param   string  $line_ending  The line ending to use (CRLF, CR, LF, etc). Defaults to PHP_EOL
+	 * @return  null
+	 */
 	public function exportTextFile($line_ending = PHP_EOL)
 	{
 		// Send headers for download
@@ -521,6 +552,11 @@ class ReactionNetwork
 		echo $this->exportReactionNetworkEquations($line_ending);
 	}
 
+	/**
+	 * HTML export function for reaction network
+	 *
+	 * Generates HTML describing the reaction network for use in an HTML form
+	 */
 	public function generateFieldsetHTML()
 	{
 		if(count($this->reactions))
@@ -542,7 +578,7 @@ class ReactionNetwork
 						</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
-		else 
+		else
 		{
 			echo '						<fieldset class="reaction_input_row">
 							1. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="" />
@@ -556,17 +592,28 @@ class ReactionNetwork
 		}
 	}
 
+	/**
+	 * Generate list of distinct reactants
+	 *
+	 * @return  array  $reactantList  Array of strings, where each element is a reactant. No reactant appears twice.
+	 */
+
 	private function generateReactantList()
 	{
-		$reactantList=array();
+		$reactantList = array();
 		foreach($this->reactions as $reaction)
 		{
 			$reactants = $reaction->getReactants();
-			if($reactants) foreach($reactants as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[]=$reactant;
+			if($reactants) foreach($reactants as $reactant) if (!in_array($reactant,$reactantList)) $reactantList[] = $reactant;
 		}
 		return $reactantList;
 	}
 
+	/**
+	 * Calculate reaction network input stoichiometry matrix
+	 *
+	 * @return  array  $sourceStoichiometryMatrix  2D array describing reaction network input stoichiometry matrix
+	 */
 	public function generateSourceStoichiometryMatrix()
 	{
 		$sourceStoichiometryMatrix=array();
@@ -589,6 +636,11 @@ class ReactionNetwork
 		return $sourceStoichiometryMatrix;
 	}
 
+	/**
+	 * Calculate reaction network output stoichiometry matrix
+	 *
+	 * @return  array  $targetStoichiometryMatrix  2D array describing reaction network output stoichiometry matrix
+	 */
 	public function generateTargetStoichiometryMatrix()
 	{
 		$targetStoichiometryMatrix = array();
@@ -611,6 +663,11 @@ class ReactionNetwork
 		return $targetStoichiometryMatrix;
 	}
 
+	/**
+	 * Calculate reaction network net stoichiometry matrix
+	 *
+	 * @return  array  $stoichiometryMatrix  2D array describing reaction network net stoichiometry matrix
+	 */
 	public function generateStoichiometryMatrix()
 	{
 		$stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
@@ -624,6 +681,12 @@ class ReactionNetwork
 		return $stoichiometryMatrix;
 	}
 
+	/**
+	 * Reaction network net stoichiometry matrix parser
+	 *
+	 * @param   array  $matrix   2D array describing reaction network net stoichiometry matrix
+	 * @return  bool   $success  Returns TRUE if stoichiometry matrix successfully parsed, and FALSE otherwise
+	 */
 	public function parseStoichiometry($matrix)
 	{
 		$success = true;
@@ -647,7 +710,7 @@ class ReactionNetwork
 				{
 					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i]))
 					{
-						error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($matrix): '.count($matrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$matrix[$j][$i]: '.$matrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
+						//error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($matrix): '.count($matrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$matrix[$j][$i]: '.$matrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
 						$success = false;
 					}
 					elseif($matrix[$j][$i] < 0) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
@@ -659,7 +722,13 @@ class ReactionNetwork
 		else $success = false;
 		return $success;
 	}
-	
+
+	/**
+	 * Reaction network Sauro input parser
+	 *
+	 * @param   string  $row      String in Sauro format representing a CRN
+	 * @return  bool    $success  Returns TRUE if Sauro input successfully parsed, and FALSE otherwise
+	 */
 	public function parseSauro($row)
 	{
 		$success = true;
@@ -683,7 +752,7 @@ class ReactionNetwork
 				$rhs = array();
 				for($j = 2; $j < count($entries); ++$j)
 				{
-					if ($i == ($entries[$j])) 
+					if ($i == ($entries[$j]))
 					{
 						if (($j % 2) == 0) // Reaction appears as LHS of pair, ie. reactant is on RHS of reaction
 						{
@@ -706,6 +775,12 @@ class ReactionNetwork
 		return $success;
 	}
 
+	/**
+	 * Reaction network SBML parser
+	 *
+	 * @param   string  $file_name  Name of SBML file
+	 * @return  bool                Returns TRUE if SBML file successfully parsed, and FALSE otherwise
+	 */
 	public function parseSBML($file_name)
 	{
 		$error = false;
@@ -715,7 +790,7 @@ class ReactionNetwork
 			$error = true;
 			$_SESSION['errors'][] = 'You didn\'t upload a valid SBML file.';
 		}
-		else 
+		else
 		{
 			$models = $sbml_file->getElementsByTagName('model');
 			if ($models->length !== 1)
@@ -723,15 +798,15 @@ class ReactionNetwork
 				$error = true;
 				$_SESSION['errors'][] = 'File does not contain one model.';
 			}
-			else 
+			else
 			{
 				$model_child_nodes = $models->item(0)->childNodes;
 				$reactions_found = false;
-				for($i = 0; $i < $model_child_nodes->length; ++$i) 
+				for($i = 0; $i < $model_child_nodes->length; ++$i)
 				{
 					if ($model_child_nodes->item($i)->nodeName === 'listOfReactions')
 					{
-						$reactions_found = true;							
+						$reactions_found = true;
 						$model_reactions = $model_child_nodes->item($i)->childNodes;
 					}
 				}
@@ -740,20 +815,20 @@ class ReactionNetwork
 					$error = true;
 					$_SESSION['errors'][] = 'No reactions found.';
 				}
-				else 
+				else
 				{
 					for ($i = 0; $i < $model_reactions->length; ++$i)
 					{
 						if ($model_reactions->item($i)->nodeName === 'reaction')
 						{
 							$lhs = array();
-							$rhs = array();		
+							$rhs = array();
 							$reaction_attributes = $model_reactions->item($i)->attributes;
 							if ($reaction_attributes->getNamedItem('reversible') and $reaction_attributes->getNamedItem('reversible')->nodeValue === 'false') $reversible = false;
 							else $reversible = true; // If not explicitly stated, reversibility assumed by SBML specification Level 3
 							$reaction_nodes = $model_reactions->item($i)->childNodes;
 							for ($j = 0; $j < $reaction_nodes->length; ++$j)
-							{				
+							{
 								if ($reaction_nodes->item($j)->nodeName === 'listOfReactants')
 								{
 									$list_of_reactants = $reaction_nodes->item($j)->childNodes;
@@ -779,7 +854,7 @@ class ReactionNetwork
 											else $rhs[$product_attributes->getNamedItem('species')->nodeValue] = 1;
 										}
 									}
-								}		
+								}
 							}
 							$this->addReaction(new Reaction($lhs, $rhs, $reversible));
 						}
@@ -790,7 +865,14 @@ class ReactionNetwork
 		return !$error;
 	}
 
-	public function parseSourceTargetStoichiometry($sourceMatrix,$targetMatrix)
+	/**
+	 * Reaction network input/output stoichiometry matrix parser
+	 *
+	 * @param   array  $sourceMatrix   2D array describing reaction network input stoichiometry matrix
+	 * @param   array  $targetMatrix   2D array describing reaction network output stoichiometry matrix
+	 * @return  bool   $success  Returns TRUE if stoichiometry matrices successfully parsed, and FALSE otherwise
+	 */
+	public function parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix)
 	{
 		$success = true;
 		if(gettype($sourceMatrix) == 'array' and count($sourceMatrix) and gettype($targetMatrix) == 'array' and count($targetMatrix) === count($sourceMatrix) and count($sourceMatrix[0])===count($targetMatrix[0]))
@@ -813,12 +895,10 @@ class ReactionNetwork
 				{
 					if(!(is_numeric($sourceMatrix[$j][$i]) and (int)$sourceMatrix[$j][$i] == $sourceMatrix[$j][$i] and $sourceMatrix[$j][$i]>=0))
 					{
-						//error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($sourceMatrix): '.count($sourceMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$sourceMatrix[$j][$i]: '.$sourceMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
 						$success = false;
 					}
 					elseif(!(is_numeric($targetMatrix[$j][$i]) and (int)$targetMatrix[$j][$i] == $targetMatrix[$j][$i] and $targetMatrix[$j][$i]>=0))
 					{
-						//error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($targetMatrix): '.count($targerMatrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$targetMatrix[$j][$i]: '.$targetMatrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
 						$success = false;
 					}
 					else
@@ -835,10 +915,10 @@ class ReactionNetwork
 	}
 
 
-	/*
+	/**
 	 * Generate V^T
 	 *
-	 * @return  array  $V  The transpose of V matrix as an array of arrays
+	 * @return  array  $V  The transpose of reaction rate Jacobian matrix (V matrix) as a 2D array
 	 */
 	public function generateReactionRateJacobianMatrix()
 	{
@@ -867,7 +947,7 @@ class ReactionNetwork
 		return $V;
 	}
 
-	/*
+	/**
 	 * Get the number of reactions
 	 *
 	 * @return  int  $numberOfReactions  The number of reactions in the network
@@ -877,6 +957,12 @@ class ReactionNetwork
 		return count($this->reactions);
 	}
 }
+// End of class ReactionNetwork
+
+
+
+
+
 
 class NetworkTest
 {
@@ -902,6 +988,10 @@ class NetworkTest
 		$this->supportsMassAction = $supportsMassAction;
 		$this->supportsGeneralKinetics = $supportsGeneralKinetics;
 	}
+
+	/**
+	 * Assorted get methods
+	 */
 	public function getShortName()
 	{
 		return $this->shortName;
@@ -921,6 +1011,7 @@ class NetworkTest
 	{
 		return $this->executableName;
 	}
+
 	public function enableTest()
 	{
 		$this->isEnabled=true;
@@ -929,10 +1020,12 @@ class NetworkTest
 	{
 		$this->isEnabled=false;
 	}
+
 	public function getIsEnabled()
 	{
 		return $this->isEnabled;
 	}
+
 	public function getInputFileFormats()
 	{
 		return $this->inputFileFormats;
@@ -942,11 +1035,18 @@ class NetworkTest
 	{
 		return $this->supportsMassAction;
 	}
+
 	public function supportsGeneralKinetics()
 	{
 		return $this->supportsGeneralKinetics;
 	}
 }
+// End of class NetworkTest
+
+
+
+
+
 
 class FileFormat
 {
@@ -954,15 +1054,18 @@ class FileFormat
 	private $shortName;
 	private $example;
 	private $link;
-	
-	public function FileFormat($long_name, $short_name, $eg, $href)
+
+	public function __construct($long_name, $short_name, $eg, $href)
 	{
 		$this->longName = sanitise($long_name);
 		$this->shortName = $short_name;
 		$this->example = $eg;
 		$this->link = $href;
 	}
-	
+
+	/**
+	 * Generate HTML for radio button selector for single file upload in this format
+	 */
 	public function getNetworkRadioButton()
 	{
 		echo '<input type="radio" name="upload_network_file_format" value="'.$this->shortName.'"';
@@ -972,6 +1075,9 @@ class FileFormat
 		echo ' '.$this->example.'</label><br />'.PHP_EOL;
 	}
 
+	/**
+	 * Generate HTML for radio button selector for batch file upload in this format
+	 */
 	public function getBatchRadioButton()
 	{
 		echo '<input type="radio" name="upload_batch_file_format" value="'.$this->shortName.'"';
@@ -981,3 +1087,4 @@ class FileFormat
 		echo ' '.$this->example.'</label><br />'.PHP_EOL;
 	}
 }
+// End of class FileFormat

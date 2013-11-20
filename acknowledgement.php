@@ -6,13 +6,13 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    11/04/2013
- * @modified   27/09/2013
+ * @modified   20/11/2013
  */
 
 require_once('includes/header.php');
 
 if(isset($_POST['cancel']))
-{ 
+{
 	if (isset($_SESSION['batch_job_id']))
 	{
 		try
@@ -40,7 +40,7 @@ if(isset($_POST['cancel']))
 		</div>
 		<?php
 	}
-	else 
+	else
 	{
 		?>
 		<div id="results">
@@ -52,23 +52,23 @@ if(isset($_POST['cancel']))
 	}
 }
 
-else 
+else
 {
 	if(!(isset($_SESSION['tempfile']) and isset($_SESSION['email']))) die('No uploaded files found.');
 	?>
 		<div id="results">
-				<h2>Batch upload acknowledgement</h2>	
+				<h2>Batch upload acknowledgement</h2>
 				<?php
 					// If no errors or warnings found, then send job straight through. Otherwise the job must be confirmed
-					if(!$_SESSION['format_warning']) 
+					if(!$_SESSION['format_warning'])
 					{?>
 						<p>Your batch job has been added to the queue. Results will be sent to you at <?php echo sanitise($_SESSION['email']); ?> once processing is complete. If you have any problems please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?>.</p>
 						<p>
 							<br /><a class="button" href=".">Back to main page</a>
 						</p>
-					<?php }		
+					<?php }
 					else
-					{				
+					{
 						?>
 						<p>There are warnings/errors about this job; please check the above messages. If you believe the results will not be of use to you, please cancel the job. Otherwise, results will be sent to you at <?php echo sanitise($_SESSION['email']); ?> once processing is complete. If you have any problems please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?>.</p>
 						<p>

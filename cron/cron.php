@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   31/10/2013
+ * @modified   20/11/2013
  */
 
 require_once('../includes/config.php');
@@ -209,7 +209,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 				{
 					$line = fgets($fhandle);
 					$networkString = trim(preg_replace('/\s+/', ' ', $line));
-					if($networkString and strpos($line, '#') !== 0) // If not empty line or comment create a file with this line
+					if($networkString and strpos($line, '#') !== 0 and strpos($line, '//') !== 0) // If not empty line or comment create a file with this line
 					{
 						file_put_contents($dirname.'/'.$fileLabel, $networkString);
 						++$fileLabel;
@@ -248,7 +248,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								{
 									$line = fgets($fhandle);
 									$row = trim(preg_replace('/\s+/', ' ', $line));
-									if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
+									if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) $matrix[] = explode(' ', $row);
 								}
 								if(!$reaction_network->parseStoichiometry($matrix))
 								{
@@ -291,12 +291,12 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
+									if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0 and mb_strtoupper($row) !== 'T MATRIX') $sourceMatrix[] = explode(' ', $row);
 								}
 								while(!feof($fhandle))
 								{
 									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
+									if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) $targetMatrix[] = explode(' ', $row);
 								}
 								if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
 								{
@@ -581,7 +581,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$zipfilename = TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.zip';
 	if ($zip->open($zipfilename, ZipArchive::CREATE)!==TRUE)
 	{
-	    exit("cannot open <$zipfilename>\n");
+		exit("cannot open <$zipfilename>\n");
 	}
 	$zip->addFile(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt','control_output.txt');
 	$zip->close();

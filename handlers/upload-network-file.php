@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   13/09/2013
+ * @modified   20/11/2013
  */
 
 require_once('../includes/config.php');
@@ -71,12 +71,12 @@ if(!count($errors))
 				while(!feof($fhandle))
 				{
 					$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-					if($row and strpos($row, '#') !== 0) $matrix[] = explode(' ', $row);
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) $matrix[] = explode(' ', $row);
 				}
 				if(!$reaction_network->parseStoichiometry($matrix)) $_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
 			}
 			break;
-			
+
 		case 'source_target':
 			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
@@ -86,26 +86,21 @@ if(!count($errors))
 				while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
 				{
 					$row = fgets($fhandle);
-					//error_log($row."\n",3,'/var/tmp/crn.log');
 				}
-	
+
 				while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
 				{
 					$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-					if($row and strpos($row, '#') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
-					//error_log($row."\n",3,'/var/tmp/crn.log');
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0 and mb_strtoupper($row)!=='T MATRIX') $sourceMatrix[] = explode(' ', $row);
 				}
 				while(!feof($fhandle))
 				{
 					$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-					if($row and strpos($row, '#') !== 0) $targetMatrix[] = explode(' ', $row);
-					//error_log($row."\n",3,'/var/tmp/crn.log');
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) $targetMatrix[] = explode(' ', $row);
 				}
 				if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
 				{
 					$_SESSION['errors'][] = 'An error was detected in the stoichiometry file. Please check that the output below is as expected.';
-					//error_log(print_r($sourceMatrix, true), 3, '/var/tmp/crn.log');
-					//error_log(print_r($targetMatrix, true), 3, '/var/tmp/crn.log');
 				}
 			}
 			break;
@@ -117,14 +112,14 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if ($row and strpos($row, '#') !== 0)
+					if ($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
-						// TODO: Implement				
-					}			
+						// TODO: Implement
+					}
 				}
 			}
 			break;
-			
+
 		case 'feinberg1':
 			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
@@ -132,14 +127,14 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if ($row and strpos($row, '#') !== 0)
+					if ($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
-						// TODO: Implement				
-					}			
+						// TODO: Implement
+					}
 				}
 			}
 			break;
-			
+
 		case 'feinberg2':
 			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
@@ -147,10 +142,10 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if ($row and strpos($row, '#') !== 0)
+					if ($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
-						// TODO: Implement				
-					}			
+						// TODO: Implement
+					}
 				}
 			}
 			break;
@@ -162,21 +157,21 @@ if(!count($errors))
 				while (!feof($fhandle))
 				{
 					$row = trim(fgets($fhandle));
-					if($row and strpos($row, '#') !== 0)
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0)
 					{
-						//TO DO: Implement this import
+						//TODO: Implement this import
 					}
 				}
 			}
 			break;
-			
+
 		case 'sauro':
 			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
 				$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 				while(!feof($fhandle))
 				{
-					if($row and strpos($row, '#') !== 0) break;
+					if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) break;
 					else $row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 				}
 				if(!$reaction_network->parseSauro($row))
@@ -187,7 +182,7 @@ if(!count($errors))
 				}
 			}
 			break;
-			
+
 		case 'sbml':
 			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'application/xml'))
 			{
@@ -197,7 +192,7 @@ if(!count($errors))
 				}
 			}
 			break;
-			
+
 		default: // assume 'human' if unsure
 			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain'))
 			{
@@ -223,7 +218,7 @@ if(!count($errors))
 	$_SESSION['reaction_network'] = $reaction_network;
 	if (MAX_REACTIONS_PER_NETWORK and $reaction_network->getNumberOfReactions() > MAX_REACTIONS_PER_NETWORK)
 	{
-		$_SESSION['errors'][] = 'Warning: the CRN you have uploaded includes more than the recommended number of reactions. It is likely that tests will not successfully complete.';	
+		$_SESSION['errors'][] = 'Warning: the CRN you have uploaded includes more than the recommended number of reactions. It is likely that tests will not successfully complete.';
 	}
 }
 
