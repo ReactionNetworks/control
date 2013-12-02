@@ -6,6 +6,6 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    27/03/2013
- * @modified   20/11/2013
+ * @modified   02/12/2013
  */
-define('CONTROL_VERSION', '1.0.2', false);
+define('CONTROL_VERSION', '1.0.3', false);

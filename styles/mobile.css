@@ -5,100 +5,105 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/05/2013
- * @modified   20/11/2013
+ * @modified   02/12/2013
  */
 
-h1
+@media screen
 {
-	padding-bottom: 0;
-}
+	h1
+	{
+		padding-bottom: 0;
+		padding-top: 5px;
+	}
 
-.left_centred
-{
-}
-
-#actions_holder
-{
-	border-top: none;
-}
-
-#actions_holder, #tools_holder
-{
-	border-left: none;
-	border-right: none;
-	margin-left: 0;
-	margin-right: 0;
-	padding-left: 0;
-	padding-right: 0;
-	position: static;
-	width: 100%;
-}
-
-#actions_holder a, #tools_holder a, #actions_holder button
-{
-	text-align: center;
-	background-repeat: no-repeat;
-	background-position: 20%;
-	border: none;
-	border-radius: 0;
-	box-shadow: none;
-	display:block;
-	padding: 0.3em;
-}
-
-#tools_show, #more_actions_show
-{
-	display: block;
-	padding: 0.8em;
-}
-
-#error_message_holder, #reaction_input_holder, #results
-{
-	margin: 0;
-}
-
-#popup_hider input
-{
-	max-width: 50%;
-}
-
-#reaction_input_holder
-{
-	border: none;
-}
-
-#reaction_input_holder input[type=text]
-{
-	max-width: 35%;
-}
-
-#results
-{
-	margin-bottom: 1em;
-}
-
-#results > div
-{
-	border-left: none;
-	border-right: none;
-}
-
-#results > h2, #results > p
-{
-	margin: 0.5em 0.5em 0 0.5em;
-}
-
-#results_link > a
-{
-	color: transparent;
-	background-image: url('../images/return.png');
-	background-repeat: no-repeat;
-	background-position: 120px 40px;
-	padding-bottom: 80px;
-}
-
-#version
-{
-	top: 0.2em;
-	right: 0.5em;
+	#header > h2
+	{
+		margin-bottom: 0;
+	}
+	
+	#actions_holder
+	{
+		border-top: none;
+	}
+	
+	#actions_holder, #tools_holder
+	{
+		border-left: none;
+		border-right: none;
+		margin-left: 0;
+		margin-right: 0;
+		padding-left: 0;
+		padding-right: 0;
+		position: static;
+		width: 100%;
+	}
+	
+	#actions_holder a, #tools_holder a, #actions_holder button
+	{
+		text-align: center;
+		background-repeat: no-repeat;
+		background-position: 20%;
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+		display:block;
+		padding: 0.3em;
+	}
+	
+	#tools_show, #more_actions_show
+	{
+		display: block;
+		padding: 0.8em;
+	}
+	
+	#error_message_holder, #reaction_input_holder, #results
+	{
+		margin: 0;
+	}
+	
+	#popup_hider input
+	{
+		max-width: 50%;
+	}
+	
+	#reaction_input_holder
+	{
+		border: none;
+	}
+	
+	#reaction_input_holder input[type=text]
+	{
+		max-width: 35%;
+	}
+	
+	#results
+	{
+		margin-bottom: 1em;
+	}
+	
+	#results > div
+	{
+		border-left: none;
+		border-right: none;
+	}
+	
+	#results > h2, #results > p
+	{
+		margin: 0.5em 0.5em 0 0.5em;
+	}
+	
+	#results_link > a
+	{
+		color: transparent;
+		background-image: url('../images/return.png');
+		background-repeat: no-repeat;
+		background-position: 120px 40px;
+		padding-bottom: 80px;
+	}
+	
+	#version
+	{
+		top: 6px;
+		right: 0.5em;
+	}
 }
