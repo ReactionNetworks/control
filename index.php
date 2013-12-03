@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/11/2013
+ * @modified   03/12/2013
  */
 
 require_once('includes/header.php');
@@ -43,11 +43,11 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 							<p>
 								<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
 								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>
-								<p id="more_actions_slidedown">
+								<div id="more_actions_slidedown">
 									<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?> title="Download a text file describing the current CRN for later analysis">Download<br />CRN File</button>
 									<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#latex_output_holder" id="latex_output_button" title="Automatically generate LaTeX markup describing the current CRN">Generate<br />LaTeX</a>
 									<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
-								</p>
+								</div><!-- more_actions_slidedown -->
 								<span id="more_actions_show">More</span>
 							</p>
 						</div><!-- actions_holder -->
@@ -101,7 +101,6 @@ foreach ($format_array as $format)
 }
 ?>
 						</p>
-						<br />
 						<div>
 							<p>Enter security code (required):<br />
 								<label for="batch_security_code"><?php batch_captcha(); ?></label>
