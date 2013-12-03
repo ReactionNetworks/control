@@ -40,7 +40,7 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 						</div><!-- tools_holder -->
 						<div id="actions_holder">
 							<h2>Analysis</h2>
-							<p>
+							<div>
 								<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
 								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>
 								<div id="more_actions_slidedown">
@@ -49,7 +49,7 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 									<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View CRN<br />DSR Graph</a>
 								</div><!-- more_actions_slidedown -->
 								<span id="more_actions_show">More</span>
-							</p>
+							</div>
 						</div><!-- actions_holder -->
 					</form>
 				</div><!-- reaction_input_holder -->
