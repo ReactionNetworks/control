@@ -47,7 +47,7 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-12-02T19:05:14+0000" />
+		<meta name="date" content="2013-12-03T15:40:37+0000" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
@@ -72,7 +72,7 @@ require_once('version.php');
 			<div id="header">
 				<!--h1 title="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>"><?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?></h1!-->
 				<h1>CoNtRol</h1>
-				<h2>Chemical Reaction Network<br />analysis tool</h2>
+				<h2>Chemical<br />Reaction<br />Network<br />analysis tool</h2>
 				<p id="version">
 <?php
 echo '					Version ', CONTROL_VERSION, PHP_EOL;

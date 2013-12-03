@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   02/12/2013
+ * @modified   03/12/2013
  */
 
 @media screen
@@ -24,9 +24,9 @@
 	
 	h1
 	{
-		font-size: 300%;
-		padding-top: 32px;
-		padding-left: 12px;
+		font-size: 475%;
+		padding-top: 22px;
+		padding-left: 174px;
 		display: inline-block;
 /*		text-align: center;*/
 	}
@@ -98,7 +98,7 @@
 		background-color: #666;
 		border: 1px solid #333;
 		position: absolute;
-		top: 108px;
+		top: 121px;
 		min-width: 9em;
 	}
 	
@@ -230,8 +230,9 @@
 	#header > h2
 	{
 		display: inline-block;
-		font-size: 120%;
-		padding-left: 20px;
+		font-size: 90%;
+		padding-left: 0;
+		color: #999;
 		margin-bottom: 32px;
 	}
 
@@ -453,8 +454,8 @@
 	#version
 	{
 		position: absolute;
-		right: 14px;
-		top: 36px;
+		right: 1.8em;
+		top: 32px;
 		font-size: 50%;
 	}
 }
