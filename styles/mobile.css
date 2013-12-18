@@ -5,26 +5,28 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/05/2013
- * @modified   03/12/2013
+ * @modified   18/12/2013
  */
 
 @media screen
 {
 	h1
 	{
-		padding-bottom: 0;
-		padding-top: 5px;
-		padding-left: 10px;
+		padding: 5px 0 0;
+		display: block;
+		text-align: center;
 	}
 
 	#header > h2
 	{
+		display: block;
 		margin-bottom: 0;
+		text-align: center;
 	}
 	
 	#actions_holder
 	{
-		border-top: none;
+		margin-top: 1em;
 	}
 	
 	#actions_holder, #tools_holder
@@ -88,11 +90,18 @@
 		border-right: none;
 	}
 	
-	#results > h2, #results > p
+	#results > h2
 	{
-		margin: 0.5em 0.5em 0 0.5em;
+		margin: 1.2em 0;
+		text-align: center;
 	}
-	
+
+	#results > p
+	{
+		margin-bottom: 2em;
+		text-align: center;
+	}
+
 	#results_link > a
 	{
 		color: transparent;
@@ -101,10 +110,30 @@
 		background-position: 120px 40px;
 		padding-bottom: 80px;
 	}
-	
-	#version
+
+	#credits
 	{
-		top: 6px;
-		right: 0.5em;
+		line-height: 140%;
+		margin: 1em 0.5em 0.5em;
+		position: static;
+		text-align: center;
+	}
+
+	#results_actions_buttons
+	{
+		text-align: center;
+	}
+
+	.align_right
+	{
+		float: none;
+		display: block;
+		margin-top: 0.7em;
+		margin-left: 0.4em;
+	}
+
+	.non_mobile
+	{
+		display: none;
 	}
 }

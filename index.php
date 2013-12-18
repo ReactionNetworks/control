@@ -8,14 +8,12 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   03/12/2013
+ * @modified   18/12/2013
  */
 
 require_once('includes/header.php');
 require_once('includes/standard-tests.php');
 require_once('includes/file-formats.php');
-
-if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '				<div id="results_link"><a href="results.php">Back to existing results</a></div>', PHP_EOL;
 ?>
 				<div id="reaction_input_holder">
 					<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
@@ -42,6 +40,9 @@ echo $_SESSION['reaction_network']->generateFieldsetHTML();
 							<h2>Analysis</h2>
 							<div>
 								<a class="button fancybox_dynamic<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#calculation_output_holder" id="process_network_button" title="Run a number of tests on the current CRN and display the results">Analyse<br />CRN</a>
+<?php
+if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '						<a class="button" id="results_link" href="results.php" title="View the results of the last CRN analysis">View<br />results</a>', PHP_EOL;
+?>
 								<a class="button fancybox" href="#option_holder" id="options_button" title="Configure options such as which tests to run during analysis">Options</a>
 								<div id="more_actions_slidedown">
 									<button class="button<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" id="download_network_file_button" type="submit"<?php if(!isset($_SESSION['reaction_network'])) echo ' disabled="disabled"'; ?> title="Download a text file describing the current CRN for later analysis">Download<br />CRN File</button>

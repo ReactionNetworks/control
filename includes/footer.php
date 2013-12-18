@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   02/12/2013
+ * @modified   18/12/2013
  */
 ?>
 			</div><!-- content -->
@@ -17,7 +17,7 @@
 					<div id="feedback_holder">
 						<h2>Feedback</h2>
 						<p>
-							Please send bug reports, feature requests and other comments to <em><?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?></em>. When reporting bugs, please describe the problem in detail, and provide screenshots if possible.
+							Please send bug reports, feature requests and other comments to <strong><em><?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?></em></strong>. When reporting bugs, please describe the problem in detail, and provide screenshots if possible.
 						</p>
 					</div>
 					<div id="privacy_holder">
@@ -56,12 +56,14 @@
 				</div><!-- credits_hider -->
 				<p id="credits">
 					<a href="#feedback_holder" class="fancybox">Feedback</a>
-					&bull;
+					<span class="non_mobile">&bull;</span>
 					<a href="#privacy_holder" class="fancybox">Privacy</a>
-					&bull;
+					<span class="non_mobile">&bull;</span>
 					<a href="http://reaction-networks.net/wiki/CoNtRol" title="View documentation for CoNtRol in a new tab">Documentation</a>
-					&bull;
+					<span class="non_mobile">&bull;</span>
 					<a href="#credits_holder" class="fancybox">Credits</a>
+					<span class="non_mobile">&bull;</span>
+					<span id="version"><?php echo 'Version ', CONTROL_VERSION; ?></span>
 				</p><!-- credits -->
 			</div><!-- footer -->
 		</div><!-- container -->

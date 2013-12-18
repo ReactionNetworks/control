@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   02/12/2013
+ * @modified   18/12/2013
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -47,7 +47,7 @@ require_once('version.php');
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
 		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-12-03T15:40:37+0000" />
+		<meta name="date" content="2013-12-18T18:45:50+0000" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
@@ -72,12 +72,7 @@ require_once('version.php');
 			<div id="header">
 				<!--h1 title="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>"><?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?></h1!-->
 				<h1>CoNtRol</h1>
-				<h2>Chemical<br />Reaction<br />Network<br />analysis tool</h2>
-				<p id="version">
-<?php
-echo '					Version ', CONTROL_VERSION, PHP_EOL;
-?>
-				</p><!-- version -->
+				<h2>Chemical <span class="non_mobile"><br /></span>Reaction <span class="non_mobile"><br /></span>Network <span class="non_mobile"><br /></span>analysis tool</h2>
 			</div>
 			<div id="content">
 				<noscript><p>Sorry, this page requires JavaScript to work correctly.</p></noscript>

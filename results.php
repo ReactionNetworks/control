@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/11/2013
+ * @modified   18/12/2013
  */
 
 require_once('includes/header.php');
@@ -17,7 +17,8 @@ if(!isset($_SESSION['test_output'])) die('No test results found.');
 
 echo '				<div id="results">
 						<h2>Test Results</h2>
-						<p>Jump to test:', PHP_EOL;
+						<p class="jump">
+							<span class="non_mobile">Jump to test:</span>', PHP_EOL;
 
 foreach($_SESSION['tests'] as $testname => $test)
 {
@@ -31,7 +32,7 @@ foreach($_SESSION['tests'] as $testname => $test)
 	}
 }
 ?>
-							<span class="align_right"><a href=".">Back to main</a></span>
+							<span class="align_right"><a href="."><img src="images/return.png" alt="Back arrow" /></a> <a href=".">Back to main</a></span>
 						</p>
 						<div>
 							<h3>Reaction Network Tested:</h3>
@@ -53,10 +54,11 @@ foreach($_SESSION['test_output'] as $name => $result)
 	}
 	echo "							<h4>Results:</h4>\n";
 	if(trim($result)) echo "<pre>$result</pre>\n						</div>\n";
-	else echo "							<pre>No results available, probably due to test timeout.</pre>\n						</div>\n";
+	else echo "							<pre>No results available, either due to test timeout or misconfiguration of test.</pre>\n						</div>\n";
 }
 ?>
 					<p id="results_actions_buttons">
+						<!--span class="non_mobile">Actions:</span-->
 						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#missing_java_warning_holder" id="dsr_graph_button" title="Generate and display the DSR graph for the current CRN (note: requires Java)">View&nbsp;CRN&nbsp;DSR&nbsp;Graph</a>
 						<a class="button fancybox<?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo ' disabled'; ?>" href="#email_results_form" id="email_results_form_button" title="Receive the test results for the current CRN via email">Email&nbsp;results</a>
 					</p>
