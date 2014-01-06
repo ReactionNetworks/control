@@ -5,10 +5,10 @@
  * This is the default page for CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   18/12/2013
+ * @modified   06/01/2014
  */
 
 require_once('includes/header.php');
@@ -90,7 +90,7 @@ for($i = 0; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported
 						</p>
 						<p>
 							<label for="upload_batch_file_email">Email address for results:</label>
-							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="48" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?>/><br />
+							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="32" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?>/><br />
 							<span id="upload_batch_file_email_error">&nbsp;</span>
 						</p>
 						<p>

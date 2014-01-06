@@ -2,10 +2,10 @@
  * Mobile stylesheet for CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2013-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/05/2013
- * @modified   18/12/2013
+ * @modified   06/01/2014
  */
 
 @media screen
@@ -14,113 +14,6 @@
 	{
 		padding: 5px 0 0;
 		display: block;
-		text-align: center;
-	}
-
-	#header > h2
-	{
-		display: block;
-		margin-bottom: 0;
-		text-align: center;
-	}
-	
-	#actions_holder
-	{
-		margin-top: 1em;
-	}
-	
-	#actions_holder, #tools_holder
-	{
-		border-left: none;
-		border-right: none;
-		margin-left: 0;
-		margin-right: 0;
-		padding-left: 0;
-		padding-right: 0;
-		position: static;
-		width: 100%;
-	}
-	
-	#actions_holder a, #tools_holder a, #actions_holder button
-	{
-		text-align: center;
-		background-repeat: no-repeat;
-		background-position: 20%;
-		border: none;
-		border-radius: 0;
-		box-shadow: none;
-		display:block;
-		padding: 0.3em;
-	}
-	
-	#tools_show, #more_actions_show
-	{
-		display: block;
-		padding: 0.8em;
-	}
-	
-	#error_message_holder, #reaction_input_holder, #results
-	{
-		margin: 0;
-	}
-	
-	#popup_hider input
-	{
-		max-width: 50%;
-	}
-	
-	#reaction_input_holder
-	{
-		border: none;
-	}
-	
-	#reaction_input_holder input[type=text]
-	{
-		max-width: 35%;
-	}
-	
-	#results
-	{
-		margin-bottom: 1em;
-	}
-	
-	#results > div
-	{
-		border-left: none;
-		border-right: none;
-	}
-	
-	#results > h2
-	{
-		margin: 1.2em 0;
-		text-align: center;
-	}
-
-	#results > p
-	{
-		margin-bottom: 2em;
-		text-align: center;
-	}
-
-	#results_link > a
-	{
-		color: transparent;
-		background-image: url('../images/return.png');
-		background-repeat: no-repeat;
-		background-position: 120px 40px;
-		padding-bottom: 80px;
-	}
-
-	#credits
-	{
-		line-height: 140%;
-		margin: 1em 0.5em 0.5em;
-		position: static;
-		text-align: center;
-	}
-
-	#results_actions_buttons
-	{
 		text-align: center;
 	}
 
@@ -135,5 +28,118 @@
 	.non_mobile
 	{
 		display: none;
+	}
+
+	#actions_holder
+	{
+		margin-top: 1em;
+	}
+
+	#actions_holder, #tools_holder
+	{
+		border-left: none;
+		border-right: none;
+		margin-left: 0;
+		margin-right: 0;
+		padding-left: 0;
+		padding-right: 0;
+		position: static;
+		width: 100%;
+	}
+
+	#actions_holder a, #actions_holder button, #tools_holder a
+	{
+		text-align: center;
+		background-repeat: no-repeat;
+		background-position: 20%;
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+		display:block;
+		padding: 0.3em;
+	}
+
+	#credits
+	{
+		line-height: 140%;
+		margin: 1em 0.5em 0.5em;
+		position: static;
+		text-align: center;
+	}
+
+	#error_message_holder, #reaction_input_holder, #results
+	{
+		margin: 0;
+	}
+
+	#feedback_holder > p, #privacy_holder > p
+	{
+		line-height: 110%;
+		width: auto;
+	}
+
+	#header > h2
+	{
+		display: block;
+		margin-bottom: 0;
+		text-align: center;
+	}
+
+	#more_actions_show, #tools_show
+	{
+		display: block;
+		padding: 0.8em;
+	}
+
+	#popup_hider input
+	{
+		max-width: 50%;
+	}
+
+	#reaction_input_holder
+	{
+		border: none;
+	}
+
+	#reaction_input_holder input[type=text]
+	{
+		max-width: 35%;
+	}
+
+	#results
+	{
+		margin-bottom: 1em;
+	}
+
+	#results > div
+	{
+		border-left: none;
+		border-right: none;
+	}
+
+	#results > h2
+	{
+		margin: 1.2em 0;
+		text-align: center;
+	}
+
+	#results > p
+	{
+		margin-bottom: 2em;
+		text-align: center;
+	}
+
+	#results_actions_buttons
+	{
+		text-align: center;
+	}
+
+	#results_link > a
+	{
+		color: transparent;
+		background-image: url('../images/return.png');
+		background-repeat: no-repeat;
+		background-position: 120px 40px;
+		padding-bottom: 80px;
 	}
 }

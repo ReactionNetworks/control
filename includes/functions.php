@@ -7,62 +7,65 @@
  * output. It must be included separately in each handler page.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/11/2013
+ * @modified   06/01/2014
  */
 
 /**
- * HTML output sanitiser
- *
- * Sanitises text for output to HTML
- *
- * @param   string  $text  The text to be sanitised
- * @return  string         The sanitised version of the text
+ * Generate a simple captcha and display it as HTML
  */
-function sanitise($text)
+function batch_captcha()
 {
-	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false);
-}
-
-function printMatrix($matrix)
-{
-	$text = '';
-	foreach($matrix as $row)
+	$output = '';
+	$_SESSION['batch-captcha'] = captcha_random_string(5);
+	$char_array = str_split($_SESSION['batch-captcha']);
+	// Encode in ASCII to trick bots
+	foreach ($char_array as $char)
 	{
-		foreach($row as $element) $text = $text.' '.$element;
-		$text.=PHP_EOL;
+		$output .= '&shy;&#' . ord($char) . ';&shy;';
 	}
-	return $text;
+	echo $output;
 }
 
 /**
- * Convert file size to bytes
+ * Generate a random string to use as a captcha
  *
- * Corrected from version on http://php.net/manual/en/function.ini-get.php
- *
- * @param   string  $val  File size as a string, eg. 1M
- * @return  int           File size in bytes
+ * Based upon http://www.marksanborn.net/php/random-password-string-generator-for-php/
  */
-function return_bytes($val)
+function captcha_random_string($length = 10)
 {
-	$val = trim($val);
-	$last = strtolower($val[strlen($val) - 1]);
-	$val = (int)substr($val,0,strlen($val) - 1);
-	switch($last)
+	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+
+	$charLength = strlen($chars)-1;
+
+	for($i = 0 ; $i < $length ; $i++)
 	{
-		case 'g':
-			$val *= 1024;
-			// fall through
-		case 'm':
-			$val *= 1024;
-			// fall through
-		case 'k':
-			$val *= 1024;
-			// no default
+		$randomString .= $chars[mt_rand(0,$charLength)];
 	}
-	return $val;
+
+	return $randomString;
+}
+
+/**
+ * Verify that a file has the correct mimetype
+ *
+ * @param   string  $file               Path to the file for testing
+ * @param   string  $expected_mimetype  The desired mimetype for the file
+ * @return  bool    $success            Return TRUE if the file was successfully opened and had the correct mimetype, FALSE otherwise.
+ */
+function check_file_format($file, $expected_mimetype)
+{
+	$success = true;
+	$finfo = new finfo(FILEINFO_MIME_TYPE);
+	if($finfo)
+	{
+		$mimetype = $finfo->file($file);
+		if($mimetype !== $expected_mimetype) $success = false;
+	}
+	else $success = false;
+	return $success;
 }
 
 /**
@@ -97,6 +100,23 @@ function get_mime($file)
 	{
 		return false;
 	}
+}
+
+/**
+ * Convert a matrix into text
+ *
+ * @param   array   $matrix  A matrix represented as a 2D array / array of arrays
+ * @return  string  $text    The matrix represented as text
+ */
+function printMatrix($matrix)
+{
+	$text = '';
+	foreach($matrix as $row)
+	{
+		foreach($row as $element) $text = $text.' '.$element;
+		$text .= PHP_EOL;
+	}
+	return $text;
 }
 
 /**
@@ -190,56 +210,42 @@ function recursive_remove_directory($directory, $empty = FALSE)
 }
 
 /**
- * Verify that a file has the correct mimetype
+ * Convert file size to bytes
  *
- * @param   string  $file               Path to the file for testing
- * @param   string  $expected_mimetype  The desired mimetype for the file
- * @return  bool    $success            Return TRUE if the file was successfully opened and had the correct mimetype, FALSE otherwise.
+ * Corrected from version on http://php.net/manual/en/function.ini-get.php
+ *
+ * @param   string  $val  File size as a string, eg. 1M
+ * @return  int           File size in bytes
  */
-function check_file_format($file, $expected_mimetype)
+function return_bytes($val)
 {
-	$success = true;
-	$finfo = new finfo(FILEINFO_MIME_TYPE);
-	if($finfo)
+	$val = trim($val);
+	$last = strtolower($val[strlen($val) - 1]);
+	$val = (int)substr($val,0,strlen($val) - 1);
+	switch($last)
 	{
-		$mimetype = $finfo->file($file);
-		if($mimetype !== $expected_mimetype) $success = false;
+		case 'g':
+			$val *= 1024;
+			// fall through
+		case 'm':
+			$val *= 1024;
+			// fall through
+		case 'k':
+			$val *= 1024;
+			// no default
 	}
-	else $success = false;
-	return $success;
+	return $val;
 }
 
 /**
- * Generate a simple captcha and display it as HTML
- */
-function batch_captcha()
-{
-	$output = '';
-	$_SESSION['batch-captcha'] = captcha_random_string(5);
-	$char_array = str_split($_SESSION['batch-captcha']);
-	// Encode in ASCII to trick bots
-	foreach ($char_array as $char)
-	{
-		$output .= '&shy;&#' . ord($char) . ';&shy;';
-	}
-	echo $output;
-}
-
-/**
- * Generate a random string to use as a captcha
+ * HTML output sanitiser
  *
- * Based upon http://www.marksanborn.net/php/random-password-string-generator-for-php/
+ * Sanitises text for output to HTML
+ *
+ * @param   string  $text  The text to be sanitised
+ * @return  string         The sanitised version of the text
  */
-function captcha_random_string($length = 10)
+function sanitise($text)
 {
-	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-
-	$charLength = strlen($chars)-1;
-
-	for($i = 0 ; $i < $length ; $i++)
-	{
-		$randomString .= $chars[mt_rand(0,$charLength)];
-	}
-
-	return $randomString;
+	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false);
 }

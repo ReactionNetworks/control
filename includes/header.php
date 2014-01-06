@@ -5,10 +5,10 @@
  * Standard header included on all pages within CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-13
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-14
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   18/12/2013
+ * @modified   06/01/2014
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -46,8 +46,7 @@ require_once('version.php');
 		<!--[if gt IE 8]><!-->
 		<link href="styles/mobile.css" rel="stylesheet" type="text/css" media="screen and (max-width: 800px)" />
 		<!--<![endif]-->
-		<meta name="author" content="Matt Kingston" />
-		<meta name="date" content="2013-12-18T18:45:50+0000" />
+		<meta name="author" content="Pete Donnell, Murad Banaji, Anca Marginean, Casian Pantea" />
 		<meta name="language" content="en" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="title" content="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>" />
@@ -70,7 +69,6 @@ require_once('version.php');
 	<body>
 		<div id="container">
 			<div id="header">
-				<!--h1 title="<?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?>"><?php if(isset($title) and $title) echo sanitise($title); else echo sanitise(DEFAULT_PAGE_TITLE); ?></h1!-->
 				<h1>CoNtRol</h1>
 				<h2>Chemical <span class="non_mobile"><br /></span>Reaction <span class="non_mobile"><br /></span>Network <span class="non_mobile"><br /></span>analysis tool</h2>
 			</div>
