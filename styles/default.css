@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   06/01/2014
+ * @modified   07/01/2014
  */
 
 @media screen
@@ -28,6 +28,12 @@
 		padding-top: 22px;
 		padding-left: 174px;
 		display: inline-block;
+	}
+
+	noscript p
+	{
+		padding-left: 11em;
+		padding-bottom: 1em;
 	}
 
 	:link
@@ -218,9 +224,15 @@
 		margin: 0.5em 1em;
 	}
 
+	#credits_holder > h2, #feedback_holder > h2, #privacy_holder > h2
+	{
+		font-size: 150%;
+		margin-left: 0.6em;
+	}
+
 	#credits_holder > ul > li
 	{
-		padding: 0.2em;
+		padding: 0.2em 0.8em;
 	}
 
 	#download_network_file_button
@@ -265,6 +277,7 @@
 	{
 		line-height: 120%;
 		width: 400px;
+		padding: 0 0.8em;
 	}
 
 	#footer
