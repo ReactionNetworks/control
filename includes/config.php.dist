@@ -9,10 +9,10 @@
  * Note: when configuring your site, make sure to set SITE_DIR to the correct relative path.
  *
  * @author     Pete Donnell <pete dot donnell at port at ac at uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/11/2013
+ * @modified   13/01/2014
  */
 
 /////////////////////////////////////////
@@ -78,16 +78,16 @@ define('MAX_REACTIONS_PER_NETWORK', 16, false);
 
 // Default page information. You shouldn't need to change this.
 define('DEFAULT_PAGE_TITLE', 'CoNtRol - Chemical Reaction Network analysis tool', false);
-define('DEFAULT_PAGE_DESCRIPTION', 'Allows the user to input a chemical reaction network. Produces a DSR graph and carries out mathematical analysis of network.', false);
+define('DEFAULT_PAGE_DESCRIPTION', 'CoNtRol is a web application to analyse chemical reaction networks. It also generates LaTeX markup describing their associated DSR graphs and equations.', false);
 
 // Work out which line ending to use for file exports. Don't change this.
-// Default to UNIX line ending
-$line_ending = "\n";
+// Default to server line ending
 if(isset($_SERVER['HTTP_USER_AGENT']))
 {
-	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
+	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Windows;') !== false) $line_ending = "\r\n";
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Macintosh;') !== false) $line_ending = "\r";
 }
+else $line_ending = PHP_EOL;
 define('CLIENT_LINE_ENDING', $line_ending, false);
 
 // Extra database options. It shouldn't be necessary to change this.
