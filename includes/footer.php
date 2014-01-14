@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-14
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   06/01/2014
+ * @modified   14/01/2014
  */
 ?>
 			</div><!-- content -->
@@ -17,7 +17,7 @@
 					<div id="feedback_holder">
 						<h2>Feedback</h2>
 						<p>
-							Please send bug reports, feature requests and other comments to <strong><em><?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?></em></strong>. When reporting bugs, please describe the problem in detail, and provide screenshots if possible.
+							Please send bug reports, feature requests and other comments to <strong><em><?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?></em></strong>. When reporting bugs, please describe the problem in as much detail as possible, and provide screenshots where relevant.
 						</p>
 					</div>
 					<div id="privacy_holder">
@@ -48,6 +48,7 @@
 							<li><a href="http://fancybox.net/">Fancybox 1.3.4</a> is &copy; 2008&ndash;2010 Janis Skarnelis. Used and distributed under the <a href="http://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
 							<li><a href="http://jung.sourceforge.net/site/jung-graph-impl/project-summary.html">JUNG</a> is &copy; the JUNG development team. Used and distributed under the <a href="http://jung.sourceforge.net/site/jung-graph-impl/license.html">BSD Licence</a>.</li>
 							<li><a href="https://github.com/megamattron/collections-generic">Collections</a> is &copy; Matt Hall. Used and distributed under the <a href="https://github.com/megamattron/collections-generic/blob/master/LICENSE.txt">Apache Licence</a>.</li>
+							<li><a href="https://www.theleagueofmoveabletype.com/orbitron">Orbitron</a> is &copy; 2009 <a href="http://pixelspread.com/">Matt McInerney</a> and released under the <a href="http://scripts.sil.org/OFL" >Open Font Licence</a>.</li>
 							<li>Icons from the GNOME, KDE and XFCE desktop icon sets.</li>
 							<li>All other code and content is &copy; 2012&ndash;<?php echo date('Y'); ?> the authors and released under the <a href="http://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
 						</ul>

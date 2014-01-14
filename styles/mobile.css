@@ -5,14 +5,14 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2013-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/05/2013
- * @modified   06/01/2014
+ * @modified   14/01/2014
  */
 
 @media screen
 {
 	h1
 	{
-		padding: 5px 0 0;
+		padding: 15px 0 0;
 		display: block;
 		text-align: center;
 	}

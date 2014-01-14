@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   06/01/2014
+ * @modified   14/01/2014
  */
 
 require_once('includes/header.php');
@@ -78,12 +78,12 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_batch_file_input">Choose a file to upload:</label>
 							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" size="48" /><br />
-							Maximum file size:
+							<span class="small">Maximum file size:
 <?php
 if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
 else echo ini_get('upload_max_filesize');
-?> <br />
-							Supported archive types: zip
+?></span><br /><span class="small">
+							Supported archive types: zip</span>
 <?php
 for($i = 0; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
 ?>
@@ -104,12 +104,12 @@ foreach ($format_array as $format)
 						</p>
 						<div>
 							<p>Enter security code (required):<br />
-								<label for="batch_security_code"><?php batch_captcha(); ?></label>
+								<span class="bold"><label for="batch_security_code"><?php batch_captcha(); ?></label></span>
 								<input type="text" name="batch_security_code" id="batch_security_code"/>
 							</p>
 						</div>
 						<p>
-							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload and process batch file</button>
+							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload batch file</button>
 						</p>
 					</form><!-- batch_upload_form -->
 					<div id="missing_java_warning_holder">

@@ -5,11 +5,33 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    02/10/2012
- * @modified   07/01/2014
+ * @modified   14/01/2014
  */
 
 @media screen
 {
+	@font-face
+	{
+		font-family: 'Orbitron';
+		src: url('../fonts/orbitron-medium-webfont.eot'); /* IE9 Compat Modes */
+		src: url('../fonts/orbitron-medium-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		     url('../fonts/orbitron-medium-webfont.woff') format('woff'), /* Modern Browsers */
+		     url('../fonts/orbitron-medium-webfont.ttf') format('truetype'); /* Safari, Android, iOS */
+		font-style: normal;
+		font-weight: bold;
+	}
+
+	@font-face
+	{
+		font-family: 'Orbitron';
+		src: url('../fonts/orbitron-bold-webfont.eot'); /* IE9 Compat Modes */
+		src: url('../fonts/orbitron-bold-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		     url('../fonts/orbitron-bold-webfont.woff') format('woff'), /* Modern Browsers */
+		     url('../fonts/orbitron-bold-webfont.ttf') format('truetype'); /* Safari, Android, iOS */
+		font-style: normal;
+		font-weight: bold;
+	}
+
 	*
 	{
 		font-family: sans-serif;
@@ -24,10 +46,11 @@
 
 	h1
 	{
-		font-size: 475%;
-		padding-top: 22px;
+		font-size: 72px;
+		padding-top: 30px;
 		padding-left: 174px;
 		display: inline-block;
+		font-family: Orbitron, sans-serif;
 	}
 
 	noscript p
@@ -62,9 +85,9 @@
 		vertical-align: text-top;
 	}
 
-	.blink
+	.bold
 	{
-		text-decoration: blink;
+		font-weight: bolder;
 	}
 
 	.button
@@ -113,6 +136,14 @@
 	{
 		overflow: auto;
 		margin-bottom: 2em;
+	}
+
+	.small
+	{
+		color: #333;
+		font-size: 75%;
+		font-style: italic;
+		padding-left: 1em;
 	}
 
 	#actions_holder, #tools_holder
@@ -290,11 +321,14 @@
 
 	#header > h2
 	{
-		display: inline-block;
-		font-size: 90%;
-		padding-left: 0;
 		color: #999;
-		margin-bottom: 32px;
+		display: inline-block;
+		font-family: sans-serif;
+		font-size: 15px;
+		font-weight: normal;
+		margin-bottom: 35px;
+		margin-left: 2px;
+		padding-left: 0px;
 	}
 
 	#hidden_character_warning, #missing_reactant_warning, #removed_reaction_warning
