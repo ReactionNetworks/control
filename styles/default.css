@@ -18,7 +18,7 @@
 		     url('../fonts/orbitron-medium-webfont.woff') format('woff'), /* Modern Browsers */
 		     url('../fonts/orbitron-medium-webfont.ttf') format('truetype'); /* Safari, Android, iOS */
 		font-style: normal;
-		font-weight: bold;
+		font-weight: normal;
 	}
 
 	@font-face
