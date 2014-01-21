@@ -5,10 +5,10 @@
  * Sends completed results to the specified email address.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/05/2013
- * @modified   30/05/2013
+ * @modified   21/01/2014
  */
 
 require_once('../includes/config.php');
@@ -17,8 +17,6 @@ require_once('../includes/functions.php');
 require_once('../includes/session.php');
 require_once('../includes/standard-tests.php');
 require_once('../includes/version.php');
-
-error_log(print_r($_POST, true), 3, '/var/tmp/crn.log');
 
 if(isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
 {
