@@ -5,10 +5,10 @@
  * Assorted classes used within CoNtRol.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/11/2013
+ * @modified   21/01/2014
  */
 
 class Reaction
@@ -673,7 +673,8 @@ class ReactionNetwork
 		$stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
 		$sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
 		$numberOfReactants = count($stoichiometryMatrix);
-		$numberOfReactions = count($stoichiometryMatrix[0]);
+		if(isset($stoichiometryMatrix[0])) $numberOfReactions = count($stoichiometryMatrix[0]);
+		else $numberOfReactions = 0;
 		for($i = 0; $i < $numberOfReactants; ++$i)
 		{
 			for($j = 0; $j < $numberOfReactions; ++$j) $stoichiometryMatrix[$i][$j] -= $sourceStoichiometryMatrix[$i][$j];
