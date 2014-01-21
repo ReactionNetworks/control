@@ -509,7 +509,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									{
 										foreach($output as $line)
 										{
-											if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', $line_ending.$line)) === false)
+											if(fwrite($ohandle, preg_replace('@(<a)(.+)(href=")(.+?)(")(.*)(>)(.+)(</a>)@', '$8 [$4]', $line_ending.$line)) === false)
 											{
 												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 												$success = false;
@@ -554,7 +554,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$body .= "Content-Type: text/plain; charset=utf-8;\r\n format=flowed\r\n";
 	$body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
 	// Remove HTML tags and replace links with bare URLs
-	$body .= preg_replace('@(<a)(.+)(href=")(.+)(">)(.+)(</a>)@', '$6 [$4]', str_replace($plain_text_search, $plain_text_replace, $mail));
+	$body .= preg_replace('@(<a)(.+)(href=")(.+?)(")(.*)(>)(.+)(</a>)@', '$8 [$4]', str_replace($plain_text_search, $plain_text_replace, $mail));
 	$body .= "\r\n\r\n--$boundary\r\n";
 	$body .= "Content-Type: text/html; charset=utf-8;\r\n format=flowed\r\n";
 	$body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
@@ -579,7 +579,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 	$zip = new ZipArchive();
 	$zipfilename = TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.zip';
-	if ($zip->open($zipfilename, ZipArchive::CREATE)!==TRUE)
+	if ($zip->open($zipfilename, ZipArchive::CREATE) !== true)
 	{
 		exit("cannot open <$zipfilename>\n");
 	}
