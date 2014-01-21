@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   06/01/2014
+ * @modified   21/01/2014
  */
 
 /**
@@ -37,6 +37,7 @@ function batch_captcha()
 function captcha_random_string($length = 10)
 {
 	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+	$randomString = '';
 
 	$charLength = strlen($chars)-1;
 
