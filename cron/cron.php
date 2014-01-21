@@ -74,7 +74,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$mail .= 'Tests enabled:';
 
 	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, "Tests enabled:")===false)
+	if(fwrite($ohandle, "Tests enabled:") === false)
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
@@ -240,8 +240,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					{
 						case 1: //Net stoichiometry
 							$mimetype = get_mime($dirname.'/'.$file);
-							if ($mimetype === 'text/plain')
-							{
+							if (strpos($mimetype, 'text/') === 0)
+							{ // Hack as sometimes files with comments get detected as a different mime type
 								$matrix = array();
 								$mail .= "\r\n<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
 								while(!feof($fhandle))
@@ -259,21 +259,22 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							else $file_found = false;
 							break; // End of case 1, net stoichiometry
 						case 2: //Net stoichiometry + V
-							$mimetype = get_mime($dirname.'/'.$file);
-							if ($mimetype === 'text/plain')
-							{}
+							if (strpos($mimetype, 'text/') === 0)
+							{ // Hack as sometimes files with comments get detected as a different mime type
+							}
 							else $file_found = false;
 							break;
 						case 3: //Source + target + V
 							$mimetype = get_mime($dirname.'/'.$file);
-							if ($mimetype === 'text/plain')
-							{}
+							if (strpos($mimetype, 'text/') === 0)
+							{ // Hack as sometimes files with comments get detected as a different mime type
+							}
 							else $file_found = false;
 							break;
 						case 4: //Source + target
 							$mimetype = get_mime($dirname.'/'.$file);
-							if ($mimetype === 'text/plain')
-							{
+							if (strpos($mimetype, 'text/') === 0)
+							{ // Hack as sometimes files with comments get detected as a different mime type
 								//$mail .= '<pre>';
 								$sourceMatrix = array();
 								$targetMatrix = array();
@@ -340,8 +341,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							//Fall through
 						default: //Assume 'human' if unsure
 							$mimetype = get_mime($dirname.'/'.$file);
-							if ($mimetype === 'text/plain')
-							{
+							if (strpos($mimetype, 'text/') === 0)
+							{ // Hack as sometimes files with comments get detected as a different mime type
 								while(!feof($fhandle))
 								{
 									$reactionString = fgets($fhandle);
@@ -355,6 +356,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 											$success = false;
 										}
 									}
+									$mail .= "<p>Finished reading file</p>\r\n";
 								}
 							}
 							else $file_found = false;
@@ -603,3 +605,8 @@ foreach ($results as $result)
 	$statement->bindParam(':id', $result['id'], PDO::PARAM_INT);
 	$statement->execute();
 }
+// Remove leftover temporary files from interactive (i.e. not batch)tests
+array_map('unlink', glob('*.hmn'));
+array_map('unlink', glob('*.sto'));
+array_map('unlink', glob('*.stv'));
+array_map('unlink', glob('*.s+v'));
