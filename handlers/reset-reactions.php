@@ -5,10 +5,10 @@
  * Deletes current reaction network data from the session
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    16/04/2013
- * @modified   18/06/2013
+ * @modified   21/01/2014
  */
 
 require_once('../includes/config.php');
@@ -23,4 +23,4 @@ if(isset($_POST['reset_reactions']) and isset($_POST['csrf_token']) and $_POST['
 	if(isset($_SESSION['test_output'])) unset($_SESSION['test_output']);
 }
 
-if(CRN_DEBUG) print_r($_POST);
+if(CRNDEBUG) print_r($_POST);
