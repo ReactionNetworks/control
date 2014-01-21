@@ -7,10 +7,10 @@
  * The results are then emailed to the batch originator. It is intended to be called via a cron job.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/04/2013
- * @modified   20/11/2013
+ * @modified   21/01/2014
  */
 
 require_once('../includes/config.php');
@@ -546,8 +546,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$sendmail_params = '-f'.ADMIN_EMAIL;
 
 	// Create HTML and plain text versions of mail
-	$plain_text_search = array('<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>');
-	$plain_text_replace = array('', '', '## ', '### ', '', '', '', ' ##', ' ###', '', '');
+	$plain_text_search = array('<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>', '" target="_blank');
+	$plain_text_replace = array('', '', '## ', '### ', '', '', '', ' ##', ' ###', '', '', '');
 	$html_search = array('<-->', '<--', '-->', "\r\n-------\r\n", "\r\n==============\r\n\r\n");
 	$html_replace = array('&lt;--&gt;', '&lt;--', '--&gt;', "\r\n", "\r\n");
 	$body = "--$boundary\r\n";
@@ -596,7 +596,7 @@ $statement->execute();
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 foreach ($results as $result)
 {
-	unlink(TEMP_FILE_DIR."/".$result['filekey'].".zip");
+	unlink(TEMP_FILE_DIR.$result['filekey'].".zip");
 	$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 4, update_timestamp = :timestamp WHERE id = :id';
 	$statement = $controldb->prepare($query);
 	$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
