@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   21/01/2014
+ * @modified   22/01/2014
  */
 
 /**
@@ -70,12 +70,56 @@ function check_file_format($file, $expected_mimetype)
 }
 
 /**
+ * Convert HTML links to plain text
+ *
+ * Primarily intended to help generate plain text version of test output for sending via email.
+ * Input link format 1:
+ * <a class="some_class" href="http://example.com/" title="Some Title">Example</a>
+ * Output plain text format 1:
+ * Some Title [http://example.com/]
+ * Input link format 2:
+ * <a class="some_class" href="http://example.com/">Example</a>
+ * Output plain text format 2:
+ * Example [http://example.com/]
+ * I.e. if title attribute is present, this is output followed by the link href location in
+ * square brackets. If the title attribute is not present, the link text is output followed
+ * by the link href location in square brackets. All other attributes are ignored.
+ *
+ * @param   string  $intext   Text including links to convert to plain text
+ * @return  string  $outtext  Same text with links converted to plain text
+ */
+function convert_links_to_plain_text($intext)
+{
+	if(strpos($intext, '|') === false) $delimiter = '|';
+	elseif(strpos($intext, '`') === false) $delimiter = '`';
+	elseif(strpos($intext, '~') === false) $delimiter = '~';
+	elseif(strpos($intext, '@') === false) $delimiter = '@';
+	else return $intext;
+	if(strpos($intext, ' title="') and strpos($intext, ' title=""') === false)
+	{ // Check if title attribute is present and nonempty
+		if(strpos($intext, ' title="') < strpos($intext, ' href="'))
+		{ // title before href
+			$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$4 [$8]', $intext);
+		}
+		else // href before title
+		{
+			$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $intext);
+		}
+	}
+	else // No title attribute present
+	{
+		$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $intext);
+	}
+	return $outtext;
+}
+
+/**
  * Get the mime type of a file
  *
  * Taken from http://stackoverflow.com/questions/134833/how-do-i-find-the-mime-type-of-a-file-with-php
  *
  * @param   string  $file  The file name to check.
- * @return  mixed   $mime  If the mimetype could be determined, return the it as a string. Else return FALSE.
+ * @return  mixed   $mime  If the mimetype could be determined, return it as a string. Else return FALSE.
  */
 function get_mime($file)
 {
