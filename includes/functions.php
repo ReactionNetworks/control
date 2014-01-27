@@ -98,7 +98,7 @@ function convert_links_to_plain_text($intext)
 	// Replace link text with link title if title attribute present
 	$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$1$2$6$7$4$8', $intext);
 	// Strip out link HTML
-	$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $outtext);
+//	$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $outtext);
 	return $outtext;
 }
 

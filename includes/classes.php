@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   21/01/2014
+ * @modified   27/01/2014
  */
 
 class Reaction
@@ -1070,7 +1070,14 @@ class FileFormat
 	public function getNetworkRadioButton()
 	{
 		echo '<input type="radio" name="upload_network_file_format" value="'.$this->shortName.'"';
-		if((!isset($_SESSION['upload_file_format']) and $this->shortName === 'human') or $_SESSION['upload_file_format'] === $this->shortName) echo ' checked="checked"';
+		if(isset($_SESSION['upload_file_format'])) // User has chosen a file format previously
+		{
+			if($this->shortName === $_SESSION['upload_file_format']) echo ' checked="checked"';
+		}
+		else // User has not chosen a file format previously, so use the default human readable
+		{
+			if($this->shortName === 'human' echo ' checked="checked"';
+		}
 		echo ' id="upload_network_file_format_'.$this->shortName.'" /><label for="upload_network_file_format_'.$this->shortName.'">'.$this->longName;
 		if ($this->link !== '') echo ' <a href="'.$this->link.'">(details)</a>';
 		echo ' '.$this->example.'</label><br />'.PHP_EOL;
@@ -1082,7 +1089,14 @@ class FileFormat
 	public function getBatchRadioButton()
 	{
 		echo '<input type="radio" name="upload_batch_file_format" value="'.$this->shortName.'"';
-		if((!isset($_SESSION['upload_file_format']) and $this->shortName === 'human') or $_SESSION['upload_file_format'] === $this->shortName) echo ' checked="checked"';
+		if(isset($_SESSION['upload_file_format']))
+		{
+			if($this->shortName === $_SESSION['upload_file_format']) echo ' checked="checked"';
+		}
+		else
+		{
+			if($this->shortName === 'human') echo ' checked="checked"';
+		}
 		echo ' id="upload_batch_file_format_'.$this->shortName.'" /><label for="upload_batch_file_format_'.$this->shortName.'">'.$this->longName;
 		if ($this->link !== '') echo ' <a href="'.$this->link.'">(details)</a>';
 		echo ' '.$this->example.'</label><br />'.PHP_EOL;

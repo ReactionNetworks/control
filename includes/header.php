@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-14
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   06/01/2014
+ * @modified   27/01/2014
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -23,7 +23,7 @@ $currentURL = explode('/', $_SERVER['REQUEST_URI']);
 $current_page = end($currentURL);
 if($current_page === 'index.php') $current_page = '';
 $protocol = 'http';
-if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== off) $protocol .= 's';
+if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== 'off') $protocol .= 's';
 if(SITE_URL.$current_page !== $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
 {
 	header('Location: '.SITE_URL.$current_page);
