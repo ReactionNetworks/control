@@ -95,21 +95,10 @@ function convert_links_to_plain_text($intext)
 	elseif(strpos($intext, '~') === false) $delimiter = '~';
 	elseif(strpos($intext, '@') === false) $delimiter = '@';
 	else return $intext;
-	if(strpos($intext, ' title="') and strpos($intext, ' title=""') === false)
-	{ // Check if title attribute is present and nonempty
-		if(strpos($intext, ' title="') < strpos($intext, ' href="'))
-		{ // title before href
-			$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$4 [$8]', $intext);
-		}
-		else // href before title
-		{
-			$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $intext);
-		}
-	}
-	else // No title attribute present
-	{
-		$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $intext);
-	}
+	// Replace link text with link title if title attribute present
+	$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$1$2$6$7$4$8', $intext);
+	// Strip out link HTML
+	$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $outtext);
 	return $outtext;
 }
 
