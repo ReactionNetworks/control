@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   22/01/2014
+ * @modified   27/01/2014
  */
 
 /**
@@ -96,9 +96,9 @@ function convert_links_to_plain_text($intext)
 	elseif(strpos($intext, '@') === false) $delimiter = '@';
 	else return $intext;
 	// Replace link text with link title if title attribute present
-	$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$1$2$6$7$4$8', $intext);
+	$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$1$2$6$7$4$9', $intext);
 	// Strip out link HTML
-//	$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $outtext);
+	$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $outtext);
 	return $outtext;
 }
 
