@@ -1076,7 +1076,7 @@ class FileFormat
 		}
 		else // User has not chosen a file format previously, so use the default human readable
 		{
-			if($this->shortName === 'human' echo ' checked="checked"';
+			if($this->shortName === 'human') echo ' checked="checked"';
 		}
 		echo ' id="upload_network_file_format_'.$this->shortName.'" /><label for="upload_network_file_format_'.$this->shortName.'">'.$this->longName;
 		if ($this->link !== '') echo ' <a href="'.$this->link.'">(details)</a>';
