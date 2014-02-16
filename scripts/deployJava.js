@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006, 2011, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2006, 2012, Oracle and/or its affiliates. All rights reserved.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -127,6 +127,19 @@ var deployJava = function() {
         }
     }
 
+     // GetJava page
+     function constructGetJavaURL(query) {
+	    
+	var getJavaURL = 'http://java.com/dt-redirect';
+
+	if (query == null || query.length == 0) return getJavaURL;
+	if(query.charAt(0) == '&')
+	{
+	   query = query.substring(1, query.length);	
+	}
+	return getJavaURL + '?'+  query;
+    }
+
     function arHas(ar, attr) {
         var len = ar.length;
         for (var i = 0; i < len; i++) {
@@ -204,8 +217,6 @@ var deployJava = function() {
     EAInstallEnabled: false,
     EarlyAccessURL: null,
 
-    // GetJava page
-    getJavaURL: 'http://jdl.sun.com/webapps/getjava/BrowserRedirect?host=java.com',
 
     // mime-type of the DeployToolkit plugin object
     oldMimeType: 'application/npruntime-scriptable-plugin;DeploymentToolkit',
@@ -423,13 +434,13 @@ var deployJava = function() {
                            (platform.indexOf('win32') != -1)) {
                     return this.FFInstall();
                 } else {
-                    location.href = this.getJavaURL +
+                    location.href = constructGetJavaURL(
                         ((this.returnPage != null) ?
                         ('&returnPage=' + this.returnPage) : '') +
                         ((this.locale != null) ?
                         ('&locale=' + this.locale) : '') +
                         ((this.brand != null) ?
-                         ('&brand=' + this.brand) : '');
+                         ('&brand=' + this.brand) : ''));
                 }
                 // we have to return false although there may be an install
                 // in progress now, when complete it may go to return page
@@ -999,11 +1010,15 @@ var deployJava = function() {
 
 
             // order is important here.  Safari userAgent contains mozilla,
+            // IE 11 userAgent contains mozilla and netscape, 
             // and Chrome userAgent contains both mozilla and safari.
             if ((browser.indexOf('msie') != -1) && (browser.indexOf('opera') == -1)) {
                 this.browserName = 'MSIE';
                 this.browserName2 = 'MSIE';
-            } else if (browser.indexOf('iphone') != -1) {
+            } else if (browser.indexOf('trident') != -1 || browser.indexOf('Trident') != -1) {
+				this.browserName = 'MSIE';
+				this.browserName2 = 'MSIE';
+			} else if (browser.indexOf('iphone') != -1) {
                 // this included both iPhone and iPad
                 this.browserName = 'Netscape Family';
                 this.browserName2 = 'iPhone';
@@ -1123,12 +1138,12 @@ var deployJava = function() {
 
     IEInstall: function() {
 
-        location.href = this.getJavaURL +
+        location.href = constructGetJavaURL(
             ((this.returnPage != null) ?
             ('&returnPage=' + this.returnPage) : '') +
             ((this.locale != null) ?
             ('&locale=' + this.locale) : '') +
-            ((this.brand != null) ? ('&brand=' + this.brand) : '');
+            ((this.brand != null) ? ('&brand=' + this.brand) : ''));
 
          // should not actually get here
          return false;
@@ -1139,14 +1154,14 @@ var deployJava = function() {
 
     FFInstall: function() {
 
-        location.href = this.getJavaURL +
+        location.href = constructGetJavaURL(
             ((this.returnPage != null) ?
             ('&returnPage=' + this.returnPage) : '') +
             ((this.locale != null) ?
             ('&locale=' + this.locale) : '') +
             ((this.brand != null) ? ('&brand=' + this.brand) : '') +
             ((this.installType != null) ?
-                ('&type=' + this.installType) : '');
+                ('&type=' + this.installType) : ''));
 
          // should not actually get here
          return false;
