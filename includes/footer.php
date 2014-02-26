@@ -34,7 +34,7 @@
 							<li>DSR test: Casian Pantea</li>
 							<li>General analysis tests: Murad Banaji</li>
 							<li>Graphic design: Pete Donnell &amp; Kitson Consulting</li>
-							<li>Web interface architecture & programming: Pete Donnell &amp; Kitson Consulting</li>
+							<li>Web interface architecture &amp; programming: Pete Donnell &amp; Kitson Consulting</li>
 						</ul>
 						<h3>Acknowledgments</h3>
 						<ul>
