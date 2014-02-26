@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    08/05/2013
- * @modified   21/01/2014
+ * @modified   27/02/2014
  */
 
 require_once('../includes/config.php');
@@ -70,7 +70,7 @@ if(isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_toke
 	foreach($_SESSION['test_output'] as $test => $result)
 	{
 		$mail .= "\r\n<h3>TEST: ".$test."</h3>\r\n\r\n";
-		$mail .= '<pre style="margin-left:16px;">';
+		$mail .= '<pre style="margin-left:16px;white-space:pre-wrap;">';
 		if(trim($result)) $mail .= "\r\n$result";
 		else $mail .= "\r\nNo results available, probably due to test timeout.";
 		$mail .= "\r\n</pre>";
