@@ -1,0 +1,96 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Fake test to calculate the CRN Jacobian matrix symbolically
+ *
+ * Generates the net stoichiometry matrix and a symbolic signed version,
+ * then calculates their product using Maxima.
+ *
+ * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @created    03/03/2014
+ * @modified   03/03/2014
+ */
+
+require_once( '../includes/classes.php' );
+if( $argc == 2 )
+{
+	$filename = $argv[1];
+	if( $filename )
+	{
+		$fhandle = fopen( $filename, 'r' );
+		$sourceMatrix = array();
+		$targetMatrix = array();
+		$row = '';
+		while( !feof($fhandle) and mb_strtoupper( trim( $row ) ) !== 'S MATRIX' )
+		{
+			$row = fgets($fhandle);
+		}
+
+		while( !feof( $fhandle ) and mb_strtoupper( $row ) !== 'T MATRIX' )
+		{
+			$row = trim( preg_replace( '/\s+/', ' ', fgets( $fhandle ) ) );
+			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0 and mb_strtoupper( $row )!=='T MATRIX' ) $sourceMatrix[] = explode( ' ', $row );
+			echo $row . "\n";
+		}
+
+		while( !feof( $fhandle ) )
+		{
+			$row = trim( preg_replace( '/\s+/', ' ', fgets( $fhandle ) ) );
+			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0) $targetMatrix[] = explode( ' ', $row );
+			echo $row . "\n";
+		}
+
+		print_r($sourceMatrix);
+		echo "\n\n";
+		print_r($targetMatrix);
+		echo "\n\n";
+		$maximaString = 'Gamma:matrix(';
+		for( $i = 0; $i < count( $targetMatrix ); ++$i )
+		{
+			if( $i ) $maximaString .= ',';
+			$maximaString .= '[';
+			for( $j = 0; $j < count( $targetMatrix[0] ); ++$j )
+			{
+				if( $j ) $maximaString .= ',';
+				$maximaString .= $targetMatrix[$i][$j] - $sourceMatrix[$i][$j];
+			}
+			$maximaString .= ']';
+		}
+		$maximaString .= ');Dv:matrix(';
+		$derivativePrefix = '';
+		$characterCode = 97; // ASCII 'a'
+		for( $i = 0; $i < count( $sourceMatrix ); ++$i )
+		{
+			if( $i ) $maximaString .= ',';
+			$maximaString .= '[';
+			for( $j = 0; $j < count( $sourceMatrix[0] ); ++$j )
+			{
+				if( $j ) $maximaString .= ',';
+				if($sourceMatrix[$i][$j]) $maximaString .= $derivativePrefix . chr( $characterCode );
+				else $maximaString .= '0';
+				if( $characterCode < 123 ) // ASCII 'z'
+				{
+					++$characterCode;
+				}
+				else // Add a prefix to the derivative if we've reached 'z'
+				{
+					$characterCode = 97;
+					if( $derivativePrefix )
+					{
+						$derivativePrefix = chr( ord( $derivativePrefix ) + 1 );
+					}
+					else $derivativePrefix = 'a';
+				}
+			}
+			$maximaString .= ']';
+		}
+		$maximaString .= ');Gamma.transpose(Dv);';
+		echo $maximaString;
+		exec( 'if [ -z $(which maxima) ]; then echo "Error: maxima not found"; else $(which maxima) --very-quiet --batch-string ' . escapeshellarg( $maximaString ) . '; fi', $output );
+		print_r( $output );
+	}
+	else die("Usage: calc-jacobian <filename>\nCalculate symbolic Jacobian matrix for chemical reaction network described in <filename>\n");
+}
+else die("Usage: calc-jacobian <filename>\nCalculate symbolic Jacobian matrix for chemical reaction network described in <filename>\n");

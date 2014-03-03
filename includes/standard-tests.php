@@ -6,10 +6,10 @@
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @author     Murad Banaji <murad dot banaji at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   20/06/2013
+ * @modified   03/03/2014
  */
 
 $standardTests = array(
@@ -44,6 +44,15 @@ $standardTests = array(
 		'Runs a number of tests on the system. These are mainly matrix-tests, and relate to multistationarity, stability and persistence. Implemented by Murad Banaji.',
 		'analysereacs --html',
 		array('human')
+	),
+
+	new NetworkTest
+	(
+		'calc-jacobian',
+		'Symbolic Jacobian calculation',
+		'Not a real test: this test calculates the Jacobian matrix symbolically, but does not perform any analysis on it. Implemented by Pete Donnell.',
+		'calc-jacobian',
+		array('source+target')
 	),
 
 /*
