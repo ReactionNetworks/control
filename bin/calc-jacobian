@@ -7,10 +7,10 @@
  * then calculates their product using Maxima.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    03/03/2014
- * @modified   03/03/2014
+ * @modified   04/03/2014
  */
 
 require_once( '../includes/classes.php' );
@@ -20,56 +20,61 @@ if( $argc == 2 )
 	if( $filename )
 	{
 		$fhandle = fopen( $filename, 'r' );
-		$sourceMatrix = array();
-		$targetMatrix = array();
+		$stoichiometryMatrix = array();
+		$reactionRateJacobianMatrix = array();
 		$row = '';
 		while( !feof($fhandle) and mb_strtoupper( trim( $row ) ) !== 'S MATRIX' )
 		{
 			$row = fgets($fhandle);
 		}
 
-		while( !feof( $fhandle ) and mb_strtoupper( $row ) !== 'T MATRIX' )
+		while( !feof( $fhandle ) and mb_strtoupper( $row ) !== 'V MATRIX' )
 		{
 			$row = trim( preg_replace( '/\s+/', ' ', fgets( $fhandle ) ) );
-			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0 and mb_strtoupper( $row )!=='T MATRIX' ) $sourceMatrix[] = explode( ' ', $row );
-			echo $row . "\n";
+			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0 and mb_strtoupper( $row )!=='V MATRIX' ) $stoichiometryMatrix[] = explode( ' ', $row );
 		}
 
 		while( !feof( $fhandle ) )
 		{
 			$row = trim( preg_replace( '/\s+/', ' ', fgets( $fhandle ) ) );
-			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0) $targetMatrix[] = explode( ' ', $row );
-			echo $row . "\n";
+			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0) $reactionRateJacobianMatrix[] = explode( ' ', $row );
 		}
 
-		print_r($sourceMatrix);
-		echo "\n\n";
-		print_r($targetMatrix);
-		echo "\n\n";
 		$maximaString = 'Gamma:matrix(';
-		for( $i = 0; $i < count( $targetMatrix ); ++$i )
+		for( $i = 0; $i < count( $stoichiometryMatrix ); ++$i )
 		{
 			if( $i ) $maximaString .= ',';
 			$maximaString .= '[';
-			for( $j = 0; $j < count( $targetMatrix[0] ); ++$j )
+			for( $j = 0; $j < count( $stoichiometryMatrix[0] ); ++$j )
 			{
 				if( $j ) $maximaString .= ',';
-				$maximaString .= $targetMatrix[$i][$j] - $sourceMatrix[$i][$j];
+				$maximaString .= $stoichiometryMatrix[$i][$j];
 			}
 			$maximaString .= ']';
 		}
 		$maximaString .= ');Dv:matrix(';
 		$derivativePrefix = '';
 		$characterCode = 97; // ASCII 'a'
-		for( $i = 0; $i < count( $sourceMatrix ); ++$i )
+		for( $i = 0; $i < count( $reactionRateJacobianMatrix[0] ); ++$i )
 		{
 			if( $i ) $maximaString .= ',';
 			$maximaString .= '[';
-			for( $j = 0; $j < count( $sourceMatrix[0] ); ++$j )
+			for( $j = 0; $j < count( $reactionRateJacobianMatrix ); ++$j )
 			{
 				if( $j ) $maximaString .= ',';
-				if($sourceMatrix[$i][$j]) $maximaString .= $derivativePrefix . chr( $characterCode );
-				else $maximaString .= '0';
+				switch( $reactionRateJacobianMatrix[$j][$i] )
+				{
+					case 0:
+						$maximaString .= '0';
+						break;
+					case 2:
+						$maximaString .= $derivativePrefix . chr( $characterCode ) . '1-' . $derivativePrefix . chr( $characterCode ) . '2';
+						break;
+					default:
+						if( $reactionRateJacobianMatrix[$j][$i] < 0 ) $maximaString .= '-';
+						$maximaString .= $derivativePrefix . chr( $characterCode );
+						break;
+				}
 				if( $characterCode < 123 ) // ASCII 'z'
 				{
 					++$characterCode;
@@ -86,11 +91,12 @@ if( $argc == 2 )
 			}
 			$maximaString .= ']';
 		}
-		$maximaString .= ');Gamma.transpose(Dv);';
-		echo $maximaString;
-		exec( 'if [ -z $(which maxima) ]; then echo "Error: maxima not found"; else $(which maxima) --very-quiet --batch-string ' . escapeshellarg( $maximaString ) . '; fi', $output );
-		print_r( $output );
+		$maximaString .= ');Gamma.Dv;';
+		exec( 'if [ -z $(which maxima) ]; then echo "Error: maxima not found."; else $(which maxima) --very-quiet --batch-string ' . escapeshellarg( $maximaString ) . '; fi', $output );
+		echo '<span style="font-family:monospace;">', PHP_EOL;
+		foreach( $output as $line ) echo $line, PHP_EOL;
+		echo '</span>', PHP_EOL;
 	}
-	else die("Usage: calc-jacobian <filename>\nCalculate symbolic Jacobian matrix for chemical reaction network described in <filename>\n");
+	else die( "Usage: calc-jacobian <filename>\nCalculate symbolic Jacobian matrix for chemical reaction network described in <filename>\n" );
 }
-else die("Usage: calc-jacobian <filename>\nCalculate symbolic Jacobian matrix for chemical reaction network described in <filename>\n");
+else die( "Usage: calc-jacobian <filename>\nCalculate symbolic Jacobian matrix for chemical reaction network described in <filename>\n" );

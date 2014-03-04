@@ -120,6 +120,16 @@
 		cursor: default;
 	}
 
+	p.jump > span, p.jump > a
+	{
+		float:left;
+	}
+
+	p.jump > a.align_right
+	{
+		width: auto;
+	}
+
 	.left_centred
 	{
 		margin: auto;
@@ -130,6 +140,11 @@
 	.mobile
 	{
 		display: none;
+	}
+
+	.monospace
+	{
+		font-family: "Consolas Mono", monospace;
 	}
 
 	.scroll

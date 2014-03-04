@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   03/03/2014
+ * @modified   04/03/2014
  */
 
 $standardTests = array(
@@ -49,10 +49,10 @@ $standardTests = array(
 	new NetworkTest
 	(
 		'calc-jacobian',
-		'Symbolic Jacobian calculation',
-		'Not a real test: this test calculates the Jacobian matrix symbolically, but does not perform any analysis on it. Implemented by Pete Donnell.',
+		'Jacobian matrix',
+		'Not a real test: this test calculates the Jacobian matrix symbolically, but does not perform any analysis on it. Implemented in <a href="http://maxima.sourceforge.net/">Maxima</a> by Pete Donnell.',
 		'calc-jacobian',
-		array('source+target')
+		array('stoichiometry+V')
 	),
 
 /*

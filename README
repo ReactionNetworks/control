@@ -1,7 +1,12 @@
 CoNtRol - Chemical Reaction Network analysis tool
 
 Comprises several components:
-Java applet to draw DSR graphs (Anca Marginean)
-C code to analyse reaction networks (Murad Banaji)
-Octave code to analyse reaction networks (Casian Pantea)
-Web interface code (Pete Donnell)
+1. Web interface code (Pete Donnell)
+2. Java Web Start application to draw DSR graphs (Anca Marginean)
+3. C code to analyse reaction networks (Murad Banaji)
+4. Octave code to analyse reaction networks (Casian Pantea)
+5. Hybrid PHP/Maxima/shell code to calculate symbolic Jacobian matrix (Pete Donnell)
+
+Components 1 and 5 are bundled together in the package 'control'. The other components are packaged separately.
+
+For detailed information on downloading, building and using CoNtRol, see http://reaction-networks.net/control/download/ and http://reaction-networks.net/wiki/CoNtRol.

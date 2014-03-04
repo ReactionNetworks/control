@@ -2,13 +2,13 @@
 /**
  * CoNtRol results page
  *
- * This is the results page for CoNtRol
+ * Main results page for CoNtRol
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   18/12/2013
+ * @modified   04/03/2014
  */
 
 require_once('includes/header.php');
@@ -34,6 +34,7 @@ foreach($_SESSION['tests'] as $testname => $test)
 ?>
 							<span class="align_right"><a href="."><img src="images/return.png" alt="Back arrow" /></a> <a href=".">Back to main</a></span>
 						</p>
+						<div style="border:none;clear:both;margin:0;padding:0;"></div>
 						<div>
 							<h3>Reaction Network Tested:</h3>
 							<p>

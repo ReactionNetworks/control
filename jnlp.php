@@ -5,10 +5,11 @@
  * Sets parameters to launch the DSR Java application
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
+ * @author     Anca Marginean <anca dot marginean at cs dot utcluj dot ro>
+ * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   25/07/2013
+ * @modified   04/03/2014
  */
 
 header('Content-Type: application/x-java-jnlp-file');

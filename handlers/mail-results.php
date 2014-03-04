@@ -94,8 +94,8 @@ if(isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_toke
 	$body .= "Content-Type: text/plain; charset=utf-8;\r\n format=flowed\r\n";
 	$body .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
 	// Remove HTML tags and replace links with bare URLs
-	$plain_text_search = array('<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>');
-	$plain_text_replace = array('', '', '## ', '### ', '', '', '', ' ##', ' ###', '', '');
+	$plain_text_search = array('<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '<span>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>', '</span>');
+	$plain_text_replace = array('', '', '## ', '### ', '', '', '', '', ' ##', ' ###', '', '', '');
 	$body .= str_replace($plain_text_search, $plain_text_replace, preg_replace('@( style=")(.*?)(")@', '', convert_links_to_plain_text($mail)));
 
 	// Create HTML version of email
