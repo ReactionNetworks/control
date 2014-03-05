@@ -40,7 +40,29 @@ if( $argc == 2 )
 			if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0) $reactionRateJacobianMatrix[] = explode( ' ', $row );
 		}
 
-		$maximaString = 'Gamma:matrix(';
+		$maximaString = 'second_additive_compound(testm):=';
+		$maximaString .= 'block([testm:testm,i:1,j:1],';
+		$maximaString .= 'matsize:matrix_size(testm)[2],';
+		$maximaString .= 'matsize2:binomial(matsize,2),';
+		$maximaString .= 'testm2:zeromatrix(matsize2,matsize2),';
+		$maximaString .= 'for i1:1 while i1 <= matsize do ';
+		$maximaString .= 'for i2:i1+1 while i2 <= matsize do(';
+		$maximaString .= 'for j1:1 while j1 <= matsize do ';
+		$maximaString .= 'for j2:j1+1 while j2 <= matsize do(';
+		$maximaString .= 'if i1=j1 then(';
+		$maximaString .= 'if i2=j2 then ';
+		$maximaString .= 'testm2[i][j]:testm[i1][j1]+testm[i2][j2] ';
+		$maximaString .= 'else testm2[i][j]:testm[i2][j2]) ';
+		$maximaString .= 'elseif i1=j2 then(';
+		$maximaString .= 'testm2[i][j]:-testm[i2][j1]) ';
+		$maximaString .= 'elseif i2=j1 then(';
+		$maximaString .= 'testm2[i][j]:-testm[i1][j2]) ';
+		$maximaString .= 'elseif i2=j2 then(';
+		$maximaString .= 'testm2[i][j]:testm[i1][j1]),';
+		$maximaString .= 'j:j+1),';
+		$maximaString .= 'i:i+1,j:1),';
+		$maximaString .= 'return(testm2))$ ';
+		$maximaString .= 'Gamma:matrix(';
 		for( $i = 0; $i < count( $stoichiometryMatrix ); ++$i )
 		{
 			if( $i ) $maximaString .= ',';
@@ -52,7 +74,7 @@ if( $argc == 2 )
 			}
 			$maximaString .= ']';
 		}
-		$maximaString .= ');Dv:matrix(';
+		$maximaString .= ')$Dv:matrix(';
 		$derivativePrefix = '';
 		$characterCode = 97; // ASCII 'a'
 		for( $i = 0; $i < count( $reactionRateJacobianMatrix[0] ); ++$i )
@@ -94,7 +116,7 @@ if( $argc == 2 )
 			}
 			$maximaString .= ']';
 		}
-		$maximaString .= ');Gamma.Dv;';
+		$maximaString .= ')$Gamma.Dv;second_additive_compound(Gamma.Dv);';
 		exec( 'if [ -z $(which maxima) ]; then echo "Error: maxima not found."; else $(which maxima) --very-quiet --batch-string ' . escapeshellarg( $maximaString ) . '; fi', $output );
 		echo '<span style="font-family:monospace;">', PHP_EOL;
 		foreach( $output as $line ) echo $line, PHP_EOL;
