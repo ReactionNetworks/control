@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    03/03/2014
- * @modified   04/03/2014
+ * @modified   05/03/2014
  */
 
 require_once( '../includes/classes.php' );
@@ -75,18 +75,21 @@ if( $argc == 2 )
 						$maximaString .= $derivativePrefix . chr( $characterCode );
 						break;
 				}
-				if( $characterCode < 123 ) // ASCII 'z'
+				if( $reactionRateJacobianMatrix[$j][$i] )
 				{
-					++$characterCode;
-				}
-				else // Add a prefix to the derivative if we've reached 'z'
-				{
-					$characterCode = 97;
-					if( $derivativePrefix )
+					if( $characterCode < 122 ) // ASCII 'z'
 					{
-						$derivativePrefix = chr( ord( $derivativePrefix ) + 1 );
+						++$characterCode;
 					}
-					else $derivativePrefix = 'a';
+					else // Add a prefix to the derivative if we've reached 'z'
+					{
+						$characterCode = 97;
+						if( $derivativePrefix )
+						{
+							$derivativePrefix = chr( ord( $derivativePrefix ) + 1 );
+						}
+						else $derivativePrefix = 'a';
+					}
 				}
 			}
 			$maximaString .= ']';
