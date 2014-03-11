@@ -10,7 +10,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    03/03/2014
- * @modified   05/03/2014
+ * @modified   11/03/2014
  */
 
 require_once( '../includes/classes.php' );
@@ -118,7 +118,7 @@ if( $argc == 2 )
 		}
 		$maximaString .= ')$Gamma.Dv;second_additive_compound(Gamma.Dv);';
 		exec( 'if [ -z $(which maxima) ]; then echo "Error: maxima not found."; else $(which maxima) --very-quiet --batch-string ' . escapeshellarg( $maximaString ) . '; fi', $output );
-		echo '<span style="font-family:monospace;">', PHP_EOL;
+		echo '<span style="font-family:monospace;white-space:pre;background:#fff;">', PHP_EOL;
 		foreach( $output as $line ) echo $line, PHP_EOL;
 		echo '</span>', PHP_EOL;
 	}
