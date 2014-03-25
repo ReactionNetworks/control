@@ -12,29 +12,29 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   21/01/2014
+ * @modified   25/03/2014
  */
 
 /////////////////////////////////////////
 // THINGS YOU SHOULD DEFINITELY CHANGE //
 /////////////////////////////////////////
 
-// site URL
+// Site URL.
 define('SITE_DIR', 'control', false);
-define('SITE_URL','http://reaction-networks.net/'.SITE_DIR.'/', false);
+define('SITE_URL','http://example.com/'.SITE_DIR.'/', false);
 
 // Email address for the site admin. All emails sent by CoNtRol are sent from this address.
-define('ADMIN_EMAIL', 'control@reaction-networks.net', false);
+define('ADMIN_EMAIL', 'control@example.com', false);
 
-// Database connection information. You definitely need to change this.
+// Database connection information. You definitely need to change this if you want to use batch processing.
 
-// MySQL on the same server
+// MySQL on the same server.
 define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
 
-// MySQL on a different server
+// MySQL on a different server.
 //define('DB_STRING', 'mysql:host=1.2.3.4;port=3306;dbname=control;charset=utf8', false);
 
-// SQLite
+// SQLite.
 //define('DB_STRING', 'sqlite:sql/control.sqlite', false);
 
 define('DB_USER', 'control', false);
@@ -47,14 +47,14 @@ define('DB_PREFIX', '', false);
 // THINGS YOU MIGHT WANT TO CHANGE //
 /////////////////////////////////////
 
-// Location for the executables used by CoNtRol. You may want to change this for extra security.
+// Location for the executables used by CoNtRol. You may want to change this to a directory that is not web-accessible for extra security.
 define('BINARY_FILE_DIR', '../bin/', false);
 
 // Debugging variable. Set to true when debugging.
 define('CRNDEBUG', false, false);
 
-// Niceness command to use when running tests. Note trailing space.
-// Value for dedicated server, i.e. normal priority okay
+// Niceness level to use when running tests. Note trailing space.
+// Value for dedicated server, i.e. normal priority.
 //define('NICENESS', '', false);
 // Value for shared server without ionice. N.B. trailing space!
 //define('NICENESS', 'nice -n 19 ', false);
@@ -84,13 +84,14 @@ define('DEFAULT_PAGE_TITLE', 'CoNtRol - Chemical Reaction Network analysis tool'
 define('DEFAULT_PAGE_DESCRIPTION', 'CoNtRol is a web application to analyse chemical reaction networks. It also generates LaTeX markup describing their associated DSR graphs and equations.', false);
 
 // Work out which line ending to use for file exports. Don't change this.
-// Default to server line ending
+// Auto-detect client line ending when appropriate.
 if(isset($_SERVER['HTTP_USER_AGENT']))
 {
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Windows;') !== false) $line_ending = "\r\n";
 	elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Macintosh;') !== false) $line_ending = "\r";
 	else $line_ending = "\n";
 }
+// Default to server line ending when client line ending not available.
 else $line_ending = PHP_EOL;
 define('CLIENT_LINE_ENDING', $line_ending, false);
 
@@ -98,10 +99,5 @@ define('CLIENT_LINE_ENDING', $line_ending, false);
 if(strpos('mysql', DB_STRING) === 0 and (!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306)) $db_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 else $db_options = null;
 
-// PHP supports ZIP archives natively. Extra archive types can be supported via system calls as specified in this array. Don't change this unless you know what you're doing.
-$supported_batch_file_types = array(
-//	array('extension' => 'rar', 'mimetype' => 'application/rar', 'binary' => '/usr/bin/unrar e')
-);
-
-// Required to support cross-platform line endings
+// Required to support cross-platform line endings on file upload.
 ini_set('auto_detect_line_endings', '1');
