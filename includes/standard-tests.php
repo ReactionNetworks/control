@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    18/01/2013
- * @modified   05/03/2014
+ * @modified   29/04/2014
  */
 
 $standardTests = array(
@@ -46,6 +46,8 @@ $standardTests = array(
 		array('human')
 	),
 
+/*
+// This test has been removed as it adds a lot of confusing output for little mathematical gain. Uncomment to re-enable it.
 	new NetworkTest
 	(
 		'calc-jacobian',
@@ -54,6 +56,7 @@ $standardTests = array(
 		'calc-jacobian',
 		array('stoichiometry+V')
 	),
+*/
 
 /*
  Add new tests here, in the following format:

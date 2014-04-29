@@ -5,7 +5,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2013
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   20/11/2013
+ * @modified   29/04/2014
  */
 
 /**
@@ -234,21 +234,21 @@ function saveNetwork()
 		reactionsRightHandSide.push(value.value);
 	});
 	var reactionsDirection = new Array();
-	$.each($('.reaction_direction :selected'), function(index, value)
+	$.each( $( '.reaction_direction :selected' ), function( index, value )
 	{
-		reactionsDirection.push(value.value);
+		reactionsDirection.push( value.value );
 	});
 	var testSettings = new Array();
-	$.each($('.test'), function(index, v)
+	$.each( $( '.test' ), function( index, v )
 	{
-		testSettings.push({name: $(this).attr('name'), value: $(this).val()});
+		testSettings.push( {name: $( this ).attr( 'name' ), value: $( this ).val()} );
 	});
 	var data = {'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'test_settings': testSettings, csrf_token: csrf_token};
-	$.post(url, data, function(returndata)
+	$.post( url, data, function( returndata )
 	{
-		if(returndata.length)
+		if( returndata.length )
 		{
-			showTestOutput('<p>' + returndata + '</p>');
+			showTestOutput( '<p>' + returndata + '</p>' );
 			validNetwork = false;
 		}
 	});
@@ -258,39 +258,39 @@ function saveNetwork()
 /**
  * Adds output from a test to the progress popover
  */
-function showTestOutput(output)
+function showTestOutput( output )
 {
-	$('#calculation_output_holder').append(output);
+	$( '#calculation_output_holder' ).append( output );
 }
 
 /**
  * Enables/disables detailed test output via AJAX
  */
-function toggleDetailedOutput(newStatus)
+function toggleDetailedOutput( newStatus )
 {
 	var url = 'handlers/toggle-detailed-output.php';
 	var data = {detailed_output: newStatus, csrf_token: csrf_token};
-	$.post(url, data);
+	$.post( url, data );
 }
 
 /**
  * Enables/disables the --mass-action-only flag via AJAX
  */
-function toggleMassAction(newStatus)
+function toggleMassAction( newStatus )
 {
 	var url = 'handlers/toggle-mass-action.php';
 	var data = {mass_action_only: newStatus, csrf_token: csrf_token};
-	$.post(url, data);
+	$.post( url, data );
 }
 
 /**
  * Enables/disables the specified test via AJAX
  */
-function toggleTest(testName, newStatus)
+function toggleTest( testName, newStatus )
 {
 	var url = 'handlers/toggle-test.php';
 	var data = {testName: testName, active: newStatus, csrf_token: csrf_token};
-	$.post(url, data);
+	$.post( url, data );
 }
 
 /**
@@ -533,7 +533,7 @@ $(document).ready(function()
 	{
 		if(!$(this).hasClass('disabled'))
 		{
-			$.when(saveNetwork()).then(generateLaTeX());
+			$.when( saveNetwork() ).then( generateLaTeX() );
 		}
 	});
 
@@ -557,8 +557,7 @@ $(document).ready(function()
 		if(!$(this).hasClass('disabled'))
 		{
 			resetPopup();
-			saveNetwork();
-			processTests(1);
+			$.when( saveNetwork() ).then( processTests(1) );
 		}
 		return false;
 	});

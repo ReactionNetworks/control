@@ -9,7 +9,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    10/10/2012
- * @modified   16/02/2014
+ * @modified   29/04/2014
  */
 
 require_once('../includes/config.php');
@@ -64,7 +64,7 @@ if(!count($errors))
 	switch($_POST['upload_network_file_format'])
 	{
 		case 'stoichiometry':
-			if(!check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$matrix = array();
 			$_SESSION['errors'][] = 'Warning: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.';
 			while(!feof($fhandle))
@@ -76,7 +76,7 @@ if(!count($errors))
 			break;
 
 		case 'source_target':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$sourceMatrix = array();
 			$targetMatrix = array();
 			$row = '';
@@ -102,7 +102,7 @@ if(!count($errors))
 			break;
 
 		case 'sv':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$file = array();
 			while (!feof($fhandle))
 			{
@@ -115,7 +115,7 @@ if(!count($errors))
 			break;
 
 		case 'feinberg1':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$file = array();
 			while (!feof($fhandle))
 			{
@@ -128,7 +128,7 @@ if(!count($errors))
 			break;
 
 		case 'feinberg2':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$file = array();
 			while (!feof($fhandle))
 			{
@@ -141,7 +141,7 @@ if(!count($errors))
 			break;
 
 		case 'stv':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$file = array();
 			while (!feof($fhandle))
 			{
@@ -154,7 +154,7 @@ if(!count($errors))
 			break;
 
 		case 'sauro':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
 			while(!feof($fhandle))
 			{
@@ -168,7 +168,7 @@ if(!count($errors))
 			break;
 
 		case 'sbml':
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'application/xml')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'application/xml' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			if (!$reaction_network->parseSBML($_FILES['upload_network_file_input']['tmp_name']))
 			{
 				$_SESSION['errors'][] = 'An error occurred while parsing the SBML file. Please check that the output below is as expected.';
@@ -176,7 +176,7 @@ if(!count($errors))
 			break;
 
 		default: // assume 'human' if unsure
-			if(check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'text/plain')) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
+			if( !check_file_format( $_FILES['upload_network_file_input']['tmp_name'], 'text/plain' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
 			$error = false;
 			while(!feof($fhandle))
 			{

@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   27/01/2014
+ * @modified   29/04/2014
  */
 
 class Reaction
@@ -209,13 +209,16 @@ class Reaction
 	{
 		$text = '';
 
-		foreach($this->leftHandSide as $reactant => $stoichiometry)
+		if( count( $this->leftHandSide ) )
 		{
-			if(strlen($text)) $text .= ' + ';
-			if($stoichiometry == 1) $text .= $reactant;
-			else if($stoichiometry) $text = $text.$stoichiometry.$reactant;
+			foreach( $this->leftHandSide as $reactant => $stoichiometry )
+			{
+				if( $text ) $text .= ' + ';
+				if( $stoichiometry == 1 ) $text .= $reactant;
+				else if( $stoichiometry ) $text = $text . $stoichiometry . $reactant;
+			}
 		}
-		if(!$text) $text = '&empty;';
+		if( !$text ) $text = '&empty;';
 
 		return $text;
 	}
@@ -229,13 +232,16 @@ class Reaction
 	{
 		$text = '';
 
-		foreach($this->rightHandSide as $reactant => $stoichiometry)
+		if( count( $this->rightHandSide ) )
 		{
-			if (strlen($text)) $text .= ' + ';
-			if ($stoichiometry == 1) $text .= $reactant;
-			else if($stoichiometry) $text = $text.$stoichiometry.$reactant;
+			foreach( $this->rightHandSide as $reactant => $stoichiometry )
+			{
+				if( $text ) $text .= ' + ';
+				if( $stoichiometry == 1 ) $text .= $reactant;
+				else if( $stoichiometry ) $text = $text . $stoichiometry . $reactant;
+			}
 		}
-		if(!$text) $text = '&empty;';
+		if( !$text ) $text = '&empty;';
 
 		return $text;
 	}
@@ -261,25 +267,25 @@ TO DO: this function isn't correct for reactions where a reactant appears on bot
 	 */
 	public function getReactants()
 	{
-		$reactants = array();
+		$reactants = false;
 
-		if($this->leftHandSide)
+		if( $this->leftHandSide )
 		{
-			foreach($this->leftHandSide as $reactant => $stoichiometry)
+			$reactants = array();
+			foreach( $this->leftHandSide as $reactant => $stoichiometry )
 			{
-				$reactants[] = $reactant;
+				if( $reactant !== 0 ) $reactants[] = $reactant;
 			}
 		}
-		else return false;
 
-		if($this->rightHandSide)
+		if( $this->rightHandSide )
 		{
-			foreach($this->rightHandSide as $reactant => $stoichiometry)
+			if( !$reactants ) $reactants = array();
+			foreach( $this->rightHandSide as $reactant => $stoichiometry )
 			{
-				$reactants[] = $reactant;
+				if( $reactant !== 0 ) $reactants[] = $reactant;
 			}
 		}
-		else return false;
 		return $reactants;
 	}
 

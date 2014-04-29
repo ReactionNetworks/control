@@ -46,11 +46,12 @@
 
 	h1
 	{
-		font-size: 72px;
-		padding-top: 30px;
-		padding-left: 174px;
+		color: black;
 		display: inline-block;
 		font-family: Orbitron, sans-serif;
+		font-size: 72px;
+		padding-left: 174px;
+		padding-top: 30px;
 	}
 
 	noscript p
@@ -334,7 +335,7 @@
 		width: 100%;
 	}
 
-	#header > h2
+	#header > a > h2
 	{
 		color: #999;
 		display: inline-block;

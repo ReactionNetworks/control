@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-14
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   27/01/2014
+ * @modified   29/04/2014
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -69,8 +69,8 @@ require_once('version.php');
 	<body>
 		<div id="container">
 			<div id="header">
-				<h1>CoNtRol</h1>
-				<h2>Chemical <span class="non_mobile"><br /></span>Reaction <span class="non_mobile"><br /></span>Network <span class="non_mobile"><br /></span>analysis tool</h2>
+				<a href="<?php echo SITE_URL; ?>"><h1>CoNtRol</h1></a>
+				<a href="<?php echo SITE_URL; ?>"><h2>Chemical <span class="non_mobile"><br /></span>Reaction <span class="non_mobile"><br /></span>Network <span class="non_mobile"><br /></span>analysis tool</h2></a>
 			</div>
 			<div id="content">
 				<noscript><p>Sorry, this page requires JavaScript to work correctly.</p></noscript>
