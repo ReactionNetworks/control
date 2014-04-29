@@ -10,4 +10,8 @@
  * @created    27/03/2013
  * @modified   29/04/2014
  */
+
+/**
+ * Define the current version
+ */
 define('CONTROL_VERSION', '1.1.1', false);
