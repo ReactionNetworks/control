@@ -7,10 +7,12 @@
  * output. It must be included separately in each handler page.
  *
  * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
- * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @link       https://reaction-networks.net/control/download/
+ * @package    CoNtRol
  * @created    01/10/2012
- * @modified   27/01/2014
+ * @modified   29/04/2014
  */
 
 /**
@@ -19,12 +21,12 @@
 function batch_captcha()
 {
 	$output = '';
-	$_SESSION['batch-captcha'] = captcha_random_string(5);
-	$char_array = str_split($_SESSION['batch-captcha']);
+	$_SESSION['batch-captcha'] = captcha_random_string( 5 );
+	$char_array = str_split( $_SESSION['batch-captcha'] );
 	// Encode in ASCII to trick bots
-	foreach ($char_array as $char)
+	foreach( $char_array as $char )
 	{
-		$output .= '&shy;&#' . ord($char) . ';&shy;';
+		$output .= '&shy;&#' . ord( $char );
 	}
 	echo $output;
 }
@@ -34,16 +36,16 @@ function batch_captcha()
  *
  * Based upon http://www.marksanborn.net/php/random-password-string-generator-for-php/
  */
-function captcha_random_string($length = 10)
+function captcha_random_string( $length = 10 )
 {
 	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 	$randomString = '';
 
-	$charLength = strlen($chars)-1;
+	$charLength = strlen( $chars )-1;
 
-	for($i = 0 ; $i < $length ; $i++)
+	for( $i = 0 ; $i < $length ; $i++ )
 	{
-		$randomString .= $chars[mt_rand(0,$charLength)];
+		$randomString .= $chars[mt_rand( 0, $charLength )];
 	}
 
 	return $randomString;
@@ -56,14 +58,14 @@ function captcha_random_string($length = 10)
  * @param   string  $expected_mimetype  The desired mimetype for the file
  * @return  bool    $success            Return TRUE if the file was successfully opened and had the correct mimetype, FALSE otherwise.
  */
-function check_file_format($file, $expected_mimetype)
+function check_file_format( $file, $expected_mimetype )
 {
 	$success = true;
-	$finfo = new finfo(FILEINFO_MIME_TYPE);
-	if($finfo)
+	$finfo = new finfo( FILEINFO_MIME_TYPE );
+	if( $finfo )
 	{
-		$mimetype = $finfo->file($file);
-		if($mimetype !== $expected_mimetype) $success = false;
+		$mimetype = $finfo->file( $file );
+		if( $mimetype !== $expected_mimetype ) $success = false;
 	}
 	else $success = false;
 	return $success;

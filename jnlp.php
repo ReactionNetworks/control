@@ -4,12 +4,14 @@
  *
  * Sets parameters to launch the DSR Java application
  *
- * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
  * @author     Anca Marginean <anca dot marginean at cs dot utcluj dot ro>
- * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
- * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
+ * @copyright  2012-2014 Technical University of Cluj & University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @link       https://reaction-networks.net/control/download/
+ * @package    CoNtRol
  * @created    01/10/2012
- * @modified   04/03/2014
+ * @modified   29/04/2014
  */
 
 header('Content-Type: application/x-java-jnlp-file');
