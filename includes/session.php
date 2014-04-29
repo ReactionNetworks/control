@@ -7,14 +7,25 @@
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
- * @link       https://reaction-networks.net/control/download/
+ * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    10/10/2012
  * @modified   29/04/2014
  */
 
+/**
+ * Standard include
+ */
 require_once('config.php');
+
+/**
+ * Standard include
+ */
 require_once('classes.php');
+
+/**
+ * Standard include
+ */
 require_once('standard-tests.php');
 
 // Disable session IDs in GET parameters

@@ -7,10 +7,22 @@
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
- * @link       https://reaction-networks.net/control/download/
+ * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
  * @modified   29/04/2014
+ */
+
+/**
+ * Reaction class
+ *
+ * Describes an individual reaction.
+ *
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
  */
 
 class Reaction
@@ -261,11 +273,11 @@ class Reaction
 	/**
 	 * Get the reactants as an array
 	 *
+	 * TO DO: this function isn't correct for reactions where a reactant appears on both sides
+	 *
 	 * @return  array  $reactants  An associative array with each reactant name/label
 	 *                             as a key, and its stoichiometry as the value.
-
-TO DO: this function isn't correct for reactions where a reactant appears on both sides
-
+	 *
 	 */
 	public function getReactants()
 	{
@@ -310,6 +322,18 @@ TO DO: this function isn't correct for reactions where a reactant appears on bot
 
 
 
+
+/**
+ * ReactionNetwork class
+ *
+ * Describes a network of reactions.
+ *
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
+ */
 
 class ReactionNetwork
 {
@@ -973,6 +997,18 @@ class ReactionNetwork
 
 
 
+/**
+ * NetworkTest class
+ *
+ * Describes a test to run on a reaction network.
+ *
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
+ */
+
 class NetworkTest
 {
 	private $shortName = '';
@@ -1056,6 +1092,18 @@ class NetworkTest
 
 
 
+
+/**
+ * FileFormat class
+ *
+ * Describes a file format describing a reaction network, for upload purposes.
+ *
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
+ */
 
 class FileFormat
 {

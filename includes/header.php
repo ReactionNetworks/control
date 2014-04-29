@@ -7,7 +7,7 @@
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
- * @link       https://reaction-networks.net/control/download/
+ * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
  * @modified   29/04/2014
@@ -19,7 +19,11 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
+/**
+ * Standard include
+ */
 require_once('config.php');
+
 // Force redirect if not being accessed on the correct URL
 $currentURL = explode('/', $_SERVER['REQUEST_URI']);
 $current_page = end($currentURL);

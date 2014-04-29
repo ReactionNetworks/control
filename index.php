@@ -7,14 +7,25 @@
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
- * @link       https://reaction-networks.net/control/download/
+ * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
  * @modified   29/04/2014
  */
 
+/**
+ * Standard include
+ */
 require_once('includes/header.php');
+
+/**
+ * Standard include
+ */
 require_once('includes/standard-tests.php');
+
+/**
+ * Standard include
+ */
 require_once('includes/file-formats.php');
 ?>
 				<div id="reaction_input_holder">

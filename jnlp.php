@@ -8,7 +8,7 @@
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @copyright  2012-2014 Technical University of Cluj & University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
- * @link       https://reaction-networks.net/control/download/
+ * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
  * @modified   29/04/2014
@@ -16,8 +16,17 @@
 
 header('Content-Type: application/x-java-jnlp-file');
 header('Content-Disposition: Attachment; filename=dsr.jnlp');
+
+/**
+ * Standard include
+ */
 require_once('includes/config.php');
+
+/**
+ * Standard include
+ */
 require_once('includes/session.php');
+
 echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 ?>
 <jnlp spec="1.0+" codebase="<?php echo SITE_URL;?>" href="">
