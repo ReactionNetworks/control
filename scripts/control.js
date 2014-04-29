@@ -15,22 +15,26 @@ function addReaction()
 {
 	++number_of_reactions;
 
-	$('#tools_holder').before('<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>');
+	$( '#tools_holder' ).before( '<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" /> </fieldset>' );
 
-	$('.reaction_left_hand_side').each(function()
+	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
-		$(this).keyup(function() { validateKeyPress($(this)); });
-		$(this).change(function() { validateKeyPress($(this)); });
-		$(this).blur(function() { validateKeyPress($(this)); });
+		$( this ).keyup( function( e ) {
+			if( validateKeyPress( $( this ) ) )
+			{
+				$( this ).keypress( function( e ) {
+					code = e.which;
+					if( code == 10 || code == 13 )
+					{
+						e.preventDefault();
+						$( '#process_network_button' ).click();
+					}
+				});
+			}
+		});
+		$( this ).change( function() { validateKeyPress( $( this ) ); } );
+		$( this ).blur( function() { validateKeyPress( $( this ) ); } );
 	});
-
-	$('.reaction_right_hand_side').each(function()
-	{
-		$(this).keyup(function() { validateKeyPress($(this)); });
-		$(this).change(function() { validateKeyPress($(this)); });
-		$(this).blur(function() { validateKeyPress($(this)); });
-	});
-	$('#reset_reaction_button').removeClass('disabled');
 }
 
 /**
@@ -131,34 +135,36 @@ function generateLaTeX()
 /**
  * Calls the test handler for all selected tests and then redirects to the results
  */
-function processTests(test_number)
+function processTests( test_number )
 {
-	var url = 'handlers/process-tests.php';
-	data = {csrf_token: csrf_token};
-	var timeout_countdown = test_timeout_limit;
-	$('#calculation_output_holder').append('<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>');
-	clearInterval(timer_id);
-	timer_id = setInterval(function()
+	setTimeout( function()
 	{
-		if (timeout_countdown)
+		var url = 'handlers/process-tests.php';
+		data = {csrf_token: csrf_token};
+		var timeout_countdown = test_timeout_limit;
+		$( '#calculation_output_holder' ).append( '<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>' );
+		clearInterval( timer_id );
+		timer_id = setInterval( function()
 		{
-			--timeout_countdown;
-			$('#timeout_countdown').html(timeout_countdown);
-		}
-		else
+			if ( timeout_countdown )
+			{
+				--timeout_countdown;
+				$( '#timeout_countdown') .html( timeout_countdown );
+			}
+			else
+			{
+				$( '#calculation_output_holder' ).append( '<p>Test timed out.</p>' );
+				clearInterval( timer_id );
+			}
+		}, 1000 );
+		$.post( url, data, function( returndata )
 		{
-			$('#calculation_output_holder').append('<p>Test timed out.</p>');
-			clearInterval(timer_id);
-		}
-	}, 1000);
-	$.post(url, data, function(returndata)
-	{
-		$('#calculation_output_holder').append(returndata);
-		$('#timeout_countdown_holder').remove();
-		//showTestOutput(returndata);
-		if(returndata == '<p>All tests completed. Redirecting to results.</p>') window.location.href='results.php';
-		else processTests(++test_number);
-	});
+			showTestOutput( returndata );
+			$( '#timeout_countdown_holder' ).remove();
+			if( returndata == '<p>All tests completed. Redirecting to results.</p>' ) window.location.href = 'results.php';
+			else processTests( ++test_number );
+		});
+	}, 100 );
 }
 
 /**
@@ -166,7 +172,7 @@ function processTests(test_number)
  *
  * N.B. This function does NOT check whether there is only one reaction left.
  * Consequently, calling it when there is only one reaction left will result
- * no reactions being left. Calling it again may trigger a JavaScript error
+ * in no reactions being left. Calling it again may trigger a JavaScript error
  * in the user's browser.
  */
 function removeReaction(notify_user)
@@ -296,75 +302,80 @@ function toggleTest( testName, newStatus )
 /**
  * Validates an email address
  */
-function validateEmailAddress(emailAddress)
+function validateEmailAddress( emailAddress )
 {
-	var atPos=emailAddress.indexOf('@');
- if( atPos< 1) return false;
- if( emailAddress.indexOf('.', atPos) > (atPos + 1) && emailAddress.charAt(emailAddress.length - 1) != '.') return true;
- return false;
+	var atPos = emailAddress.indexOf( '@' );
+	if( atPos < 1 ) return false;
+	if( emailAddress.indexOf( '.', atPos ) > ( atPos + 1 ) && emailAddress.charAt( emailAddress.length - 1 ) != '.' ) return true;
+	return false;
 }
 
 /**
  * Warns about invalid character input
  */
-function validateKeyPress(inputElement)
+function validateKeyPress( inputElement )
 {
-	var invalidCharacters = new Array('<', '>', '-', '=');
-	for(i = 0; i < invalidCharacters.length; ++i)
+	var invalidCharacters = new Array( '<', '>', '-', '=' );
+	for( i = 0; i < invalidCharacters.length; ++i )
 	{
-		if (inputElement.val().indexOf(invalidCharacters[i]) > -1)
+		if( inputElement.val().indexOf( invalidCharacters[i] ) > -1 )
 		{
-			inputElement.val( inputElement.val().replace(invalidCharacters[i], ''));
-			$('#invalid_character_span').html(invalidCharacters[i]);
+			inputElement.val( inputElement.val().replace( invalidCharacters[i], '' ) );
+			$( '#invalid_character_span' ).html( invalidCharacters[i] );
 			var position = inputElement.position();
-			$('#hidden_character_warning').css('top', position.top + 48);
-			$('#hidden_character_warning').css('left', position.left);
-			$('#hidden_character_warning').show();
-			setTimeout(function()
+			$( '#hidden_character_warning' ).css( 'top', position.top + 48 );
+			$( '#hidden_character_warning' ).css( 'left', position.left );
+			$( '#hidden_character_warning' ).show();
+			setTimeout( function()
 			{
-				$('#hidden_character_warning').hide();
+				$( '#hidden_character_warning' ).hide();
 			}, 1500);
 		}
 	}
 	var validInput = true;
 	var totalChars = 0;
-	$('#missing_reactant_warning').hide();
-	$('.reaction_left_hand_side').each(function()
+	$( '#missing_reactant_warning' ).hide();
+	$( '.reaction_left_hand_side' ).each( function()
 	{
-		$(this).css('border-color', '');
-		totalChars += $(this).val().length;
-		lhs = $.trim($(this).val());
-		if(lhs.indexOf('+') == 0 || lhs[lhs.length - 1] == '+' || lhs.indexOf('++') > -1 || lhs.indexOf('+ +') > -1 || lhs.indexOf('+  +') > -1)
+		$( this ).css( 'border-color', '' );
+		totalChars += $( this ).val().length;
+		lhs = $.trim( $( this ).val() );
+		if( lhs.indexOf( '+' ) == 0 || lhs[lhs.length - 1] == '+' || lhs.indexOf( '++' ) > -1 || lhs.indexOf( '+ +' ) > -1 || lhs.indexOf( '+  +' ) > -1)
 		{
 			validInput = false;
-			$(this).css('border-color', 'red');
+			$( this ).css( 'border-color', 'red' );
 			var position = inputElement.position();
-			$('#missing_reactant_warning').css('top', position.top + 48);
-			$('#missing_reactant_warning').css('left', position.left);
-			$('#missing_reactant_warning').show();
+			$( '#missing_reactant_warning' ).css( 'top', position.top + 48 );
+			$( '#missing_reactant_warning' ).css( 'left', position.left );
+			$( '#missing_reactant_warning' ).show();
 		}
 	});
-	$('.reaction_right_hand_side').each(function()
+	$( '.reaction_right_hand_side' ).each( function()
 	{
-		$(this).css('border-color', '');
-		totalChars += $(this).val().length;
-		rhs = $.trim($(this).val());
-		if(rhs.indexOf('+') == 0 || rhs[rhs.length - 1] == '+' || rhs.indexOf('++') > -1 || rhs.indexOf('+ +') > -1 || rhs.indexOf('+  +') > -1)
+		$( this ).css( 'border-color', '' );
+		totalChars += $( this ).val().length;
+		rhs = $.trim( $( this ).val() );
+		if( rhs.indexOf( '+' ) == 0 || rhs[rhs.length - 1] == '+' || rhs.indexOf( '++' ) > -1 || rhs.indexOf( '+ +' ) > -1 || rhs.indexOf( '+  +' ) > -1 )
 		{
 			validInput = false;
-			$(this).css('border-color', 'red');
+			$( this ).css( 'border-color', 'red' );
 			var position = inputElement.position();
-			$('#missing_reactant_warning').css('top', position.top + 48);
-			$('#missing_reactant_warning').css('left', position.left);
-			$('#missing_reactant_warning').show();
+			$( '#missing_reactant_warning').css( 'top', position.top + 48 );
+			$( '#missing_reactant_warning').css( 'left', position.left );
+			$( '#missing_reactant_warning').show();
 		}
 	});
-	if(validInput && totalChars)
+	if( validInput && totalChars )
 	{
 		enableButtons();
 		saveNetwork();
+		return true;
 	}
-	else disableButtons();
+	else
+	{
+		disableButtons();
+		return false;
+	}
 }
 
 var popupWidth = 800;
@@ -444,14 +455,21 @@ $(document).ready(function()
 		return false;
 	});
 
-	$('.reaction_left_hand_side').each(function()
+	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
-		$(this).keyup(function() { validateKeyPress($(this)); });
-	});
-
-	$('.reaction_right_hand_side').each(function()
-	{
-		$(this).keyup(function() { validateKeyPress($(this));	});
+		$( this ).keyup( function( e ) {
+			if( validateKeyPress( $( this ) ) )
+			{
+				$( this ).keypress( function( e ) {
+					code = e.which;
+					if( code == 10 || code == 13 )
+					{
+						e.preventDefault();
+						$( '#process_network_button' ).click();
+					}
+				});
+			}
+		});
 	});
 
 	if($('#add_reaction_button').height() > buttonSize) buttonSize = $('#add_reaction_button').height();
@@ -642,7 +660,10 @@ $(document).ready(function()
 		$('#upload_network_file_button').removeAttr('disabled');
 	});
 
-	$(window).resize(function() { detectWindowSize(); });
-	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1)
-		$('.reaction_left_hand_side').first().select();
+	$( window ).resize( function() { detectWindowSize(); });
+
+	if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 )
+	{
+		$( '.reaction_left_hand_side' ).first().select();
+	}
 });
