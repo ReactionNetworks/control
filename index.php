@@ -8,7 +8,7 @@
  * @copyright  University of Portsmouth, Kitson Consulting Limited 2012-2014
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
  * @created    01/10/2012
- * @modified   14/01/2014
+ * @modified   29/04/2014
  */
 
 require_once('includes/header.php');
@@ -59,7 +59,7 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_network_file_input">Choose a file to upload:</label>
-							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" />
+							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" accept=".txt,.xml,text/*,application/xml,application/sbml+xml" />
 						</p>
 						<p class="left_centred">
 							File format:<br /><?php
@@ -77,7 +77,7 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_batch_file_input">Choose a file to upload:</label>
-							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" size="48" /><br />
+							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" size="48" accept=".zip,application/zip,application/octet-stream" /><br />
 							<span class="small">Maximum file size:
 <?php
 if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
