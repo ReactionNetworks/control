@@ -14,7 +14,7 @@
  */
 
 /**
- * Standard include
+ * Standard HTML headers
  */
 require_once( 'includes/header.php' );
 
@@ -91,4 +91,7 @@ else echo '						<p>The DSR graph requires Java to view, which is not installed 
 					</form><!-- email_results_form -->
 				</div><!-- popup_hider -->
 <?php
+/**
+ * Standard HTML footers
+ */
 require_once( 'includes/footer.php' );

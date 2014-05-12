@@ -11,21 +11,21 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   12/05/2014
  */
 
-header('Content-Type: application/x-java-jnlp-file');
-header('Content-Disposition: Attachment; filename=dsr.jnlp');
-
-/**
- * Standard include
- */
-require_once('includes/config.php');
+header( 'Content-Type: application/x-java-jnlp-file' );
+header( 'Content-Disposition: Attachment; filename=dsr.jnlp' );
 
 /**
- * Standard include
+ * CoNtRol config
  */
-require_once('includes/session.php');
+require_once( 'includes/config.php' );
+
+/**
+ * Session data containing CRN description
+ */
+require_once( 'includes/session.php' );
 
 echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 ?>
@@ -44,7 +44,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 		<jar href="applets/collections-generic-4.01.jar" main="false" />
 	</resources>
 	<application-desc name="DSR Graph" main-class="dsr.DsrDraw" width="960" height="700">
-		<argument><?php echo htmlspecialchars(str_replace(' ', '', str_replace(PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations()))); ?></argument>
+		<argument><?php echo htmlspecialchars (str_replace( ' ', '', str_replace( PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations() ) ) ); ?></argument>
 	</application-desc>
 	<update check="background"/>
 </jnlp>

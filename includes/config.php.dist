@@ -14,33 +14,66 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   12/05/2014
  */
 
 /////////////////////////////////////////
 // THINGS YOU SHOULD DEFINITELY CHANGE //
 /////////////////////////////////////////
 
-// Site URL.
+/**
+ * Site subdirectory.
+ */
 define('SITE_DIR', 'control', false);
+
+/**
+ * Site URL.
+ *
+ * If you want to run CoNtRol in the top level directory, remove SITE_DIR from this.
+ */
 define('SITE_URL','http://example.com/'.SITE_DIR.'/', false);
 
-// Email address for the site admin. All emails sent by CoNtRol are sent from this address.
+/**
+ * Email address for the site admin.
+ *
+ * All emails sent by CoNtRol are sent from this address.
+ */
 define('ADMIN_EMAIL', 'control@example.com', false);
 
-// Database connection information. You definitely need to change this if you want to use batch processing.
+/**
+ * Database connection information.
+ *
+ * You definitely need to change this if you want to use batch processing.
+ */
 
-// MySQL on the same server.
+// Example 1: MySQL on the same server.
 define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
 
-// MySQL on a different server.
+// Example 2: MySQL on a different server.
 //define('DB_STRING', 'mysql:host=1.2.3.4;port=3306;dbname=control;charset=utf8', false);
 
-// SQLite.
+// Example 3: SQLite.
 //define('DB_STRING', 'sqlite:sql/control.sqlite', false);
 
+/**
+ * Database user
+ *
+ * Not required for SQLite.
+ */
 define('DB_USER', 'control', false);
+
+/**
+ * Database password
+ *
+ * Not required for SQLite.
+ */
 define('DB_PASS', 'password', false);
+
+/**
+ * Database table prefix
+ *
+ * Optional, useful for MySQL on hosting with a limited number of MySQL databases.
+ */
 define('DB_PREFIX', '', false);
 
 
@@ -49,31 +82,57 @@ define('DB_PREFIX', '', false);
 // THINGS YOU MIGHT WANT TO CHANGE //
 /////////////////////////////////////
 
-// Location for the executables used by CoNtRol. You may want to change this to a directory that is not web-accessible for extra security.
+/**
+ * Location for the executables used by CoNtRol
+ * You may want to change this to a directory that is not web-accessible for extra security.
+ */
 define('BINARY_FILE_DIR', '../bin/', false);
 
-// Debugging variable. Set to true when debugging.
+/**
+ * Debugging variable. Set to true when debugging.
+ */
 define('CRNDEBUG', false, false);
 
-// Niceness level to use when running tests. Note trailing space.
-// Value for dedicated server, i.e. normal priority.
+/**
+ * Niceness level to use when running tests
+ *
+ * Note trailing space.
+ */
+
+// Example 1: Value for dedicated server, i.e. normal priority.
 //define('NICENESS', '', false);
-// Value for shared server without ionice. N.B. trailing space!
+
+// Example 2: Value for shared server without ionice. N.B. trailing space!
 //define('NICENESS', 'nice -n 19 ', false);
-// Value for shared server with ionice. N.B. trailing space!
+
+// Example 3: Value for shared server with ionice. N.B. trailing space!
 define('NICENESS', 'nice -n 19 ionice -c3 ', false);
 
-// Location for temporary files. The default should work but you may wish to change it.
+/**
+ * Location for temporary files
+ *
+ * The default should work but you may wish to change it.
+ */
 define('TEMP_FILE_DIR', '/var/tmp/', false);
 
-// The maximum amount of time a test will run before being cancelled. This is required because
-// tests are run via calls to exec(), which doesn't count towards max_execution_time.
+/**
+ * The maximum amount of time a test will run before being cancelled
+ *
+ * This is required because tests are run via calls to exec(),
+ * which doesn't count towards max_execution_time.
+ */
 define('TEST_TIMEOUT_LIMIT', 60, false);
 
-// The maximum number of reactions that CoNtRol will accept without warning.
+/**
+ * The maximum number of reactions that CoNtRol will accept without warning.
+ */
 define('MAX_REACTIONS_PER_NETWORK', 16, false);
 
-// The server timezone.
+/**
+ * The server timezone.
+ *
+ * PHP will issue warnings if this is not set.
+ */
 date_default_timezone_set('Europe/London');
 
 
@@ -81,12 +140,21 @@ date_default_timezone_set('Europe/London');
 // THINGS YOU ALMOST CERTAINLY SHOULDN'T CHANGE //
 //////////////////////////////////////////////////
 
-// Default page information. You shouldn't need to change this.
+/**
+ * Default page title.
+ */
 define('DEFAULT_PAGE_TITLE', 'CoNtRol - Chemical Reaction Network analysis tool', false);
+
+/**
+ * Default page meta description tag.
+ */
 define('DEFAULT_PAGE_DESCRIPTION', 'CoNtRol is a web application to analyse chemical reaction networks. It also generates LaTeX markup describing their associated DSR graphs and equations.', false);
 
-// Work out which line ending to use for file exports. Don't change this.
-// Auto-detect client line ending when appropriate.
+/*
+ * Work out which line ending to use for file exports.
+ *
+ * Don't change this: CoNtRol auto-detects the client line ending when appropriate.
+ */
 if(isset($_SERVER['HTTP_USER_AGENT']))
 {
 	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Windows;') !== false) $line_ending = "\r\n";
@@ -95,11 +163,21 @@ if(isset($_SERVER['HTTP_USER_AGENT']))
 }
 // Default to server line ending when client line ending not available.
 else $line_ending = PHP_EOL;
+
+/**
+ * Client computer line ending (Windows/Mac/UNIX)
+ */
 define('CLIENT_LINE_ENDING', $line_ending, false);
 
-// Extra database options. It shouldn't be necessary to change this.
+/*
+ * Extra database options.
+ *
+ * It shouldn't be necessary to change this.
+ */
 if(strpos('mysql', DB_STRING) === 0 and (!defined(PHP_VERSION_ID) or PHP_VERSION_ID < 50306)) $db_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 else $db_options = null;
 
-// Required to support cross-platform line endings on file upload.
+/*
+ * Required to support cross-platform line endings on file upload.
+ */
 ini_set('auto_detect_line_endings', '1');

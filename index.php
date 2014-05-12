@@ -10,23 +10,23 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   12/05/2014
  */
 
 /**
- * Standard include
+ * Standard HTML headers
  */
-require_once('includes/header.php');
+require_once( 'includes/header.php' );
 
 /**
- * Standard include
+ * Tests available to run on CRN
  */
-require_once('includes/standard-tests.php');
+require_once( 'includes/standard-tests.php' );
 
 /**
- * Standard include
+ * Allowed file formats for upload
  */
-require_once('includes/file-formats.php');
+require_once( 'includes/file-formats.php' );
 ?>
 				<div id="reaction_input_holder">
 					<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
@@ -190,4 +190,7 @@ if(count($standardTests))
 					<p>Removed reaction <span id="removed_reaction_span"></span></p>
 				</div><!-- removed_reaction_warning -->
 <?php
-require_once('includes/footer.php');
+/**
+ * Standard HTML footers
+ */
+require_once( 'includes/footer.php' );

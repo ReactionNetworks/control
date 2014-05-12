@@ -12,7 +12,7 @@
  */
 
 /**
- * Standard include
+ * Standard HTML headers
  */
 require_once( 'includes/header.php' );
 
@@ -90,4 +90,7 @@ else
 	<?php
 }
 
+/**
+ * Standard HTML footers
+ */
 require_once( 'includes/footer.php' );
