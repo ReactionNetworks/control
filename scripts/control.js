@@ -163,9 +163,13 @@ function processTests( test_number )
 		{
 			showTestOutput( returndata );
 			$( '#timeout_countdown_holder' ).remove();
+			// All tests complete:
 			if( returndata == '<p>All tests completed. Redirecting to results.</p>' ) window.location.href = 'results.php';
+			// A bug occurred:
+			else if( returndata == '<p>Error: CSRF detected or CRN not set up.</p>' ) window.location.reload();
+			// Proceed to the next test:
 			else processTests( ++test_number );
-		});
+		} );
 	}, 100 );
 }
 
@@ -177,22 +181,22 @@ function processTests( test_number )
  * in no reactions being left. Calling it again may trigger a JavaScript error
  * in the user's browser.
  */
-function removeReaction(notify_user)
+function removeReaction( notify_user )
 {
-	if (notify_user)
+	if( notify_user )
 	{
-		$('#removed_reaction_span').html(number_of_reactions);
-		var position = $('#remove_reaction_button').position();
-		$('#removed_reaction_warning').css('top', position.top + 24);
-		$('#removed_reaction_warning').css('left', position.left - 56);
-		$('#removed_reaction_warning').show();
-		setTimeout(function()
+		$( '#removed_reaction_span' ).html( number_of_reactions );
+		var position = $( '#remove_reaction_button' ).position();
+		$( '#removed_reaction_warning' ).css( 'top', position.top + 24 );
+		$( '#removed_reaction_warning' ).css( 'left', position.left - 56 );
+		$( '#removed_reaction_warning' ).show();
+		setTimeout( function()
 		{
-			$('#removed_reaction_warning').hide();
-		}, 1500);
+			$( '#removed_reaction_warning' ).hide();
+		}, 1500 );
 	}
 
-	$('#reaction_input_form fieldset').filter(':last').remove();
+	$( '#reaction_input_form fieldset' ).filter( ':last' ).remove();
 	--number_of_reactions;
 }
 
@@ -201,7 +205,7 @@ function removeReaction(notify_user)
  */
 function resetPopup()
 {
-	$('#calculation_output_holder').html('<p>Processing selected tests. This may take some time, please be patient. Do not close this popup window!</p>');
+	$( '#calculation_output_holder' ).html( '<p>Processing selected tests. This may take some time, please be patient. Do not close this popup window!</p>' );
 }
 
 /**
@@ -212,15 +216,15 @@ function resetPopup()
  */
 function resetReactions()
 {
-	$('#reaction_input_form fieldset input').val('');
-	$('#reaction_input_form fieldset select option[value=both]').attr('selected', true);
+	$( '#reaction_input_form fieldset input' ).val( '' );
+	$( '#reaction_input_form fieldset select option[value=both]' ).attr( 'selected', true );
 	disableButtons();
-	while($('#reaction_input_form fieldset').length - 1) removeReaction(false);
-	$('#remove_reaction_button').addClass('disabled');
+	while( $( '#reaction_input_form fieldset' ).length - 1 ) removeReaction( false );
+	$( '#remove_reaction_button' ).addClass( 'disabled' );
 	var url = 'handlers/reset-reactions.php';
 	var data = {reset_reactions: 1, csrf_token: csrf_token};
-	$.post(url, data);
-	if($('#results_link')) $('#results_link').hide();
+	$.post( url, data );
+	if( $( '#results_link' ) ) $( '#results_link' ).hide();
 }
 
 /**
@@ -235,22 +239,22 @@ function saveNetwork()
 	$.each($('.reaction_left_hand_side'), function(index, value)
 	{
 		reactionsLeftHandSide.push(value.value);
-	});
+	} );
 	var reactionsRightHandSide = new Array();
 	$.each($('.reaction_right_hand_side'), function(index, value)
 	{
 		reactionsRightHandSide.push(value.value);
-	});
+	} );
 	var reactionsDirection = new Array();
 	$.each( $( '.reaction_direction :selected' ), function( index, value )
 	{
 		reactionsDirection.push( value.value );
-	});
+	} );
 	var testSettings = new Array();
 	$.each( $( '.test' ), function( index, v )
 	{
 		testSettings.push( {name: $( this ).attr( 'name' ), value: $( this ).val()} );
-	});
+	} );
 	var data = {'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'test_settings': testSettings, csrf_token: csrf_token};
 	$.post( url, data, function( returndata )
 	{
@@ -259,7 +263,7 @@ function saveNetwork()
 			showTestOutput( '<p>' + returndata + '</p>' );
 			validNetwork = false;
 		}
-	});
+	} );
 	return validNetwork;
 }
 
