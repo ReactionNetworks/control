@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   12/05/2014
  */
 
 /**
@@ -384,76 +384,76 @@ var popupWidth = 800;
 var popupHeight = 600;
 var popupMargin = 16;
 
-$(document).ready(function()
+$( document ).ready( function()
 {
 	// Set some useful variables
-	if($(window).innerWidth() > 800) popupWidth = $(window).innerWidth() - 256;
-	else popupWidth = $(window).innerWidth() - 16;
-	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
-	else popupHeight = $(window).innerHeight() - 16;
+	if( $( window ).innerWidth() > 800 ) popupWidth = $( window ).innerWidth() - 256;
+	else popupWidth = $( window ).innerWidth() - 16;
+	if( $( window ).innerHeight() > 800 ) popupHeight = $( window ).innerHeight() - 256;
+	else popupHeight = $( window ).innerHeight() - 16;
 	var buttonSize = 0;
 
-	// Enable DSR applet for browsers with Java installed
-	if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length) $('#dsr_graph_button').removeClass('fancybox');
+	// Enable DSR Java app for browsers with Java installed
+	if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 && deployJava.getJREs().length ) $( '#dsr_graph_button' ).removeClass( 'fancybox' );
 
 	// File inputs slide down out of the File Input header on clock
 	var toolsShown = false;
-	$('#tools_show').click(function()
+	$( '#tools_show' ).click( function()
 	{
-		if (!toolsShown)
+		if( !toolsShown )
 		{
-			$('#tools_buttons_slidedown').slideDown();
-			$('#tools_show').html('Hide');
+			$( '#tools_buttons_slidedown' ).slideDown();
+			$( '#tools_show' ).html( 'Hide' );
 			toolsShown = true;
 		}
 		else
 		{
-			$('#tools_buttons_slidedown').slideUp();
-			$('#tools_show').html('Show');
+			$( '#tools_buttons_slidedown' ).slideUp();
+			$( '#tools_show' ).html( 'Show' );
 			toolsShown = false;
 		}
 	});
 
 	// Similarly, more analysis options slide down
 	var moreActionsShown = false;
-	$('#more_actions_show	').click(function()
+	$( '#more_actions_show' ).click( function()
 	{
-		if (!moreActionsShown)
+		if( !moreActionsShown )
 		{
-			$('#more_actions_slidedown').slideDown();
-			$('#more_actions_show	').html('Less');
+			$( '#more_actions_slidedown' ).slideDown();
+			$( '#more_actions_show' ).html( 'Less' );
 			moreActionsShown = true;
 		}
 		else
 		{
-			$('#more_actions_slidedown').slideUp();
-			$('#more_actions_show	').html('More');
+			$(' #more_actions_slidedown' ).slideUp();
+			$(' #more_actions_show' ).html( 'More' );
 			moreActionsShown = false;
 		}
 	});
 
-	$('#add_reaction_button').click(function()
+	$( '#add_reaction_button' ).click( function()
 	{
 		addReaction();
-		$('#remove_reaction_button').removeClass('disabled');
+		$( '#remove_reaction_button' ).removeClass( 'disabled' );
 		return false;
 	});
 
-	$('#remove_reaction_button').click(function()
+	$( '#remove_reaction_button' ).click( function()
 	{
-		if(!$(this).hasClass('disabled'))
+		if( !$( this ).hasClass( 'disabled' ) )
 		{
-			if($('#reaction_input_form > fieldset').length > 1) removeReaction(true);
-			if($('#reaction_input_form > fieldset').length == 1) $(this).addClass('disabled');
+			if( $( '#reaction_input_form > fieldset' ).length > 1 ) removeReaction( true );
+			if( $( '#reaction_input_form > fieldset' ).length == 1 ) $( this ).addClass( 'disabled' );
 			else $(this).removeClass('disabled');
 		}
-		if($('#reaction_input_form > fieldset').length == 1 && $('#reaction_input_form > fieldset .reaction_left_hand_side').val() == '' && $('#reaction_input_form > fieldset .reaction_right_hand_side').val() == '') $('#reset_reaction_button').addClass('disabled');
+		if( $( '#reaction_input_form > fieldset' ).length == 1 && $( '#reaction_input_form > fieldset .reaction_left_hand_side' ).val() == '' && $( '#reaction_input_form > fieldset .reaction_right_hand_side' ).val() == '') $( '#reset_reaction_button' ).addClass( 'disabled' );
 		return false;
 	});
 
-	$('#reset_reaction_button').click(function()
+	$( '#reset_reaction_button' ).click( function()
 	{
-		if(!$(this).hasClass('disabled')) resetReactions();
+		if( !$( this ).hasClass( 'disabled' ) ) resetReactions();
 		return false;
 	});
 
@@ -469,118 +469,119 @@ $(document).ready(function()
 						e.preventDefault();
 						$( '#process_network_button' ).click();
 					}
-				});
+				} );
 			}
-		});
-	});
+		} );
+	} );
 
-	if($('#add_reaction_button').height() > buttonSize) buttonSize = $('#add_reaction_button').height();
-	if($('#add_reaction_button').width() > buttonSize) buttonSize = $('#add_reaction_button').width();
-	if($('#remove_reaction_button').height() > buttonSize) buttonSize = $('#remove_reaction_button').height();
-	if($('#remove_reaction_button').width() > buttonSize) buttonSize = $('#remove_reaction_button').width();
-	if($('#reset_reaction_button').height() > buttonSize) buttonSize = $('#reset_reaction_button').height();
-	if($('#reset_reaction_button').width() > buttonSize) buttonSize = $('#reset_reaction_button').width();
-	$('#add_reaction_button').height(buttonSize);
-	$('#add_reaction_button').width(buttonSize);
-	$('#remove_reaction_button').height(buttonSize);
-	$('#remove_reaction_button').width(buttonSize);
-	$('#reset_reaction_button').height(buttonSize);
-	$('#reset_reaction_button').width(buttonSize);
+	if( $( '#add_reaction_button' ).height() > buttonSize) buttonSize = $( '#add_reaction_button' ).height();
+	if( $( '#add_reaction_button' ).width() > buttonSize) buttonSize = $( '#add_reaction_button' ).width();
+	if( $( '#remove_reaction_button' ).height() > buttonSize ) buttonSize = $( '#remove_reaction_button' ).height();
+	if( $( '#remove_reaction_button' ).width() > buttonSize ) buttonSize = $( '#remove_reaction_button' ).width();
+	if( $( '#reset_reaction_button' ).height() > buttonSize ) buttonSize = $( '#reset_reaction_button' ).height();
+	if( $( '#reset_reaction_button' ).width() > buttonSize ) buttonSize = $( '#reset_reaction_button' ).width();
+	$( '#add_reaction_button' ).height( buttonSize );
+	$( '#add_reaction_button' ).width( buttonSize );
+	$( '#remove_reaction_button' ).height( buttonSize );
+	$( '#remove_reaction_button' ).width( buttonSize );
+	$( '#reset_reaction_button' ).height( buttonSize );
+	$( '#reset_reaction_button' ).width( buttonSize );
 
-	$('.fancybox').fancybox({autoDimensions: true, width: popupWidth, height: popupHeight});
-	$('.fancybox_dynamic').fancybox({autoDimensions: false, width: popupWidth, height: popupHeight});
+	$( '.fancybox' ).fancybox( {autoDimensions: true, width: popupWidth, height: popupHeight} );
+	$( '.fancybox_dynamic' ).fancybox( {autoDimensions: false, width: popupWidth, height: popupHeight} );
 
-	$('#detailed_output_checkbox').change(function()
+	$( '#detailed_output_checkbox' ).change( function()
 	{
 		var activated = 0;
-		if($(this).is(':checked')) activated = 1;
-		toggleDetailedOutput(activated);
-	});
+		if( $( this ).is( ':checked' ) ) activated = 1;
+		toggleDetailedOutput( activated );
+	} );
 
-	$('#download_network_file_button').click(function(e)
+	$( '#download_network_file_button' ).click( function( e )
 	{
-		if($(this).hasClass('disabled')) e.preventDefault();
-	});
+		if( $( this ).hasClass( 'disabled' ) ) e.preventDefault();
+	} );
 
-	$('#dsr_graph_button').click(function(e)
+	$( '#dsr_graph_button' ).click( function( e )
 	{
-		if($(this).hasClass('disabled')) e.preventDefault();
-		else if(navigator.userAgent.indexOf('Android') == -1 && navigator.userAgent.indexOf('iOS') == -1 && deployJava.getJREs().length)
+		if( $( this ).hasClass( 'disabled' ) ) e.preventDefault();
+		else if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 && deployJava.getJREs().length )
 		{
 			e.preventDefault();
-			window.location.replace('jnlp.php');
+			window.location.replace( 'jnlp.php' );
 		}
-	});
+	} );
 
-	$('#email_results_form').submit(function(e)
+	$( '#email_results_form' ).submit( function( e )
 	{
 		e.preventDefault();
-		$('#email_results_button').addClass('disabled');
-		$('#email_results_button').attr('disabled', 'disabled');
+		$( '#email_results_button' ).addClass( 'disabled' );
+		$( '#email_results_button' ).attr( 'disabled', 'disabled' );
 		var url = 'handlers/mail-results.php';
-		var email = $('#results_email').val();
-		var data = {email: email, csrf_token: csrf_token};
-		$.post(url, data, function(returndata)
+		var email = $( '#results_email' ).val();
+		var label = $( '#results_label' ).val();
+		var data = {email: email, label: label, csrf_token: csrf_token};
+		$.post( url, data, function( returndata )
 		{
-			if(returndata.length) $('#email_results_error').html(returndata);
-			window.setTimeout(function()
+			if( returndata.length ) $( '#email_results_error' ).html( returndata );
+			window.setTimeout( function()
 			{
-				$('#email_results_error').html('&nbsp;');
-				$('#email_results_button').removeClass('disabled');
-				$('#email_results_button').removeAttr('disabled');
-			}, 1000);
-		});
-	});
+				$( '#email_results_error' ).html( '&nbsp;' );
+				$( '#email_results_button' ).removeClass( 'disabled' );
+				$( '#email_results_button' ).removeAttr( 'disabled' );
+			}, 1000 );
+		} );
+	} );
 
-	$('#email_results_form_button').click(function(e)
+	$( '#email_results_form_button' ).click( function( e )
 	{
-		$('#results_email').select();
-		if(validateEmailAddress($('#results_email').val()))
+		$( '#results_email' ).select();
+		if( validateEmailAddress( $( '#results_email' ).val() ) )
 		{
-			$('#email_results_error').html('&nbsp;');
-			$('#email_results_button').removeClass('disabled');
-			$('#email_results_button').removeAttr('disabled');
+			$( '#email_results_error' ).html( '&nbsp;' );
+			$( '#email_results_button' ).removeClass( 'disabled' );
+			$( '#email_results_button' ).removeAttr( 'disabled' );
 		}
 		else
 		{
-			$('#email_results_error').html('Invalid email address');
-			$('#email_results_button').addClass('disabled');
-			$('#email_results_button').addAttr('disabled');
+			$( '#email_results_error' ).html( 'Invalid email address' );
+			$( '#email_results_button' ).addClass( 'disabled' );
+			$( '#email_results_button' ).addAttr( 'disabled' );
 		}
-	});
+	} );
 
-	$('#latex_output_button').click(function(e)
+	$( '#latex_output_button' ).click( function( e )
 	{
-		if(!$(this).hasClass('disabled'))
+		if( !$( this ).hasClass( 'disabled' ) )
 		{
 			$.when( saveNetwork() ).then( generateLaTeX() );
 		}
-	});
+	} );
 
-	$('#mass_action_checkbox').change(function()
+	$( '#mass_action_checkbox' ).change( function()
 	{
 		var activated = 0;
-		if($(this).is(':checked')) activated = 1;
-		toggleMassAction(activated);
-	});
+		if( $( this ).is( ':checked' ) ) activated = 1;
+		toggleMassAction( activated );
+	} );
 
-	$('#option_holder input[name*="test_checkbox"]').change(function()
+	$( '#option_holder input[name*="test_checkbox"]' ).change( function()
 	{
-		var testName = $(this).attr('name').slice(14, -1);
+		var testName = $( this ).attr( 'name' ).slice( 14, -1 );
 		var activated = 0;
-		if($(this).is(':checked')) activated = 1;
-		toggleTest(testName, activated);
-	});
+		if( $( this ).is( ':checked' ) ) activated = 1;
+		toggleTest( testName, activated );
+	} );
 
-	$('#process_network_button').click(function()
+	$( '#process_network_button' ).click( function()
 	{
-		if(!$(this).hasClass('disabled'))
+		if( !$( this ).hasClass( 'disabled' ) )
 		{
 			resetPopup();
-			$.when( saveNetwork() ).then( processTests(1) );
+			$.when( saveNetwork() ).then( processTests( 1 ) );
 		}
 		return false;
-	});
+	} );
 
 	$('#results_email').change(function()
 	{
@@ -662,7 +663,7 @@ $(document).ready(function()
 		$('#upload_network_file_button').removeAttr('disabled');
 	});
 
-	$( window ).resize( function() { detectWindowSize(); });
+	$( window ).resize( function() { detectWindowSize(); } );
 
 	if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 )
 	{

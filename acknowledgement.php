@@ -8,35 +8,35 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    11/04/2013
- * @modified   29/04/2014
+ * @modified   12/05/2014
  */
 
 /**
  * Standard include
  */
-require_once('includes/header.php');
+require_once( 'includes/header.php' );
 
-if(isset($_POST['cancel']))
+if( isset( $_POST['cancel'] ) )
 {
-	if (isset($_SESSION['batch_job_id']))
+	if( isset( $_SESSION['batch_job_id'] ) )
 	{
 		try
 		{
-			$controldb = new PDO(DB_STRING, DB_USER, DB_PASS, $db_options);
+			$controldb = new PDO( DB_STRING, DB_USER, DB_PASS, $db_options );
 		}
-		catch(PDOException $exception)
+		catch( PDOException $exception )
 		{
-			die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
+			die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) ) . '.' );
 		}
-		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 4 WHERE id = '.$_SESSION['batch_job_id'];
-		$statement = $controldb->prepare($query);
+		$query = 'UPDATE ' . DB_PREFIX . 'batch_jobs SET status = 4 WHERE id = ' . $_SESSION['batch_job_id'];
+		$statement = $controldb->prepare( $query );
 		$statement->execute();
 		// Delete the temporary files associated with this job
-		$query = 'SELECT * FROM '.DB_PREFIX.'batch_jobs WHERE id = '.$_SESSION['batch_job_id'];
-		$statement = $controldb->prepare($query);
+		$query = 'SELECT * FROM ' . DB_PREFIX . 'batch_jobs WHERE id = ' . $_SESSION['batch_job_id'];
+		$statement = $controldb->prepare( $query );
 		$statement->execute();
-		$entry = $statement->fetch(PDO::FETCH_ASSOC);
-		array_map('unlink', glob($entry['filename'].'*'));
+		$entry = $statement->fetch( PDO::FETCH_ASSOC );
+		array_map( 'unlink', glob( $entry['filename'].'*' ) );
 ?>
 		<div id="results">
 				<h2>Batch job cancelled</h2>
@@ -59,20 +59,20 @@ if(isset($_POST['cancel']))
 
 else
 {
-	if(!(isset($_SESSION['tempfile']) and isset($_SESSION['email']))) die("\t\t\t\t<p>No uploaded files found.</p>\n\t\t\t</div><!-- content -->\n\t\t</div><!-- container -->\n\t</body>\n</html>\n");
+	if( !( isset( $_SESSION['tempfile']) and isset( $_SESSION['email'] ) ) ) die( "\t\t\t\t<p>No uploaded files found.</p>\n\t\t\t</div><!-- content -->\n\t\t</div><!-- container -->\n\t</body>\n</html>\n" );
 ?>
 		<div id="results">
 				<h2>Batch upload acknowledgement</h2>
 <?php
 	// If no errors or warnings found, then send job straight through. Otherwise the job must be confirmed
-	if(!$_SESSION['format_warning']):
+	if( !$_SESSION['format_warning'] ):
 ?>
 						<p>Your batch job has been added to the queue. Results will be sent to you at <?php echo sanitise($_SESSION['email']); ?> once processing is complete. If you have any problems please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?>.</p>
 						<p>
 							<br /><a class="button" href=".">Back to main page</a>
 						</p>
 <?php
-	else: // ($_SESSION['format_warning'])
+	else: // ( $_SESSION['format_warning'] )
 ?>
 						<p>There are warnings/errors about this job; please check the above messages. If you believe the results will not be of use to you, please cancel the job. Otherwise, results will be sent to you at <?php echo sanitise($_SESSION['email']); ?> once processing is complete. If you have any problems please email the site admin at <?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?>.</p>
 						<p>
@@ -83,11 +83,11 @@ else
 							</form>
 						</p>
 <?php
-	endif; // (!$_SESSION['format_warning'])
+	endif; // ( !$_SESSION['format_warning'] )
 	unset($_SESSION['format_warning']);
 ?>
 		</div><!-- results -->
 	<?php
 }
 
-require_once('includes/footer.php');
+require_once( 'includes/footer.php' );
