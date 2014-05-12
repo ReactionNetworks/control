@@ -18,7 +18,7 @@ header( 'Content-Type: application/x-java-jnlp-file' );
 header( 'Content-Disposition: Attachment; filename=dsr.jnlp' );
 
 /**
- * CoNtRol config
+ * Main CoNtRol config
  */
 require_once( 'includes/config.php' );
 
@@ -29,22 +29,26 @@ require_once( 'includes/session.php' );
 
 echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 ?>
-<jnlp spec="1.0+" codebase="<?php echo SITE_URL;?>" href="">
+<jnlp spec="1.0+" codebase="<?php echo SITE_URL; ?>" version="<?php echo CONTROL_VERSION; ?>">
 	<information>
 		<title>DSR Graph</title>
 		<vendor>reaction-networks.net</vendor>
+		<homepage href="https://reaction-networks.net/wiki/CoNtRol"/>
+		<description>Generates a DSR graph for a CRN, with the option to export it to LaTeX.</description>
+		<icon href="https://reaction-networks.net/apple-touch-icon.png" width="60" height="60"/>
+		<offline-allowed/>
 	</information>
 	<resources>
-		<j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+		<java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
 		<jar href="applets/dsr.jar" main="true"/>
 		<jar href="applets/jung-algorithms-2.0.1.jar" main="false"/>
 		<jar href="applets/jung-api-2.0.1.jar" main="false"/>
-		<jar href="applets/jung-graph-impl-2.0.1.jar" main="false" />
-		<jar href="applets/jung-visualization-2.0.1.jar" main="false" />
-		<jar href="applets/collections-generic-4.01.jar" main="false" />
+		<jar href="applets/jung-graph-impl-2.0.1.jar" main="false"/>
+		<jar href="applets/jung-visualization-2.0.1.jar" main="false"/>
+		<jar href="applets/collections-generic-4.01.jar" main="false"/>
 	</resources>
-	<application-desc name="DSR Graph" main-class="dsr.DsrDraw" width="960" height="700">
-		<argument><?php echo htmlspecialchars (str_replace( ' ', '', str_replace( PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations() ) ) ); ?></argument>
+	<application-desc main-class="dsr.DsrDraw">
+		<argument><?php echo htmlspecialchars( str_replace( ' ', '', str_replace( PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations() ) ) ); ?></argument>
 	</application-desc>
 	<update check="background"/>
 </jnlp>
