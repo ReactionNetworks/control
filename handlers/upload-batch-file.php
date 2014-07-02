@@ -44,7 +44,7 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 			{
 				$mimetype = $finfo->file($_FILES['upload_batch_file_input']['tmp_name']);
 				$allowed_mimetypes = array('application/zip');
-				foreach($supported_batch_file_types as $supported_batch_file_type) $allowed_mimetypes[] = $supported_batch_file_type['mimetype'];
+				//foreach($supported_batch_file_types as $supported_batch_file_type) $allowed_mimetypes[] = $supported_batch_file_type['mimetype'];
 				if(!in_array($mimetype, $allowed_mimetypes)) $_SESSION['errors'][] = 'Batch file format '.$mimetype.' not supported.';
 				else
 				{

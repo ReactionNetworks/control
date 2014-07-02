@@ -249,7 +249,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 				{
 					$file_found = true;
 					// Write $somecontent to our opened file.
-					if(fwrite($ohandle, $line_ending."## FILE: ".end(explode('/', $file))." ##".$line_ending.$line_ending."Processing start time: ".date('Y-m-d H:i:s')) === false)
+					$file_name_parts = explode( '/', $file );
+					if( fwrite( $ohandle, $line_ending . "## FILE: " . end( $file_name_parts ) . " ##" . $line_ending . $line_ending . "Processing start time: " . date( 'Y-m-d H:i:s' ) ) === false )
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
@@ -546,7 +547,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							} // foreach($tests_enabled as $currentTest)
 						} // if($success)
 					} // if($success)
-					if(fwrite($ohandle, '## END OF FILE: '.end(explode('/', $file)).' ##'.$line_ending.$line_ending.$line_ending) === false)
+					$file_name_parts = explode( '/', $file );
+					if( fwrite( $ohandle, '## END OF FILE: ' . end( $file_name_parts ) . ' ##' . $line_ending . $line_ending . $line_ending ) === false )
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
