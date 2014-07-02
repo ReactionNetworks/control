@@ -98,7 +98,7 @@ else echo ini_get('upload_max_filesize');
 ?></span><br /><span class="small">
 							Supported archive types: zip</span>
 <?php
-for($i = 0; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
+//for($i = 0; $i < count($supported_batch_file_types); ++$i) echo ', ', $supported_batch_file_types[$i]['extension'];
 ?>
 						</p>
 						<p>
