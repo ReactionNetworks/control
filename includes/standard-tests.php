@@ -11,7 +11,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/01/2013
- * @modified   29/04/2014
+ * @modified   02/07/2014
  */
 
 $standardTests = array(
@@ -48,8 +48,6 @@ $standardTests = array(
 		array('human')
 	),
 
-/*
-// This test has been removed as it adds a lot of confusing output for little mathematical gain. Uncomment to re-enable it.
 	new NetworkTest
 	(
 		'calc-jacobian',
@@ -58,7 +56,6 @@ $standardTests = array(
 		'calc-jacobian',
 		array('stoichiometry+V')
 	),
-*/
 
 /*
  Add new tests here, in the following format:
