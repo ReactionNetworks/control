@@ -26,11 +26,13 @@ then
 	exit 2
 fi
 
-echo "Endotacticity test version 0.1.0"
+echo "Endotacticity test version 0.1.0."
 echo
 
 # Construct GLPK code to test endotacticity
-END_GLP=$(mktemp -t glpk)
+# N.B. || hack to get consistency between Linux and Mac OS X, see
+# http://unix.stackexchange.com/questions/30091/fix-or-alternative-for-mktemp-in-os-x
+END_GLP=$(mktemp 2> /dev/null || mktemp -t glpk)
 echo "/* sets */
 set REACTIONS;
 set REACTANTS;
