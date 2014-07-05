@@ -17,14 +17,17 @@
 GLP=$(which glpsol)
 if [ -z $GLP ]
 then
-	echo "Error: glpsol binary not found"
+	echo "Error: glpsol binary not found" >&2
 	exit 1
 fi
 if [ $# -ne 1 ]
 then
-	echo "Usage: endotactic <filename>"
+	echo "Usage: endotactic <filename>" >&2
 	exit 2
 fi
+
+echo "Endotacticity test version 0.1.0"
+echo
 
 # Construct GLPK code to test endotacticity
 END_GLP=$(mktemp -t glpk)
