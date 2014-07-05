@@ -11,7 +11,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/01/2013
- * @modified   02/07/2014
+ * @modified   05/07/2014
  */
 
 $standardTests = array(
@@ -48,6 +48,8 @@ $standardTests = array(
 		array('human')
 	),
 
+
+// This test has been removed as it adds a lot of confusing output for little mathematical gain. Uncomment to re-enable it.
 	new NetworkTest
 	(
 		'calc-jacobian',
@@ -57,17 +59,29 @@ $standardTests = array(
 		array('stoichiometry+V')
 	),
 
+	new NetworkTest
+	(
+		'endotactic',
+		'Endotactic',
+		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using GLPK by Matthew Johnston, Casian Pantea and Pete Donnell.',
+		'endotactic',
+		array('GLPK'),
+		false,
+		true
+	),
+
+
 /*
  Add new tests here, in the following format:
 	new NetworkTest
 	(
 		'shortname' (no spaces or unusual characters allowed),
 		'Human Readable Name',
-		'Full description' (may include HTML, but make sure it's valid!),
-		'executable filename' (i.e. the name of the binary or shell script in bin/ that belongs to this test),
-		array('human') (supported file formats, currently 'human' or 'stoichiometry'),
-		true (if the binary supports --mass-action-only option),
-		true (if the binary supports general kinetics)
+		'Full description', // (may include HTML, but make sure it's valid!)
+		'executable filename', // (i.e. the name of the binary or shell script in bin/ that belongs to this test)
+		array('human'), // (supported file formats)
+		true, // (if the binary supports --mass-action-only option)
+		true // (if the binary supports general kinetics)
 	),
  */
 );

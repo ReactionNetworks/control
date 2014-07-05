@@ -6,7 +6,8 @@ Comprises several components:
 3. C code to analyse reaction networks (Murad Banaji)
 4. Octave code to analyse reaction networks (Casian Pantea)
 5. Hybrid PHP/Maxima/shell code to calculate symbolic Jacobian matrix (Pete Donnell)
+5. Hybrid GLPK/shell code to test (strong) endotacticity (Matthew Johnston, Casian Pantea, Pete Donnell)
 
-Components 1 and 5 are bundled together in the package 'control'. The other components are packaged separately.
+Components 1, 5 and 6 are bundled together in the package 'control'. The other components are packaged separately.
 
 For detailed information on downloading, building and using CoNtRol, see https://reaction-networks.net/control/download/ and https://reaction-networks.net/wiki/CoNtRol.

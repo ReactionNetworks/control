@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   05/07/2014
  */
 
 /**
@@ -413,6 +413,48 @@ class ReactionNetwork
 	}
 
 	/**
+	 * Export function for GLPK CRN data description
+	 *
+	 * @return  string  $glpk  GLPK version of CRN
+	 */
+	public function exportGLPKData()
+	{
+		$glpk = 'set REACTIONS:=';
+		$numberOfReactionsIrreversible = 0;
+		foreach( $this->reactions as $reaction )
+		{
+			++$numberOfReactionsIrreversible;
+			if( $reaction->isReversible() ) ++$numberOfReactionsIrreversible;
+		}
+		for( $i = 1; $i <= $numberOfReactionsIrreversible; ++$i ) $glpk .= " $i";
+		$glpk .= ';' . PHP_EOL . 'set REACTANTS:=';
+		$numberOfReactants = count( $this->generateReactantList() );
+		for( $i = 1; $i <= $numberOfReactants; ++$i ) $glpk .= " $i";
+		$glpk .= ';' . PHP_EOL . PHP_EOL . 'param Ys:';
+		for( $i = 1; $i <= $numberOfReactionsIrreversible; ++$i ) $glpk .= "\t$i";
+		$glpk .= ':=';
+		$sourceMatrix = $this->generateIrreversibleSourceStoichiometryMatrix();
+		for( $i = 0; $i < count( $sourceMatrix ); ++$i )
+		{
+			$glpk .= PHP_EOL;
+			$glpk .= ($i + 1) . "\t";
+			foreach( $sourceMatrix[$i] as $element ) $glpk .= "\t$element";
+		}
+		$glpk .= ';' . PHP_EOL . PHP_EOL . 'param Gamma:';
+		for( $i = 1; $i <= $numberOfReactionsIrreversible; ++$i ) $glpk .= "\t$i";
+		$glpk .= ':=';
+		$netMatrix = $this->generateIrreversibleStoichiometryMatrix();
+		for( $i = 0; $i < count( $netMatrix ); ++$i )
+		{
+			$glpk .= PHP_EOL;
+			$glpk .= ($i + 1) . "\t";
+			foreach( $netMatrix[$i] as $element ) $glpk .= "\t$element";
+		}
+		$glpk .= ';' . PHP_EOL . PHP_EOL;
+		return $glpk;
+	}
+
+	/**
 	 * HTML export function for reaction network descriptor
 	 *
 	 * @return  string  $equations  HTML version of reaction network chemical equations
@@ -669,6 +711,42 @@ class ReactionNetwork
 	}
 
 	/**
+	 * Calculate irreversible reaction network input stoichiometry matrix
+	 *
+	 * @return  array  $sourceStoichiometryMatrix  2D array describing reaction network input stoichiometry matrix
+	 */
+	public function generateIrreversibleSourceStoichiometryMatrix()
+	{
+		$sourceStoichiometryMatrix=array();
+		$reactantList=$this->generateReactantList();
+		$numberOfReactants=count( $reactantList );
+		for( $i = 0; $i < $numberOfReactants; ++$i )
+		{
+			$sourceStoichiometryMatrix[]=array();
+
+			foreach( $this->reactions as $reaction )
+			{
+				$matrixEntry = 0;
+				foreach( $reaction->getLeftHandSide() as $reactant => $stoichiometry )
+				{
+					if( $reactantList[$i] === $reactant ) $matrixEntry = $stoichiometry;
+				}
+				$sourceStoichiometryMatrix[$i][] = $matrixEntry;
+				if( $reaction->isReversible() )
+				{
+					$matrixEntry = 0;
+					foreach( $reaction->getRightHandSide() as $reactant => $stoichiometry )
+					{
+						if( $reactantList[$i] === $reactant ) $matrixEntry = $stoichiometry;
+					}
+					$sourceStoichiometryMatrix[$i][] = $matrixEntry;
+				}
+			}
+		}
+		return $sourceStoichiometryMatrix;
+	}
+
+	/**
 	 * Calculate reaction network output stoichiometry matrix
 	 *
 	 * @return  array  $targetStoichiometryMatrix  2D array describing reaction network output stoichiometry matrix
@@ -696,6 +774,42 @@ class ReactionNetwork
 	}
 
 	/**
+	 * Calculate irreversible reaction network output stoichiometry matrix
+	 *
+	 * @return  array  $targetStoichiometryMatrix  2D array describing reaction network output stoichiometry matrix
+	 */
+	public function generateIrreversibleTargetStoichiometryMatrix()
+	{
+		$targetStoichiometryMatrix = array();
+		$reactantList = $this->generateReactantList();
+		$numberOfReactants = count( $reactantList );
+		for( $i = 0; $i < $numberOfReactants; ++$i )
+		{
+			$targetStoichiometryMatrix[] = array();
+
+			foreach( $this->reactions as $reaction )
+			{
+				$matrixEntry = 0;
+				foreach( $reaction->getRightHandSide() as $reactant => $stoichiometry )
+				{
+					if( $reactantList[$i] === $reactant ) $matrixEntry = $stoichiometry;
+				}
+				$targetStoichiometryMatrix[$i][] = $matrixEntry;
+				if( $reaction->isReversible() )
+				{
+					$matrixEntry = 0;
+					foreach( $reaction->getLeftHandSide() as $reactant => $stoichiometry )
+					{
+						if( $reactantList[$i] === $reactant ) $matrixEntry = $stoichiometry;
+					}
+					$targetStoichiometryMatrix[$i][] = $matrixEntry;
+				}
+			}
+		}
+		return $targetStoichiometryMatrix;
+	}
+
+	/**
 	 * Calculate reaction network net stoichiometry matrix
 	 *
 	 * @return  array  $stoichiometryMatrix  2D array describing reaction network net stoichiometry matrix
@@ -710,6 +824,25 @@ class ReactionNetwork
 		for($i = 0; $i < $numberOfReactants; ++$i)
 		{
 			for($j = 0; $j < $numberOfReactions; ++$j) $stoichiometryMatrix[$i][$j] -= $sourceStoichiometryMatrix[$i][$j];
+		}
+		return $stoichiometryMatrix;
+	}
+
+	/**
+	 * Calculate irreversible reaction network net stoichiometry matrix
+	 *
+	 * @return  array  $stoichiometryMatrix  2D array describing reaction network net stoichiometry matrix
+	 */
+	public function generateIrreversibleStoichiometryMatrix()
+	{
+		$stoichiometryMatrix = $this->generateIrreversibleTargetStoichiometryMatrix();
+		$sourceStoichiometryMatrix = $this->generateIrreversibleSourceStoichiometryMatrix();
+		$numberOfReactants = count( $stoichiometryMatrix );
+		if( isset( $stoichiometryMatrix[0] ) ) $numberOfReactions = count( $stoichiometryMatrix[0] );
+		else $numberOfReactions = 0;
+		for( $i = 0; $i < $numberOfReactants; ++$i )
+		{
+			for( $j = 0; $j < $numberOfReactions; ++$j ) $stoichiometryMatrix[$i][$j] -= $sourceStoichiometryMatrix[$i][$j];
 		}
 		return $stoichiometryMatrix;
 	}

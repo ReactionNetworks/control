@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    17/01/2013
- * @modified   29/04/2014
+ * @modified   05/07/2014
  */
 
 /**
@@ -133,6 +133,20 @@ if(count($_POST) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_
 		exit;
 	}
 	if(fwrite($handle, $_SESSION['reaction_network']->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
+	{
+		echo "<p>Cannot write to file ($filename)</p>";
+		exit;
+	}
+	fclose($handle);
+
+	// Create GLPK data file
+	$filename = $_SESSION['tempfile'].'.glpk';
+	if(!$handle = fopen($filename, 'w'))
+	{
+		echo "<p>Cannot open file ($filename)</p>";
+		exit;
+	}
+	if(fwrite($handle, $_SESSION['reaction_network']->exportGLPKData()) === false)
 	{
 		echo "<p>Cannot write to file ($filename)</p>";
 		exit;

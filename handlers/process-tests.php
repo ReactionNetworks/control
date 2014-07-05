@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/10/2012
- * @modified   29/04/2014
+ * @modified   05/07/2014
  */
 
 /**
@@ -63,6 +63,7 @@ if(isset($_SESSION['reaction_network']) and isset($_POST['csrf_token']) and $_PO
 		if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
 		if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
 		if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
+		if(in_array('GLPK', $currentTest->getInputFileFormats())) $extension = '.glpk';
 		if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
 
 		if(!$extension) $temp = 'This test does not support any valid file formats. Test aborted.';
