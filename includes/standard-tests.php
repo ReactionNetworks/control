@@ -49,16 +49,6 @@ $standardTests = array(
 	),
 
 
-// This test has been removed as it adds a lot of confusing output for little mathematical gain. Uncomment to re-enable it.
-	new NetworkTest
-	(
-		'calc-jacobian',
-		'Jacobian matrix',
-		'Pseudo-test: this test calculates the Jacobian matrix and its second additive compound symbolically, but does not perform any analysis on either. Can be useful in spotting CRNs that are cooperative, competitive, otherwise monotone (in forward or backwards time) with respect to an orthant ordering, contractive and/or nonexpansive. Implemented in <a href="http://maxima.sourceforge.net/">Maxima</a> by Pete Donnell.',
-		'calc-jacobian',
-		array('stoichiometry+V')
-	),
-
 	new NetworkTest
 	(
 		'endotactic',
@@ -70,6 +60,15 @@ $standardTests = array(
 		true
 	),
 
+
+	new NetworkTest
+	(
+		'calc-jacobian',
+		'Jacobian matrix',
+		'Pseudo-test: this test calculates the Jacobian matrix and its second additive compound symbolically, but does not perform any analysis on either. Can be useful in spotting CRNs that are cooperative, competitive, otherwise monotone (in forward or backwards time) with respect to an orthant ordering, contractive and/or nonexpansive. Implemented in <a href="http://maxima.sourceforge.net/">Maxima</a> by Pete Donnell.',
+		'calc-jacobian',
+		array('stoichiometry+V')
+	),
 
 /*
  Add new tests here, in the following format:
