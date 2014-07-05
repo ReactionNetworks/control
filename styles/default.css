@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    02/10/2012
- * @modified   29/04/2014
+ * @modified   05/07/2014
  */
 
 @media screen
@@ -46,22 +46,6 @@
 		padding: 0;
 	}
 
-	h1
-	{
-		color: black;
-		display: inline-block;
-		font-family: Orbitron, sans-serif;
-		font-size: 72px;
-		padding-left: 174px;
-		padding-top: 30px;
-	}
-
-	noscript p
-	{
-		padding-left: 11em;
-		padding-bottom: 1em;
-	}
-
 	:link
 	{
 		text-decoration: none;
@@ -76,6 +60,37 @@
 	:visited
 	{
 		color: #333;
+	}
+
+	h1
+	{
+		display: inline-block;
+		font-size: 72px;
+		padding-left: 174px;
+		padding-top: 30px;
+	}
+
+	h1 > a
+	{
+		color: black;
+		font-family: Orbitron, sans-serif;
+	}
+
+	h1 > :link:hover
+	{
+		text-decoration: none;
+	}
+
+	noscript p
+	{
+		padding-left: 11em;
+		padding-bottom: 1em;
+	}
+
+	sup
+	{
+		font-size: smaller;
+		vertical-align: super;
 	}
 
 	.align_right
@@ -337,16 +352,25 @@
 		width: 100%;
 	}
 
-	#header > a > h2
+	#header > h2
 	{
-		color: #999;
 		display: inline-block;
 		font-family: sans-serif;
 		font-size: 15px;
 		font-weight: normal;
-		margin-bottom: 35px;
+		margin-bottom: 32px;
 		margin-left: 2px;
 		padding-left: 0px;
+	}
+
+	#header > h2 > a
+	{
+		color: #999;
+	}
+
+	#header > h2 > :link:hover
+	{
+		text-decoration: none;
 	}
 
 	#hidden_character_warning, #missing_reactant_warning, #removed_reaction_warning

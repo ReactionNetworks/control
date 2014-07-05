@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   05/07/2014
  */
 
 /**
@@ -26,7 +26,7 @@ function batch_captcha()
 	// Encode in ASCII to trick bots
 	foreach( $char_array as $char )
 	{
-		$output .= '&shy;&#' . ord( $char );
+		$output .= '&shy;&#' . ord( $char ) . ';';
 	}
 	echo $output;
 }

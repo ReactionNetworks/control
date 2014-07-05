@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   05/07/2014
  */
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
@@ -75,8 +75,8 @@ require_once('version.php');
 	<body>
 		<div id="container">
 			<div id="header">
-				<a href="<?php echo SITE_URL; ?>"><h1>CoNtRol</h1></a>
-				<a href="<?php echo SITE_URL; ?>"><h2>Chemical <span class="non_mobile"><br /></span>Reaction <span class="non_mobile"><br /></span>Network <span class="non_mobile"><br /></span>analysis tool</h2></a>
+				<h1><a href="<?php echo SITE_URL; ?>">CoNtRol</a></h1>
+				<h2><a href="<?php echo SITE_URL; ?>">Chemical <span class="non_mobile"><br /></span>Reaction <span class="non_mobile"><br /></span>Network <span class="non_mobile"><br /></span>analysis tool</a></h2>
 			</div>
 			<div id="content">
 				<noscript><p>Sorry, this page requires JavaScript to work correctly.</p></noscript>

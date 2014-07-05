@@ -65,7 +65,7 @@ $standardTests = array(
 	(
 		'calc-jacobian',
 		'Jacobian matrix',
-		'Pseudo-test: this test calculates the Jacobian matrix and its second additive compound symbolically, but does not perform any analysis on either. Can be useful in spotting CRNs that are cooperative, competitive, otherwise monotone (in forward or backwards time) with respect to an orthant ordering, contractive and/or nonexpansive. Implemented in <a href="http://maxima.sourceforge.net/">Maxima</a> by Pete Donnell.',
+		'Pseudo-test: this test calculates the Jacobian matrix and its second additive compound symbolically, but does not perform any analysis on either. Can be useful in spotting CRNs that are cooperative, competitive, otherwise monotone (in forward or backwards time) with respect to an orthant ordering, contractive and/or nonexpansive, or in ruling out Hopf bifurcations via the DSR<sup>[2]</sup> condition. Implemented in <a href="http://maxima.sourceforge.net/">Maxima</a> by Pete Donnell.',
 		'calc-jacobian',
 		array('stoichiometry+V')
 	),
