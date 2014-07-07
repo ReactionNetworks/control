@@ -11,7 +11,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    11/04/2013
- * @modified   02/07/2014
+ * @modified   07/07/2014
  */
 
 /**
@@ -32,6 +32,7 @@ require_once('../includes/session.php');
 $_SESSION['errors'] = array();
 $mimetype = '';
 $filename = '';
+$original_filename = '';
 $filekey = uniqid();
 
 if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input']) and count($_FILES['upload_batch_file_input']) and isset($_POST['csrf_token']) and $_POST['csrf_token'] === $_SESSION['csrf_token'])
@@ -50,6 +51,7 @@ if(isset($_FILES) and count($_FILES) and isset($_FILES['upload_batch_file_input'
 				{
 					$filepath = explode('/', $_FILES['upload_batch_file_input']['tmp_name']);
 					$filename = TEMP_FILE_DIR.end($filepath);
+					$original_filename = $_FILES['upload_batch_file_input']['name'];
 					move_uploaded_file($_FILES['upload_batch_file_input']['tmp_name'], $filename);
 				}
 			}
@@ -158,7 +160,7 @@ if(!count($_SESSION['errors']))
 		die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
 	}
 
-	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, file_format, email, status, detailed_output, mass_action_only, tests_enabled, filekey, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :file_format, :email, :status, :detailed_output, :mass_action_only, :tests_enabled, :filekey, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
+	$statement = $controldb->prepare('INSERT INTO '. DB_PREFIX. 'batch_jobs (filename, original_filename, file_format, email, label, status, detailed_output, mass_action_only, tests_enabled, filekey, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :original_filename, :file_format, :email, :label, :status, :detailed_output, :mass_action_only, :tests_enabled, :filekey, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)');
 	if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) $detailed_output = 1;
 	else $detailed_output = 0;
 	if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) $mass_action_only = 1;
@@ -186,8 +188,10 @@ if(!count($_SESSION['errors']))
 		}
 	}
 	$statement->bindParam(':filename', $filename, PDO::PARAM_STR);
+	$statement->bindParam(':original_filename', $original_filename, PDO::PARAM_STR);
 	$statement->bindParam(':file_format', $file_format, PDO::PARAM_INT);
 	$statement->bindValue(':email', trim($_POST['upload_batch_file_email']), PDO::PARAM_STR);
+	$statement->bindValue(':label', $_POST['upload_batch_file_label'], PDO::PARAM_STR);
 	$statement->bindValue(':status', 0, PDO::PARAM_INT);
 	$statement->bindParam(':detailed_output', $detailed_output, PDO::PARAM_INT);
 	$statement->bindParam(':mass_action_only', $mass_action_only, PDO::PARAM_INT);

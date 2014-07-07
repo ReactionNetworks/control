@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/04/2013
- * @modified   02/07/2014
+ * @modified   07/07/2014
  */
 
 /**
@@ -50,7 +50,7 @@ catch(PDOException $exception)
 }
 
 // Set 'not started' jobs to 'in progress'
-$query = 'SELECT * FROM '.DB_PREFIX.'batch_jobs WHERE status = 0';
+$query = 'SELECT * FROM ' . DB_PREFIX . 'batch_jobs WHERE status = 0';
 $statement = $controldb->prepare($query);
 $statement->execute();
 $jobs = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -58,7 +58,7 @@ $number_of_jobs = count($jobs);
 
 for($i = 0; $i < $number_of_jobs; ++$i)
 {
-	$query = 'UPDATE '.DB_PREFIX. 'batch_jobs SET status = 1, update_timestamp = :timestamp WHERE id = :id';
+	$query = 'UPDATE ' . DB_PREFIX . 'batch_jobs SET status = 1, update_timestamp = :timestamp WHERE id = :id';
 	$statement = $controldb->prepare($query);
 	$statement->bindParam(':id', $jobs[$i]['id'], PDO::PARAM_INT);
 	$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
@@ -73,57 +73,53 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		$mail .= "<p>ERROR: Cannot open file ($output_filename)</p>\r\n";
 		$success = false;
 	}
-	$boundary = hash("sha256", uniqid(time()));
+	$boundary = hash( 'sha256', uniqid( time() ) );
 	$mail = "<h1>CoNtRol Output</h1>\r\n";
 	$mail .= "==============\r\n\r\n";
-	$mail .= '<p>Version: '.CONTROL_VERSION."<br />\r\n";
+	$mail .= '<p>Version: ' . CONTROL_VERSION . "<br />\r\n";
+	$mail .= '<p>Original filename: ' . sanitise( $jobs[$i]['original_filename'] ) . "<br />\r\n";
 
 	// Initialise some variables
 	$line_ending = "\n";
-	if(strpos($jobs[$i]['remote_user_agent'], 'Windows;') !== false) $line_ending = "\r".$line_ending;
-	if(strpos($jobs[$i]['remote_user_agent'], 'Macintosh;') !== false) $line_ending = "\r";
+	if( strpos( $jobs[$i]['remote_user_agent'], 'Windows;' ) !== false ) $line_ending = "\r".$line_ending;
+	if( strpos( $jobs[$i]['remote_user_agent'], 'Macintosh;' ) !== false ) $line_ending = "\r";
 
-	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, "CoNtRol Output$line_ending==============".$line_ending.$line_ending."Version: ".CONTROL_VERSION.$line_ending) === false)
+	if( fwrite( $ohandle, "CoNtRol Output$line_ending==============" . $line_ending . $line_ending . "Version: " . CONTROL_VERSION . $line_ending ) === false )
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
 	}
 
-	$tests_enabled = explode(';', $jobs[$i]['tests_enabled']);
+	$tests_enabled = explode( ';', $jobs[$i]['tests_enabled'] );
 	$mail .= 'Tests enabled:';
 
-	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, "Tests enabled:") === false)
+	if( fwrite( $ohandle, "Tests enabled:" ) === false )
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
 	}
 
-	foreach($tests_enabled as $test)
+	foreach( $tests_enabled as $test )
 	{
 		$mail .= " $test";
-		// Write $somecontent to our opened file.
-		if(fwrite($ohandle, " $test") === false)
+		if( fwrite( $ohandle, " $test" ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
 		}
 	}
 	$mail .= "<br />\r\nDetailed test output: ";
-	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, $line_ending."Detailed test output: ") === false)
+	if( fwrite( $ohandle, $line_ending."Detailed test output: " ) === false )
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
 	}
 	$detailed_output = false;
-	if($jobs[$i]['detailed_output'] == 1)
+	if( $jobs[$i]['detailed_output'] == 1 )
 	{
 		$detailed_output = true;
 		$mail .= 'True';
-		// Write $somecontent to our opened file.
-		if(fwrite($ohandle, "true") === false)
+		if( fwrite( $ohandle, 'true' ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
@@ -132,27 +128,24 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	else
 	{
 		$mail .= 'False';
-		// Write $somecontent to our opened file.
-		if(fwrite($ohandle, "false") === false)
+		if( fwrite( $ohandle, 'false' ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
 		}
 	}
 	$mail .= "<br />\r\nMass action only: ";
-	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, $line_ending ."Mass action only: ") === false)
+	if( fwrite( $ohandle, $line_ending . 'Mass action only: ' ) === false )
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
 	}
 	$mass_action_only = false;
-	if($jobs[$i]['mass_action_only'] == 1)
+	if( $jobs[$i]['mass_action_only'] == 1 )
 	{
 		$mass_action_only = true;
 		$mail .= 'True';
-		// Write $somecontent to our opened file.
-		if(fwrite($ohandle, "true") === false)
+		if( fwrite( $ohandle, 'true' ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
@@ -161,117 +154,114 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	else
 	{
 		$mail .= 'False';
-		// Write $somecontent to our opened file.
-		if(fwrite($ohandle, "false") === false)
+		if( fwrite( $ohandle, 'false' ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
 		}
 	}
 	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";
-	// Write $somecontent to our opened file.
-	if(fwrite($ohandle, $line_ending .'Batch submission time: '.$jobs[$i]['creation_timestamp'].$line_ending.$line_ending) === false)
+	if( fwrite( $ohandle, $line_ending . 'Batch submission time: ' . $jobs[$i]['creation_timestamp'] . $line_ending . $line_ending ) === false )
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 		$success = false;
 	}
 
 	$filename = $jobs[$i]['filename'];
-	$dirname = TEMP_FILE_DIR.'control/'.$jobs[$i]['id'];
-	$mimetype = get_mime($filename);
+	$dirname = TEMP_FILE_DIR . 'control/' . $jobs[$i]['id'];
+	$mimetype = get_mime( $filename );
 	$success = false;
-	switch($mimetype)
+	switch( $mimetype )
 	{
 		case 'application/zip':
 			$archive = new ZipArchive;
-			$success = $archive->open($filename);
+			$success = $archive->open( $filename );
 			break;
 		default:
 			$mail .= "<p>ERROR: Unsupported archive type: $mimetype</p>\r\n";
 			break;
 	}
-	if(!$success) $mail .= "<p>ERROR: Failed to open archive $filename</p>\r\n";
+	if( !$success ) $mail .= "<p>ERROR: Failed to open archive $filename</p>\r\n";
 	else
 	{
-		$success = mkdir($dirname, 0700, true);
-		if ($success)
+		$success = mkdir( $dirname, 0700, true );
+		if( $success )
 		{
-			$archive->extractTo($dirname);
+			$archive->extractTo( $dirname );
 			$archive->close();
 		}
 		else $mail .= "<p>ERROR: Failed to create temporary directory</p>\r\n";
 	}
-	if($success)
+	if( $success )
 	{
 		$extracted_files = scandir($dirname);
 		// Special case: Sauro (6) has a single file with one network per LINE
-		if ($jobs[$i]['file_format'] == 6)
+		if( $jobs[$i]['file_format'] == 6 )
 		{
 			// If the user is on a Mac, this folder might be present so we should ignore it to prevent errors
-			$mac_dir_pos = array_search('__MACOSX', $extracted_files);
-			if ($mac_dir_pos !== false)
+			$mac_dir_pos = array_search( '__MACOSX', $extracted_files );
+			if( $mac_dir_pos !== false )
 			{
-				recursive_remove_directory($dir_name.'/__MACOSX');
-				unset($extracted_files[$mac_dir_pos]);
+				recursive_remove_directory( $dir_name . '/__MACOSX' );
+				unset( $extracted_files[$mac_dir_pos] );
 				// "Re-index" the array, as this isn't automatic, and our sauro file is now in $extracted_files[3], whereas code below assumes index 2
-				$extracted_files = array_values($extracted_files);
+				$extracted_files = array_values( $extracted_files );
 			}
-			if (count($extracted_files) !== 3) // 3 due to sauro file, . and ..
+			if( count( $extracted_files ) !== 3 ) // 3 due to sauro file, . and ..
 			{
-				$mail .= "<p>ERROR: Found ".(count($extracted_files) - 2)." files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
+				$mail .= '<p>ERROR: Found ' . ( count( $extracted_files ) - 2 ) . " files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
 				$success = false;
 			}
 			else
 			{
-				$fhandle = fopen($dirname.'/'.$extracted_files[2], 'r');
+				$fhandle = fopen( $dirname . '/' . $extracted_files[2], 'r' );
 				$fileLabel = 1;
-				while(!feof($fhandle))
+				while( !feof( $fhandle ) )
 				{
-					$line = fgets($fhandle);
-					$networkString = trim(preg_replace('/\s+/', ' ', $line));
-					if($networkString and strpos($line, '#') !== 0 and strpos($line, '//') !== 0) // If not empty line or comment create a file with this line
+					$line = fgets( $fhandle );
+					$networkString = trim( preg_replace( '/\s+/', ' ', $line ) );
+					if( $networkString and strpos( $line, '#' ) !== 0 and strpos( $line, '//' ) !== 0 ) // If not empty line or comment create a file with this line
 					{
-						file_put_contents($dirname.'/'.$fileLabel, $networkString);
+						file_put_contents( $dirname . '/' . $fileLabel, $networkString );
 						++$fileLabel;
 					}
 				}
-				fclose($fhandle);
-				unlink($dirname.'/'.$extracted_files[2]);
-				$extracted_files = scandir($dirname); // Refill the file array with the new files
+				fclose( $fhandle );
+				unlink( $dirname . '/' . $extracted_files[2] );
+				$extracted_files = scandir( $dirname ); // Refill the file array with the new files
 			}
 		}
 		$file_found = false;
-		if($extracted_files !== false)
+		if( $extracted_files !== false )
 		{
-			foreach($extracted_files as $file)
+			foreach( $extracted_files as $file )
 			{
-				if(!is_dir($file))
+				if( !is_dir( $file ) )
 				{
 					$file_found = true;
-					// Write $somecontent to our opened file.
 					$file_name_parts = explode( '/', $file );
 					if( fwrite( $ohandle, $line_ending . "## FILE: " . end( $file_name_parts ) . " ##" . $line_ending . $line_ending . "Processing start time: " . date( 'Y-m-d H:i:s' ) ) === false )
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
 					}
-					$fhandle = fopen($dirname.'/'.$file, 'r');
+					$fhandle = fopen( $dirname . '/' . $file, 'r' );
 					$reaction_network = new ReactionNetwork();
-					switch($jobs[$i]['file_format'])
+					switch( $jobs[$i]['file_format'] )
 					{
-						case 1: //Net stoichiometry
-							$mimetype = get_mime($dirname.'/'.$file);
-							if (strpos($mimetype, 'text/') === 0)
+						case 1: // Net stoichiometry
+							$mimetype = get_mime( $dirname . '/' . $file );
+							if( strpos( $mimetype, 'text/' ) === 0 )
 							{ // Hack as sometimes files with comments get detected as a different mime type
 								$matrix = array();
 								$mail .= "\r\n<p>WARNING: You uploaded a stoichiometry file. The output below will not be correct if any reactants appear on both sides of a reaction.</p>\r\n";
-								while(!feof($fhandle))
+								while( !feof( $fhandle ) )
 								{
-									$line = fgets($fhandle);
-									$row = trim(preg_replace('/\s+/', ' ', $line));
-									if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) $matrix[] = explode(' ', $row);
+									$line = fgets( $fhandle );
+									$row = trim( preg_replace( '/\s+/', ' ', $line ) );
+									if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0 ) $matrix[] = explode( ' ', $row );
 								}
-								if(!$reaction_network->parseStoichiometry($matrix))
+								if( !$reaction_network->parseStoichiometry( $matrix ) )
 								{
 									$mail .= "\r\n<p>ERROR: An error was detected in the stoichiometry file.</p>\r\n";
 									$success = false;
@@ -279,32 +269,30 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							}
 							else $file_found = false;
 							break; // End of case 1, net stoichiometry
-						case 2: //Net stoichiometry + V
-							if (strpos($mimetype, 'text/') === 0)
+						case 2: // Net stoichiometry + V
+							if( strpos( $mimetype, 'text/' ) === 0 )
 							{ // Hack as sometimes files with comments get detected as a different mime type
 							}
 							else $file_found = false;
 							break;
-						case 3: //Source + target + V
-							$mimetype = get_mime($dirname.'/'.$file);
-							if (strpos($mimetype, 'text/') === 0)
+						case 3: // Source + target + V
+							$mimetype = get_mime( $dirname . '/' . $file );
+							if( strpos( $mimetype, 'text/' ) === 0 )
 							{ // Hack as sometimes files with comments get detected as a different mime type
 							}
 							else $file_found = false;
 							break;
-						case 4: //Source + target
-							$mimetype = get_mime($dirname.'/'.$file);
-							if (strpos($mimetype, 'text/') === 0)
+						case 4: // Source + target
+							$mimetype = get_mime( $dirname . '/' . $file );
+							if( strpos( $mimetype, 'text/' ) === 0 )
 							{ // Hack as sometimes files with comments get detected as a different mime type
-								//$mail .= '<pre>';
 								$sourceMatrix = array();
 								$targetMatrix = array();
 								$row = '';
-								while (!feof($fhandle) and mb_strtoupper(trim($row)) !== 'S MATRIX')
+								while( !feof( $fhandle ) and mb_strtoupper( trim( $row ) ) !== 'S MATRIX' )
 								{
-									$row = fgets($fhandle);
-									// Write $somecontent to our opened file.
-									if(fwrite($ohandle, "$line_ending$row") === false)
+									$row = fgets( $fhandle );
+									if( fwrite( $ohandle, "$line_ending$row" ) === false )
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
@@ -341,7 +329,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							else $file_found = false;
 							break;
 
-						// NB Sauro also handled above as each LINE represents a network, not each file
+						// N.B. Sauro also handled above as each LINE represents a network, not each file
 						case 6:
 							while(!feof($fhandle))
 							{
@@ -358,11 +346,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							}
 							break;
 
-						case 0: //Human
-							//Fall through
-						default: //Assume 'human' if unsure
+						case 0: // Human
+							// Fall through
+						default: // Assume 'human' if unsure
 							$mimetype = get_mime($dirname.'/'.$file);
-							if (strpos($mimetype, 'text/') === 0)
+							if( strpos( $mimetype, 'text/' ) === 0 )
 							{ // Hack as sometimes files with comments get detected as a different mime type
 								while(!feof($fhandle))
 								{
@@ -384,7 +372,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					} // end of switch ($file_format)
 
 					fclose($fhandle);
-					// Write $somecontent to our opened file.
 					if(fwrite($ohandle, $line_ending.$line_ending."Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)).$line_ending.$line_ending === false)
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
@@ -395,15 +382,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						// Create human-readable descriptor file
 						$temp_filename = $filename.'.hmn';
 
-						// In our example we're opening $filename in append mode.
-						// The file pointer is at the bottom of the file hence
-						// that's where $somecontent will go when we fwrite() it.
 						if(!$handle = fopen($temp_filename, 'w'))
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportReactionNetworkEquations()) === false)
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
@@ -414,15 +397,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						// Create net stoichiometry descriptor file
 						$temp_filename = $filename.'.sto';
 
-						// In our example we're opening $filename in append mode.
-						// The file pointer is at the bottom of the file hence
-						// that's where $somecontent will go when we fwrite() it.
 						if(!$handle = fopen($temp_filename, 'w'))
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportStoichiometryMatrix()) === false)
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
@@ -433,15 +412,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						// Create net stoichiometry + V matrix descriptor file
 						$temp_filename = $filename.'.s+v';
 
-						// In our example we're opening $filename in append mode.
-						// The file pointer is at the bottom of the file hence
-						// that's where $somecontent will go when we fwrite() it.
 						if(!$handle = fopen($temp_filename, 'w'))
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportStoichiometryAndVMatrix()) === false)
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
@@ -452,22 +427,34 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						// Create source stoichiometry + target stoichiometry + V matrix descriptor file
 						$temp_filename = $filename.'.stv';
 
-						// In our example we're opening $filename in append mode.
-						// The file pointer is at the bottom of the file hence
-						// that's where $somecontent will go when we fwrite() it.
 						if(!$handle = fopen($temp_filename, 'w'))
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
 
-						// Write $somecontent to our opened file.
 						if(fwrite($handle, $reaction_network->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
 						fclose($handle);
+
+						// Create GLPK data file
+						$temp_filename = $filename . '.glpk';
+
+						if( !$handle = fopen( $temp_filename, 'w' ) )
+						{
+							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+
+						if( fwrite( $handle, $reaction_network->exportGLPKData() ) === false )
+						{
+							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
+							$success = false;
+						}
+						fclose( $handle );
 
 						if($success)
 						{
@@ -479,7 +466,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							{
 								$extension = '';
 								$temp = '';
-								// Write $somecontent to our opened file.
 								if(fwrite($ohandle, $line_ending. "### TEST: ".$currentTest->getShortName()." ###".$line_ending.$line_ending."Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
 								{
 									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
@@ -490,6 +476,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
 								if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
 								if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
+								if(in_array('GLPK', $currentTest->getInputFileFormats())) $extension = '.glpk';
 								if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
 								if(!$extension) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
 								else
@@ -498,7 +485,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'timeout '.TEST_TIMEOUT_LIMIT.' ./'.$currentTest->getExecutableName();
 									$output = array();
 									$returnValue = 0;
-									//$exec_string = NICENESS.$binary;
 									if(isset($mass_action_only) and $mass_action_only)
 									{
 										if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
@@ -508,7 +494,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									{
 										if(!$currentTest->supportsGeneralKinetics()) $mail .= "<p>WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.</p>\r\n";
 									}
-									// Write $somecontent to our opened file.
 									if(fwrite($ohandle, "Output:$line_ending-------$line_ending") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
@@ -518,8 +503,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
 									else $exec_string .= ' 2> /dev/null';
 									exec($exec_string, $output, $returnValue);
-									//$mail .= '<pre>';
-									if ($returnValue)
+									if( $returnValue )
 									{
 										if(fwrite($ohandle, 'ERROR: Test failed, probably due to timeout.') === false)
 										{
@@ -529,9 +513,18 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 									}
 									else
 									{
-										foreach($output as $line)
+										foreach( $output as &$line )
 										{
-											if(fwrite($ohandle, convert_links_to_plain_text($line_ending.$line)) === false)
+											// Strip out extraneous HTML from calc-jacobian test
+											if( strpos( $line, '|' ) === false ) $delimiter = '|';
+											elseif( strpos( $line, '`' ) === false ) $delimiter = '`';
+											elseif( strpos( $line, '~' ) === false ) $delimiter = '~';
+											elseif( strpos( $line, '@' ) === false ) $delimiter = '@';
+
+											$line = preg_replace( $delimiter . '(<span)(.+?)(>)' . $delimiter, '', $line);
+											$line = preg_replace( $delimiter . '(</span>)' . $delimiter, '', $line);
+
+											if( fwrite( $ohandle, convert_links_to_plain_text( $line_ending . $line ) ) === false )
 											{
 												$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 												$success = false;
@@ -552,7 +545,6 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
-						//$mail .= "<h2>END OF FILE: ".end(explode('/', $file))."</h2>\r\n\r\n";
 					}
 				} // if(!is_dir($file))
 			} // foreach($extracted_files as $file)
@@ -574,9 +566,9 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$body .= "Content-Type: text/plain; charset=utf-8;\r\n format=flowed\r\n";
 	$body .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
 	// Remove HTML tags and replace links with bare URLs
-	$plain_text_search = array('<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>');
-	$plain_text_replace = array('', '', '## ', '### ', '', '', '', ' ##', ' ###', '', '');
-	$body .= convert_links_to_plain_text(str_replace($plain_text_search, $plain_text_replace, $mail));
+	$plain_text_search = array( '<br />', '<h1>', '<h2>', '<h3>', '<p>', '<pre>', '</h1>', '</h2>', '</h3>', '</p>', '</pre>' );
+	$plain_text_replace = array( '', '', '## ', '### ', '', '', '', ' ##', ' ###', '', '' );
+	$body .= convert_links_to_plain_text( str_replace( $plain_text_search, $plain_text_replace, $mail ) );
 
 	// Create HTML version of email
 	$body .= "\r\n\r\n--$boundary\r\n";
@@ -587,19 +579,22 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	// Remove problematic plain text code and replace admin email with link
 	$html_search = array('<-->', '<--', '-->', "\r\n-------\r\n", "\r\n==============\r\n\r\n");
 	$html_replace = array('&lt;--&gt;', '&lt;--', '--&gt;', "\r\n", "\r\n");
-	$body .= str_replace(ADMIN_EMAIL, '<a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>', str_replace($html_search, $html_replace, $mail));
+	$body .= str_replace( ADMIN_EMAIL, '<a href="mailto:' . ADMIN_EMAIL . '">' . ADMIN_EMAIL . '</a>', str_replace( $html_search, $html_replace, $mail ) );
 	// Close HTML
 	$body .= "</body>\r\n</html>\r\n\r\n--$boundary--\r\n";
 
 	// Set the job to complete and remove the files
-	if (!mail('<'.$jobs[$i]['email'].'>', 'CoNtRol Batch Output', $body, $extra_headers, $sendmail_params))
+	$mail_subject = 'CoNtRol Batch Output (input file ' . sanitise($jobs[$i]['original_filename']);
+	if($jobs[$i]['label']) $mail_subject .= ', label ' . sanitise($jobs[$i]['label']);
+	$mail_subject .= ')';
+	if (!mail('<'.$jobs[$i]['email'].'>', $mail_subject, $body, $extra_headers, $sendmail_params))
 	{
-		echo 'CoNtRol batch mail sending failed at ', date('Y-m-d H:i:s'), PHP_EOL, "\$sendmail_params: $sendmail_params", PHP_EOL, "$extra_headers: $extra_headers", PHP_EOL, "$mail: $mail";
+		echo 'CoNtRol batch mail sending failed at ', date( 'Y-m-d H:i:s' ), PHP_EOL, "\$sendmail_params: $sendmail_params", PHP_EOL, "\$extra_headers: $extra_headers", PHP_EOL, "\$mail: $mail";
 	}
-	elseif($success)
+	elseif( $success )
 	{
 		$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 2, update_timestamp = :timestamp WHERE id = :id';
-		$statement = $controldb->prepare($query);
+		$statement = $controldb->prepare( $query );
 		$statement->bindParam(':id', $jobs[$i]['id'], PDO::PARAM_INT);
 		$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
 		$statement->execute();
@@ -607,37 +602,38 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		array_map('unlink', glob($jobs[$i]['filename'].'*'));
 	}
 	// Remove decompressed files
-	recursive_remove_directory($dirname);
-	fclose($ohandle);
+	recursive_remove_directory( $dirname );
+	fclose( $ohandle );
 
 	$zip = new ZipArchive();
-	$zipfilename = TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.zip';
-	if ($zip->open($zipfilename, ZipArchive::CREATE) !== true)
+	$zipfilename = TEMP_FILE_DIR . '/' . $jobs[$i]['filekey'] . '.zip';
+	if( $zip->open( $zipfilename, ZipArchive::CREATE ) !== true )
 	{
-		exit("cannot open <$zipfilename>\n");
+		exit( "Cannot open <$zipfilename>\n" );
 	}
-	$zip->addFile(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt','control_output.txt');
+	$zip->addFile( TEMP_FILE_DIR . '/' . $jobs[$i]['filekey'] . '.txt' , 'control_output.txt' );
 	$zip->close();
-	unlink(TEMP_FILE_DIR."/".$jobs[$i]['filekey'].'.txt');
+	unlink( TEMP_FILE_DIR . '/' . $jobs[$i]['filekey'] . '.txt' );
 } // for($i = 0; $i < $number_of_jobs; ++$i)
 
 // Status 3 = output file downloaded; set them to status 4 once files removed
 // Status 5 = unconfirmed; also remove these files since the job isn't going to be run
 $query = 'SELECT id, filekey FROM '.DB_PREFIX.'batch_jobs WHERE status = 3 OR status = 5';
-$statement = $controldb->prepare($query);
+$statement = $controldb->prepare( $query );
 $statement->execute();
-$results = $statement->fetchAll(PDO::FETCH_ASSOC);
-foreach ($results as $result)
+$results = $statement->fetchAll( PDO::FETCH_ASSOC );
+foreach( $results as $result )
 {
-	unlink(TEMP_FILE_DIR.$result['filekey'].".zip");
-	$query = 'UPDATE '.DB_PREFIX.'batch_jobs SET status = 4, update_timestamp = :timestamp WHERE id = :id';
-	$statement = $controldb->prepare($query);
-	$statement->bindValue(':timestamp', date('Y-m-d H:i:s'), PDO::PARAM_STR);
-	$statement->bindParam(':id', $result['id'], PDO::PARAM_INT);
+	unlink( TEMP_FILE_DIR . $result['filekey'] . '.zip' );
+	$query = 'UPDATE ' . DB_PREFIX . 'batch_jobs SET status = 4, update_timestamp = :timestamp WHERE id = :id';
+	$statement = $controldb->prepare( $query );
+	$statement->bindValue( ':timestamp', date( 'Y-m-d H:i:s' ), PDO::PARAM_STR );
+	$statement->bindParam( ':id', $result['id'], PDO::PARAM_INT );
 	$statement->execute();
 }
 // Remove leftover temporary files from interactive (i.e. not batch) tests
-array_map('unlink', glob('*.hmn'));
-array_map('unlink', glob('*.sto'));
-array_map('unlink', glob('*.stv'));
-array_map('unlink', glob('*.s+v'));
+array_map( 'unlink', glob( TEMP_FILE_DIR . '*.hmn' ) );
+array_map( 'unlink', glob( TEMP_FILE_DIR . '*.glpk' ) );
+array_map( 'unlink', glob( TEMP_FILE_DIR . '*.sto' ) );
+array_map( 'unlink', glob( TEMP_FILE_DIR . '*.stv' ) );
+array_map( 'unlink', glob( TEMP_FILE_DIR . '*.s+v' ) );

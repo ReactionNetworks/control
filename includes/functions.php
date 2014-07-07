@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   05/07/2014
+ * @modified   07/07/2014
  */
 
 /**
@@ -90,17 +90,17 @@ function check_file_format( $file, $expected_mimetype )
  * @param   string  $intext   Text including links to convert to plain text
  * @return  string  $outtext  Same text with links converted to plain text
  */
-function convert_links_to_plain_text($intext)
+function convert_links_to_plain_text( $intext )
 {
-	if(strpos($intext, '|') === false) $delimiter = '|';
-	elseif(strpos($intext, '`') === false) $delimiter = '`';
-	elseif(strpos($intext, '~') === false) $delimiter = '~';
-	elseif(strpos($intext, '@') === false) $delimiter = '@';
+	if( strpos( $intext, '|' ) === false ) $delimiter = '|';
+	elseif( strpos( $intext, '`' ) === false ) $delimiter = '`';
+	elseif( strpos( $intext, '~' ) === false ) $delimiter = '~';
+	elseif( strpos( $intext, '@' ) === false ) $delimiter = '@';
 	else return $intext;
 	// Replace link text with link title if title attribute present
-	$outtext = preg_replace($delimiter.'(<a)(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$1$2$6$7$4$9', $intext);
+	$outtext = preg_replace( $delimiter . '(<a)(.+?)(title=")(.+?)(")(.*?)(>)(.+?)(</a>)' . $delimiter, '$1$2$6$7$4$9', $intext );
 	// Strip out link HTML
-	$outtext = preg_replace($delimiter.'(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)'.$delimiter, '$8 [$4]', $outtext);
+	$outtext = preg_replace( $delimiter . '(<a)(.+?)(href=")(.+?)(")(.*?)(>)(.+?)(</a>)' . $delimiter, '$8 [$4]', $outtext );
 	return $outtext;
 }
 

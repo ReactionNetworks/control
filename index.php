@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   02/07/2014
+ * @modified   07/07/2014
  */
 
 /**
@@ -105,6 +105,10 @@ else echo ini_get('upload_max_filesize');
 							<label for="upload_batch_file_email">Email address for results:</label>
 							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="32" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?>/><br />
 							<span id="upload_batch_file_email_error">&nbsp;</span>
+						</p>
+						<p>
+							<label for="upload_batch_file_label">(Optional) label for results:</label>
+							<input type="text" id="upload_batch_file_label" name="upload_batch_file_label" size="32" />
 						</p>
 						<p>
 							File format:<br />
