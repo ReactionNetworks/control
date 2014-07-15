@@ -233,6 +233,11 @@
 		font-size: 150%;
 	}
 
+	#batch_security_code_label
+	{
+		font-family: Monaco, Consolas, 'Deja Vu Sans Mono', monospace;
+	}
+
 	#batch_upload_button
 	{
 		background-image: url('../images/batch.png');

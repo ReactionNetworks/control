@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   07/07/2014
+ * @modified   15/07/2014
  */
 
 /**
@@ -121,7 +121,7 @@ foreach ($format_array as $format)
 						</p>
 						<div>
 							<p>Enter security code (required):<br />
-								<span class="bold"><label for="batch_security_code"><?php batch_captcha(); ?></label></span>
+								<span class="bold"><label for="batch_security_code" id="batch_security_code_label"><?php batch_captcha(); ?></label></span>
 								<input type="text" name="batch_security_code" id="batch_security_code"/>
 							</p>
 						</div>

@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/05/2014
+ * @modified   15/07/2014
  */
 
 /**
@@ -224,6 +224,7 @@ function resetReactions()
 	var url = 'handlers/reset-reactions.php';
 	var data = {reset_reactions: 1, csrf_token: csrf_token};
 	$.post( url, data );
+	if( $( '#error_message_holder' ) ) $( '#error_message_holder' ).hide();
 	if( $( '#results_link' ) ) $( '#results_link' ).hide();
 }
 
