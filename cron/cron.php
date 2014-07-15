@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/04/2013
- * @modified   07/07/2014
+ * @modified   15/07/2014
  */
 
 /**
@@ -195,18 +195,18 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	if( $success )
 	{
 		$extracted_files = scandir($dirname);
+		// If the user is on a Mac, this folder might be present so we should ignore it to prevent errors
+		$mac_dir_pos = array_search( '__MACOSX', $extracted_files );
+		if( $mac_dir_pos !== false )
+		{
+			recursive_remove_directory( $dir_name . '/__MACOSX' );
+			unset( $extracted_files[$mac_dir_pos] );
+			// "Re-index" the array, as this isn't automatic, and our data files start at $extracted_files[3], whereas code below assumes index 2
+			$extracted_files = array_values( $extracted_files );
+		}
 		// Special case: Sauro (6) has a single file with one network per LINE
 		if( $jobs[$i]['file_format'] == 6 )
 		{
-			// If the user is on a Mac, this folder might be present so we should ignore it to prevent errors
-			$mac_dir_pos = array_search( '__MACOSX', $extracted_files );
-			if( $mac_dir_pos !== false )
-			{
-				recursive_remove_directory( $dir_name . '/__MACOSX' );
-				unset( $extracted_files[$mac_dir_pos] );
-				// "Re-index" the array, as this isn't automatic, and our sauro file is now in $extracted_files[3], whereas code below assumes index 2
-				$extracted_files = array_values( $extracted_files );
-			}
 			if( count( $extracted_files ) !== 3 ) // 3 due to sauro file, . and ..
 			{
 				$mail .= '<p>ERROR: Found ' . ( count( $extracted_files ) - 2 ) . " files - Sauro archive must contain only one file (with one network per line).</p>\r\n";
