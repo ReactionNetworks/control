@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   05/07/2014
+ * @modified   15/07/2014
  */
 
 /**
@@ -947,82 +947,88 @@ class ReactionNetwork
 	 * @param   string  $file_name  Name of SBML file
 	 * @return  bool                Returns TRUE if SBML file successfully parsed, and FALSE otherwise
 	 */
-	public function parseSBML($file_name)
+	public function parseSBML( $file_name )
 	{
 		$error = false;
 		$sbml_file = new DOMDocument();
-		if (!$sbml_file->load($file_name, LIBXML_DTDLOAD|LIBXML_DTDVALID))
+		if( !$sbml_file->load( $file_name, LIBXML_DTDLOAD | LIBXML_DTDVALID ) )
 		{
 			$error = true;
-			$_SESSION['errors'][] = 'You didn\'t upload a valid SBML file.';
+			$_SESSION['errors'][] = "You didn't upload a valid SBML file.";
 		}
 		else
 		{
-			$models = $sbml_file->getElementsByTagName('model');
-			if ($models->length !== 1)
+			$models = $sbml_file->getElementsByTagName( 'model' );
+			if( $models->length !== 1 )
 			{
 				$error = true;
 				$_SESSION['errors'][] = 'File does not contain one model.';
 			}
 			else
 			{
-				$model_child_nodes = $models->item(0)->childNodes;
+				$model_child_nodes = $models->item( 0 )->childNodes;
 				$reactions_found = false;
-				for($i = 0; $i < $model_child_nodes->length; ++$i)
+				for( $i = 0; $i < $model_child_nodes->length; ++$i )
 				{
-					if ($model_child_nodes->item($i)->nodeName === 'listOfReactions')
+					if( $model_child_nodes->item( $i )->nodeName === 'listOfReactions' )
 					{
 						$reactions_found = true;
-						$model_reactions = $model_child_nodes->item($i)->childNodes;
+						$model_reactions = $model_child_nodes->item( $i )->childNodes;
 					}
 				}
-				if (!$reactions_found)
+				if( !$reactions_found )
 				{
 					$error = true;
 					$_SESSION['errors'][] = 'No reactions found.';
 				}
 				else
 				{
-					for ($i = 0; $i < $model_reactions->length; ++$i)
+					for( $i = 0; $i < $model_reactions->length; ++$i )
 					{
-						if ($model_reactions->item($i)->nodeName === 'reaction')
+						if( $model_reactions->item( $i )->nodeName === 'reaction' )
 						{
 							$lhs = array();
 							$rhs = array();
-							$reaction_attributes = $model_reactions->item($i)->attributes;
-							if ($reaction_attributes->getNamedItem('reversible') and $reaction_attributes->getNamedItem('reversible')->nodeValue === 'false') $reversible = false;
+							$reaction_attributes = $model_reactions->item( $i )->attributes;
+							if( $reaction_attributes->getNamedItem( 'reversible' ) and $reaction_attributes->getNamedItem( 'reversible' )->nodeValue === 'false' ) $reversible = false;
 							else $reversible = true; // If not explicitly stated, reversibility assumed by SBML specification Level 3
-							$reaction_nodes = $model_reactions->item($i)->childNodes;
-							for ($j = 0; $j < $reaction_nodes->length; ++$j)
+							$reaction_nodes = $model_reactions->item( $i )->childNodes;
+							for( $j = 0; $j < $reaction_nodes->length; ++$j )
 							{
-								if ($reaction_nodes->item($j)->nodeName === 'listOfReactants')
+								if( $reaction_nodes->item( $j )->nodeName === 'listOfReactants' )
 								{
-									$list_of_reactants = $reaction_nodes->item($j)->childNodes;
-									for ($k = 0; $k < $list_of_reactants->length; ++$k)
+									$list_of_reactants = $reaction_nodes->item( $j )->childNodes;
+									for( $k = 0; $k < $list_of_reactants->length; ++$k )
 									{
-										if ($list_of_reactants->item($k)->hasAttributes())
+										if( $list_of_reactants->item( $k )->hasAttributes() )
 										{
-											$reactant_attributes = $list_of_reactants->item($k)->attributes;
-											if ($reactant_attributes->getNamedItem('stoichiometry')) $lhs[$reactant_attributes->getNamedItem('species')->nodeValue] = $reactant_attributes->getNamedItem('stoichiometry')->nodeValue;
-											else $lhs[$reactant_attributes->getNamedItem('species')->nodeValue] = 1;
+											$reactant_attributes = $list_of_reactants->item( $k )->attributes;
+											if( $reactant_attributes->getNamedItem( 'species' )->nodeValue != 'EmptySet' )
+											{
+												if( $reactant_attributes->getNamedItem( 'stoichiometry' ) ) $lhs[$reactant_attributes->getNamedItem( 'species' )->nodeValue] = $reactant_attributes->getNamedItem( 'stoichiometry' )->nodeValue;
+												else $lhs[$reactant_attributes->getNamedItem( 'species' )->nodeValue] = 1;
+											}
 										}
 									}
 								}
-								elseif ($reaction_nodes->item($j)->nodeName === 'listOfProducts')
+								elseif( $reaction_nodes->item( $j )->nodeName === 'listOfProducts' )
 								{
-									$list_of_products = $reaction_nodes->item($j)->childNodes;
-									for ($k = 0; $k < $list_of_products->length; ++$k)
+									$list_of_products = $reaction_nodes->item( $j )->childNodes;
+									for( $k = 0; $k < $list_of_products->length; ++$k )
 									{
-										if ($list_of_products->item($k)->hasAttributes())
+										if( $list_of_products->item( $k )->hasAttributes() )
 										{
-											$product_attributes = $list_of_products->item($k)->attributes;
-											if ($product_attributes->getNamedItem('stoichiometry')) $rhs[$product_attributes->getNamedItem('species')->nodeValue] = $product_attributes->getNamedItem('stoichiometry')->nodeValue;
-											else $rhs[$product_attributes->getNamedItem('species')->nodeValue] = 1;
+											$product_attributes = $list_of_products->item( $k )->attributes;
+											if( $product_attributes->getNamedItem( 'species' )->nodeValue != 'EmptySet' )
+											{
+												if( $product_attributes->getNamedItem( 'stoichiometry' ) ) $rhs[$product_attributes->getNamedItem( 'species' )->nodeValue] = $product_attributes->getNamedItem( 'stoichiometry' )->nodeValue;
+												else $rhs[$product_attributes->getNamedItem( 'species' )->nodeValue] = 1;
+											}
 										}
 									}
 								}
 							}
-							$this->addReaction(new Reaction($lhs, $rhs, $reversible));
+							$this->addReaction( new Reaction( $lhs, $rhs, $reversible ) );
 						}
 					}
 				}
