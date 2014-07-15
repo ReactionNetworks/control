@@ -620,6 +620,11 @@ $( document ).ready( function()
 		}
 	});
 
+	$( 'th.test_checkboxes' ).click( function()
+	{
+		$( 'input[name*=test_checkbox]' ).each( function() { $( this ).prop( 'checked', true ).trigger( 'change' ) } );
+	});
+
 	$('#upload_batch_file_email').change(function()
 	{
 		if(validateEmailAddress($('#upload_batch_file_email').val()))

@@ -149,14 +149,14 @@ else echo '						<p>The DSR graph requires Java to view, which is not installed 
 						<table summary="Control whether each test is enabled or disabled">
 							<thead>
 								<tr>
-									<th>&#x2713;</th>
+									<th class="test_checkboxes">&#x2713;</th>
 									<th>Test name</th>
 									<th>Description</th>
 								</tr>
 							</thead>
 							<tfoot>
 								<tr>
-									<th>&#x2713;</th>
+									<th class="test_checkboxes">&#x2713;</th>
 									<th>Test name</th>
 									<th>Description</th>
 								</tr>
@@ -173,14 +173,14 @@ if(count($standardTests))
 		if( $_SESSION['tests'][$test->getShortName()]) echo ' checked="checked"';
 		echo ' name="test_checkbox[', sanitise($test->getShortName()), ']" id="test_checkbox_', sanitise($test->getShortName()), '" /></td>', PHP_EOL;
 		echo '									<td><label for="test_checkbox_', sanitise($test->getShortName()), '">', sanitise($test->getLongName()), "</label></td>\n";
-		echo '									<td>', $test->getDescription(), "</td>\n							</tr>\n";
+		echo '									<td>', $test->getDescription(), "</td>\n								</tr>\n";
 	}
 }
 ?>
 							</tbody>
 						</table>
 						<h2>Other options:</h2>
-						<p><input type="checkbox" name="mass_action" id="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?> /> <label for="mass_action_checkbox">Test mass action kinetics only (when supported)</label></p>
+						<!--p><input type="checkbox" name="mass_action" id="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?> /> <label for="mass_action_checkbox">Test mass action kinetics only (when supported)</label></p-->
 						<p><input type="checkbox" name="detailed_output" id="detailed_output_checkbox"<?php if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) echo ' checked="checked"'; ?> /> <label for="detailed_output_checkbox">Show detailed test output</label></p>
 					</form><!-- option_holder -->
 				</div><!-- popup_hider -->

@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    02/10/2012
- * @modified   05/07/2014
+ * @modified   15/07/2014
  */
 
 @media screen
@@ -177,6 +177,11 @@
 		font-size: 75%;
 		font-style: italic;
 		padding-left: 1em;
+	}
+
+	th.test_checkboxes
+	{
+		cursor: pointer;
 	}
 
 	#actions_holder, #tools_holder

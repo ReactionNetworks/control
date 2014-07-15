@@ -468,6 +468,84 @@ class ReactionNetwork
 	}
 
 	/**
+	 * Export function for reaction network multiedges in Sage format
+	 * 
+	 * TODO: support the empty complex (N.B. doesn't exist in standard Sauro format)
+	 *
+	 * @return  string  $edges  Sage version of reaction network multiedges
+	 */
+	public function exportSauroEdgesAsSage()
+	{
+		$edges = '';
+		$numberOfReactions = count( $this->reactions );
+		$numberOfReactionsIrreversible = $numberOfReactions;
+		foreach( $this->reactions as $reaction )
+		{
+			if( $reaction->isReversible() ) ++$numberOfReactionsIrreversible;
+		}
+		$first_edge = true;
+		for($i = 0; $i < $numberOfReactions; ++$i)
+		{
+			foreach( $this->reactions[$i]->getLeftHandSide() as $reactant => $stoichiometry )
+			{
+				for( $j = 0; $j < $stoichiometry; ++$j )
+				{
+					if( !$first_edge ) $edges .= ',';
+					$edges .= '(';
+					$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
+					$edges .= ',';
+					$edges .= $i;
+					$edges .= ')';
+					$first_edge = false;
+				}
+			}
+			foreach( $this->reactions[$i]->getRightHandSide() as $reactant => $stoichiometry )
+			{
+				for( $j = 0; $j < $stoichiometry; ++$j )
+				{
+					if( !$first_edge ) $edges .= ',';
+					$edges .= '(';
+					$edges .= $i;
+					$edges .= ',';
+					$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
+					$edges .= ')';
+					$first_edge = false;
+				}
+			}
+		}
+		for($i = $numberOfReactions; $i < $numberOfReactionsIrreversible; ++$i)
+		{
+			foreach( $this->reactions[$i - $numberOfReactions]->getRightHandSide() as $reactant => $stoichiometry )
+			{
+				for( $j = 0; $j < $stoichiometry; ++$j )
+				{
+					if( !$first_edge ) $edges .= ',';
+					$edges .= '(';
+					$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
+					$edges .= ',';
+					$edges .= $i;
+					$edges .= ')';
+					$first_edge = false;
+				}
+			}
+			foreach( $this->reactions[$i - $numberOfReactions]->getleftHandSide() as $reactant => $stoichiometry )
+			{
+				for( $j = 0; $j < $stoichiometry; ++$j )
+				{
+					if( !$first_edge ) $edges .= ',';
+					$edges .= '(';
+					$edges .= $i;
+					$edges .= ',';
+					$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
+					$edges .= ')';
+					$first_edge = false;
+				}
+			}
+		}
+		return $edges;
+	}
+
+	/**
 	 * Export function for reaction network net stoichiometry
 	 *
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
@@ -1143,6 +1221,53 @@ class ReactionNetwork
 	public function getNumberOfReactions()
 	{
 		return count($this->reactions);
+	}
+
+	/**
+	 * Isomorphism test
+	 *
+	 * Tests whether the current network is isomorphic to another network, using Sage.
+	 *
+	 * @param   ReactionNetwork  $reaction_network  The network to compare
+	 * @return  bool             $is_isomorphic     True if the network is isomorphic, false otherwise
+	 */
+	public function isIsomorphic( $reaction_network )
+	{
+		$is_isomorphic = false;
+		$sage_string = 'import sage.all' . PHP_EOL;
+		$sage_string .= 'original_crn = sage.all.DiGraph( multiedges = True )' . PHP_EOL;
+		$sage_string .= 'new_crn = sage.all.DiGraph( multiedges = True )' . PHP_EOL;
+		$sage_string .= 'original_crn.add_edges( [';
+		$sage_string .= $this->exportSauroEdgesAsSage();
+		$sage_string .= '] )' . PHP_EOL;
+		$sage_string .= 'new_crn.add_edges( [';
+		$sage_string .= $reaction_network->exportSauroEdgesAsSage();
+		$sage_string .= '] )' . PHP_EOL;
+		$sage_string .= '' . PHP_EOL;
+		$sage_string .= '' . PHP_EOL;
+		$sage_string .= 'original_crn.is_isomorphic(new_crn)' . PHP_EOL;
+		$sage_filename = tempnam( TEMP_FILE_DIR, 'crnsage.' );
+
+		if( !$handle = fopen( $sage_filename, 'w' ) )
+		{
+			die( "ERROR: Cannot open file ($sage_filename)" );
+		}
+		if( fwrite( $handle, $sage_string ) === false )
+		{
+			die( "ERROR: Cannot write to file ($sage_filename)" );
+		}
+		fclose($handle);
+echo $sage_string;
+		$sage_exec_string = NICENESS . "sage -q $sage_filename";
+echo $sage_exec_string;
+		$output = array();
+		$returnValue = 0;
+		exec( $sage_exec_string);//, $output, $returnValue );
+print_r( $output );
+		$result = end( $output );
+		if( $result === 'True' ) $is_isomorphic = true;
+
+		return $is_isomorphic;
 	}
 }
 // End of class ReactionNetwork

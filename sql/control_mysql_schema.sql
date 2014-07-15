@@ -1,30 +1,13 @@
--- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: May 28, 2013 at 06:40 PM
--- Server version: 5.5.31
--- PHP Version: 5.3.10-1ubuntu3.6
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `control`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `batch_jobs`
---
+CREATE DATABASE IF NOT EXISTS `control` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `control`;
 
 CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -32,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `batch_jobs` (
   `original_filename` varchar(255) NOT NULL,
   `file_format` tinyint(3) unsigned NOT NULL COMMENT '0 = human, 1 = net stoichiometry, 2 = net stoichiometry + V, 3 = source + target + V, 4 = s + v, 5 = SBML, 6 = sauro',
   `email` varchar(255) NOT NULL,
-  `label` varchar(255),
+  `label` varchar(255) DEFAULT NULL,
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0 = not started, 1 = in progress, 2 = complete, 3 = output file downloaded, 4 = output file removed',
   `detailed_output` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `mass_action_only` tinyint(3) unsigned NOT NULL,
@@ -45,7 +28,17 @@ CREATE TABLE IF NOT EXISTS `batch_jobs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `filename` (`filename`),
   UNIQUE KEY `filekey` (`filekey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `known_crns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `number_of_reactions` tinyint(4) NOT NULL,
+  `number_of_species` tinyint(4) NOT NULL,
+  `sauro_string` varchar(255) NOT NULL,
+  `result` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sauro_string` (`sauro_string`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

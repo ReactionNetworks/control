@@ -53,9 +53,21 @@ $standardTests = array(
 	(
 		'endotactic',
 		'Endotactic',
-		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using GLPK by Matthew Johnston, Casian Pantea and Pete Donnell.',
+		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="http://scip.zib.de/">SCIP</a> by Matthew Johnston, Casian Pantea and Pete Donnell.',
 		'endotactic',
 		array('GLPK'),
+		false,
+		true
+	),
+
+
+	new NetworkTest
+	(
+		'isomorphic',
+		'Isomorphism lookup',
+		'Tests whether the network is isomorphic to a known network with interesting properties. Implemented in <a href="http://www.sagemath.org/">Sage</a> by Murad Banaji, Casian Pantea and Pete Donnell.',
+		'isomorphic',
+		array('human'),
 		false,
 		true
 	),
