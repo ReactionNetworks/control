@@ -14,7 +14,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/05/2014
+ * @modified   10/07/2014
  */
 
 /////////////////////////////////////////
@@ -31,7 +31,7 @@ define('SITE_DIR', 'control', false);
  *
  * If you want to run CoNtRol in the top level directory, remove SITE_DIR from this.
  */
-define('SITE_URL','http://example.com/'.SITE_DIR.'/', false);
+define('SITE_URL','http://127.0.0.1/'.SITE_DIR.'/', false);
 
 /**
  * Email address for the site admin.
@@ -47,13 +47,13 @@ define('ADMIN_EMAIL', 'control@example.com', false);
  */
 
 // Example 1: MySQL on the same server.
-define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
+//define('DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8', false);
 
 // Example 2: MySQL on a different server.
 //define('DB_STRING', 'mysql:host=1.2.3.4;port=3306;dbname=control;charset=utf8', false);
 
 // Example 3: SQLite.
-//define('DB_STRING', 'sqlite:sql/control.sqlite', false);
+define('DB_STRING', 'sqlite:/var/www/html/control/sql/control.sqlite', false);
 
 /**
  * Database user
@@ -103,10 +103,10 @@ define('CRNDEBUG', false, false);
 //define('NICENESS', '', false);
 
 // Example 2: Value for shared server without ionice. N.B. trailing space!
-//define('NICENESS', 'nice -n 19 ', false);
+define('NICENESS', 'nice -n 19 ', false);
 
 // Example 3: Value for shared server with ionice. N.B. trailing space!
-define('NICENESS', 'nice -n 19 ionice -c3 ', false);
+//define('NICENESS', 'nice -n 19 ionice -c3 ', false);
 
 /**
  * Location for temporary files

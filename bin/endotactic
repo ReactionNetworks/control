@@ -7,26 +7,33 @@
 #
 # @author     Matthew Johnston <mjohnston3 at wisc dot edu>
 # @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
-# @copyright  University of Wisconsin-Madison, University of Portsmouth, Kitson Consulting Limited 2014
+# @copyright  2014 University of Wisconsin-Madison & University of Portsmouth & Kitson Consulting Limited
 # @license    https://gnu.org/licenses/gpl-3.0-standalone.html
 # @created    05/07/2014
-# @modified   05/07/2014
+# @modified   15/07/2014
 ##
 
-# Check that glpsol is available and that this script was invoked correctly
+# Check that glpsol and scip are available and that this script was invoked correctly
 GLP=$(which glpsol)
+SCIP=$(which scip)
 if [ -z $GLP ]
 then
 	echo "Error: glpsol binary not found" >&2
 	exit 1
 fi
+if [ -z $SCIP ]
+then
+	echo "Error: scip binary not found" >&2
+	echo "$PATH"
+	exit 2
+fi
 if [ $# -ne 1 ]
 then
 	echo "Usage: endotactic <filename>" >&2
-	exit 2
+	exit 3
 fi
 
-echo "Endotacticity test version 0.1.0."
+echo "Endotacticity test version 0.2.0."
 echo
 
 # Construct GLPK code to test endotacticity
@@ -82,16 +89,17 @@ end;" >> $END_GLP
 # Check whether network is endotactic
 # N.B. Pipe through {} required to work around Bash subshell scoping, see
 # http://nion.modprobe.de/blog/archives/531-Altering-a-variable-outside-the-scope-of-a-loop-influenced-by-a-subshell.html
-$GLP --math $END_GLP | {
+$GLP --check --wlp $END_GLP.lp --math $END_GLP >&2
+$SCIP -f $END_GLP.lp | {
 ENDOTACTIC=false
 while read i
 do
 	printf %s\\n "$i" >&2
-	RESULT=$(printf %s\\n "$i" | grep 'tree is empty')
+	RESULT=$(printf %s\\n "$i" | grep 'objective value:')
 	if [ "$RESULT" ]
 	then
-		NOT_ENDOTACTIC=$(printf %s\\n $RESULT | grep -)
-		if [ "$NOT_ENDOTACTIC" ]
+		NOT_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
+		if [ "$NOT_ENDOTACTIC" -lt 0 ]
 		then
 			printf %s\\n 'This CRN is not endotactic.'
 		else
@@ -151,14 +159,15 @@ param delt:=10;
 
 end;" >> $END_GLP
 
-	$GLP --math $END_GLP | while read i
+	$GLP --check --wlp $END_GLP.lp --math $END_GLP >&2
+	$SCIP -f $END_GLP.lp | while read i
 	do
 		printf %s\\n "$i" >&2
-		RESULT=$(printf %s\\n "$i" | grep 'tree is empty')
+		RESULT=$(printf %s\\n "$i" | grep 'objective value:')
 		if [ "$RESULT" ]
 		then
-			NOT_S_ENDOTACTIC=$(printf %s\\n $RESULT | grep -)
-			if [ "$NOT_S_ENDOTACTIC" ]
+			NOT_S_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
+			if [ "$NOT_S_ENDOTACTIC" -lt 0 ]
 			then
 				printf %s\\n 'This CRN is endotactic but not strongly endotactic.'
 			else
@@ -170,4 +179,4 @@ fi
 }
 
 # Clean up temporary file
-rm -f $END_GLP
+rm -f $END_GLP*

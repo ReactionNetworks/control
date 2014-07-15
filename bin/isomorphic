@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+/**
+ * CoNtRol CRN graph isomorphism test
+ *
+ * Tests whether a given CRN is isomorphic to a CRN with known properties.
+ *
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @author     Casian Pantea <cpantea-at-math-dot-wvu-dot-edu>
+ * @copyright  2014 University of Portsmouth & Kitson Consulting Limited & West Virginia University
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
+ * @created    14/07/2014
+ * @modified   14/07/2014
+ */
+
+/**
+ * Standard include
+ */
+require_once( '../includes/classes.php' );
+

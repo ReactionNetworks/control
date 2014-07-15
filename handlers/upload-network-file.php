@@ -11,7 +11,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    10/10/2012
- * @modified   29/04/2014
+ * @modified   14/07/2014
  */
 
 /**
@@ -215,7 +215,7 @@ if(!count($errors))
 	$_SESSION['reaction_network'] = $reaction_network;
 	if (MAX_REACTIONS_PER_NETWORK and $reaction_network->getNumberOfReactions() > MAX_REACTIONS_PER_NETWORK)
 	{
-		$_SESSION['errors'][] = 'Warning: the CRN you have uploaded includes more than the recommended number of reactions. It is likely that tests will not successfully complete.';
+		$_SESSION['errors'][] = 'Warning: the CRN you have uploaded includes more than the recommended number of reactions. It is likely that some tests will not successfully complete.';
 	}
 }
 

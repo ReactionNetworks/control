@@ -11,7 +11,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/05/2014
+ * @modified   14/07/2014
  */
 
 header( 'Content-Type: application/x-java-jnlp-file' );
@@ -21,6 +21,11 @@ header( 'Content-Disposition: Attachment; filename=dsr.jnlp' );
  * Main CoNtRol config
  */
 require_once( 'includes/config.php' );
+
+/**
+ * CoNtRol version number
+ */
+require_once( 'includes/version.php' );
 
 /**
  * Session data containing CRN description
@@ -33,9 +38,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 	<information>
 		<title>DSR Graph</title>
 		<vendor>reaction-networks.net</vendor>
-		<homepage href="https://reaction-networks.net/wiki/CoNtRol"/>
+		<homepage href="http://reaction-networks.net/wiki/CoNtRol"/>
 		<description>Generates a DSR graph for a CRN, with the option to export it to LaTeX.</description>
-		<icon href="https://reaction-networks.net/apple-touch-icon.png" width="60" height="60"/>
+		<icon href="http://reaction-networks.net/apple-touch-icon.png" width="60" height="60"/>
 		<offline-allowed/>
 	</information>
 	<resources>
@@ -47,7 +52,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL;
 		<jar href="applets/jung-visualization-2.0.1.jar" main="false"/>
 		<jar href="applets/collections-generic-4.01.jar" main="false"/>
 	</resources>
-	<application-desc main-class="dsr.DsrDraw">
+	<application-desc main-class="dsr.DsrDraw" name="DSR Graph">
 		<argument><?php echo htmlspecialchars( str_replace( ' ', '', str_replace( PHP_EOL, '.', $_SESSION['reaction_network']->exportReactionNetworkEquations() ) ) ); ?></argument>
 	</application-desc>
 	<update check="background"/>
