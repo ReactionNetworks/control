@@ -976,6 +976,17 @@ class ReactionNetwork
 						$model_reactions = $model_child_nodes->item( $i )->childNodes;
 					}
 				}
+				for( $i = 0; $i < $model_child_nodes->length; ++$i )
+				{
+					if( $model_child_nodes->item( $i )->nodeName === 'listOfCompartments' )
+					{
+						if( count( $model_child_nodes->item( $i )->childNodes ) > 1 )
+						{
+							$error = true;
+							$_SESSION['errors'][] = 'This model contains more than one compartment, which is not currently supported.';
+						}
+					}
+				}
 				if( !$reactions_found )
 				{
 					$error = true;
@@ -1026,6 +1037,11 @@ class ReactionNetwork
 											}
 										}
 									}
+								}
+								elseif( $reaction_nodes->item( $j )->nodeName === 'listOfModifiers' )
+								{
+									if( !$error ) $_SESSION['errors'][] = 'This model includes one or more reactions with modifiers, which are not currently supported.';
+									$error = true;
 								}
 							}
 							$this->addReaction( new Reaction( $lhs, $rhs, $reversible ) );
