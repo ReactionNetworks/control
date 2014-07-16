@@ -1234,6 +1234,8 @@ class ReactionNetwork
 	public function isIsomorphic( $reaction_network )
 	{
 		$is_isomorphic = false;
+
+		// Construct Sage code to check isomorphism
 		$sage_string = 'import sage.all' . PHP_EOL;
 		$sage_string .= 'original_crn = sage.all.DiGraph( multiedges = True )' . PHP_EOL;
 		$sage_string .= 'new_crn = sage.all.DiGraph( multiedges = True )' . PHP_EOL;
@@ -1243,11 +1245,10 @@ class ReactionNetwork
 		$sage_string .= 'new_crn.add_edges( [';
 		$sage_string .= $reaction_network->exportSauroEdgesAsSage();
 		$sage_string .= '] )' . PHP_EOL;
-		$sage_string .= '' . PHP_EOL;
-		$sage_string .= '' . PHP_EOL;
-		$sage_string .= 'original_crn.is_isomorphic(new_crn)' . PHP_EOL;
+		$sage_string .= 'print( original_crn.is_isomorphic( new_crn ) )' . PHP_EOL;
 		$sage_filename = tempnam( TEMP_FILE_DIR, 'crnsage.' );
 
+		// Write Sage code to temporary file
 		if( !$handle = fopen( $sage_filename, 'w' ) )
 		{
 			die( "ERROR: Cannot open file ($sage_filename)" );
@@ -1257,13 +1258,14 @@ class ReactionNetwork
 			die( "ERROR: Cannot write to file ($sage_filename)" );
 		}
 		fclose($handle);
-echo $sage_string;
-		$sage_exec_string = NICENESS . "sage -q $sage_filename";
-echo $sage_exec_string;
+
+		// Run Sage code and capture output
+		// Note: Sage requires $HOME to be set, and also by default looks for a .sage directory in $HOME
+		// Work round this with `export HOME` and `--nodotsage`
+		$sage_exec_string = 'export HOME=' . TEMP_FILE_DIR . ' && ' . NICENESS . "sage --nodotsage -q $sage_filename 2> /dev/null";
 		$output = array();
 		$returnValue = 0;
-		exec( $sage_exec_string);//, $output, $returnValue );
-print_r( $output );
+		exec( $sage_exec_string, $output, $returnValue );
 		$result = end( $output );
 		if( $result === 'True' ) $is_isomorphic = true;
 
