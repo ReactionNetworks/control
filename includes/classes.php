@@ -1268,6 +1268,7 @@ class ReactionNetwork
 		exec( $sage_exec_string, $output, $returnValue );
 		$result = end( $output );
 		if( $result === 'True' ) $is_isomorphic = true;
+		unlink( $sage_filename );
 
 		return $is_isomorphic;
 	}
