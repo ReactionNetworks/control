@@ -8,10 +8,10 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    27/03/2013
- * @modified   15/07/2014
+ * @modified   16/07/2014
  */
 
 /**
  * Define the current version
  */
-define('CONTROL_VERSION', '1.4.0', false);
+define('CONTROL_VERSION', '1.4.1', false);
