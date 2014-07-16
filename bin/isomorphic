@@ -13,7 +13,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    14/07/2014
- * @modified   15/07/2014
+ * @modified   16/07/2014
  */
 
 /**
@@ -79,7 +79,7 @@ if( $argc == 2 )
 		// Check isomorphism for each potential match
 		foreach( $matches as $match )
 		{
-			fwrite($stderr, 'Possible match: ' . $match['sauro_string'] . PHP_EOL  );
+			fwrite( $stderr, 'Possible match: ' . $match['sauro_string'] . PHP_EOL );
 
 			$temp_reaction_network = new ReactionNetwork();
 			if( !$match_id and $temp_reaction_network->parseSauro( $match['sauro_string'] ) )
@@ -89,6 +89,7 @@ if( $argc == 2 )
 					$match_id = (int) $match['id'];
 					echo 'Isomorphism match found. This CRN is isomorphic to one stored in the CoNtRol database. It has the following properties:' . PHP_EOL . PHP_EOL;
 				}
+				else fwrite( $stderr, 'Possible match not isomorphic.' . PHP_EOL );
 			}
 		}
 

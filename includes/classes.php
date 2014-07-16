@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   15/07/2014
+ * @modified   16/07/2014
  */
 
 /**
@@ -469,8 +469,6 @@ class ReactionNetwork
 
 	/**
 	 * Export function for reaction network multiedges in Sage format
-	 * 
-	 * TODO: support the empty complex (N.B. doesn't exist in standard Sauro format)
 	 *
 	 * @return  string  $edges  Sage version of reaction network multiedges
 	 */
@@ -478,13 +476,8 @@ class ReactionNetwork
 	{
 		$edges = '';
 		$numberOfReactions = count( $this->reactions );
-		$numberOfReactionsIrreversible = $numberOfReactions;
-		foreach( $this->reactions as $reaction )
-		{
-			if( $reaction->isReversible() ) ++$numberOfReactionsIrreversible;
-		}
 		$first_edge = true;
-		for($i = 0; $i < $numberOfReactions; ++$i)
+		for( $i = 0; $i < $numberOfReactions; ++$i )
 		{
 			foreach( $this->reactions[$i]->getLeftHandSide() as $reactant => $stoichiometry )
 			{
@@ -512,35 +505,38 @@ class ReactionNetwork
 					$first_edge = false;
 				}
 			}
+			if( $this->reactions[$i]->isReversible() )
+			{
+				foreach( $this->reactions[$i]->getRightHandSide() as $reactant => $stoichiometry )
+				{
+					for( $j = 0; $j < $stoichiometry; ++$j )
+					{
+						if( !$first_edge ) $edges .= ',';
+						$edges .= '(';
+						$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
+						$edges .= ',';
+						$edges .= ( $i + $numberOfReactions );
+						$edges .= ')';
+						$first_edge = false;
+					}
+				}
+				foreach( $this->reactions[$i]->getleftHandSide() as $reactant => $stoichiometry )
+				{
+					for( $j = 0; $j < $stoichiometry; ++$j )
+					{
+						if( !$first_edge ) $edges .= ',';
+						$edges .= '(';
+						$edges .= ( $i + $numberOfReactions );
+						$edges .= ',';
+						$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
+						$edges .= ')';
+						$first_edge = false;
+					}
+				}
+			}
 		}
-		for($i = $numberOfReactions; $i < $numberOfReactionsIrreversible; ++$i)
+		for( $i = 0; $i < $numberOfReactions; ++$i )
 		{
-			foreach( $this->reactions[$i - $numberOfReactions]->getRightHandSide() as $reactant => $stoichiometry )
-			{
-				for( $j = 0; $j < $stoichiometry; ++$j )
-				{
-					if( !$first_edge ) $edges .= ',';
-					$edges .= '(';
-					$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
-					$edges .= ',';
-					$edges .= $i;
-					$edges .= ')';
-					$first_edge = false;
-				}
-			}
-			foreach( $this->reactions[$i - $numberOfReactions]->getleftHandSide() as $reactant => $stoichiometry )
-			{
-				for( $j = 0; $j < $stoichiometry; ++$j )
-				{
-					if( !$first_edge ) $edges .= ',';
-					$edges .= '(';
-					$edges .= $i;
-					$edges .= ',';
-					$edges .= "'" . str_replace( "'", '', $reactant ) . "'";
-					$edges .= ')';
-					$first_edge = false;
-				}
-			}
 		}
 		return $edges;
 	}
@@ -1261,14 +1257,25 @@ class ReactionNetwork
 
 		// Run Sage code and capture output
 		// Note: Sage requires $HOME to be set, and also by default looks for a .sage directory in $HOME
-		// Work round this with `export HOME` and `--nodotsage`
-		$sage_exec_string = 'export HOME=' . TEMP_FILE_DIR . ' && ' . NICENESS . "sage --nodotsage -q $sage_filename 2> /dev/null";
+		// Web server user usually has neither. Work round this with `export HOME` and `--nodotsage`.
+		$sage_exec_string = 'export HOME=' . TEMP_FILE_DIR . ' && ' . NICENESS . "sage --nodotsage -q $sage_filename";
+		if( CRNDEBUG ) $sage_exec_string .= ' 2>&1';
+		else $sage_exec_string .= ' 2> /dev/null';
 		$output = array();
 		$returnValue = 0;
 		exec( $sage_exec_string, $output, $returnValue );
 		$result = end( $output );
 		if( $result === 'True' ) $is_isomorphic = true;
-		unlink( $sage_filename );
+		if( CRNDEBUG )
+		{
+			$stderr = fopen( 'php://stderr', 'w' );
+			fwrite( $stderr, $sage_string . PHP_EOL );
+			fwrite( $stderr, $sage_exec_string . PHP_EOL );
+			foreach( $output as $line ) fwrite( $stderr, $line . PHP_EOL );
+			fwrite( $stderr, $result . PHP_EOL );
+			fclose( $stderr );
+		}
+		else unlink( $sage_filename );
 
 		return $is_isomorphic;
 	}
