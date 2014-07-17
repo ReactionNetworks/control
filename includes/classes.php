@@ -1114,9 +1114,59 @@ class ReactionNetwork
 								}
 								elseif( $reaction_nodes->item( $j )->nodeName === 'listOfModifiers' )
 								{
-									if( !$error ) $_SESSION['errors'][] = 'This model includes one or more reactions with modifiers, which are not currently supported.';
-									$error = true;
-								}
+									$list_of_modifiers = $reaction_nodes->item( $j )->childNodes;
+									if( CRNDEBUG ) $_SESSION['errors'][] = 'There are ' . $list_of_modifiers->length . ' modifiers';
+									for( $k = 0; $k < $list_of_modifiers->length; ++$k )
+									{
+										if( CRNDEBUG ) $_SESSION['errors'][] = $list_of_modifiers->item( $k )->nodeName;
+										if( $list_of_modifiers->item( $k )->attributes )
+										{
+											if( CRNDEBUG ) $_SESSION['errors'][] = 'Looking for modifier ' . print_r( $list_of_modifiers->item( $k ), true );
+											$modifier_found = false;
+											$reaction_child_nodes = $model_reactions->item( $i )->childNodes;
+											foreach( $reaction_child_nodes as $reaction_child_node )
+											{
+												if( CRNDEBUG ) $_SESSION['errors'][] = $reaction_child_node->nodeValue;
+												if( $reaction_child_node->nodeName === 'kineticLaw' )
+												{
+													if( CRNDEBUG ) $_SESSION['errors'][] = 'kineticLaw node found';
+													$kinetic_law_child_nodes = $reaction_child_node->childNodes;
+													foreach( $kinetic_law_child_nodes as $kinetic_law_child_node )
+													{
+														if( $kinetic_law_child_node->nodeName === 'math' )
+														{
+															if( CRNDEBUG ) $_SESSION['errors'][] = 'math node found';
+															$math_child_nodes = $kinetic_law_child_node->childNodes;
+															foreach( $math_child_nodes as $math_child_node )
+															{
+																if( $math_child_node->nodeName === 'apply' )
+																{
+																	if( CRNDEBUG ) $_SESSION['errors'][] = 'apply node found';
+																	$times_found = false;
+																	foreach( $math_child_node->childNodes as $math_node )
+																	{
+																		if( $math_node->nodeName === 'times' ) $times_found = true;
+																		if( $times_found and $math_node->nodeName === 'ci' and trim( $math_node->nodeValue ) === $list_of_modifiers->item( $k )->attributes->getNamedItem( 'species' )->nodeValue )
+																		{
+																			$modifier_found = true;
+																			$lhs[$list_of_modifiers->item( $k )->attributes->getNamedItem( 'species' )->nodeValue] = 1;
+																			$rhs[$list_of_modifiers->item( $k )->attributes->getNamedItem( 'species' )->nodeValue] = 1;
+																		}
+																	} // foreach( $math_child_node->childNodes as $math_node )
+																} // if( $math_child_nodes->nodeName === 'apply' )
+															} // foreach( $math_child_nodes as $math_child_node )
+														} // if( $kinetic_law_child_node->nodeName === 'math' )
+													} // foreach( $kinetic_law_child_nodes as $kinetic_law_child_node )
+												} // if( $reaction_child_node->nodeName === 'kineticLaw' )
+											} // foreach( $reaction_child_nodes as $reaction_child_node )
+											if( !$error and !$modifier_found )
+											{
+												$_SESSION['errors'][] = 'This model includes one or more reactions with unrecognised modifiers, which are not currently supported.';
+												$error = true;
+											} // if( !$error and !$modifier_found )
+										} // if( $list_of_modifiers->item( $k )->nodeValue )
+									} // for( $k = 0; $k < $list_of_modifiers->length; ++$k )
+								} // elseif( $reaction_nodes->item( $j )->nodeName === 'listOfModifiers' )
 							}
 							$this->addReaction( new Reaction( $lhs, $rhs, $reversible ) );
 						}

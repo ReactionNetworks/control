@@ -14,4 +14,4 @@
 /**
  * Define the current version
  */
-define('CONTROL_VERSION', '1.4.1', false);
+define('CONTROL_VERSION', '1.4.2', false);

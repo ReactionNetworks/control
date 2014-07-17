@@ -2,13 +2,15 @@
 ##
 # Endotactic test
 #
-# Tests whether a CRN is endotactic or strongly endotactic. GLPK code by Matthew Johnston, POSIX shell
-# script wrapper code by Pete Donnell.
+# Tests whether a CRN is endotactic or strongly endotactic. GLPK code by
+# Matthew Johnston, POSIX shell script wrapper code by Pete Donnell.
 #
-# @author     Matthew Johnston <mjohnston3 at wisc dot edu>
-# @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
+# @author     Matthew Johnston <mjohnston3-at-wisc-dot-edu>
+# @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
 # @copyright  2014 University of Wisconsin-Madison & University of Portsmouth & Kitson Consulting Limited
-# @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+# @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+# @see        https://reaction-networks.net/control/documentation/
+# @package    CoNtRol
 # @created    05/07/2014
 # @modified   16/07/2014
 ##
