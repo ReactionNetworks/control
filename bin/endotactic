@@ -12,7 +12,7 @@
 # @see        https://reaction-networks.net/control/documentation/
 # @package    CoNtRol
 # @created    05/07/2014
-# @modified   16/07/2014
+# @modified   17/07/2014
 ##
 
 # Check that glpsol and scip are available and that this script was invoked correctly
@@ -35,7 +35,7 @@ then
 	exit 3
 fi
 
-echo "Endotacticity test version 0.2.0."
+echo "Endotacticity test version 0.3.0."
 echo
 
 # Construct GLPK code to test endotacticity

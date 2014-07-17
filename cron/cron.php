@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/04/2013
- * @modified   16/07/2014
+ * @modified   17/07/2014
  */
 
 /**
@@ -134,7 +134,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$success = false;
 		}
 	}
-	$mail .= "<br />\r\nMass action only: ";
+	/*$mail .= "<br />\r\nMass action only: ";
 	if( fwrite( $ohandle, $line_ending . 'Mass action only: ' ) === false )
 	{
 		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
@@ -159,7 +159,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
 		}
-	}
+	}*/
 	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";
 	if( fwrite( $ohandle, $line_ending . 'Batch submission time: ' . $jobs[$i]['creation_timestamp'] . $line_ending . $line_ending ) === false )
 	{
@@ -379,6 +379,11 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 					}
 					if ($success)
 					{
+						// Initialise ini file for passing results between tests
+						$inifilename = $filename . '.ini';
+						file_put_contents( $inifilename, '' );
+
+
 						// Create human-readable descriptor file
 						$temp_filename = $filename.'.hmn';
 
@@ -481,28 +486,21 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 								if(!$extension) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
 								else
 								{
-									$test_filename = $filename.$extension;
-									$exec_string = 'cd '.BINARY_FILE_DIR.' && '.NICENESS.'timeout '.TEST_TIMEOUT_LIMIT.' ./'.$currentTest->getExecutableName();
-									$output = array();
-									$returnValue = 0;
-									if(isset($mass_action_only) and $mass_action_only)
-									{
-										if($currentTest->supportsMassAction()) $exec_string .= ' --mass-action-only';
-										else $mail .= "<p>WARNING: you requested testing mass-action kinetics only, but this test always tests general kinetics.</p>\r\n";
-									}
-									else
-									{
-										if(!$currentTest->supportsGeneralKinetics()) $mail .= "<p>WARNING: you requested testing general kinetics, but this test only supports mass-action kinetics.</p>\r\n";
-									}
+									$exec_string = 'cd ' . BINARY_FILE_DIR . ' && ' . NICENESS . 'timeout ' . TEST_TIMEOUT_LIMIT;
+									$exec_string .= ' ./' . $currentTest->getExecutableName();
 									if(fwrite($ohandle, "Output:$line_ending-------$line_ending") === false)
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
 									}
-									$exec_string .= ' '.$test_filename;
-									if(isset($detailed_output) and $detailed_output) $exec_string .= ' 2>&1';
+									$test_filename = $filename . $extension;
+									$exec_string .= ' ' . $test_filename;
+									if( $currentTest->supportsIniFile() ) $exec_string .= ' --inifile=' . $inifilename;
+									if( isset( $detailed_output ) and $detailed_output ) $exec_string .= ' 2>&1';
 									else $exec_string .= ' 2> /dev/null';
-									exec($exec_string, $output, $returnValue);
+									$output = array();
+									$returnValue = 0;
+									exec( $exec_string, $output, $returnValue );
 									if( $returnValue )
 									{
 										if(fwrite($ohandle, 'ERROR: Test failed, probably due to timeout.') === false)

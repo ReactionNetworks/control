@@ -6,29 +6,40 @@
  * Written for illustrative purposes only, to help writing wrappers
  * for more complicated tests e.g. octave, MatLab etc.
  *
- * @author     Pete Donnell <pete dot donnell at port dot ac dot uk>
- * @copyright  2013 University of Portsmouth & Kitson Consulting Limited
- * @license    https://gnu.org/licenses/gpl-3.0-standalone.html
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @copyright  2013-2014 University of Portsmouth & Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
  * @created    14/02/2013
- * @modified   16/04/2013
+ * @modified   17/07/2013
  */
 
-if($argc > 1 && $argc < 4)
+$error_text = 'Usage: dummy FILENAME [--inifile=INIFILENAME]' . PHP_EOL;
+$error_text .= 'Run dummy calculation on chemical reaction network described in FILENAME' . PHP_EOL;
+$error_text .= '  --inifile=INIFILENAME    Load results from previous tests in ini format' . PHP_EOL;
+
+if( $argc > 1 and $argc < 4 )
 {
 	$filename = '';
-	$mass_action_only = false;
+	$inifilename = '';
+	$inisettings = null;
 
 	for($i = 1; $i < $argc; ++$i)
 	{
-		if($argv[$i] === '--mass-action-only') $mass_action_only = true;
-		elseif(substr($argv[$i], 0, 2) === '--') die("dummy: invalid option -- '".substr($argv[$i], 2)."'\n");
+		if( strpos( $argv[$i], '--inifile' ) === 0 )
+		{
+			$inifileparam = explode( '=', $argv[$i] );
+			$inifilename = $inifileparam[1];
+		}
+		elseif( substr( $argv[$i], 0, 2 ) === '--' ) die( "dummy: invalid option -- '" . substr( $argv[$i], 2 ) . "'\n" );
 		else $filename = $argv[$i];
 	}
 
-	if($filename)
+	if( $filename )
 	{
 		echo 'Dummy test complete. File format was ';
-		switch(end(explode('.', $filename)))
+		switch( end( explode( '.', $filename ) ) )
 		{
 			case 'hmn':
 				echo 'human-readable';
@@ -36,14 +47,32 @@ if($argc > 1 && $argc < 4)
 			case 'sto':
 				echo 'stoichiometry';
 				break;
+			case 's+v':
+				echo 'stoichiometry + V matrix';
+				break;
+			case 'glpk':
+				echo 'glpk';
+				break;
 			default:
 				echo 'unknown';
 				break;
 		}
-		echo '. Test run assuming ';
-		if($mass_action_only) echo 'mass-action kinetics only.';
-		else echo 'general kinetics.';
+		if( $inifilename )
+		{
+			echo ', with ini file ', $inifilename;
+			$inisettings = parse_ini_file( $inifilename, false );
+		}
+		echo '.' . PHP_EOL;
+		if( $inisettings )
+		{
+			echo 'Found the following ini settings:', PHP_EOL;
+			foreach( $inisettings as $name => $value )
+			{
+				echo $name, ' = ', $value, PHP_EOL;
+			}
+		}
+		elseif( $inisettings === false ) echo 'Unable to parse inifile.', PHP_EOL;
 	}
-	else die("Usage: dummy [--mass-action-only] FILENAME\nRun dummy calculation on chemical reaction network described in FILENAME\n  --mass-action-only    Run calculation assuming mass action kinetics only\n");
+	else die( $error_text );
 }
-else die("Usage: dummy [--mass-action-only] FILENAME\nRun dummy calculation on chemical reaction network described in FILENAME\n  --mass-action-only	Run calculation assuming mass action kinetics only\n");
+else die( $error_text );

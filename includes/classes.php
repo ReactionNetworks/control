@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   16/07/2014
+ * @modified   17/07/2014
  */
 
 /**
@@ -1354,24 +1354,22 @@ class NetworkTest
 	private $shortName = '';
 	private $longName = '';
 	private $description = '';
-	private $supportsMassAction = true;
-	private $supportsGeneralKinetics = true;
 	private $executableName = '';
-	private $inputFileFormats = array('human', 'stoichiometry');
+	private $inputFileFormats = array( 'human', 'stoichiometry' );
+	private $supportsIniFile = false;
 	private $isEnabled = true;
 
 	/**
 	 * Constructor
 	 */
-	function __construct($shortName, $longName, $description, $executableName, $inputFileFormats, $supportsMassAction = false, $supportsGeneralKinetics = true)
+	function __construct( $shortName, $longName, $description, $executableName, $inputFileFormats, $supportsIniFile = false )
 	{
 		$this->shortName = $shortName;
 		$this->longName = $longName;
 		$this->description = $description;
 		$this->executableName = $executableName;
 		$this->inputFileFormats = $inputFileFormats;
-		$this->supportsMassAction = $supportsMassAction;
-		$this->supportsGeneralKinetics = $supportsGeneralKinetics;
+		$this->supportsIniFile = $supportsIniFile;
 	}
 
 	/**
@@ -1399,11 +1397,11 @@ class NetworkTest
 
 	public function enableTest()
 	{
-		$this->isEnabled=true;
+		$this->isEnabled = true;
 	}
 	public function disableTest()
 	{
-		$this->isEnabled=false;
+		$this->isEnabled = false;
 	}
 
 	public function getIsEnabled()
@@ -1416,14 +1414,9 @@ class NetworkTest
 		return $this->inputFileFormats;
 	}
 
-	public function supportsMassAction()
+	public function supportsIniFile()
 	{
-		return $this->supportsMassAction;
-	}
-
-	public function supportsGeneralKinetics()
-	{
-		return $this->supportsGeneralKinetics;
+		return $this->supportsIniFile;
 	}
 }
 // End of class NetworkTest
