@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   29/04/2014
+ * @modified   06/08/2014
  */
 ?>
 			</div><!-- content -->
@@ -35,6 +35,8 @@
 							<li>DSR graph Java application: Anca Marginean &amp; Casian Pantea</li>
 							<li>DSR test: Casian Pantea</li>
 							<li>General analysis tests: Murad Banaji</li>
+							<li>Endotacticity test: Matthew Johnston, Casian Pantea &amp; Pete Donnell</li>
+							<li>Isomorphism test: Pete Donnell, Casian Pantea &amp; Murad Banaji</li>
 							<li>Graphic design: Pete Donnell &amp; Kitson Consulting</li>
 							<li>Web interface architecture &amp; programming: Pete Donnell &amp; Kitson Consulting</li>
 						</ul>
