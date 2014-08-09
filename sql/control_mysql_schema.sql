@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS batch_jobs (
   UNIQUE KEY filekey (filekey)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE known_crns;
 CREATE TABLE IF NOT EXISTS known_crns (
   id int(11) NOT NULL AUTO_INCREMENT,
   submitter varchar(127) DEFAULT NULL,
@@ -56,8 +57,6 @@ CREATE TABLE IF NOT EXISTS known_crns (
   PRIMARY KEY (id),
   UNIQUE KEY sauro_string (sauro_string)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-TRUNCATE TABLE known_crns;
 INSERT INTO known_crns (id, submitter, number_of_reactions, number_of_species, sauro_string, result, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES
 (1, 'Pete Donnell', 4, 3, '4 3 4 0 0 5 0 6 6 1 5 1 1 4 5 2 2 6 6 3 3 5', 'Each stoichiometry class of this network contains a unique equilibrium, located in the relative interior, which attracts all initial conditions within the stoichiometry class.\r\n\r\nReference:\r\nM. Banaji and J. Mierczyński, &ldquo;Global convergence in systems of differential equations arising from chemical reaction networks&rdquo;, <em>J. Diff. Eq.</em>, <strong>254</strong> (3) (2013), 1357-1374', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, 'Pete Donnell', 4, 6, '4 6 4 0 0 8 8 1 8 1 9 1 1 8 1 8 1 8 5 2 8 2 2 9 2 6 8 3 3 7', 'This CRN is known as the &ldquo;Brusselator&rdquo;, and is a simple model of the Belousov-Zhabotinsky reactions. For some parameter values it undergoes a Hopf bifurcation and exhibits a stable limit cycle.\r\n\r\nReference:\r\n<a href="http://www.bibliotecapleyades.net/archivos_pdf/brusselator.pdf">http://www.bibliotecapleyades.net/archivos_pdf/brusselator.pdf</a>', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
