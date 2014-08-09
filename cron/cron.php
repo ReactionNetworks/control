@@ -46,7 +46,7 @@ try
 }
 catch(PDOException $exception)
 {
-	die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.');
+	die( 'Unable to open database. Error: ' . str_replace( DB_PASS, '********', $exception ) . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.');
 }
 
 // Set 'not started' jobs to 'in progress'

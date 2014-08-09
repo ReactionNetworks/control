@@ -156,7 +156,7 @@ if( !count( $_SESSION['errors'] ) )
 	}
 	catch( PDOException $exception )
 	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.');
+		die( 'Unable to open database. Error: ' . str_replace( DB_PASS, '********', $exception ) . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.');
 	}
 
 	$statement = $controldb->prepare( 'INSERT INTO ' . DB_PREFIX . 'batch_jobs (filename, original_filename, file_format, email, label, status, detailed_output, mass_action_only, tests_enabled, filekey, remote_ip, remote_user_agent, creation_timestamp, update_timestamp) VALUES (:filename, :original_filename, :file_format, :email, :label, :status, :detailed_output, :mass_action_only, :tests_enabled, :filekey, :remote_ip, :remote_user_agent, :creation_timestamp, :update_timestamp)' );

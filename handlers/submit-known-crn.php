@@ -60,16 +60,6 @@ if( isset( $_POST['submitter'] ) )
 // If no errors were detected, attempt to store the network in the database
 if( !count( $_SESSION['errors'] ) )
 {
-	// Attempt to open the database and throw an exception if unable to do so
-	try
-	{
-		$controldb = new PDO( DB_STRING, DB_USER, DB_PASS, $db_options );
-	}
-	catch( PDOException $exception )
-	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
-	}
-
 	// Check whether the submitted CRN is already in the database
 	$crn_found = false;
 	// Attempt to open the database and throw an exception if unable to do so
@@ -79,7 +69,7 @@ if( !count( $_SESSION['errors'] ) )
 	}
 	catch(PDOException $exception)
 	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
+		die( 'Unable to open database. Error: ' . str_replace( DB_PASS, '********', $exception ) . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
 	}
 
 	// Look up known CRNs with the same number of reactions and species from the database to check isomorphism

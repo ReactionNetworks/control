@@ -26,7 +26,7 @@ if( isset( $_GET['filekey'] ) and $_GET['filekey'] )
 	}
 	catch( PDOException $exception )
 	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
+		die( 'Unable to open database. Error: ' . str_replace( DB_PASS, '********', $exception ) . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
 	}
 
 	$query = 'SELECT id, status, original_filename FROM ' . DB_PREFIX . 'batch_jobs WHERE filekey = :filekey';
