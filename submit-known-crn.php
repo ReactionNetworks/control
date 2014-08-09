@@ -10,8 +10,10 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/08/2014
- * @modified   08/08/2014
+ * @modified   09/08/2014
  */
+
+$title = 'CoNtRol - submit new CRN details';
 
 /**
  * Standard HTML headers

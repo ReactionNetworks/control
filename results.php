@@ -10,8 +10,10 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/05/2014
+ * @modified   09/08/2014
  */
+
+$title = 'CoNtRol - test results';
 
 /**
  * Standard HTML headers
@@ -55,7 +57,7 @@ foreach( $_SESSION['test_output'] as $name => $result )
 	foreach( $_SESSION['standard_tests'] as &$standardTest )
 	if( $name === $standardTest->getShortName() )
 	{
-		echo '							<h3>Test ', $currentTest, ': ', sanitise( $standardTest->getLongName() ), "</h3>\n" ;
+		echo '							<h3><a href="', $_SERVER['REQUEST_URI'], '#" title="Start of page">&#x21e7;</a> Test ', $currentTest, ': ', sanitise( $standardTest->getLongName() ), "</h3>\n" ;
 		echo '<p>', $standardTest->getDescription(), "</p>\n";
 	}
 	echo "							<h4>Results:</h4>\n";

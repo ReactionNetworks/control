@@ -107,7 +107,7 @@ then
 			NOT_ENDOTACTIC=$(printf %s\\n $RESULT | grep -)
 			if [ "$NOT_ENDOTACTIC" ]
 			then
-				printf %s\\n 'This CRN is not endotactic.'
+				printf %s\\n 'This CRN is not endotactic. No claims based on endotacticity can be made about <a href="https://reaction-networks.net/wiki/Persistence">persistence</a> of trajectories.'
 			else
 				ENDOTACTIC=true
 			fi
@@ -174,9 +174,9 @@ end;" >> $END_GLP
 				NOT_S_ENDOTACTIC=$(printf %s\\n $RESULT | grep -)
 				if [ "$NOT_S_ENDOTACTIC" ]
 				then
-					printf %s\\n 'This CRN is endotactic but not strongly endotactic.'
+					printf %s\\n 'This CRN is endotactic but not strongly endotactic. It is conjectured (<a href="http://www.math.wisc.edu/~craciun/PAPERS/Craciun_Nazarov_Pantea_PERSISTENCE_PERMANENCE.pdf">Gheorghe Craciun, Fedor Nazarov and Casian Pantea, "Persistence and permanence of mass-action and power-law dynamical systems", <em>SIAM Journal on Applied Mathematics</em>, <strong>73</strong> (1) (2013) 305-329</a>) that the network is <a href="https://reaction-networks.net/wiki/Persistence">persistent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>. Note that the persistence conjecture has been proved for some special cases, but remains open for general CRNs.'
 				else
-					printf %s\\n 'This CRN is strongly endotactic.'
+					printf %s\\n 'This CRN is strongly endotactic. According to <a href="http://math.uchicago.edu/~annejls/geometricGAC.pdf">Anne J. Shiu, Manoj Gopalkrishnan and Ezra Miller, "A geometric approach to the global attractor conjecture", <em>SIAM J. Appl. Dyn. Syst.</em>, <strong>13</strong> (2) (2014), 758-797</a>, this implies that the network is <a href="https://reaction-networks.net/wiki/Persistence#Permanence">permanent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>.'
 				fi
 			fi
 		done
@@ -196,7 +196,7 @@ else
 			NOT_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
 			if [ "$NOT_ENDOTACTIC" -lt 0 ]
 			then
-				printf %s\\n 'This CRN is not endotactic. No claims can be made about <a href="https://reaction-networks.net/wiki/Persistence">persistence</a> of trajectories.'
+				printf %s\\n 'This CRN is not endotactic. No claims based on endotacticity can be made about <a href="https://reaction-networks.net/wiki/Persistence">persistence</a> of trajectories.'
 			else
 				ENDOTACTIC=true
 			fi
@@ -264,7 +264,7 @@ end;" >> $END_GLP
 				NOT_S_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
 				if [ "$NOT_S_ENDOTACTIC" -lt 0 ]
 				then
-					printf %s\\n 'This CRN is endotactic but not strongly endotactic. According to the persistence conjecture as stated in <a href="http://www.math.wisc.edu/~craciun/PAPERS/Craciun_Nazarov_Pantea_PERSISTENCE_PERMANENCE.pdf">Gheorghe Craciun, Fedor Nazarov and Casian Pantea, "Persistence and permanence of mass-action and power-law dynamical systems", <em>SIAM Journal on Applied Mathematics</em>, <strong>73</strong> (1) (2013) 305-329</a>, this states that the network is <a href="https://reaction-networks.net/wiki/Persistence">persistent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>. Note that the persistence conjecture has been proved for some special cases, but remains open for general CRNs.'
+					printf %s\\n 'This CRN is endotactic but not strongly endotactic. It is conjectured (<a href="http://www.math.wisc.edu/~craciun/PAPERS/Craciun_Nazarov_Pantea_PERSISTENCE_PERMANENCE.pdf">Gheorghe Craciun, Fedor Nazarov and Casian Pantea, "Persistence and permanence of mass-action and power-law dynamical systems", <em>SIAM Journal on Applied Mathematics</em>, <strong>73</strong> (1) (2013) 305-329</a>) that the network is <a href="https://reaction-networks.net/wiki/Persistence">persistent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>. Note that the persistence conjecture has been proved for some special cases, but remains open for general CRNs.'
 				else
 					printf %s\\n 'This CRN is strongly endotactic. According to <a href="http://math.uchicago.edu/~annejls/geometricGAC.pdf">Anne J. Shiu, Manoj Gopalkrishnan and Ezra Miller, "A geometric approach to the global attractor conjecture", <em>SIAM J. Appl. Dyn. Syst.</em>, <strong>13</strong> (2) (2014), 758-797</a>, this implies that the network is <a href="https://reaction-networks.net/wiki/Persistence#Permanence">permanent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>.'
 				fi

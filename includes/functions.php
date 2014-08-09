@@ -12,11 +12,13 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   07/07/2014
+ * @modified   09/08/2014
  */
 
 /**
- * Generate a simple captcha and display it as HTML
+ * Generate a simple CAPTCHA and display it as HTML
+ *
+ * @return  string  $output  HTML code representing the CAPTCHA text
  */
 function batch_captcha()
 {
@@ -41,9 +43,9 @@ function captcha_random_string( $length = 10 )
 	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 	$randomString = '';
 
-	$charLength = strlen( $chars )-1;
+	$charLength = strlen( $chars ) - 1;
 
-	for( $i = 0 ; $i < $length ; $i++ )
+	for( $i = 0; $i < $length; $i++ )
 	{
 		$randomString .= $chars[mt_rand( 0, $charLength )];
 	}
@@ -112,24 +114,24 @@ function convert_links_to_plain_text( $intext )
  * @param   string  $file  The file name to check.
  * @return  mixed   $mime  If the mimetype could be determined, return it as a string. Else return FALSE.
  */
-function get_mime($file)
+function get_mime( $file )
 {
-	if(function_exists("finfo_file"))
+	if( function_exists( 'finfo_file' ) )
 	{
-		$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type à la mimetype extension
-		$mime = finfo_file($finfo, $file);
-		finfo_close($finfo);
+		$finfo = finfo_open( FILEINFO_MIME_TYPE ); // return mime type à la mimetype extension
+		$mime = finfo_file( $finfo, $file );
+		finfo_close( $finfo );
 		return $mime;
 	}
-	elseif(function_exists("mime_content_type"))
+	else if( function_exists( 'mime_content_type' ) )
 	{
-		return mime_content_type($file);
+		return mime_content_type( $file );
 	}
-	elseif(!stristr(ini_get("disable_functions"), "shell_exec"))
+	else if( !stristr( ini_get( 'disable_functions' ), 'shell_exec' ) )
 	{
 		// http://stackoverflow.com/a/134930/1593459
-		$file = escapeshellarg($file);
-		$mime = shell_exec("file -bi " . $file);
+		$file = escapeshellarg( $file );
+		$mime = shell_exec( 'file -bi ' . $file );
 		return $mime;
 	}
 	else
@@ -139,17 +141,32 @@ function get_mime($file)
 }
 
 /**
+ * Hide email address for display in web page
+ *
+ * Provides very basic email address obfuscation, to reduce the risk of email addresses
+ * being harvested by spam bots. It replaces all instances of '@' with the word ' at ',
+ * and all instances of '.' with the word ' dot '.
+ *
+ * @param   string  $email  The email address in its original form
+ * @return  string          The same email address in obfuscated form
+ */
+function hide_email_address( $email )
+{
+	return str_replace( '@', ' at ', str_replace( '.', ' dot ', $email ) );
+}
+
+/**
  * Convert a matrix into text
  *
  * @param   array   $matrix  A matrix represented as a 2D array / array of arrays
  * @return  string  $text    The matrix represented as text
  */
-function printMatrix($matrix)
+function printMatrix( $matrix )
 {
 	$text = '';
-	foreach($matrix as $row)
+	foreach( $matrix as $row )
 	{
-		foreach($row as $element) $text = $text.' '.$element;
+		foreach( $row as $element ) $text = $text . ' ' . $element;
 		$text .= PHP_EOL;
 	}
 	return $text;
@@ -253,12 +270,12 @@ function recursive_remove_directory($directory, $empty = FALSE)
  * @param   string  $val  File size as a string, eg. 1M
  * @return  int           File size in bytes
  */
-function return_bytes($val)
+function return_bytes( $val )
 {
-	$val = trim($val);
-	$last = strtolower($val[strlen($val) - 1]);
-	$val = (int)substr($val,0,strlen($val) - 1);
-	switch($last)
+	$val = trim( $val );
+	$last = strtolower( $val[strlen( $val ) - 1] );
+	$val = (int) substr( $val, 0, strlen( $val ) - 1 );
+	switch( $last )
 	{
 		case 'g':
 			$val *= 1024;
@@ -281,7 +298,7 @@ function return_bytes($val)
  * @param   string  $text  The text to be sanitised
  * @return  string         The sanitised version of the text
  */
-function sanitise($text)
+function sanitise( $text )
 {
-	return htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false);
+	return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8', false );
 }

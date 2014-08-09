@@ -67,7 +67,7 @@ if( !count( $_SESSION['errors'] ) )
 	}
 	catch( PDOException $exception )
 	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) ) . '.' );
+		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
 	}
 
 	// Check whether the submitted CRN is already in the database
@@ -79,7 +79,7 @@ if( !count( $_SESSION['errors'] ) )
 	}
 	catch(PDOException $exception)
 	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) ) . '.' );
+		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
 	}
 
 	// Look up known CRNs with the same number of reactions and species from the database to check isomorphism
@@ -109,7 +109,7 @@ if( !count( $_SESSION['errors'] ) )
 
 	if( $crn_found )
 	{
-		$_SESSION['errors'][] = 'The CRN you submitted is already present in the database. Its description appears below. If you believe that the description is inaccurate, please notify the site administrator at ' . str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) ) . '.';
+		$_SESSION['errors'][] = 'The CRN you submitted is already present in the database. Its description appears below. If you believe that the description is inaccurate, please notify the site administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.';
 	}
 	else
 	{

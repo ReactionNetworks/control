@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    19/07/2013
- * @modified   12/05/2014
+ * @modified   09/08/2014
  */
 
 /**
@@ -26,10 +26,10 @@ if( isset( $_GET['filekey'] ) and $_GET['filekey'] )
 	}
 	catch( PDOException $exception )
 	{
-		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . str_replace( '@', ' at ', str_replace ('.', ' dot ', ADMIN_EMAIL ) ) . '.' );
+		die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
 	}
 
-	$query = 'SELECT id, status FROM ' . DB_PREFIX . 'batch_jobs WHERE filekey = :filekey';
+	$query = 'SELECT id, status, original_filename FROM ' . DB_PREFIX . 'batch_jobs WHERE filekey = :filekey';
 	$statement = $controldb->prepare( $query );
 	$statement->bindParam( ':filekey', $_GET['filekey'], PDO::PARAM_STR );
 	$statement->execute();
@@ -42,19 +42,19 @@ if( isset( $_GET['filekey'] ) and $_GET['filekey'] )
 			echo '			<div id="results">
 						<h2>Error</h2>
 						<p>The key you requested could not be found. Please email the site admin at ';
-			echo str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) );
+			echo hide_email_address(  ADMIN_EMAIL );
 			echo ' if you are sure you have requested a valid key. <a href=".">Back to main page</a>.</p>
 				</div><!-- results -->', PHP_EOL;
 			require_once( 'includes/footer.php' );
 			break;
 		case 1:
-			if( $results[0]['status'] > 2 )
+			if( $results[0]['status'] > 3 )
 			{
 				require_once( 'includes/header.php' );
 	 			echo '			<div id="results">
 					<h2>Error</h2>
 					<p>The file you requested is no longer available. Files are removed after download. If you believe the file should still be available, please email the site admin at ';
-				echo str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) );
+				echo hide_email_address( ADMIN_EMAIL );
 				echo '. <a href=".">Back to main page</a>.</p>
 			</div><!-- results -->', PHP_EOL;
 				require_once( 'includes/footer.php' );
@@ -64,7 +64,7 @@ if( isset( $_GET['filekey'] ) and $_GET['filekey'] )
 				if( file_exists( TEMP_FILE_DIR . '/' . $_GET['filekey'] . '.zip' ) )
 				{
 					header( 'Content-Type: application/zip' );
-					header( 'Content-Disposition: Attachment; filename=control_output.zip' );
+					header( 'Content-Disposition: Attachment; filename=' . str_replace( '.zip', '_output.zip', $results[0]['original_filename'] ) );
 					readfile( TEMP_FILE_DIR . '/' . $_GET['filekey'] . '.zip' );
 					$query = 'UPDATE ' . DB_PREFIX . 'batch_jobs SET status = 3, update_timestamp = :timestamp WHERE id = :id';
 					$statement = $controldb->prepare( $query );
@@ -79,7 +79,7 @@ if( isset( $_GET['filekey'] ) and $_GET['filekey'] )
 			echo '			<div id="results">
 						<h2>Error</h2>
 						<p>Multiple keys were found. Please email the site admin at ';
-			echo str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) );
+			echo hide_email_address(  ADMIN_EMAIL );
 			echo ' to report this error. <a href=".">Back to main page</a>.</p>
 				</div><!-- results -->', PHP_EOL;
 			require_once( 'includes/footer.php' );

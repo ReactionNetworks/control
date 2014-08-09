@@ -69,7 +69,7 @@ if( $argc == 2 )
 		}
 		catch(PDOException $exception)
 		{
-			die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . str_replace( '@', ' at ', str_replace( '.', ' dot ', ADMIN_EMAIL ) ) . '.' );
+			die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.' );
 		}
 
 		// Look up known CRNs with the same number of reactions and species from the database to check isomorphism

@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/04/2013
- * @modified   17/07/2014
+ * @modified   09/08/2014
  */
 
 /**
@@ -46,7 +46,7 @@ try
 }
 catch(PDOException $exception)
 {
-	die('Unable to open database. Error: '.$exception.'. Please contact the system administrator at '.str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)).'.');
+	die( 'Unable to open database. Error: ' . $exception . '. Please contact the system administrator at ' . hide_email_address( ADMIN_EMAIL ) . '.');
 }
 
 // Set 'not started' jobs to 'in progress'
@@ -134,32 +134,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 			$success = false;
 		}
 	}
-	/*$mail .= "<br />\r\nMass action only: ";
-	if( fwrite( $ohandle, $line_ending . 'Mass action only: ' ) === false )
-	{
-		$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-		$success = false;
-	}
-	$mass_action_only = false;
-	if( $jobs[$i]['mass_action_only'] == 1 )
-	{
-		$mass_action_only = true;
-		$mail .= 'True';
-		if( fwrite( $ohandle, 'true' ) === false )
-		{
-			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-			$success = false;
-		}
-	}
-	else
-	{
-		$mail .= 'False';
-		if( fwrite( $ohandle, 'false' ) === false )
-		{
-			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
-			$success = false;
-		}
-	}*/
+
 	$mail .= "<br />\r\nBatch submission time: ".$jobs[$i]['creation_timestamp']."</p>\r\n\r\n";
 	if( fwrite( $ohandle, $line_ending . 'Batch submission time: ' . $jobs[$i]['creation_timestamp'] . $line_ending . $line_ending ) === false )
 	{
@@ -371,8 +346,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							break;
 					} // end of switch ($file_format)
 
-					fclose($fhandle);
-					if(fwrite($ohandle, $line_ending.$line_ending."Reaction network:$line_ending".$reaction_network->exportReactionNetworkEquations($line_ending)).$line_ending.$line_ending === false)
+					fclose( $fhandle );
+					if( fwrite( $ohandle, $line_ending . $line_ending . "Reaction network:$line_ending" . $reaction_network->exportReactionNetworkEquations( $line_ending ) ) . $line_ending . $line_ending === false )
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
@@ -385,29 +360,29 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 
 						// Create human-readable descriptor file
-						$temp_filename = $filename.'.hmn';
+						$temp_filename = $filename . '.hmn';
 
-						if(!$handle = fopen($temp_filename, 'w'))
+						if( !$handle = fopen( $temp_filename, 'w' ) )
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						if(fwrite($handle, $reaction_network->exportReactionNetworkEquations()) === false)
+						if( fwrite( $handle, $reaction_network->exportReactionNetworkEquations() ) === false )
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						fclose($handle);
+						fclose( $handle );
 
 						// Create net stoichiometry descriptor file
-						$temp_filename = $filename.'.sto';
+						$temp_filename = $filename . '.sto';
 
-						if(!$handle = fopen($temp_filename, 'w'))
+						if( !$handle = fopen( $temp_filename, 'w' ) )
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						if(fwrite($handle, $reaction_network->exportStoichiometryMatrix()) === false)
+						if( fwrite( $handle, $reaction_network->exportStoichiometryMatrix() ) === false )
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
 							$success = false;
@@ -422,7 +397,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
-						if(fwrite($handle, $reaction_network->exportStoichiometryAndVMatrix()) === false)
+						if( fwrite( $handle, $reaction_network->exportStoichiometryAndVMatrix() ) === false )
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
 							$success = false;
@@ -430,15 +405,15 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						fclose($handle);
 
 						// Create source stoichiometry + target stoichiometry + V matrix descriptor file
-						$temp_filename = $filename.'.stv';
+						$temp_filename = $filename . '.stv';
 
-						if(!$handle = fopen($temp_filename, 'w'))
+						if( !$handle = fopen( $temp_filename, 'w' ) )
 						{
 							$mail .= "<p>ERROR: Cannot open file ($temp_filename)</p>\r\n";
 							$success = false;
 						}
 
-						if(fwrite($handle, $reaction_network->exportSourceAndTargetStoichiometryAndVMatrix()) === false)
+						if( fwrite( $handle, $reaction_network->exportSourceAndTargetStoichiometryAndVMatrix() ) === false )
 						{
 							$mail .= "<p>ERROR: Cannot write to file ($temp_filename)</p>\r\n";
 							$success = false;
@@ -461,34 +436,34 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 						}
 						fclose( $handle );
 
-						if($success)
+						if( $success )
 						{
-							foreach($standardTests as $test)
+							foreach( $standardTests as $test )
 							{
-								foreach($tests_enabled as &$enabled_test) if($enabled_test === $test->getShortName()) $enabled_test = $test;
+								foreach( $tests_enabled as &$enabled_test ) if( $enabled_test === $test->getShortName() ) $enabled_test = $test;
 							}
-							foreach($tests_enabled as $currentTest)
+							foreach( $tests_enabled as $currentTest )
 							{
 								$extension = '';
 								$temp = '';
-								if(fwrite($ohandle, $line_ending. "### TEST: ".$currentTest->getShortName()." ###".$line_ending.$line_ending."Test start time: ".date('Y-m-d H:i:s').$line_ending.$line_ending) === false)
+								if( fwrite( $ohandle, $line_ending . "### TEST: {$currentTest->getShortName()} ###{$line_ending$line_ending}Test start time: " . date('Y-m-d H:i:s') . $line_ending . $line_ending ) === false )
 								{
 									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 									$success = false;
 								}
 								// Need to split this into net stoichiometry versus source/target stoichiometry?
 								// How best to treat reversible vs irreversible reactions in stoichiometry case?
-								if(in_array('stoichiometry', $currentTest->getInputFileFormats())) $extension = '.sto';
-								if(in_array('stoichiometry+V', $currentTest->getInputFileFormats())) $extension = '.s+v';
-								if(in_array('S+T+V', $currentTest->getInputFileFormats())) $extension = '.stv';
-								if(in_array('GLPK', $currentTest->getInputFileFormats())) $extension = '.glpk';
-								if(in_array('human', $currentTest->getInputFileFormats())) $extension = '.hmn';
-								if(!$extension) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
+								if( in_array( 'stoichiometry', $currentTest->getInputFileFormats() ) ) $extension = '.sto';
+								if( in_array( 'stoichiometry+V', $currentTest->getInputFileFormats() ) ) $extension = '.s+v';
+								if( in_array( 'S+T+V', $currentTest->getInputFileFormats() ) ) $extension = '.stv';
+								if( in_array( 'GLPK', $currentTest->getInputFileFormats() ) ) $extension = '.glpk';
+								if( in_array( 'human', $currentTest->getInputFileFormats() ) ) $extension = '.hmn';
+								if( !$extension ) $mail .= "<p>ERROR: This test does not support any valid file formats. Test aborted.</p>\r\n";
 								else
 								{
 									$exec_string = 'cd ' . BINARY_FILE_DIR . ' && ' . NICENESS . 'timeout ' . TEST_TIMEOUT_LIMIT;
 									$exec_string .= ' ./' . $currentTest->getExecutableName();
-									if(fwrite($ohandle, "Output:$line_ending-------$line_ending") === false)
+									if( fwrite( $ohandle, "Output:$line_ending-------$line_ending" ) === false )
 									{
 										$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 										$success = false;
@@ -616,7 +591,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 // Status 3 = output file downloaded; set them to status 4 once files removed
 // Status 5 = unconfirmed; also remove these files since the job isn't going to be run
-$query = 'SELECT id, filekey FROM '.DB_PREFIX.'batch_jobs WHERE status = 3 OR status = 5';
+$query = 'SELECT id, filekey FROM ' . DB_PREFIX . 'batch_jobs WHERE status = 3 OR status = 5';
 $statement = $controldb->prepare( $query );
 $statement->execute();
 $results = $statement->fetchAll( PDO::FETCH_ASSOC );

@@ -38,7 +38,7 @@ require_once( '../includes/session.php' );
  */
 require_once( '../includes/standard-tests.php' );
 
-if( isset( $_SESSION['reaction_network'] ) and isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_token'] )
+if( isset( $_SESSION['reaction_network'] ) and $_SESSION['reaction_network']->getNumberOfReactions() and isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_token'] )
 {
 	$currentTest = null;
 	$inifilename = $_SESSION['tempfile'] . '.ini';
@@ -90,7 +90,7 @@ if( isset( $_SESSION['reaction_network'] ) and isset( $_POST['csrf_token'] ) and
 	else
 	{
 		// Delete temporary files
-		array_map( 'unlink', glob( $_SESSION['tempfile'].'*' ) );
+		array_map( 'unlink', glob( $_SESSION['tempfile'] . '*' ) );
 		echo '<p>All tests completed. Redirecting to results.</p>';
 	}
 }

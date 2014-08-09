@@ -19,7 +19,7 @@
 					<div id="feedback_holder">
 						<h2>Feedback</h2>
 						<p>
-							Please send bug reports, feature requests and other comments to <strong><em><?php echo str_replace('@', ' at ', str_replace('.', ' dot ', ADMIN_EMAIL)); ?></em></strong>. When reporting bugs, please describe the problem in as much detail as possible, and provide screenshots where relevant.
+							Please send bug reports, feature requests and other comments to <strong><em><?php echo hide_email_address( ADMIN_EMAIL ); ?></em></strong>. When reporting bugs, please describe the problem in as much detail as possible, and provide screenshots where relevant.
 						</p>
 <?php
 if( ACCEPT_KNOWN_CRN_SUBMISSIONS ):
@@ -71,7 +71,10 @@ endif;
 					</div><!-- credits_holder -->
 				</div><!-- credits_hider -->
 				<p id="credits">
+					<a href="<?php echo $_SERVER['REQUEST_URI']; ?>#" title="Start of page">&#x21e7;</a>
 					<a href="#feedback_holder" class="fancybox">Feedback</a>
+					<span class="non_mobile">&bull;</span>
+					<a href="submit-known-crn.php">Submit a CRN</a>
 					<span class="non_mobile">&bull;</span>
 					<a href="#privacy_holder" class="fancybox">Privacy</a>
 					<span class="non_mobile">&bull;</span>
