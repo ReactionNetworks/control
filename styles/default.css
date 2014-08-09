@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    02/10/2012
- * @modified   15/07/2014
+ * @modified   08/08/2014
  */
 
 @media screen
@@ -233,7 +233,7 @@
 		display: inline-block;
 	}
 
-	#add_reaction_button, #reaction_input_form fieldset input, #reaction_input_form fieldset select, #remove_reaction_button, #reset_reaction_button
+	#add_reaction_button, #reaction_input_form fieldset input, #reaction_input_form fieldset select, #remove_reaction_button, #reset_reaction_button, #submit_known_crn, #submitter
 	{
 		font-size: 150%;
 	}
@@ -307,6 +307,11 @@
 	#credits_holder > ul > li
 	{
 		padding: 0.2em 0.8em;
+	}
+
+	#crn_description
+	{
+		margin-bottom: 1em;
 	}
 
 	#download_network_file_button
@@ -547,6 +552,11 @@
 	#results_link
 	{
 		background-image: url('../images/return.png');
+	}
+
+	#submit_known_crn
+	{
+		margin: 1em auto 0.5em;
 	}
 
 	#tools_holder

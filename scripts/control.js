@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   15/07/2014
+ * @modified   08/08/2014
  */
 
 /**
@@ -494,6 +494,11 @@ $( document ).ready( function()
 
 	$( '.fancybox' ).fancybox( {autoDimensions: true, width: popupWidth, height: popupHeight} );
 	$( '.fancybox_dynamic' ).fancybox( {autoDimensions: false, width: popupWidth, height: popupHeight} );
+
+	$( '#crn_description' ).focus( function()
+	{
+		$( this ).select();
+	} );
 
 	$( '#detailed_output_checkbox' ).change( function()
 	{

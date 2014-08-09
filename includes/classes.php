@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   17/07/2014
+ * @modified   08/08/2014
  */
 
 /**
@@ -38,28 +38,28 @@ class Reaction
 	 * @param  mixed  $rightHandSide  The right hand side of the reaction, either a string to parse, or an array of pre-parsed strings
 	 * @param  bool   $reversible     TRUE if the reaction is reversible, false otherwise
 	 */
-	function __construct($leftHandSide, $rightHandSide, $reversible)
+	function __construct( $leftHandSide, $rightHandSide, $reversible )
 	{
-		switch(gettype($leftHandSide))
+		switch( gettype( $leftHandSide ) )
 		{
 			case 'array':
 				$this->leftHandSide = $leftHandSide;
 				break;
 			case 'string':
-				$this->leftHandSide = Reaction::parseReactants($leftHandSide);
+				$this->leftHandSide = Reaction::parseReactants( $leftHandSide );
 				break;
 			default:
 				// Throw an exception?
 				break;
 		}
 
-		switch(gettype($rightHandSide))
+		switch( gettype( $rightHandSide ) )
 		{
 			case 'array':
 				$this->rightHandSide = $rightHandSide;
 				break;
 			case 'string':
-				$this->rightHandSide = Reaction::parseReactants($rightHandSide);
+				$this->rightHandSide = Reaction::parseReactants( $rightHandSide );
 				break;
 			default:
 				// Throw an exception?
@@ -77,56 +77,56 @@ class Reaction
 	 * @param   string  $reactionString  The string describing the reaction.
 	 * @return  mixed   $reactants       If there is no error, returns an array of strings, each of which is a reactant. Otherwise returns FALSE.
 	 */
-	private static function parseReactants($reactantString)
+	private static function parseReactants( $reactantString )
 	{
 		// Remove preceding/trailing whitespace
-		$reactantString = trim($reactantString);
+		$reactantString = trim( $reactantString );
 
 		// Check there are no invalid characters
-		if((strpos($reactantString, '>') !== false) or (strpos($reactantString, '-') !== false) or
-		   (strpos($reactantString, '<') !== false) or (strpos($reactantString, '=') !== false)) return false;
+		if( ( strpos( $reactantString, '>' ) !== false ) or ( strpos( $reactantString, '-' ) !== false ) or
+		   ( strpos( $reactantString, '<' ) !== false ) or ( strpos( $reactantString, '=' ) !== false ) ) return false;
 		else
 		{
 			$temp = '';
-			$reactantStringLength = strlen($reactantString);
+			$reactantStringLength = strlen( $reactantString );
 			// Remove whitespace
-			for($i = 0; $i < $reactantStringLength; ++$i)
+			for( $i = 0; $i < $reactantStringLength; ++$i )
 			{
-				if($reactantString{$i} !== ' ') $temp .= $reactantString{$i};
+				if( $reactantString{$i} !== ' ' ) $temp .= $reactantString{$i};
 			}
 			$reactants = explode('+', $temp);
 		}
-		$numberOfReactants = count($reactants);
+		$numberOfReactants = count( $reactants );
 		$reactantStoichiometries = array();
-		for($i = 0; $i < $numberOfReactants; ++$i)
+		for( $i = 0; $i < $numberOfReactants; ++$i )
 		{
-			if(is_numeric($reactants[$i])) return false;
-			else if($reactants[$i] and !is_numeric($reactants[$i][0]))
+			if( is_numeric( $reactants[$i] ) ) return false;
+			else if( $reactants[$i] and !is_numeric( $reactants[$i][0] ) )
 			{
 				$reactant_found = false;
-				foreach($reactantStoichiometries as $reactant => $stoichiometry)
+				foreach( $reactantStoichiometries as $reactant => $stoichiometry )
 				{
-					if($reactants[$i] == $reactant) $reactant_found = true;
+					if( $reactants[$i] == $reactant ) $reactant_found = true;
 				}
-				if($reactant_found) $reactantStoichiometries[$reactants[$i]] += 1;
+				if( $reactant_found ) $reactantStoichiometries[$reactants[$i]] += 1;
 				else $reactantStoichiometries[$reactants[$i]] = 1;
 			}
 			else
 			{
-				$reactantLength = strlen($reactants[$i]);
+				$reactantLength = strlen( $reactants[$i] );
 				$characterPos = 0;
-				for($j = 0; $j < $reactantLength; ++$j)
+				for( $j = 0; $j < $reactantLength; ++$j )
 				{
-					if(!is_numeric($reactants[$i][$j])) $characterPos = $j;
-					if($characterPos) break;
+					if( !is_numeric( $reactants[$i][$j] ) ) $characterPos = $j;
+					if( $characterPos ) break;
 				}
 				$reactant_found = false;
-				foreach($reactantStoichiometries as $reactant => $stoichiometry)
+				foreach( $reactantStoichiometries as $reactant => $stoichiometry )
 				{
-					if(substr($reactants[$i], $characterPos) == $reactant) $reactant_found = true;
+					if( substr( $reactants[$i], $characterPos ) == $reactant ) $reactant_found = true;
 				}
-				if($reactant_found) $reactantStoichiometries[substr($reactants[$i], $characterPos)] += substr($reactants[$i], 0, $characterPos);
-				else $reactantStoichiometries[substr($reactants[$i], $characterPos)] = substr($reactants[$i], 0, $characterPos);
+				if( $reactant_found ) $reactantStoichiometries[substr( $reactants[$i], $characterPos )] += substr( $reactants[$i], 0, $characterPos );
+				else $reactantStoichiometries[substr( $reactants[$i], $characterPos )] = substr( $reactants[$i], 0, $characterPos );
 			}
 		}
 		return $reactantStoichiometries;
@@ -139,46 +139,46 @@ class Reaction
 	 * @param   string  $reactionString  The string describing the reaction.
 	 * @return  mixed   $reaction        If there is no error, returns a reaction object. Otherwise returns FALSE.
 	 */
-	public static function parseReaction($reactionString)
+	public static function parseReaction( $reactionString )
 	{
 		$temp = '';
 		$reversible = true;
-		$reactionStringLength = strlen($reactionString);
+		$reactionStringLength = strlen( $reactionString );
 		// Remove whitespace
-		for($i = 0; $i < $reactionStringLength; ++$i)
+		for( $i = 0; $i < $reactionStringLength; ++$i )
 		{
-			if($reactionString{$i} !== ' ' and $reactionString{$i} !== '-' and $reactionString{$i} !== '=') $temp .= $reactionString{$i};
+			if( $reactionString{$i} !== ' ' and $reactionString{$i} !== '-' and $reactionString{$i} !== '=' ) $temp .= $reactionString{$i};
 		}
 
-		$leftArrowPos = strpos($temp, '<');
-		$rightArrowPos = strpos($temp, '>');
+		$leftArrowPos = strpos( $temp, '<' );
+		$rightArrowPos = strpos( $temp, '>' );
 
-		if ($leftArrowPos === false and $rightArrowPos === false) return false;
+		if( $leftArrowPos === false and $rightArrowPos === false ) return false;
 		else
 		{
-			if ($leftArrowPos !== false and $rightArrowPos !== false)
+			if( $leftArrowPos !== false and $rightArrowPos !== false )
 			{
-				if ($leftArrowPos === $rightArrowPos-1)
+				if( $leftArrowPos === $rightArrowPos - 1 )
 				{
-					$lhs = Reaction::parseReactants(substr($temp, 0, $leftArrowPos));
-					$rhs = Reaction::parseReactants(substr($temp, $rightArrowPos + 1));
+					$lhs = Reaction::parseReactants( substr( $temp, 0, $leftArrowPos ) );
+					$rhs = Reaction::parseReactants( substr( $temp, $rightArrowPos + 1 ) );
 				}
 				else return false;
 			}
-			else if ($leftArrowPos!==false)
+			else if( $leftArrowPos !== false )
 			{
-				$rhs = Reaction::parseReactants(substr($temp, 0, $leftArrowPos));
-				$lhs = Reaction::parseReactants(substr($temp, $leftArrowPos + 1));
+				$rhs = Reaction::parseReactants( substr( $temp, 0, $leftArrowPos ) );
+				$lhs = Reaction::parseReactants( substr( $temp, $leftArrowPos + 1 ) );
 				$reversible = false;
 			}
 			else
 			{
-				$lhs = Reaction::parseReactants(substr($temp, 0, $rightArrowPos));
-				$rhs = Reaction::parseReactants(substr($temp, $rightArrowPos + 1));
+				$lhs = Reaction::parseReactants( substr( $temp, 0, $rightArrowPos ) );
+				$rhs = Reaction::parseReactants( substr( $temp, $rightArrowPos + 1 ) );
 				$reversible = false;
 			}
 		 }
-	 	return new Reaction($lhs,$rhs,$reversible);
+	 	return new Reaction( $lhs, $rhs, $reversible );
 	}
 
 	/**
@@ -190,27 +190,28 @@ class Reaction
 	{
 		$text = '';
 		$text .= $this->exportLHSAsText();
-		if($this->reversible) $text .= ' &#x21cc; ';
+		if( $this->reversible ) $text .= ' &#x21cc; ';
 		else $text .= ' &rarr; ';
 		$text .= $this->exportRHSAsText();
-		$text .= '<br />'.CLIENT_LINE_ENDING;
+		$text .= '<br />' . CLIENT_LINE_ENDING;
 		return $text;
 	}
 
 	/**
 	 * Export Reaction as plain text
 	 *
-	 * @return  string  $text  Text describing the reaction.
+	 * @param   string  $line_ending  For compatibility between OSes, specify the plain text line ending to use. Defaults to the same as the server.
+	 * @return  string  $text         Text describing the reaction.
 	 */
-	public function exportAsText($line_ending = PHP_EOL)
+	public function exportAsText( $line_ending = PHP_EOL )
 	{
 		$text = '';
-		$text.=$this->exportLHSAsText();
-		if($this->reversible) $text .= ' <--> ';
+		$text .= $this->exportLHSAsText();
+		if( $this->reversible ) $text .= ' <--> ';
 		else $text .= ' --> ';
-		$text.=$this->exportRHSAsText();
+		$text .= $this->exportRHSAsText();
 		$text .= $line_ending;
-		$text = str_replace('&empty;', '0', $text);
+		$text = str_replace( '&empty;', '0', $text );
 		return $text;
 	}
 
@@ -344,7 +345,7 @@ class ReactionNetwork
 	 *
 	 * @param  array  $reactions   An array of Reactions
 	 */
-	function __construct($reactions = array())
+	function __construct( $reactions = array() )
 	{
 		$this->reactions = $reactions;
 	}
@@ -354,9 +355,9 @@ class ReactionNetwork
 	 *
 	 * @param  Reaction  $reaction   The Reaction to add
 	 */
-	public function addReaction($reaction)
+	public function addReaction( $reaction )
 	{
-		if($reaction)
+		if( $reaction )
 		{
 			$this->reactions[] = $reaction;
 			return true;
@@ -370,10 +371,10 @@ class ReactionNetwork
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
 	 * @return  string  $equations  Text version of reaction network chemical equations
 	 */
-	public function exportReactionNetworkEquations($line_ending = PHP_EOL, $LaTeX = false)
+	public function exportReactionNetworkEquations( $line_ending = PHP_EOL, $LaTeX = false )
 	{
 		$equations = '';
-		foreach($this->reactions as $reaction) $equations .= $reaction->exportAsText($line_ending);
+		foreach( $this->reactions as $reaction ) $equations .= $reaction->exportAsText( $line_ending );
 		return $equations;
 	}
 
@@ -383,11 +384,11 @@ class ReactionNetwork
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
 	 * @return  string  $equations  Text version of reaction network chemical matrices
 	 */
-	public function exportStoichiometryAndVMatrix($LaTeX = false)
+	public function exportStoichiometryAndVMatrix( $LaTeX = false )
 	{
-		$equations = 'S MATRIX'.PHP_EOL;
+		$equations = 'S MATRIX' . PHP_EOL;
 		$equations .= $this->exportStoichiometryMatrix();
-		$equations .= PHP_EOL.'V MATRIX'.PHP_EOL;
+		$equations .= PHP_EOL . 'V MATRIX' . PHP_EOL;
 		$equations .= $this->exportVMatrix();
 		return $equations;
 	}
@@ -398,15 +399,15 @@ class ReactionNetwork
 	 * @param   bool    $LaTeX      If TRUE, exports LaTeX markup. If FALSE, exports plain text
 	 * @return  string  $equations  Text version of reaction network chemical matrices
 	 */
-	public function exportSourceAndTargetStoichiometryAndVMatrix($LaTeX = false)
+	public function exportSourceAndTargetStoichiometryAndVMatrix( $LaTeX = false )
 	{
 		$equations = 'S MATRIX'.PHP_EOL;
 		$equations .= $this->exportSourceStoichiometryMatrix();
-		$equations .= PHP_EOL.PHP_EOL.'T MATRIX'.PHP_EOL;
+		$equations .= PHP_EOL . PHP_EOL . 'T MATRIX' . PHP_EOL;
 		$equations .= $this->exportTargetStoichiometryMatrix();
-		$equations .= PHP_EOL.PHP_EOL.'V MATRIX'.PHP_EOL;
+		$equations .= PHP_EOL . PHP_EOL . 'V MATRIX' . PHP_EOL;
 		$equations .= $this->exportVMatrix();
-/* TO DO: add REVERSIBLE section to output
+		/* TO DO: add REVERSIBLE section to output
 		$equations .= PHP_EOL.PHP_EOL.'REVERSIBLE'.PHP_EOL;
 		foreach($this->reactions)*/
 		return $equations;
@@ -465,6 +466,93 @@ class ReactionNetwork
 		$numberOfReactions = count($this->reactions);
 		for($i = 0; $i < $numberOfReactions; ++$i) $equations .= $this->reactions[$i]->exportAsHTML();
 		return $equations;
+	}
+
+	/**
+	 * Export function for reaction network multiedges in Sauro format
+	 *
+	 * @return  string  $sauro  Sauro version of reaction network multiedges
+	 */
+	public function exportSauro()
+	{
+		$irreversibleStoichiometryMatrix = $this->generateIrreversibleSourceStoichiometryMatrix();
+		$sauro = (string) count( $irreversibleStoichiometryMatrix[0] );
+		$sauro .= ' ';
+		$sauro .= (string) count( $irreversibleStoichiometryMatrix );
+		$sauro .= ' ';
+		$numberOfReactions = count( $this->reactions );
+		$reactants = $this->generateReactantList();
+		for( $i = 0; $i < $numberOfReactions; ++$i )
+		{
+			foreach( $this->reactions[$i]->getLeftHandSide() as $reactant => $stoichiometry )
+			{
+				for( $j = 0; $j < count( $reactants ); ++$j )
+				{
+					if( $reactants[$j] === $reactant )
+					{
+						for( $k = 0; $k < $stoichiometry; ++$k )
+						{
+							$sauro .= (string) $k + count( $reactants );
+							$sauro .= ' ';
+							$sauro .= $i;
+							$sauro .= ' ';
+						}
+					}
+				}
+			}
+			foreach( $this->reactions[$i]->getRightHandSide() as $reactant => $stoichiometry )
+			{
+				for( $j = 0; $j < count( $reactants ); ++$j )
+				{
+					if( $reactants[$j] === $reactant )
+					{
+						for( $k = 0; $k < $stoichiometry; ++$k )
+						{
+							$sauro .= $i;
+							$sauro .= ' ';
+							$sauro .= (string) $k + count( $reactants );
+							$sauro .= ' ';
+						}
+					}
+				}
+			}
+			if( $this->isReversible() )
+			{
+				foreach( $this->reactions[$i]->getRightHandSide() as $reactant => $stoichiometry )
+				{
+					for( $j = 0; $j < count( $reactants ); ++$j )
+					{
+						if( $reactants[$j] === $reactant )
+						{
+							for( $k = 0; $k < $stoichiometry; ++$k )
+							{
+								$sauro .= (string) $k + count( $reactants );
+								$sauro .= ' ';
+								$sauro .= $i;
+								$sauro .= ' ';
+							}
+						}
+					}
+				}
+				foreach( $this->reactions[$i]->getLeftHandSide() as $reactant => $stoichiometry )
+				{
+					for( $j = 0; $j < count( $reactants ); ++$j )
+					{
+						if( $reactants[$j] === $reactant )
+						{
+							for( $k = 0; $k < $stoichiometry; ++$k )
+							{
+								$sauro .= $i;
+								$sauro .= ' ';
+								$sauro .= (string) $k + count( $reactants );
+								$sauro .= ' ';
+							}
+						}
+					}
+				}
+			}
+		}
+		return $sauro;
 	}
 
 	/**
@@ -534,9 +622,6 @@ class ReactionNetwork
 					}
 				}
 			}
-		}
-		for( $i = 0; $i < $numberOfReactions; ++$i )
-		{
 		}
 		return $edges;
 	}
@@ -1260,13 +1345,23 @@ class ReactionNetwork
 	}
 
 	/**
+	 * Get the number of reactants
+	 *
+	 * @return  int  $numberOfReactants  The number of reactants in the network
+	 */
+	public function getNumberOfReactants()
+	{
+		return count( $this->generateReactantList() );
+	}
+
+	/**
 	 * Get the number of reactions
 	 *
 	 * @return  int  $numberOfReactions  The number of reactions in the network
 	 */
 	public function getNumberOfReactions()
 	{
-		return count($this->reactions);
+		return count( $this->reactions );
 	}
 
 	/**

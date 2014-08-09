@@ -119,12 +119,18 @@ foreach ($format_array as $format)
 }
 ?>
 						</p>
+<?php
+if( REQUIRE_CAPTCHA ):
+?>
 						<div>
 							<p>Enter security code (required):<br />
 								<span class="bold"><label for="batch_security_code" id="batch_security_code_label"><?php batch_captcha(); ?></label></span>
 								<input type="text" name="batch_security_code" id="batch_security_code"/>
 							</p>
 						</div>
+<?php
+endif;
+?>
 						<p>
 							<button class="button disabled" id="upload_batch_file_button" type="submit" disabled="disabled">Upload batch file</button>
 						</p>
