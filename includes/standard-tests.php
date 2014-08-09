@@ -11,7 +11,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/01/2013
- * @modified   17/07/2014
+ * @modified   09/08/2014
  */
 
 $supportsIniFile = true;
@@ -34,7 +34,7 @@ $standardTests = array(
 	(
 		'dsr',
 		'DSR',
-		'Checks condition (*) for the DSR graph. Implemented by Casian Pantea, based on <a href="http://projecteuclid.org/euclid.cms/1264434136">M. Banaji and G. Craciun, Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements</a>.',
+		'Checks condition (*) for the DSR graph. Implemented using <a href="https://www.gnu.org/software/octave/">GNU Octave</a> by Casian Pantea, based on <a href="http://projecteuclid.org/euclid.cms/1264434136">M. Banaji and G. Craciun, &ldquo;Graph-theoretic approaches to injectivity and multiple equilibria in systems of interacting elements.&rdquo;</a>',
 		'dsr',
 		array( 'stoichiometry+V' ),
 		$doesNotSupportIniFile
@@ -55,7 +55,7 @@ $standardTests = array(
 	(
 		'endotactic',
 		'Endotactic',
-		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="http://scip.zib.de/">SCIP</a> by Matthew Johnston, Casian Pantea and Pete Donnell.',
+		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="http://scip.zib.de/">SCIP</a> by Matthew Johnston, Pete Donnell and Casian Pantea.',
 		'endotactic',
 		array( 'GLPK' ),
 		$doesNotSupportIniFile
@@ -66,7 +66,7 @@ $standardTests = array(
 	(
 		'isomorphic',
 		'Isomorphism lookup',
-		'Tests whether the network is isomorphic to a known network with interesting properties. Implemented in <a href="http://www.sagemath.org/">Sage</a> by Murad Banaji, Casian Pantea and Pete Donnell.',
+		'Tests whether the network is isomorphic to a known network with interesting properties. Implemented in <a href="http://www.sagemath.org/">Sage</a> by Pete Donnell, Casian Pantea and Murad Banaji.',
 		'isomorphic',
 		array( 'human' ),
 		$doesNotSupportIniFile

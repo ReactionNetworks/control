@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   08/08/2014
+ * @modified   09/08/2014
  */
 
 /**
@@ -476,12 +476,15 @@ class ReactionNetwork
 	public function exportSauro()
 	{
 		$irreversibleStoichiometryMatrix = $this->generateIrreversibleSourceStoichiometryMatrix();
-		$sauro = (string) count( $irreversibleStoichiometryMatrix[0] );
-		$sauro .= ' ';
-		$sauro .= (string) count( $irreversibleStoichiometryMatrix );
-		$sauro .= ' ';
 		$numberOfReactions = count( $this->reactions );
+		$numberOfReactionsIrreversible = count( $irreversibleStoichiometryMatrix[0] );
+		$numberOfReversibleReactionsSeen = 0;
 		$reactants = $this->generateReactantList();
+		$numberOfReactants = count( $reactants );
+		$sauro = (string) count( $irreversibleStoichiometryMatrix );
+		$sauro .= ' ';
+		$sauro .= (string) $numberOfReactionsIrreversible;
+		$sauro .= ' ';
 		for( $i = 0; $i < $numberOfReactions; ++$i )
 		{
 			foreach( $this->reactions[$i]->getLeftHandSide() as $reactant => $stoichiometry )
@@ -492,7 +495,7 @@ class ReactionNetwork
 					{
 						for( $k = 0; $k < $stoichiometry; ++$k )
 						{
-							$sauro .= (string) $k + count( $reactants );
+							$sauro .= (string) $j + $numberOfReactionsIrreversible;
 							$sauro .= ' ';
 							$sauro .= $i;
 							$sauro .= ' ';
@@ -510,13 +513,13 @@ class ReactionNetwork
 						{
 							$sauro .= $i;
 							$sauro .= ' ';
-							$sauro .= (string) $k + count( $reactants );
+							$sauro .= (string) $j + $numberOfReactionsIrreversible;
 							$sauro .= ' ';
 						}
 					}
 				}
 			}
-			if( $this->isReversible() )
+			if( $this->reactions[$i]->isReversible() )
 			{
 				foreach( $this->reactions[$i]->getRightHandSide() as $reactant => $stoichiometry )
 				{
@@ -526,9 +529,9 @@ class ReactionNetwork
 						{
 							for( $k = 0; $k < $stoichiometry; ++$k )
 							{
-								$sauro .= (string) $k + count( $reactants );
+								$sauro .= (string) $j + $numberOfReactionsIrreversible;
 								$sauro .= ' ';
-								$sauro .= $i;
+								$sauro .= $numberOfReactions + $numberOfReversibleReactionsSeen;
 								$sauro .= ' ';
 							}
 						}
@@ -542,17 +545,18 @@ class ReactionNetwork
 						{
 							for( $k = 0; $k < $stoichiometry; ++$k )
 							{
-								$sauro .= $i;
+								$sauro .= $numberOfReactions + $numberOfReversibleReactionsSeen;
 								$sauro .= ' ';
-								$sauro .= (string) $k + count( $reactants );
+								$sauro .= (string) $j + $numberOfReactionsIrreversible;
 								$sauro .= ' ';
 							}
 						}
 					}
 				}
+				++$numberOfReversibleReactionsSeen;
 			}
 		}
-		return $sauro;
+		return trim( $sauro );
 	}
 
 	/**
@@ -914,17 +918,17 @@ class ReactionNetwork
 	{
 		$targetStoichiometryMatrix = array();
 		$reactantList = $this->generateReactantList();
-		$numberOfReactants = count($reactantList);
-		for($i = 0; $i < $numberOfReactants; ++$i)
+		$numberOfReactants = count( $reactantList );
+		for( $i = 0; $i < $numberOfReactants; ++$i )
 		{
 			$targetStoichiometryMatrix[] = array();
 
 			foreach($this->reactions as $reaction)
 			{
 				$matrixEntry = 0;
-				foreach($reaction->getRightHandSide() as $reactant => $stoichiometry)
+				foreach( $reaction->getRightHandSide() as $reactant => $stoichiometry )
 				{
-					if($reactantList[$i] === $reactant) $matrixEntry = $stoichiometry;
+					if( $reactantList[$i] === $reactant ) $matrixEntry = $stoichiometry;
 				}
 				$targetStoichiometryMatrix[$i][] = $matrixEntry;
 			}
@@ -977,12 +981,12 @@ class ReactionNetwork
 	{
 		$stoichiometryMatrix = $this->generateTargetStoichiometryMatrix();
 		$sourceStoichiometryMatrix = $this->generateSourceStoichiometryMatrix();
-		$numberOfReactants = count($stoichiometryMatrix);
-		if(isset($stoichiometryMatrix[0])) $numberOfReactions = count($stoichiometryMatrix[0]);
+		$numberOfReactants = count( $stoichiometryMatrix );
+		if( isset( $stoichiometryMatrix[0] ) ) $numberOfReactions = count( $stoichiometryMatrix[0] );
 		else $numberOfReactions = 0;
-		for($i = 0; $i < $numberOfReactants; ++$i)
+		for( $i = 0; $i < $numberOfReactants; ++$i )
 		{
-			for($j = 0; $j < $numberOfReactions; ++$j) $stoichiometryMatrix[$i][$j] -= $sourceStoichiometryMatrix[$i][$j];
+			for( $j = 0; $j < $numberOfReactions; ++$j ) $stoichiometryMatrix[$i][$j] -= $sourceStoichiometryMatrix[$i][$j];
 		}
 		return $stoichiometryMatrix;
 	}
@@ -1012,36 +1016,35 @@ class ReactionNetwork
 	 * @param   array  $matrix   2D array describing reaction network net stoichiometry matrix
 	 * @return  bool   $success  Returns TRUE if stoichiometry matrix successfully parsed, and FALSE otherwise
 	 */
-	public function parseStoichiometry($matrix)
+	public function parseStoichiometry( $matrix )
 	{
 		$success = true;
-		if(gettype($matrix) == 'array' and count($matrix))
+		if( gettype( $matrix ) == 'array' and count( $matrix ) )
 		{
 			$allReactants = array();
 			$reactantPrefix = '';
-			$numberOfReactants = count($matrix);
-			$numberOfReactions = count($matrix[0]);
-			for($i = 0; $i < $numberOfReactants; ++$i)
+			$numberOfReactants = count( $matrix );
+			$numberOfReactions = count( $matrix[0] );
+			for( $i = 0; $i < $numberOfReactants; ++$i )
 			{
-				if(count($matrix[$i]) !== $numberOfReactions) $success = false;
-				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
-				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
+				if( count( $matrix[$i] ) !== $numberOfReactions ) $success = false;
+				if( floor( $i / 26 ) ) $reactantPrefix = chr( ( floor( $i / 26 ) % 26 ) + 65 );
+				$allReactants[] = $reactantPrefix . chr( ( $i % 26 ) + 65 );
 			}
-			for($i = 0; $i < $numberOfReactions; ++$i)
+			for( $i = 0; $i < $numberOfReactions; ++$i )
 			{
 				$lhs = array();
 				$rhs = array();
-				for($j = 0; $j < $numberOfReactants; ++$j)
+				for( $j = 0; $j < $numberOfReactants; ++$j )
 				{
-					if(!(is_numeric($matrix[$j][$i]) and (int)$matrix[$j][$i] == $matrix[$j][$i]))
+					if( !( is_numeric( $matrix[$j][$i] ) and (int) $matrix[$j][$i] == $matrix[$j][$i] ) )
 					{
-						//error_log('$success: '.$success.PHP_EOL.'$numberOfReactants: '.$numberOfReactants.PHP_EOL.'$numberOfReactions: '.$numberOfReactions.PHP_EOL.'count($matrix): '.count($matrix).PHP_EOL.'$i: '.$i.PHP_EOL.'$j: '.$j.PHP_EOL.'$matrix[$j][$i]: '.$matrix[$j][$i].PHP_EOL.PHP_EOL, 3, '/var/tmp/crn.log');
 						$success = false;
 					}
-					elseif($matrix[$j][$i] < 0) $lhs[$allReactants[$j]] = ($matrix[$j][$i] * -1);
-					elseif($matrix[$j][$i] > 0) $rhs[$allReactants[$j]] = $matrix[$j][$i];
+					elseif( $matrix[$j][$i] < 0 ) $lhs[$allReactants[$j]] = ( $matrix[$j][$i] * -1 );
+					elseif( $matrix[$j][$i] > 0 ) $rhs[$allReactants[$j]] = $matrix[$j][$i];
 				}
-				$this->addReaction(new Reaction($lhs, $rhs, false));
+				$this->addReaction( new Reaction( $lhs, $rhs, false ) );
 			}
 		}
 		else $success = false;
@@ -1054,46 +1057,46 @@ class ReactionNetwork
 	 * @param   string  $row      String in Sauro format representing a CRN
 	 * @return  bool    $success  Returns TRUE if Sauro input successfully parsed, and FALSE otherwise
 	 */
-	public function parseSauro($row)
+	public function parseSauro( $row )
 	{
 		$success = true;
-		$row = trim($row);
-		if(gettype($row) == 'string' and $row)
+		$row = trim( $row );
+		if( gettype( $row ) == 'string' and $row )
 		{
-			$entries = explode(' ', $row);
-			if (count($entries)%2) $success = false;
+			$entries = explode( ' ', $row );
+			if( count( $entries ) % 2 ) $success = false;
 			$allReactants = array();
 			$reactantPrefix = '';
-			$numberOfReactants = (int)$entries[1];
-			$numberOfReactions = (int)$entries[0];
-			for($i = 0; $i < $numberOfReactants; ++$i)
+			$numberOfReactants = (int) $entries[1];
+			$numberOfReactions = (int) $entries[0];
+			for( $i = 0; $i < $numberOfReactants; ++$i )
 			{
-				if(floor($i/26)) $reactantPrefix = chr((floor($i/26)%26)+65);
-				$allReactants[] = $reactantPrefix.chr(($i%26)+65);
+				if( floor( $i / 26 ) ) $reactantPrefix = chr( ( floor( $i / 26 ) % 26 ) + 65 );
+				$allReactants[] = $reactantPrefix . chr( ( $i % 26 ) + 65 );
 			}
-			for($i = 0; $i < $numberOfReactions; ++$i)
+			for( $i = 0; $i < $numberOfReactions; ++$i )
 			{
 				$lhs = array();
 				$rhs = array();
-				for($j = 2; $j < count($entries); ++$j)
+				for( $j = 2; $j < count($entries); ++$j )
 				{
-					if ($i == ($entries[$j]))
+					if( $i == ( $entries[$j] ) )
 					{
-						if (($j % 2) == 0) // Reaction appears as LHS of pair, ie. reactant is on RHS of reaction
+						if( ( $j % 2 ) == 0 ) // Reaction appears as LHS of pair, ie. reactant is on RHS of reaction
 						{
-							$reactantLabel = $allReactants[($entries[$j + 1] - $numberOfReactions)];
-							if (array_key_exists($reactantLabel, $rhs)) ++$rhs[$reactantLabel]; // Reactant already on RHS, so increment its stoichiometry
+							$reactantLabel = $allReactants[( $entries[$j + 1] - $numberOfReactions )];
+							if( array_key_exists( $reactantLabel, $rhs ) ) ++$rhs[$reactantLabel]; // Reactant already on RHS, so increment its stoichiometry
 							else $rhs[$reactantLabel] = 1; // Reactant not yet on RHS, so create an entry
 						}
 						else // Reaction appears as RHS of pair, ie. reactant is on LHS of reaction
 						{
-							$reactantLabel = $allReactants[($entries[$j - 1] - $numberOfReactions)];
-							if (array_key_exists($reactantLabel, $lhs)) ++$lhs[$reactantLabel]; // Reactant already on LHS, so increment its stoichiometry
+							$reactantLabel = $allReactants[( $entries[$j - 1] - $numberOfReactions )];
+							if( array_key_exists( $reactantLabel, $lhs ) ) ++$lhs[$reactantLabel]; // Reactant already on LHS, so increment its stoichiometry
 							else $lhs[$reactantLabel] = 1; // Reactant not yet on LHS, so create an entry
 						}
 					}
 				}
-				$this->addReaction(new Reaction($lhs, $rhs, false));
+				$this->addReaction( new Reaction( $lhs, $rhs, false ) );
 			}
 		}
 		else $success = false;
@@ -1362,6 +1365,21 @@ class ReactionNetwork
 	public function getNumberOfReactions()
 	{
 		return count( $this->reactions );
+	}
+
+	/**
+	 * Get the number of reactions, counting reversible reactions as two irreversible reactions
+	 *
+	 * @return  int  $numberOfReactions  The number of reactions in the network
+	 */
+	public function getNumberOfReactionsIrreversible()
+	{
+		$numberOfReactions = $this->getNumberOfReactions();
+		foreach( $this->reactions as $reaction )
+		{
+			if( $reaction->isReversible() ) ++$numberOfReactions;
+		}
+		return $numberOfReactions;
 	}
 
 	/**

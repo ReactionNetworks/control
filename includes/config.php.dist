@@ -6,7 +6,8 @@
  * hence is automatically included in every page that produces HTML output. It must be
  * included separately in each handler page.
  *
- * Note: when configuring your site, make sure to set SITE_DIR to the correct relative path.
+ * Note: while the defaults *should* work on most systems, it is strongly recommended to
+ * review the settings from the first section, and preferably also the second section.
  *
  * @author     Pete Donnell <pete dot donnell at port at ac at uk>
  * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
@@ -14,7 +15,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   08/08/2014
+ * @modified   09/08/2014
  */
 
 /////////////////////////////////////////
@@ -170,19 +171,19 @@ if( is_link( '/etc/localtime' ) )
 	// Mac OS X (and older Linuxes)
 	// /etc/localtime is a symlink to the timezone in /usr/share/zoneinfo.
 	$filename = readlink( '/etc/localtime' );
-	if( strpos( $filename, '/usr/share/zoneinfo/' ) === 0 ) $timezone = substr( $filename, 20 );
+	if( strpos( $filename, '/usr/share/zoneinfo/' ) === 0 ) $timezone = trim( substr( $filename, 20 ) );
 }
 elseif( file_exists( '/etc/timezone' ) )
 {
 	// Ubuntu/Debian
 	$data = file_get_contents( '/etc/timezone' );
-	if( $data ) $timezone = $data;
+	if( $data ) $timezone = trim( $data );
 }
 elseif( file_exists( '/etc/sysconfig/clock' ) )
 {
 	// RHEL/CentOS
 	$data = parse_ini_file( '/etc/sysconfig/clock' );
-	if( !empty( $data['ZONE'] ) ) $timezone = $data['ZONE'];
+	if( !empty( $data['ZONE'] ) ) $timezone = trim( $data['ZONE'] );
 }
 date_default_timezone_set( $timezone );
 

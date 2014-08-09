@@ -13,7 +13,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    14/07/2014
- * @modified   16/07/2014
+ * @modified   09/08/2014
  */
 
 /**
@@ -25,6 +25,11 @@ require_once( '../includes/classes.php' );
  * Standard include
  */
 require_once( '../includes/config.php' );
+
+/**
+ * Standard include
+ */
+require_once( '../includes/functions.php' );
 
 // Check that this script was correctly invoked
 $stderr = fopen( 'php://stderr', 'w' );
@@ -96,12 +101,13 @@ if( $argc == 2 )
 		// Output results if a match was found
 		if( $match_id )
 		{
-			$query = 'SELECT result FROM ' . DB_PREFIX . 'known_crns WHERE id = :id';
+			$query = 'SELECT result, submitter FROM ' . DB_PREFIX . 'known_crns WHERE id = :id';
 			$statement = $controldb->prepare( $query );
 			$statement->bindParam( ':id', $match_id, PDO::PARAM_INT );
 			$statement->execute();
 			$result = $statement->fetchAll( PDO::FETCH_ASSOC );
 			echo $result[0]['result'];
+			if( trim( $result[0]['submitter'] ) ) echo PHP_EOL, PHP_EOL, 'Submitted by ', sanitise( trim( $result[0]['submitter'] ) ), '.';
 		}
 		else echo 'No isomorphism matches found. This CRN is not isomorphic to any known CRNs in the CoNtRol database.' . PHP_EOL;
 	}

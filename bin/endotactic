@@ -12,8 +12,11 @@
 # @see        https://reaction-networks.net/control/documentation/
 # @package    CoNtRol
 # @created    05/07/2014
-# @modified   17/07/2014
+# @modified   09/08/2014
 ##
+
+echo "Endotacticity test version 0.4.0."
+echo
 
 # Check that glpsol and scip are available and that this script was invoked correctly
 GLP=$(which glpsol)
@@ -25,18 +28,17 @@ then
 fi
 if [ -z $SCIP ]
 then
-	echo "Error: scip binary not found" >&2
-	echo "$PATH"
-	exit 2
+	echo "Solving using glpsol. This may be slow for larger networks." >&2
+	echo >&2
+else
+	echo "Solving using scip. This is the preferred mode." >&2
+	echo >&2
 fi
 if [ $# -ne 1 ]
 then
 	echo "Usage: endotactic <filename>" >&2
-	exit 3
+	exit 2
 fi
-
-echo "Endotacticity test version 0.3.0."
-echo
 
 # Construct GLPK code to test endotacticity
 # N.B. || hack to get consistency between Linux and Mac OS X, see
@@ -91,28 +93,30 @@ end;" >> $END_GLP
 # Check whether network is endotactic
 # N.B. Pipe through {} required to work around Bash subshell scoping, see
 # http://nion.modprobe.de/blog/archives/531-Altering-a-variable-outside-the-scope-of-a-loop-influenced-by-a-subshell.html
-$GLP --check --wlp $END_GLP.lp --math $END_GLP >&2
-$SCIP -f $END_GLP.lp | {
-ENDOTACTIC=false
-while read i
-do
-	printf %s\\n "$i" >&2
-	RESULT=$(printf %s\\n "$i" | grep 'objective value:')
-	if [ "$RESULT" ]
-	then
-		NOT_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
-		if [ "$NOT_ENDOTACTIC" -lt 0 ]
-		then
-			printf %s\\n 'This CRN is not endotactic. No claims can be made about <a href="https://reaction-networks.net/wiki/Persistence">persistence</a> of trajectories.'
-		else
-			ENDOTACTIC=true
-		fi
-	fi
-done
-
-# Check whether network is strongly endotactic
-if [ "$ENDOTACTIC" = true ]
+if [ -z $SCIP ]
 then
+	# run without scip
+	$GLP --math $END_GLP | {
+	ENDOTACTIC=false
+	while read i
+	do
+		printf %s\\n "$i" >&2
+		RESULT=$(printf %s\\n "$i" | grep 'tree is empty')
+		if [ "$RESULT" ]
+		then
+			NOT_ENDOTACTIC=$(printf %s\\n $RESULT | grep -)
+			if [ "$NOT_ENDOTACTIC" ]
+			then
+				printf %s\\n 'This CRN is not endotactic.'
+			else
+				ENDOTACTIC=true
+			fi
+		fi
+	done
+
+	# Check whether network is strongly endotactic
+	if [ "$ENDOTACTIC" = true ]
+	then
 	# Construct GLPK code to test strong endotacticity
 	echo "/* sets */
 set REACTIONS;
@@ -155,30 +159,120 @@ s.t. const8{i in REACTIONS, j in REACTIONS: i <> j} : sum{k in REACTANTS} w[k]*(
 /* data section */
 
 data;" > $END_GLP
-	cat "$1" >> $END_GLP
-	echo "param eps:=0.1;
+		cat "$1" >> $END_GLP
+		echo "param eps:=0.1;
 param delt:=10;
 
 end;" >> $END_GLP
 
+		$GLP --math $END_GLP | while read i
+		do
+			printf %s\\n "$i" >&2
+			RESULT=$(printf %s\\n "$i" | grep 'tree is empty')
+			if [ "$RESULT" ]
+			then
+				NOT_S_ENDOTACTIC=$(printf %s\\n $RESULT | grep -)
+				if [ "$NOT_S_ENDOTACTIC" ]
+				then
+					printf %s\\n 'This CRN is endotactic but not strongly endotactic.'
+				else
+					printf %s\\n 'This CRN is strongly endotactic.'
+				fi
+			fi
+		done
+	fi
+	}
+else
+	# convert to scip as it's faster than glpsol
 	$GLP --check --wlp $END_GLP.lp --math $END_GLP >&2
-	$SCIP -f $END_GLP.lp | while read i
+	$SCIP -f $END_GLP.lp | {
+	ENDOTACTIC=false
+	while read i
 	do
 		printf %s\\n "$i" >&2
 		RESULT=$(printf %s\\n "$i" | grep 'objective value:')
 		if [ "$RESULT" ]
 		then
-			NOT_S_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
-			if [ "$NOT_S_ENDOTACTIC" -lt 0 ]
+			NOT_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
+			if [ "$NOT_ENDOTACTIC" -lt 0 ]
 			then
-				printf %s\\n 'This CRN is endotactic but not strongly endotactic. According to the persistence conjecture as stated in <a href="http://www.math.wisc.edu/~craciun/PAPERS/Craciun_Nazarov_Pantea_PERSISTENCE_PERMANENCE.pdf">Gheorghe Craciun, Fedor Nazarov and Casian Pantea, "Persistence and permanence of mass-action and power-law dynamical systems", <em>SIAM Journal on Applied Mathematics</em>, <strong>73</strong> (1) (2013) 305-329</a>, this states that the network is <a href="https://reaction-networks.net/wiki/Persistence">persistent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>. Note that the persistence conjecture has been proved for some special cases, but remains open for general CRNs.'
+				printf %s\\n 'This CRN is not endotactic. No claims can be made about <a href="https://reaction-networks.net/wiki/Persistence">persistence</a> of trajectories.'
 			else
-				printf %s\\n 'This CRN is strongly endotactic. According to <a href="http://math.uchicago.edu/~annejls/geometricGAC.pdf">Anne J. Shiu, Manoj Gopalkrishnan and Ezra Miller, "A geometric approach to the global attractor conjecture", <em>SIAM J. Appl. Dyn. Syst.</em>, <strong>13</strong> (2) (2014), 758-797</a>, this implies that the network is <a href="https://reaction-networks.net/wiki/Persistence#Permanence">permanent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>.'
+				ENDOTACTIC=true
 			fi
 		fi
 	done
+
+	# Check whether network is strongly endotactic
+	if [ "$ENDOTACTIC" = true ]
+	then
+		# Construct GLPK code to test strong endotacticity
+		echo "/* sets */
+set REACTIONS;
+set REACTANTS;
+
+/* parameters */
+
+param Ys {i in REACTANTS, j in REACTIONS};
+param Gamma {i in REACTANTS, j in REACTIONS};
+param eps;
+param delt;
+
+
+/* decision variables */
+
+var w {i in REACTANTS} >=-delt <=delt;
+var R0 {i in REACTIONS} >=0 <=1, integer;
+var Rn {i in REACTIONS} >=0 <=1, integer;
+var supp >=0 <=1, integer;
+
+
+/* objective function */
+
+minimize z:  sum{i in REACTIONS} -Rn[i];
+
+
+/* constraints */
+
+s.t. const1{i in REACTIONS} : sum{k in REACTANTS} w[k]*Gamma[k,i] <= delt*(1-R0[i]);
+s.t. const2{i in REACTIONS} : -sum{k in REACTANTS} w[k]*Gamma[k,i] <= delt*(1-R0[i]);
+s.t. const3{i in REACTIONS} : Rn[i] <= 1-R0[i];
+s.t. const4{i in REACTIONS} : sum{k in REACTANTS} w[k]*Gamma[k,i] <= delt*(1-Rn[i])-eps;
+s.t. const5{i in REACTIONS, j in REACTIONS: i <> j} : sum{k in REACTANTS} w[k]*(Ys[k,i]-Ys[k,j]) <= delt*(1-R0[i]+R0[j])-eps;
+s.t. const6 : 1-supp <= delt*sum{i in REACTIONS} R0[i];
+s.t. const7 : supp-1 <= delt*sum{i in REACTIONS} R0[i];
+s.t. const8{i in REACTIONS, j in REACTIONS: i <> j} : sum{k in REACTANTS} w[k]*(Ys[k,i]-Ys[k,j]) <= delt*(2-Rn[i]+Rn[j]-supp);
+
+
+
+/* data section */
+
+data;" > $END_GLP
+		cat "$1" >> $END_GLP
+		echo "param eps:=0.1;
+param delt:=10;
+
+end;" >> $END_GLP
+
+		$GLP --check --wlp $END_GLP.lp --math $END_GLP >&2
+		$SCIP -f $END_GLP.lp | while read i
+		do
+			printf %s\\n "$i" >&2
+			RESULT=$(printf %s\\n "$i" | grep 'objective value:')
+			if [ "$RESULT" ]
+			then
+				NOT_S_ENDOTACTIC=$(echo '<?php echo (int) '$(echo $RESULT | rev | cut -d \  -f 1 | rev)';' | $(which php))
+				if [ "$NOT_S_ENDOTACTIC" -lt 0 ]
+				then
+					printf %s\\n 'This CRN is endotactic but not strongly endotactic. According to the persistence conjecture as stated in <a href="http://www.math.wisc.edu/~craciun/PAPERS/Craciun_Nazarov_Pantea_PERSISTENCE_PERMANENCE.pdf">Gheorghe Craciun, Fedor Nazarov and Casian Pantea, "Persistence and permanence of mass-action and power-law dynamical systems", <em>SIAM Journal on Applied Mathematics</em>, <strong>73</strong> (1) (2013) 305-329</a>, this states that the network is <a href="https://reaction-networks.net/wiki/Persistence">persistent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>. Note that the persistence conjecture has been proved for some special cases, but remains open for general CRNs.'
+				else
+					printf %s\\n 'This CRN is strongly endotactic. According to <a href="http://math.uchicago.edu/~annejls/geometricGAC.pdf">Anne J. Shiu, Manoj Gopalkrishnan and Ezra Miller, "A geometric approach to the global attractor conjecture", <em>SIAM J. Appl. Dyn. Syst.</em>, <strong>13</strong> (2) (2014), 758-797</a>, this implies that the network is <a href="https://reaction-networks.net/wiki/Persistence#Permanence">permanent</a> under <a href="https://reaction-networks.net/wiki/K-variable_kinetics"><em>k</em>-variable kinetics</a>.'
+				fi
+			fi
+		done
+	fi
+	}
 fi
-}
 
 # Clean up temporary file
 rm -f $END_GLP*

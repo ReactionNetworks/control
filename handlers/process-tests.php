@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/10/2012
- * @modified   17/07/2014
+ * @modified   09/08/2014
  */
 
 /**
@@ -78,6 +78,7 @@ if( isset( $_SESSION['reaction_network'] ) and isset( $_POST['csrf_token'] ) and
 			$output = array();
 			$returnValue = 0;
 			if( isset( $_SESSION['detailed_output'] ) and $_SESSION['detailed_output'] ) $exec_string .= ' 2>&1';
+			else $exec_string .= ' 2> /dev/null';
 			exec( $exec_string, $output, $returnValue );
 			foreach( $output as $line ) $temp .= "\n$line";
 		}
