@@ -219,7 +219,7 @@ else $line_ending = PHP_EOL;
 /**
  * Client computer line ending (Windows/Mac/UNIX)
  */
-define( 'CLIENT_LINE_ENDING', $line_ending, false );
+define( 'CLIENT_LINE_ENDING', $line_ending );
 
 /*
  * Required to support cross-platform line endings on file import.
