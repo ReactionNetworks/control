@@ -186,7 +186,7 @@ if(!count($errors))
 
 		case 'sbml':
 			if( !check_file_format($_FILES['upload_network_file_input']['tmp_name'], 'application/xml' ) ) $_SESSION['errors'][] = 'Warning: the file format could not be verified correctly. Results may not be as expected.';
-			if (!$reaction_network->parseSBML($_FILES['upload_network_file_input']['tmp_name']))
+			if( $reaction_network->parseSBML( $_FILES['upload_network_file_input']['tmp_name'] ) !== true )
 			{
 				$_SESSION['errors'][] = 'An error occurred while parsing the SBML file. Please check that the output below is as expected.';
 			}

@@ -375,6 +375,7 @@ class ReactionNetwork
 	{
 		$equations = '';
 		foreach( $this->reactions as $reaction ) $equations .= $reaction->exportAsText( $line_ending );
+		if( !$equations ) $equations = 'No reactions found.';
 		return $equations;
 	}
 
@@ -1107,7 +1108,7 @@ class ReactionNetwork
 	 * Reaction network SBML parser
 	 *
 	 * @param   string  $file_name  Name of SBML file
-	 * @return  bool                Returns TRUE if SBML file successfully parsed, and FALSE otherwise
+	 * @return  mixed               Returns TRUE if SBML file successfully parsed, string containing error otherwise
 	 */
 	public function parseSBML( $file_name )
 	{
@@ -1116,7 +1117,8 @@ class ReactionNetwork
 		if( !$sbml_file->load( $file_name, LIBXML_DTDLOAD | LIBXML_DTDVALID ) )
 		{
 			$error = true;
-			$_SESSION['errors'][] = "You didn't upload a valid SBML file.";
+			$_SESSION['errors'][] = 'Invalid SBML file.';
+			return "Invalid SBML file.\r\n";
 		}
 		else
 		{
@@ -1125,6 +1127,7 @@ class ReactionNetwork
 			{
 				$error = true;
 				$_SESSION['errors'][] = 'File does not contain one model.';
+				return "File does not contain one model.\r\n";
 			}
 			else
 			{
@@ -1146,6 +1149,7 @@ class ReactionNetwork
 						{
 							$error = true;
 							$_SESSION['errors'][] = 'This model contains more than one compartment, which is not currently supported.';
+							return "This model contains more than one compartment, which is not currently supported.\r\n";
 						}
 					}
 				}
@@ -1153,6 +1157,7 @@ class ReactionNetwork
 				{
 					$error = true;
 					$_SESSION['errors'][] = 'No reactions found.';
+					return "No reactions found.\r\n";
 				}
 				else
 				{
@@ -1249,8 +1254,9 @@ class ReactionNetwork
 											} // foreach( $reaction_child_nodes as $reaction_child_node )
 											if( !$error and !$modifier_found )
 											{
-												$_SESSION['errors'][] = 'This model includes one or more reactions with unrecognised modifiers, which are not currently supported.';
 												$error = true;
+												$_SESSION['errors'][] = 'This model includes one or more reactions with unrecognised modifiers, which are not currently supported.';
+												return "This model includes one or more reactions with unrecognised modifiers, which are not currently supported.\r\n";
 											} // if( !$error and !$modifier_found )
 										} // if( $list_of_modifiers->item( $k )->nodeValue )
 									} // for( $k = 0; $k < $list_of_modifiers->length; ++$k )

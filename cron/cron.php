@@ -118,8 +118,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	if( $jobs[$i]['detailed_output'] == 1 )
 	{
 		$detailed_output = true;
-		$mail .= 'True';
-		if( fwrite( $ohandle, 'true' ) === false )
+		$mail .= 'Yes';
+		if( fwrite( $ohandle, 'Yes' ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
@@ -127,8 +127,8 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	}
 	else
 	{
-		$mail .= 'False';
-		if( fwrite( $ohandle, 'false' ) === false )
+		$mail .= 'No';
+		if( fwrite( $ohandle, 'No' ) === false )
 		{
 			$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 			$success = false;
@@ -273,17 +273,17 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 										$success = false;
 									}
 								}
-								while(!feof($fhandle) and mb_strtoupper($row) !== 'T MATRIX')
+								while( !feof( $fhandle ) and mb_strtoupper( $row ) !== 'T MATRIX' )
 								{
-									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0 and mb_strtoupper($row) !== 'T MATRIX') $sourceMatrix[] = explode(' ', $row);
+									$row = trim( preg_replace( '/\s+/', ' ', fgets( $fhandle ) ) );
+									if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0 and mb_strtoupper($row ) !== 'T MATRIX' ) $sourceMatrix[] = explode( ' ', $row );
 								}
-								while(!feof($fhandle))
+								while( !feof( $fhandle ) )
 								{
-									$row = trim(preg_replace('/\s+/', ' ', fgets($fhandle)));
-									if($row and strpos($row, '#') !== 0 and strpos($row, '//') !== 0) $targetMatrix[] = explode(' ', $row);
+									$row = trim( preg_replace( '/\s+/', ' ', fgets( $fhandle ) ) );
+									if( $row and strpos( $row, '#' ) !== 0 and strpos( $row, '//' ) !== 0 ) $targetMatrix[] = explode( ' ', $row );
 								}
-								if(!$reaction_network->parseSourceTargetStoichiometry($sourceMatrix, $targetMatrix))
+								if( !$reaction_network->parseSourceTargetStoichiometry( $sourceMatrix, $targetMatrix ) )
 								{
 									$mail .= "<p>An error was detected in the stoichiometry file. </p>\r\n";
 									$success = false;
@@ -293,12 +293,13 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							break; // End of case 4, source + target stoichiometry
 
 						case 5: // SBML (all levels)
-							$mimetype = get_mime($dirname.'/'.$file);
-							if ($mimetype === 'application/xml')
+							$mimetype = get_mime( $dirname . '/' . $file );
+							if( $mimetype === 'application/xml' )
 							{
-								if (!$reaction_network->parseSBML($dirname.'/'.$file))
+								$parse_SBML_success = $reaction_network->parseSBML( $dirname . '/' . $file );
+								if( $parse_SBML_success !== true )
 								{
-									$mail .= "<p>An error was detected in the SBML file. </p>\r\n";
+									$mail .= "<p>Warning! An error was detected in the SBML file " . end( $file_name_parts ) . ": $parse_SBML_success</p>\r\n";
 								}
 							}
 							else $file_found = false;
@@ -345,14 +346,20 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							else $file_found = false;
 							break;
 					} // end of switch ($file_format)
-
 					fclose( $fhandle );
-					if( fwrite( $ohandle, $line_ending . $line_ending . "Reaction network:$line_ending" . $reaction_network->exportReactionNetworkEquations( $line_ending ) ) . $line_ending . $line_ending === false )
+
+					if( !$reaction_network->getNumberOfReactions() )
+					{
+						fwrite( $ohandle, $line_ending . $line_ending . 'Error: Reaction network contains no reactions. Aborting tests.' );
+						$success = false;
+					}
+
+					if( fwrite( $ohandle, $line_ending . $line_ending . "Reaction network:$line_ending" . $reaction_network->exportReactionNetworkEquations( $line_ending ) . $line_ending . $line_ending ) === false )
 					{
 						$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 						$success = false;
 					}
-					if ($success)
+					if( $success )
 					{
 						// Initialise ini file for passing results between tests
 						$inifilename = $filename . '.ini';
@@ -446,7 +453,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 							{
 								$extension = '';
 								$temp = '';
-								if( fwrite( $ohandle, $line_ending . "### TEST: {$currentTest->getShortName()} ###{$line_ending$line_ending}Test start time: " . date('Y-m-d H:i:s') . $line_ending . $line_ending ) === false )
+								if( fwrite( $ohandle, $line_ending . "### TEST: {$currentTest->getShortName()} ###" . $line_ending . $line_ending . " Test start time: " . date('Y-m-d H:i:s') . $line_ending . $line_ending ) === false )
 								{
 									$mail .= "<p>ERROR: Cannot write to file ($output_filename)</p>\r\n";
 									$success = false;
@@ -584,7 +591,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	{
 		exit( "Cannot open <$zipfilename>\n" );
 	}
-	$zip->addFile( TEMP_FILE_DIR . '/' . $jobs[$i]['filekey'] . '.txt' , sanitise( $jobs[$i]['original_filename'] ) . '_output.txt' );
+	$zip->addFile( TEMP_FILE_DIR . '/' . $jobs[$i]['filekey'] . '.txt' , sanitise( str_replace( '.zip', '', $jobs[$i]['original_filename'] ) ) . '_output.txt' );
 	$zip->close();
 	unlink( TEMP_FILE_DIR . '/' . $jobs[$i]['filekey'] . '.txt' );
 } // for($i = 0; $i < $number_of_jobs; ++$i)
