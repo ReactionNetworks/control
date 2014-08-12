@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   15/07/2014
+ * @modified   12/08/2014
  */
 
 /**
@@ -72,7 +72,7 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_network_file_input">Choose a file to upload:</label>
-							<input type="file" id="upload_network_file_input" name="upload_network_file_input" size="48" accept=".txt,.xml,text/*,application/xml,application/sbml+xml" />
+							<input type="file" id="upload_network_file_input" name="upload_network_file_input" accept="text/*,application/xml,application/sbml+xml" />
 						</p>
 						<p class="left_centred">
 							File format:<br /><?php
@@ -90,7 +90,7 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_batch_file_input">Choose a file to upload:</label>
-							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" size="48" accept=".zip,application/zip,application/octet-stream" /><br />
+							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" accept="application/zip,application/octet-stream" /><br />
 							<span class="small">Maximum file size:
 <?php
 if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
@@ -103,12 +103,12 @@ else echo ini_get('upload_max_filesize');
 						</p>
 						<p>
 							<label for="upload_batch_file_email">Email address for results:</label>
-							<input type="text" id="upload_batch_file_email" name="upload_batch_file_email" size="32" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?>/><br />
+							<input type="email" id="upload_batch_file_email" name="upload_batch_file_email" size="32" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?> placeholder="you@example.com" /><br />
 							<span id="upload_batch_file_email_error">&nbsp;</span>
 						</p>
 						<p>
 							<label for="upload_batch_file_label">(Optional) label for results:</label>
-							<input type="text" id="upload_batch_file_label" name="upload_batch_file_label" size="32" />
+							<input type="text" id="upload_batch_file_label" name="upload_batch_file_label" size="32" autocomplete="off" spellcheck="false" placeholder="Example label" />
 						</p>
 						<p>
 							File format:<br />
@@ -125,7 +125,7 @@ if( REQUIRE_CAPTCHA ):
 						<div>
 							<p>Enter security code (required):<br />
 								<span class="bold"><label for="batch_security_code" id="batch_security_code_label"><?php batch_captcha(); ?></label></span>
-								<input type="text" name="batch_security_code" id="batch_security_code"/>
+								<input type="text" name="batch_security_code" id="batch_security_code" autocomplete="off" spellcheck="false" placeholder="XXXXX" />
 							</p>
 						</div>
 <?php
@@ -152,7 +152,7 @@ else echo '						<p>The DSR graph requires Java to view, which is not installed 
 							Tick/untick the checkboxes to enable/disable each test.
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 						</p>
-						<table summary="Control whether each test is enabled or disabled">
+						<table>
 							<thead>
 								<tr>
 									<th class="test_checkboxes">&#x2713;</th>
@@ -186,7 +186,6 @@ if(count($standardTests))
 							</tbody>
 						</table>
 						<h2>Other options:</h2>
-						<!--p><input type="checkbox" name="mass_action" id="mass_action_checkbox"<?php if(isset($_SESSION['mass_action_only']) and $_SESSION['mass_action_only']) echo ' checked="checked"'; ?> /> <label for="mass_action_checkbox">Test mass action kinetics only (when supported)</label></p-->
 						<p><input type="checkbox" name="detailed_output" id="detailed_output_checkbox"<?php if(isset($_SESSION['detailed_output']) and $_SESSION['detailed_output']) echo ' checked="checked"'; ?> /> <label for="detailed_output_checkbox">Show detailed test output</label></p>
 					</form><!-- option_holder -->
 				</div><!-- popup_hider -->

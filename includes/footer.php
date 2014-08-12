@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   09/08/2014
+ * @modified   12/08/2014
  */
 ?>
 			</div><!-- content -->
@@ -86,5 +86,3 @@ endif;
 				</p><!-- credits -->
 			</div><!-- footer -->
 		</div><!-- container -->
-	</body>
-</html>
