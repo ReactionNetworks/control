@@ -12,7 +12,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/04/2013
- * @modified   09/08/2014
+ * @modified   13/08/2014
  */
 
 /**
@@ -67,6 +67,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 
 for($i = 0; $i < $number_of_jobs; ++$i)
 {
+	$success = true;
 	$output_filename = TEMP_FILE_DIR.'/'.$jobs[$i]['filekey'].'.txt';
 	if(!$ohandle = fopen($output_filename, 'w'))
 	{
@@ -211,6 +212,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 		{
 			foreach( $extracted_files as $file )
 			{
+				$success = true;
 				if( !is_dir( $file ) )
 				{
 					$file_found = true;
