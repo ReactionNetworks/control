@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/08/2014
+ * @modified   13/08/2014
  */
 
 $title = 'CoNtRol - test results';
@@ -82,7 +82,7 @@ else echo '						<p>The DSR graph requires Java to view, which is not installed 
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="results_email">Email address for results:</label>
-							<input type="email" id="results_email" name="email" size="48" <?php if(isset($_SESSION['email'])) echo 'value="', sanitise($_SESSION['email']), '" '; ?> placeholder="you@example.com" /><br />
+							<input type="email" id="results_email" name="email" required size="48" <?php if(isset($_SESSION['email'])) echo 'value="', sanitise($_SESSION['email']), '" '; ?> placeholder="you@example.com" /><br />
 							<label for="results_label">Optional label:</label>
 							<input type="text" id="results_label" name="label" size="48" autocomplete="off" spellcheck="false" placeholder="Example label" /><br />
 							<span id="email_results_error">&nbsp;</span>

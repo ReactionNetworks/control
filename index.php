@@ -10,7 +10,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/08/2014
+ * @modified   13/08/2014
  */
 
 /**
@@ -90,7 +90,7 @@ if(isset($_SESSION['test_output']) and count($_SESSION['test_output'])) echo '		
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 							<label for="upload_batch_file_input">Choose a file to upload:</label>
-							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" accept="application/zip,application/octet-stream" /><br />
+							<input type="file" id="upload_batch_file_input" name="upload_batch_file_input" required accept="application/zip,application/octet-stream" /><br />
 							<span class="small">Maximum file size:
 <?php
 if(return_bytes(ini_get('post_max_size') < return_bytes(ini_get('upload_max_filesize')))) echo ini_get('post_max_size');
@@ -103,7 +103,7 @@ else echo ini_get('upload_max_filesize');
 						</p>
 						<p>
 							<label for="upload_batch_file_email">Email address for results:</label>
-							<input type="email" id="upload_batch_file_email" name="upload_batch_file_email" size="32" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?> placeholder="you@example.com" /><br />
+							<input type="email" id="upload_batch_file_email" name="upload_batch_file_email" required size="32" <?php if(isset($_SESSION['email'])) echo 'value = "', sanitise($_SESSION['email']), '" '; ?> placeholder="you@example.com" /><br />
 							<span id="upload_batch_file_email_error">&nbsp;</span>
 						</p>
 						<p>
@@ -125,7 +125,7 @@ if( REQUIRE_CAPTCHA ):
 						<div>
 							<p>Enter security code (required):<br />
 								<span class="bold"><label for="batch_security_code" id="batch_security_code_label"><?php batch_captcha(); ?></label></span>
-								<input type="text" name="batch_security_code" id="batch_security_code" autocomplete="off" spellcheck="false" placeholder="XXXXX" />
+								<input type="text" name="batch_security_code" id="batch_security_code" required autocomplete="off" spellcheck="false" placeholder="XXXXX" />
 							</p>
 						</div>
 <?php

@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/08/2014
+ * @modified   13/08/2014
  */
 
 /**
@@ -17,7 +17,7 @@ function addReaction()
 {
 	++number_of_reactions;
 
-	$( '#tools_holder' ).before( '<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" spellcheck="false" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" spellcheck="false" /> </fieldset>' );
+	$( '#tools_holder' ).before( '<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" spellcheck="false" placeholder="&empty;" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" spellcheck="false" placeholder="&empty;" /> </fieldset>' );
 
 	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
