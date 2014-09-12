@@ -7,7 +7,7 @@
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   13/08/2014
+ * @modified   12/09/2014
  */
 
 /**
@@ -21,22 +21,25 @@ function addReaction()
 
 	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
-		$( this ).keyup( function( e ) {
-			if( validateKeyPress( $( this ) ) )
+		// Prevent double binding
+		$( this ).off( 'keydown keyup' );
+		// Capture Enter key
+		$( this ).on( 'keydown', function( e )
+		{
+			if( e.which == 13 ) e.preventDefault();
+		} );
+		// Validate input and check for network submission
+		$( this ).on( 'keyup', function( e )
+		{
+			if( e.which == 13 )
 			{
-				$( this ).keypress( function( e ) {
-					code = e.which;
-					if( code == 10 || code == 13 )
-					{
-						e.preventDefault();
-						$( '#process_network_button' ).click();
-					}
-				});
+				if( validateKeyPress( $( this ) ) )
+				{
+					$( '#process_network_button' ).click();
+				}
 			}
-		});
-		$( this ).change( function() { validateKeyPress( $( this ) ); } );
-		$( this ).blur( function() { validateKeyPress( $( this ) ); } );
-	});
+		} );
+	} );
 }
 
 /**
@@ -44,10 +47,10 @@ function addReaction()
  */
 function detectWindowSize()
 {
-	if($(window).innerWidth() > 800) popupWidth = $(window).innerWidth() - 256;
-	else popupWidth = $(window).innerWidth() - 16;
-	if($(window).innerHeight() > 800) popupHeight = $(window).innerHeight() - 256;
-	else popupHeight = $(window).innerHeight() - 16;
+	if( $( window ).innerWidth() > 800 ) popupWidth = $( window ).innerWidth() - 256;
+	else popupWidth = $( window ).innerWidth() - 16;
+	if( $( window ).innerHeight() > 800 ) popupHeight = $( window ).innerHeight() - 256;
+	else popupHeight = $( window ).innerHeight() - 16;
 }
 
 /**
@@ -55,11 +58,11 @@ function detectWindowSize()
  */
 function disableButtons()
 {
-	$('#dsr_graph_button').addClass('disabled');
-	$('#process_network_button').addClass('disabled');
-	$('#download_network_file_button').addClass('disabled');
-	$('#latex_output_button').addClass('disabled');
-	$('#reset_reaction_button').addClass('disabled');
+	$( '#dsr_graph_button' ).addClass( 'disabled' );
+	$( '#process_network_button' ).addClass( 'disabled' );
+	$( '#download_network_file_button' ).addClass( 'disabled' );
+	$( '#latex_output_button' ).addClass( 'disabled' );
+	$( '#reset_reaction_button' ).addClass( 'disabled' );
 }
 
 /**
@@ -68,12 +71,12 @@ function disableButtons()
 function enableButtons()
 {
 	// Remove reaction button doesn't need to be enabled, as it is automatically enabled/disabled based on the number of reactions
-	$('#dsr_graph_button').removeClass('disabled');
-	$('#process_network_button').removeClass('disabled');
-	$('#download_network_file_button').removeClass('disabled');
-	$('#download_network_file_button').removeAttr('disabled');
-	$('#latex_output_button').removeClass('disabled');
-	$('#reset_reaction_button').removeClass('disabled');
+	$( '#dsr_graph_button' ).removeClass( 'disabled' );
+	$( '#process_network_button' ).removeClass( 'disabled' );
+	$( '#download_network_file_button' ).removeClass( 'disabled' );
+	$( '#download_network_file_button' ).removeAttr( 'disabled' );
+	$( '#latex_output_button' ).removeClass( 'disabled' );
+	$( '#reset_reaction_button' ).removeClass( 'disabled' );
 }
 
 /**
@@ -81,15 +84,15 @@ function enableButtons()
  */
 function generateLaTeX()
 {
-	var numberOfRows = $('.reaction_input_row').length;
+	var numberOfRows = $( '.reaction_input_row' ).length;
 	var numberOfColumns = 0;
 	var textOutput = '\\begin{array}{rcl}\n';
-	$('.reaction_input_row').each(function(index, element)
+	$( '.reaction_input_row' ).each( function( index, element )
 	{
-		if($('.reaction_left_hand_side', $(this)).val() == '' || $('.reaction_left_hand_side', $(this)).val() == ' ' || $('.reaction_left_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
-		else textOutput += $('.reaction_left_hand_side', $(this)).val().replace('&', '\\&amp;');
+		if( $( '.reaction_left_hand_side', $( this ) ).val() == '' || $( '.reaction_left_hand_side', $( this ) ).val() == ' ' || $( '.reaction_left_hand_side', $( this ) ).val() == '  ' ) textOutput += '\\emptyset';
+		else textOutput += $( '.reaction_left_hand_side', $( this ) ).val().replace( '&', '\\&amp;' );
 		textOutput += ' &amp; ';
-		switch($('select.reaction_direction option:selected', $(this)).val())
+		switch( $( 'select.reaction_direction option:selected', $( this ) ).val())
 		{
 			case 'left':
 				textOutput += '\\leftarrow';
@@ -104,34 +107,33 @@ function generateLaTeX()
 				textOutput += ' ? ';
 		}
 		textOutput += ' &amp; ';
-		if($('.reaction_right_hand_side', $(this)).val() == '' || $('.reaction_right_hand_side', $(this)).val() == ' ' || $('.reaction_right_hand_side', $(this)).val() == '  ') textOutput += '\\emptyset';
-		else textOutput += $('.reaction_right_hand_side', $(this)).val().replace('&', '\\&');
-		textOutput = textOutput.replace('$', '\\$');
+		if( $( '.reaction_right_hand_side', $( this ) ).val() == '' || $( '.reaction_right_hand_side', $( this ) ).val() == ' ' || $( '.reaction_right_hand_side', $( this ) ).val() == '  ' ) textOutput += '\\emptyset';
+		else textOutput += $( '.reaction_right_hand_side', $( this ) ).val().replace( '&', '\\&' );
+		textOutput = textOutput.replace( '$', '\\$' );
 		textOutput += ' ';
-		if(index < numberOfRows - 1) textOutput += '\\\\';
+		if( index < numberOfRows - 1 ) textOutput += '\\\\';
 		textOutput += '\n';
 	});
-	var allLines = textOutput.split('\n');
-	for(i = 0; i < allLines.length; ++i)
+	var allLines = textOutput.split( '\n' );
+	for( i = 0; i < allLines.length; ++i )
 	{
-		if(allLines[i].length > numberOfColumns) numberOfColumns = allLines[i].length;
+		if( allLines[i].length > numberOfColumns ) numberOfColumns = allLines[i].length;
 	}
 	numberOfColumns *= 2;
 	numberOfRows += 3;
 	textOutput = '<p>Reactions:</p><textarea rows="' + numberOfRows + '" cols="' + numberOfColumns + '">\n' + textOutput + '\\end{array}</textarea><p>Stoichiometry matrix:</p><textarea rows="' + numberOfRows*2 + '" cols="' + numberOfColumns + '">\\Gamma = ';
 	var url = 'handlers/get-net-stoichiometry.php';
-	var data = {csrf_token: csrf_token};
-	$.post(url, data, function(returndata)
+	var data = { csrf_token: csrf_token };
+	$.post( url, data, function( returndata )
 	{
-		textOutput += returndata.replace('&', '&amp;') + '\n</textarea>\n<p>Reaction rate Jacobian:</p><textarea rows="' + numberOfRows*2 + '" cols="' + numberOfColumns + '">V^T = ';
+		textOutput += returndata.replace( '&', '&amp;' ) + '\n</textarea>\n<p>Reaction rate Jacobian:</p><textarea rows="' + numberOfRows*2 + '" cols="' + numberOfColumns + '">V^T = ';
 		url = 'handlers/get-v-matrix.php';
-		$.post(url, data, function(returndata)
+		$.post( url, data, function( returndata )
 		{
-			textOutput += returndata.replace('&', '&amp;') + '\n</textarea>\n';
-			$('#latex_output_holder').html(textOutput);
-		});
-	}
-	);
+			textOutput += returndata.replace( '&', '&amp;' ) + '\n</textarea>\n';
+			$( '#latex_output_holder' ).html( textOutput );
+		} );
+	} );
 }
 
 /**
@@ -142,7 +144,7 @@ function processTests( test_number )
 	setTimeout( function()
 	{
 		var url = 'handlers/process-tests.php';
-		data = {csrf_token: csrf_token};
+		data = { csrf_token: csrf_token };
 		var timeout_countdown = test_timeout_limit;
 		$( '#calculation_output_holder' ).append( '<p id="timeout_countdown_holder">Processing test ' + test_number + '... <span id="timeout_countdown">' + test_timeout_limit + '</span> seconds until timeout.</p>' );
 		clearInterval( timer_id );
@@ -198,6 +200,7 @@ function removeReaction( notify_user )
 
 	$( '#reaction_input_form fieldset' ).filter( ':last' ).remove();
 	--number_of_reactions;
+	saveNetwork();
 }
 
 /**
@@ -222,7 +225,7 @@ function resetReactions()
 	while( $( '#reaction_input_form fieldset' ).length - 1 ) removeReaction( false );
 	$( '#remove_reaction_button' ).addClass( 'disabled' );
 	var url = 'handlers/reset-reactions.php';
-	var data = {reset_reactions: 1, csrf_token: csrf_token};
+	var data = { reset_reactions: 1, csrf_token: csrf_token };
 	$.post( url, data );
 	if( $( '#error_message_holder' ) ) $( '#error_message_holder' ).hide();
 	if( $( '#results_link' ) ) $( '#results_link' ).hide();
@@ -237,14 +240,14 @@ function saveNetwork()
 	validNetwork = true;
 	var url = 'handlers/process-network.php';
 	var reactionsLeftHandSide = new Array();
-	$.each($('.reaction_left_hand_side'), function(index, value)
+	$.each( $( '.reaction_left_hand_side' ), function( index, value )
 	{
-		reactionsLeftHandSide.push(value.value);
+		reactionsLeftHandSide.push( value.value );
 	} );
 	var reactionsRightHandSide = new Array();
-	$.each($('.reaction_right_hand_side'), function(index, value)
+	$.each( $( '.reaction_right_hand_side' ), function( index, value )
 	{
-		reactionsRightHandSide.push(value.value);
+		reactionsRightHandSide.push( value.value );
 	} );
 	var reactionsDirection = new Array();
 	$.each( $( '.reaction_direction :selected' ), function( index, value )
@@ -254,9 +257,9 @@ function saveNetwork()
 	var testSettings = new Array();
 	$.each( $( '.test' ), function( index, v )
 	{
-		testSettings.push( {name: $( this ).attr( 'name' ), value: $( this ).val()} );
+		testSettings.push( { name: $( this ).attr( 'name' ), value: $( this ).val() } );
 	} );
-	var data = {'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'test_settings': testSettings, csrf_token: csrf_token};
+	var data = { 'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'test_settings': testSettings, csrf_token: csrf_token };
 	$.post( url, data, function( returndata )
 	{
 		if( returndata.length )
@@ -282,17 +285,7 @@ function showTestOutput( output )
 function toggleDetailedOutput( newStatus )
 {
 	var url = 'handlers/toggle-detailed-output.php';
-	var data = {detailed_output: newStatus, csrf_token: csrf_token};
-	$.post( url, data );
-}
-
-/**
- * Enables/disables the --mass-action-only flag via AJAX
- */
-function toggleMassAction( newStatus )
-{
-	var url = 'handlers/toggle-mass-action.php';
-	var data = {mass_action_only: newStatus, csrf_token: csrf_token};
+	var data = { detailed_output: newStatus, csrf_token: csrf_token };
 	$.post( url, data );
 }
 
@@ -302,7 +295,7 @@ function toggleMassAction( newStatus )
 function toggleTest( testName, newStatus )
 {
 	var url = 'handlers/toggle-test.php';
-	var data = {testName: testName, active: newStatus, csrf_token: csrf_token};
+	var data = { testName: testName, active: newStatus, csrf_token: csrf_token };
 	$.post( url, data );
 }
 
@@ -333,16 +326,13 @@ function validateKeyPress( inputElement )
 			$( '#hidden_character_warning' ).css( 'top', position.top + 48 );
 			$( '#hidden_character_warning' ).css( 'left', position.left );
 			$( '#hidden_character_warning' ).show();
-			setTimeout( function()
-			{
-				$( '#hidden_character_warning' ).hide();
-			}, 1500);
+			setTimeout( function() { $( '#hidden_character_warning' ).hide(); }, 1500);
 		}
 	}
 	var validInput = true;
 	var totalChars = 0;
 	$( '#missing_reactant_warning' ).hide();
-	$( '.reaction_left_hand_side' ).each( function()
+	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
 		$( this ).css( 'border-color', '' );
 		totalChars += $( this ).val().length;
@@ -356,26 +346,11 @@ function validateKeyPress( inputElement )
 			$( '#missing_reactant_warning' ).css( 'left', position.left );
 			$( '#missing_reactant_warning' ).show();
 		}
-	});
-	$( '.reaction_right_hand_side' ).each( function()
-	{
-		$( this ).css( 'border-color', '' );
-		totalChars += $( this ).val().length;
-		rhs = $.trim( $( this ).val() );
-		if( rhs.indexOf( '+' ) == 0 || rhs[rhs.length - 1] == '+' || rhs.indexOf( '++' ) > -1 || rhs.indexOf( '+ +' ) > -1 || rhs.indexOf( '+  +' ) > -1 )
-		{
-			validInput = false;
-			$( this ).css( 'border-color', 'red' );
-			var position = inputElement.position();
-			$( '#missing_reactant_warning').css( 'top', position.top + 48 );
-			$( '#missing_reactant_warning').css( 'left', position.left );
-			$( '#missing_reactant_warning').show();
-		}
-	});
+	} );
 	if( validInput && totalChars )
 	{
-		enableButtons();
 		saveNetwork();
+		enableButtons();
 		return true;
 	}
 	else
@@ -385,6 +360,7 @@ function validateKeyPress( inputElement )
 	}
 }
 
+var networkSubmitted = false;
 var popupWidth = 800;
 var popupHeight = 600;
 var popupMargin = 16;
@@ -417,7 +393,7 @@ $( document ).ready( function()
 			$( '#tools_show' ).html( 'Show' );
 			toolsShown = false;
 		}
-	});
+	} );
 
 	// Similarly, more analysis options slide down
 	var moreActionsShown = false;
@@ -435,14 +411,14 @@ $( document ).ready( function()
 			$(' #more_actions_show' ).html( 'More' );
 			moreActionsShown = false;
 		}
-	});
+	} );
 
 	$( '#add_reaction_button' ).click( function()
 	{
 		addReaction();
 		$( '#remove_reaction_button' ).removeClass( 'disabled' );
 		return false;
-	});
+	} );
 
 	$( '#remove_reaction_button' ).click( function()
 	{
@@ -454,27 +430,43 @@ $( document ).ready( function()
 		}
 		if( $( '#reaction_input_form > fieldset' ).length == 1 && $( '#reaction_input_form > fieldset .reaction_left_hand_side' ).val() == '' && $( '#reaction_input_form > fieldset .reaction_right_hand_side' ).val() == '') $( '#reset_reaction_button' ).addClass( 'disabled' );
 		return false;
-	});
+	} );
 
 	$( '#reset_reaction_button' ).click( function()
 	{
 		if( !$( this ).hasClass( 'disabled' ) ) resetReactions();
 		return false;
-	});
+	} );
+
+	$( '.reaction_direction' ).each( function()
+	{
+		// Prevent double binding
+		$( this ).off();
+		// Bind change handler
+		$( this ).change( function()
+		{
+			saveNetwork();
+		} );
+	} );
 
 	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
-		$( this ).keyup( function( e ) {
-			if( validateKeyPress( $( this ) ) )
+		// Prevent double binding
+		$( this ).off( 'keydown keyup' );
+		// Capture Enter key
+		$( this ).on( 'keydown', function( e )
+		{
+			if( e.which == 13 ) e.preventDefault();
+		} );
+		// Validate input and check for network submission
+		$( this ).on( 'keyup', function( e )
+		{
+			if( e.which == 13 )
 			{
-				$( this ).keypress( function( e ) {
-					code = e.which;
-					if( code == 10 || code == 13 )
-					{
-						e.preventDefault();
-						$( '#process_network_button' ).click();
-					}
-				} );
+				if( validateKeyPress( $( this ) ) )
+				{
+					$( '#process_network_button' ).click();
+				}
 			}
 		} );
 	} );
@@ -492,8 +484,8 @@ $( document ).ready( function()
 	$( '#reset_reaction_button' ).height( buttonSize );
 	$( '#reset_reaction_button' ).width( buttonSize );
 
-	$( '.fancybox' ).fancybox( {autoDimensions: true, width: popupWidth, height: popupHeight} );
-	$( '.fancybox_dynamic' ).fancybox( {autoDimensions: false, width: popupWidth, height: popupHeight} );
+	$( '.fancybox' ).fancybox( { autoDimensions: true, width: popupWidth, height: popupHeight } );
+	$( '.fancybox_dynamic' ).fancybox( { autoDimensions: false, width: popupWidth, height: popupHeight } );
 
 	$( '#crn_description' ).focus( function()
 	{
@@ -568,13 +560,6 @@ $( document ).ready( function()
 		}
 	} );
 
-	$( '#mass_action_checkbox' ).change( function()
-	{
-		var activated = 0;
-		if( $( this ).is( ':checked' ) ) activated = 1;
-		toggleMassAction( activated );
-	} );
-
 	$( '#option_holder input[name*="test_checkbox"]' ).change( function()
 	{
 		var testName = $( this ).attr( 'name' ).slice( 14, -1 );
@@ -585,10 +570,11 @@ $( document ).ready( function()
 
 	$( '#process_network_button' ).click( function()
 	{
-		if( !$( this ).hasClass( 'disabled' ) )
+		if( !networkSubmitted && !$( this ).hasClass( 'disabled' ) )
 		{
 			resetPopup();
 			$.when( saveNetwork() ).then( processTests( 1 ) );
+			networkSubmitted = true;
 		}
 		return false;
 	} );
@@ -607,7 +593,7 @@ $( document ).ready( function()
 			$('#email_results_button').addClass('disabled');
 			$('#email_results_button').attr('disabled', 'disabled');
 		}
-	});
+	} );
 
 	$('#results_email').keyup(function()
 	{
@@ -623,12 +609,12 @@ $( document ).ready( function()
 			$('#email_results_button').addClass('disabled');
 			$('#email_results_button').attr('disabled', 'disabled');
 		}
-	});
+	} );
 
 	$( 'th.test_checkboxes' ).click( function()
 	{
 		$( 'input[name*=test_checkbox]' ).each( function() { $( this ).prop( 'checked', true ).trigger( 'change' ) } );
-	});
+	} );
 
 	$('#upload_batch_file_email').change(function()
 	{
@@ -642,7 +628,7 @@ $( document ).ready( function()
 			}
 		}
 		else $('#upload_batch_file_email_error').html('Invalid email address');
-	});
+	} );
 
 	$('#upload_batch_file_email').keyup(function()
 	{
@@ -661,7 +647,7 @@ $( document ).ready( function()
 			$('#upload_batch_file_button').addClass('disabled');
 			$('#upload_batch_file_button').attr('disabled', 'disabled');
 		}
-	});
+	} );
 
 	$('#upload_batch_file_input').change(function()
 	{
@@ -670,13 +656,13 @@ $( document ).ready( function()
 			$('#upload_batch_file_button').removeClass('disabled');
 			$('#upload_batch_file_button').removeAttr('disabled');
 		}
-	});
+	} );
 
 	$('#upload_network_file_input').change(function()
 	{
 		$('#upload_network_file_button').removeClass('disabled');
 		$('#upload_network_file_button').removeAttr('disabled');
-	});
+	} );
 
 	$( window ).resize( function() { detectWindowSize(); } );
 
@@ -684,4 +670,4 @@ $( document ).ready( function()
 	{
 		$( '.reaction_left_hand_side' ).first().select();
 	}
-});
+} );
