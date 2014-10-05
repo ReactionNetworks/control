@@ -31,9 +31,9 @@ function addReaction()
 		// Validate input and check for network submission
 		$( this ).on( 'keyup', function( e )
 		{
-			if( e.which == 13 )
+			if( validateKeyPress( $( this ) ) )
 			{
-				if( validateKeyPress( $( this ) ) )
+				if( e.which == 13 )
 				{
 					$( '#process_network_button' ).click();
 				}
@@ -461,9 +461,9 @@ $( document ).ready( function()
 		// Validate input and check for network submission
 		$( this ).on( 'keyup', function( e )
 		{
-			if( e.which == 13 )
+			if( validateKeyPress( $( this ) ) )
 			{
-				if( validateKeyPress( $( this ) ) )
+				if( e.which == 13 )
 				{
 					$( '#process_network_button' ).click();
 				}
