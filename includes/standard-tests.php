@@ -55,7 +55,7 @@ $standardTests = array(
 	(
 		'endotactic',
 		'Endotactic',
-		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="http://scip.zib.de/">SCIP</a> by Matthew Johnston, Pete Donnell and Casian Pantea, based on <a href="http://arxiv.org/abs/1412.4662">&ldaquo;A computational approach to persistence, permanence, and endotacticity of biochemical reaction systems&rdquo;</a>.',
+		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="http://scip.zib.de/">SCIP</a> by Matthew Johnston, Pete Donnell and Casian Pantea, based on <a href="http://arxiv.org/abs/1412.4662">&ldquo;A computational approach to persistence, permanence, and endotacticity of biochemical reaction systems&rdquo;</a>.',
 		'endotactic',
 		array( 'GLPK' ),
 		$doesNotSupportIniFile
