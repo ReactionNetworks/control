@@ -6,12 +6,12 @@
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @author     Murad Banaji <murad-dot-banaji-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/01/2013
- * @modified   09/08/2014
+ * @modified   11/04/2017
  */
 
 $supportsIniFile = true;
@@ -68,6 +68,17 @@ $standardTests = array(
 		'Isomorphism lookup',
 		'Tests whether the network is isomorphic to a known network with interesting properties. Implemented in <a href="http://www.sagemath.org/">Sage</a> by Pete Donnell, Casian Pantea and Murad Banaji.',
 		'isomorphic',
+		array( 'human' ),
+		$doesNotSupportIniFile
+	),
+
+
+	new NetworkTest
+	(
+		'3d-global-convergence',
+		'Convergence to equilibrium in 3D',
+		'Tests whether the CRN has a 3D stoichiometric subspace and always converges to equilibrium, based on a theoretical result by Li. Note: this is a work in progress. Implemented by Pete Donnell.',
+		'3d-global-convergence',
 		array( 'human' ),
 		$doesNotSupportIniFile
 	),

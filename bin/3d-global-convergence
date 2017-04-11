@@ -1,0 +1,159 @@
+#!/usr/bin/env php
+<?php
+/**
+ * CoNtRol CRN graph isomorphism test
+ *
+ * Tests whether a given CRN is isomorphic to a CRN with known properties.
+ *
+ * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
+ * @copyright  2017 Kitson Consulting Limited
+ * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
+ * @see        https://reaction-networks.net/control/documentation/
+ * @package    CoNtRol
+ * @created    11/04/2017
+ * @modified   11/04/2017
+ */
+
+/**
+ * Standard include
+ */
+require_once( '../includes/classes.php' );
+
+/**
+ * Standard include
+ */
+require_once( '../includes/config.php' );
+
+/**
+ * Standard include
+ */
+require_once( '../includes/functions.php' );
+
+// Check that this script was correctly invoked
+$stderr = fopen( 'php://stderr', 'w' );
+if( $argc === 2 )
+{
+	// Load the CRN from file
+	$filename = $argv[1];
+	if( $filename )
+	{
+		$fhandle = fopen( $filename, 'r' );
+		$reaction_network = new ReactionNetwork();
+		$error = false;
+		while( !feof( $fhandle ) )
+		{
+			$reactionString = fgets( $fhandle );
+			if( $reactionString and strpos( $reactionString, '#' ) !== 0 and strpos( $reactionString, '//' ) !== 0 )
+			{
+				$newReaction = Reaction::parseReaction( $reactionString );
+				if( $newReaction ) $reaction_network->addReaction( $newReaction );
+				elseif( !$error )
+				{
+					echo 'An error occurred while adding a reaction. Output may not be as expected.';
+					$error = true;
+				}
+			}
+		}
+		$net_matrix = $reaction_network->generateIrreversibleStoichiometryMatrix();
+		$number_of_reactions = $reaction_network->getNumberOfReactions();
+		$number_of_species = count( $net_matrix );
+		fwrite( $stderr, 'Reactions: ' . $number_of_reactions . PHP_EOL );
+		fwrite( $stderr, 'Species: ' . $number_of_species . PHP_EOL );
+
+		if( $number_of_reactions < 3 or $number_of_species < 3 )
+		{
+			echo 'Stoichiometric subspace has dimension less than 3. This CRN is not globally convergent under the conditions described in TODO.' . PHP_EOL;
+		}
+		else
+		{
+			if( CRNDEBUG ) echo print_r( $net_matrix, true );
+			$octave = 'disp( rank( [';
+			foreach( $net_matrix as $row )
+			{
+				foreach( $row as $entry )
+				{
+					$octave .= $entry . ', ';
+				}
+				$octave .= '_';
+			}
+			$octave .= '] ) );' . PHP_EOL;
+			$octave = str_replace( ', _]', ' ]', $octave );
+			$octave = str_replace( ', _', PHP_EOL, $octave );
+			$octave_filename = tempnam( TEMP_FILE_DIR, 'crnoctave.' );
+			if( !$handle = fopen( $octave_filename, 'w' ) )
+			{
+				die( "ERROR: Cannot open file ($octave_filename)" );
+			}
+			if( fwrite( $handle, $octave ) === false )
+			{
+				die( "ERROR: Cannot write to file ($octave_filename)" );
+			}
+			fclose( $handle );
+
+			if( CRNDEBUG ) echo $octave;
+			// TODO: octave-cli isn't always present, need fallback
+			//$rank = (int) exec( '$(which octave) --quiet --no-history --no-window-system ' . $octave_filename );
+			$rank = (int) exec( 'octave-cli ' . $octave_filename );
+			unlink( $octave_filename );
+			if( CRNDEBUG ) echo $rank . PHP_EOL;
+			if( $rank !== 3 )
+			{
+				echo 'Stoichiometric subspace does not have dimension 3. This CRN is not globally convergent under the conditions described in TODO.' . PHP_EOL;
+			}
+			else
+			{
+				$error = '';
+				$max_entries = [];
+				$left_matrix = $reaction_network->generateIrreversibleSourceStoichiometryMatrix();
+				$right_matrix = $reaction_network->generateIrreversibleTargetStoichiometryMatrix();
+				foreach( $left_matrix[0] as $entry )
+				{
+					$max_entries[] = $entry;
+				}
+				if( CRNDEBUG ) echo 'LHS matrix:' . PHP_EOL;
+				for( $i = 0; $i < count( $left_matrix ); ++$i )
+				{
+					$row = $left_matrix[$i];
+					for( $j = 0; $j < count( $row ); ++$j )
+					{
+						if( $row[$j] > 0 )
+						{
+							if( $max_entries[$j] === 0 ) $max_entries[$j] = $row[$j];
+							elseif( $row[$j] !== $max_entries[$j] )
+							{
+								$error .= 'Column ' . ( $j + 1 ) . ' of LHS contains entry with wrong magnitude on row ' . ( $i + 1 ) . '. This CRN is not globally convergent under the conditions described in TODO.' . PHP_EOL;
+							}
+						}
+						if( CRNDEBUG ) echo $left_matrix[$i][$j] . ' ';
+					}
+					if( CRNDEBUG ) echo PHP_EOL;
+				}
+				if( CRNDEBUG ) echo 'RHS matrix:' . PHP_EOL;
+				if( !$error )
+				{
+					for( $i = 0; $i < count( $right_matrix ); ++$i )
+					{
+						for( $j = 0; $j < count( $right_matrix[$i] ); ++$j )
+						{
+							if( $left_matrix[$i][$j] > 0 and $left_matrix[$i][$j] <= $right_matrix[$i][$j] )
+							{
+								$error .= 'Reaction ' . ( $j + 1 ) . ' includes species ' . ( $i + 1 ) . ' as a reactant, but the reaction does not consume more of the species than it produces. This CRN is not globally convergent under the conditions described in TODO.' . PHP_EOL;
+							}
+							elseif( $max_entries[$j] > 0 and $right_matrix[$i][$j] > $max_entries[$j] )
+							{
+								$error .= 'Column ' . ( $j + 1 ) . ' of RHS contains entry with wrong magnitude on row ' . ( $i + 1 ) . '. This CRN is not globally convergent under the conditions described in TODO.' . PHP_EOL;
+							}
+							if( CRNDEBUG ) echo $right_matrix[$i][$j] . ' ';
+						}
+						if( CRNDEBUG ) echo PHP_EOL;
+					}
+				}
+				if( $error ) echo $error;
+				else echo 'This CRN *might* satisfy the conditions for global convergence in TODO. You still need to check that columns of μ₁(J^[' . ( $number_of_species - 1 ) . ']) are *strictly* diagonally dominant. Note that the results only hold on the interior of the positive orthant, so check the output of other tests to verify whether the system is persistent.' . PHP_EOL;
+			}
+		}
+	}
+	else fwrite( $stderr, "Usage: " . basename( __FILE__ ) . " <filename>\nCheck chemical reaction network described in <filename> for global convergence to equilibria\n" );
+}
+else fwrite( $stderr, "Usage: " . basename( __FILE__ ) . " <filename>\nCheck chemical reaction network described in <filename> for global convergence to equilibria\n" );
+fclose( $stderr );

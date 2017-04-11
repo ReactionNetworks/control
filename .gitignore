@@ -7,4 +7,5 @@ bin/analysereacs
 bin/dsr
 bin/*.m
 bin/dummy*
+bin/octave-workspace
 sql/control.sqlite

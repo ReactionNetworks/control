@@ -5,12 +5,12 @@
  * This is the default page for CoNtRol
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   13/08/2014
+ * @modified   11/04/2017
  */
 
 /**
@@ -32,9 +32,9 @@ require_once( 'includes/file-formats.php' );
 					<form id="reaction_input_form" action="handlers/download-network-file.php" method="post">
 						<p>
 							<input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
-							<a class="button" id="add_reaction_button" href="#" title="Add New Reaction">+</a>
-							<a class="button<?php if(!isset($_SESSION['reaction_network']) or $_SESSION['reaction_network']->getNumberOfReactions() < 2) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove Last Reaction">&ndash;</a>
-							<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo 'disabled'; ?>" id="reset_reaction_button" href="#" title="Reset All Reactions">--</a>
+							<a class="button" id="add_reaction_button" href="#" title="Add new reaction">+</a>
+							<a class="button<?php if(!isset($_SESSION['reaction_network']) or $_SESSION['reaction_network']->getNumberOfReactions() < 2) echo ' disabled'; ?>" id="remove_reaction_button" href="#" title="Remove last reaction">&ndash;</a>
+							<a class="button <?php if(!isset($_SESSION['reaction_network']) or !$_SESSION['reaction_network']->getNumberOfReactions()) echo 'disabled'; ?>" id="reset_reaction_button" href="#" title="Reset all reactions">--</a>
 						</p>
 <?php
 echo $_SESSION['reaction_network']->generateFieldsetHTML();

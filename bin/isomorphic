@@ -8,12 +8,12 @@
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @author     Casian Pantea <cpantea-at-math-dot-wvu-dot-edu>
  * @author     Murad Banaji <murad-dot-banaji-at-port-dot-ac-dot-uk>
- * @copyright  2014 University of Portsmouth & Kitson Consulting Limited & West Virginia University
+ * @copyright  2014-2017 University of Portsmouth & Kitson Consulting Limited & West Virginia University
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    14/07/2014
- * @modified   09/08/2014
+ * @modified   11/04/2017
  */
 
 /**
@@ -33,7 +33,7 @@ require_once( '../includes/functions.php' );
 
 // Check that this script was correctly invoked
 $stderr = fopen( 'php://stderr', 'w' );
-if( $argc == 2 )
+if( $argc === 2 )
 {
 	// Load the CRN from file
 	$filename = $argv[1];
@@ -59,8 +59,8 @@ if( $argc == 2 )
 		$temp_matrix = $reaction_network->generateIrreversibleStoichiometryMatrix();
 		$number_of_reactions = count( $temp_matrix[0] );
 		$number_of_species = count( $temp_matrix );
-		fwrite($stderr, 'Reactions: ' . $number_of_reactions . PHP_EOL );
-		fwrite($stderr, 'Species: ' . $number_of_species . PHP_EOL );
+		fwrite( $stderr, 'Reactions: ' . $number_of_reactions . PHP_EOL );
+		fwrite( $stderr, 'Species: ' . $number_of_species . PHP_EOL );
 
 		// Attempt to open the database and throw an exception if unable to do so
 		try
@@ -111,7 +111,7 @@ if( $argc == 2 )
 		}
 		else echo 'No isomorphism matches found. This CRN is not isomorphic to any known CRNs in the CoNtRol database.' . PHP_EOL;
 	}
-	else fwrite( $stderr, "Usage: isomorphic <filename>\nCheck chemical reaction network described in <filename> for isorphism to known network\n" );
+	else fwrite( $stderr, "Usage: " . basename( __FILE__ ) . " <filename>\nCheck chemical reaction network described in <filename> for isorphism to known network\n" );
 }
-else fwrite( $stderr, "Usage: isomorphic <filename>\nCheck chemical reaction network described in <filename> for isorphism to known network\n" );
+else fwrite( $stderr, "Usage: " . basename( __FILE__ ) . " <filename>\nCheck chemical reaction network described in <filename> for isorphism to known network\n" );
 fclose( $stderr );
