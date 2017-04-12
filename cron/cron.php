@@ -7,12 +7,12 @@
  * The results are then emailed to the batch originator. It is intended to be called via a cron job.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/04/2013
- * @modified   13/08/2014
+ * @modified   12/04/2017
  */
 
 /**
@@ -540,7 +540,7 @@ for($i = 0; $i < $number_of_jobs; ++$i)
 	$extra_headers .= "MIME-Version: 1.0\r\n";
 	$extra_headers .= "Content-Type: multipart/alternative;\r\n boundary=\"$boundary\"\r\n";
 	$extra_headers .= "Message-ID: <".time().'-'.substr(hash('sha512', ADMIN_EMAIL.$jobs[$i]['email']), -10).'@'.end($admin_email_split).">\r\n";
-	$extra_headers .= 'X-Originating-IP: ['.$jobs[$i]['remote_ip']."]\r\n";
+	$extra_headers .= 'X-Remote-IP: ['.$jobs[$i]['remote_ip']."]\r\n";
 	$sendmail_params = '-f'.ADMIN_EMAIL;
 
 	// Create plain text version of mail

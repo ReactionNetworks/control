@@ -5,12 +5,12 @@
  * Sends completed results to the specified email address.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/05/2013
- * @modified   12/05/2014
+ * @modified   12/04/2017
  */
 
 /**
@@ -111,7 +111,7 @@ if( isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_t
 	$extra_headers .= "MIME-Version: 1.0\r\n";
 	$extra_headers .= "Content-Type: multipart/alternative;\r\n boundary=\"$boundary\"\r\n";
 	$extra_headers .= "Message-ID: <" . time() . '-' . substr( hash( 'sha512', ADMIN_EMAIL . $_POST['email'] ), -10 ) . '@' . end( $admin_email_split ) . ">\r\n";
-	$extra_headers .= 'X-Originating-IP: [' . $_SERVER['REMOTE_ADDR'] . "]\r\n";
+	$extra_headers .= 'X-Remote-IP: [' . $_SERVER['REMOTE_ADDR'] . "]\r\n";
 	$sendmail_params = '-f' . ADMIN_EMAIL;
 
 	// Create plain text version of email
