@@ -2,12 +2,12 @@
  * Default stylesheet for CoNtRol
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    02/10/2012
- * @modified   08/08/2014
+ * @modified   30/04/2017
  */
 
 @media screen
@@ -163,6 +163,14 @@
 	.monospace
 	{
 		font-family: "Consolas Mono", monospace;
+	}
+
+	.reaction_forward_rate_constant,
+	.reaction_backward_rate_constant
+	{
+		font-size: 80% !important;
+		margin: 4px 0 4px 15px;
+		width: 120px;
 	}
 
 	.scroll

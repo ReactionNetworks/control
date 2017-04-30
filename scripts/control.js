@@ -2,12 +2,12 @@
  * Main CoNtRol JavaScript file
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/09/2014
+ * @modified   30/04/2017
  */
 
 /**
@@ -17,7 +17,7 @@ function addReaction()
 {
 	++number_of_reactions;
 
-	$( '#tools_holder' ).before( '<fieldset class="reaction_input_row">' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" spellcheck="false" placeholder="&empty;" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" spellcheck="false" placeholder="&empty;" /> </fieldset>' );
+	$( '#tools_holder' ).before( '<fieldset class="reaction_input_row"><input type="number" size="3" maxlength="10" class="reaction_forward_rate_constant" name="reaction_forward_rate_constant[]" value="" spellcheck="false" placeholder="1.0" step="0.0000000001" /><br />' + number_of_reactions + '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" spellcheck="false" placeholder="&empty;" /> <select class="reaction_direction" name="reaction_direction[]"><option value="left">&larr;</option><option value="both" selected="selected">&#x21cc;</option><option value="right">&rarr;</option></select> <input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" spellcheck="false" placeholder="&empty;" /><br /><input type="number" size="3" maxlength="10" class="reaction_backward_rate_constant" name="reaction_backward_rate_constant[]" value="" spellcheck="false" placeholder="1.0" step="0.0000000001" /></fieldset>' );
 
 	$( '.reaction_left_hand_side, .reaction_right_hand_side' ).each( function()
 	{
@@ -254,12 +254,22 @@ function saveNetwork()
 	{
 		reactionsDirection.push( value.value );
 	} );
+	var reactionsForwardRateConstants = new Array();
+	$.each( $( '.reaction_forward_rate_constant' ), function( index, value )
+	{
+		reactionsForwardRateConstants.push( value.value );
+	} );
+	var reactionsBackwardRateConstants = new Array();
+	$.each( $( '.reaction_backward_rate_constant' ), function( index, value )
+	{
+		reactionsBackwardRateConstants.push( value.value );
+	} );
 	var testSettings = new Array();
 	$.each( $( '.test' ), function( index, v )
 	{
 		testSettings.push( { name: $( this ).attr( 'name' ), value: $( this ).val() } );
 	} );
-	var data = { 'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'test_settings': testSettings, csrf_token: csrf_token };
+	var data = { 'reaction_left_hand_side[]': reactionsLeftHandSide, 'reaction_right_hand_side[]': reactionsRightHandSide, 'reaction_direction[]': reactionsDirection, 'reaction_forward_rate_constant[]': reactionsForwardRateConstants, 'reaction_backward_rate_constant[]': reactionsBackwardRateConstants, 'test_settings': testSettings, csrf_token: csrf_token };
 	$.post( url, data, function( returndata )
 	{
 		if( returndata.length )
@@ -446,6 +456,28 @@ $( document ).ready( function()
 		$( this ).change( function()
 		{
 			saveNetwork();
+		} );
+	} );
+
+	$( '.reaction_direction' ).each( function()
+	{
+		$( this ).on( 'change', function( e )
+		{
+			if( this.options[e.target.selectedIndex].value == 'left' )
+			{
+				$( this ).siblings( '.reaction_forward_rate_constant' ).hide();
+				$( this ).siblings( '.reaction_backward_rate_constant' ).show();
+			}
+			else if( this.options[e.target.selectedIndex].value == 'right' )
+			{
+				$( this ).siblings( '.reaction_forward_rate_constant' ).show();
+				$( this ).siblings( '.reaction_backward_rate_constant' ).hide();
+			}
+			else
+			{
+				$( this ).siblings( '.reaction_forward_rate_constant' ).show();
+				$( this ).siblings( '.reaction_backward_rate_constant' ).show();
+			}
 		} );
 	} );
 
