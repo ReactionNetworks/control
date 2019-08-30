@@ -6,12 +6,12 @@
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
  * @author     Murad Banaji <murad-dot-banaji-at-port-dot-ac-dot-uk>
- * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    18/01/2013
- * @modified   11/04/2017
+ * @modified   30/08/2019
  */
 
 $supportsIniFile = true;
@@ -55,7 +55,7 @@ $standardTests = array(
 	(
 		'endotactic',
 		'Endotactic',
-		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="http://scip.zib.de/">SCIP</a> by Matthew Johnston, Pete Donnell and Casian Pantea, based on <a href="http://arxiv.org/abs/1412.4662">&ldquo;A computational approach to persistence, permanence, and endotacticity of biochemical reaction systems&rdquo;</a>.',
+		'Tests whether the network is endotactic, strongly endotactic, or not endotactic. Implemented using <a href="https://www.gnu.org/software/glpk/">GLPK</a> and <a href="https://scip.zib.de/">SCIP</a> by Matthew Johnston, Pete Donnell and Casian Pantea, based on <a href="https://arxiv.org/abs/1412.4662">&ldquo;A computational approach to persistence, permanence, and endotacticity of biochemical reaction systems&rdquo;</a>.',
 		'endotactic',
 		array( 'GLPK' ),
 		$doesNotSupportIniFile
