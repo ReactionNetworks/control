@@ -5,12 +5,12 @@
  * Standard footer included on all pages within CoNtRol
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   12/08/2014
+ * @modified   30/08/2019
  */
 ?>
 			</div><!-- content -->
@@ -54,19 +54,19 @@ endif;
 						</ul>
 						<h3>Acknowledgements</h3>
 						<ul>
-							<li>This work was supported by grants F/07 058/BU (Leverhulme, to C.P. and M.B.) and EP/J008826/1 (EPSRC, to P.D. and M.B.) and also by <a href="http://kitson-consulting.co.uk/" title="Science and IT Consultants">Kitson Consulting Limited</a>.</li>
+							<li>This work was supported by grants F/07 058/BU (Leverhulme, to C.P. and M.B.) and EP/J008826/1 (EPSRC, to P.D. and M.B.) and also by <a href="https://kitson-consulting.co.uk/" title="Science and IT Consultants">Kitson Consulting Limited</a>.</li>
 							<li>P.D. wishes to acknowledge Mark Donnell, Polly Hember, Matt Kingston, Olaf Mayer and Casian Pantea for their assistance with typing.</li>
 						</ul>
 						<h3>Licensing &amp; Copyright</h3>
 						<ul>
 							<li><a href="https://github.com/megamattron/collections-generic">Collections</a> is &copy; Matt Hall. Used and distributed under the <a href="https://github.com/megamattron/collections-generic/blob/master/LICENSE.txt">Apache Licence</a>.</li>
-							<li><a href="https://www.java.com/js/deployJava.txt"><code>deployJava.js</code></a> is &copy; 2006, 2012 Oracle. Used and distributed under Oracle's licence terms.</li>
-							<li><a href="http://fancybox.net/">Fancybox 1.3.4</a> is &copy; 2008&ndash;2010 Janis Skarnelis. Used and distributed under the <a href="http://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
-							<li><a href="http://jquery.com/">jQuery v1.8.3</a> is &copy; 2012 the jQuery Foundation et al. Used and distributed under the <a href="http://opensource.org/licenses/MIT">MIT Licence</a>.</li>
+							<li><a href="https://www.java.com/js/deployJava.txt"><code>deployJava.js</code></a> is &copy; 2006, 2016 Oracle. Used and distributed under Oracle's licence terms.</li>
+							<li><a href="http://fancybox.net/">Fancybox 1.3.4</a> is &copy; 2008&ndash;2010 Janis Skarnelis. Used and distributed under the <a href="https://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
+							<li><a href="https://jquery.com/">jQuery v1.8.3</a> is &copy; 2012 the jQuery Foundation et al. Used and distributed under the <a href="https://opensource.org/licenses/MIT">MIT Licence</a>.</li>
 							<li><a href="http://jung.sourceforge.net/site/jung-graph-impl/project-summary.html">JUNG</a> is &copy; the JUNG development team. Used and distributed under the <a href="http://jung.sourceforge.net/site/jung-graph-impl/license.html">BSD Licence</a>.</li>
-							<li><a href="https://www.theleagueofmoveabletype.com/orbitron">Orbitron</a> is &copy; 2009 <a href="http://pixelspread.com/">Matt McInerney</a> and released under the <a href="http://scripts.sil.org/OFL" >Open Font Licence</a>.</li>
+							<li><a href="https://www.theleagueofmoveabletype.com/orbitron">Orbitron</a> is &copy; 2009 <a href="https://matt.cc/">Matt McInerney</a> and released under the <a href="https://scripts.sil.org/OFL" >Open Font Licence</a>.</li>
 							<li>Icons from the GNOME, KDE and XFCE desktop icon sets.</li>
-							<li>All other code and content is &copy; 2012&ndash;<?php echo date('Y'); ?> the authors and released under the <a href="http://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
+							<li>All other code and content is &copy; 2012&ndash;<?php echo date('Y'); ?> the authors and released under the <a href="https://www.gnu.org/licenses/gpl.html">GPL v3 or later</a>.</li>
 						</ul>
 					</div><!-- credits_holder -->
 				</div><!-- credits_hider -->
@@ -78,7 +78,7 @@ endif;
 					<span class="non_mobile">&bull;</span>
 					<a href="#privacy_holder" class="fancybox">Privacy</a>
 					<span class="non_mobile">&bull;</span>
-					<a href="http://reaction-networks.net/wiki/CoNtRol" title="View documentation for CoNtRol in a new tab">Documentation</a>
+					<a href="https://reaction-networks.net/wiki/CoNtRol" title="View documentation for CoNtRol in a new tab">Documentation</a>
 					<span class="non_mobile">&bull;</span>
 					<a href="#credits_holder" class="fancybox">Credits</a>
 					<span class="non_mobile">&bull;</span>
