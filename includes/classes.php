@@ -5,12 +5,12 @@
  * Assorted classes used within CoNtRol.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   30/04/2017
+ * @modified   04/09/2019
  */
 
 /**
@@ -808,7 +808,7 @@ class ReactionNetwork
 				if( !$this->reactions[$i]->isReversible() ) $backward_rate_display = ' style="display: none;"';
 				else $hide_backward_rate = '';
 				echo '						<fieldset class="reaction_input_row">
-							<input type="number" size="3" maxlength="10" class="reaction_forward_rate_constant" name="reaction_forward_rate_constant[]" value="' . $this->reactions[$i]->forwardRateConstant . '" spellcheck="false" placeholder="1.0" step="0.0000000001" /><br />
+							<!--input type="number" size="3" maxlength="10" class="reaction_forward_rate_constant" name="reaction_forward_rate_constant[]" value="' . $this->reactions[$i]->forwardRateConstant . '" spellcheck="false" placeholder="1.0" step="0.0000000001" /><br /-->
 							' . ( $i + 1 ) . '. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="', str_replace( '&empty;', '', $this->reactions[$i]->exportLHSAsText() ), '" spellcheck="false" placeholder="&empty;" />
 							<select class="reaction_direction" name="reaction_direction[]">
 								<option value="left">&larr;</option>
@@ -819,23 +819,23 @@ class ReactionNetwork
 							if( !$this->reactions[$i]->isReversible() ) echo ' selected="selected"';
 							echo '>&rarr;</option>
 							</select>
-							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace( '&empty;', '', $this->reactions[$i]->exportRHSAsText() ), '" spellcheck="false" placeholder="&empty;" /><br />
-							<input type="number" size="3" maxlength="10" class="reaction_backward_rate_constant" name="reaction_backward_rate_constant[]" value="' . $this->reactions[$i]->backwardRateConstant . '" spellcheck="false" placeholder="1.0" step="0.0000000001" ' . $backward_rate_display . '/>
+							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="', str_replace( '&empty;', '', $this->reactions[$i]->exportRHSAsText() ), '" spellcheck="false" placeholder="&empty;" /><!--br />
+							<input type="number" size="3" maxlength="10" class="reaction_backward_rate_constant" name="reaction_backward_rate_constant[]" value="' . $this->reactions[$i]->backwardRateConstant . '" spellcheck="false" placeholder="1.0" step="0.0000000001" ' . $backward_rate_display . '/-->
 						</fieldset><!-- reaction_input_row -->', PHP_EOL;
 			}
 		}
 		else
 		{
 			echo '						<fieldset class="reaction_input_row">
-							<input type="number" size="3" maxlength="10" class="reaction_forward_rate_constant" name="reaction_forward_rate_constant[]" value="" spellcheck="false" placeholder="1.0" step="0.0000000001" /><br />
+							<!--input type="number" size="3" maxlength="10" class="reaction_forward_rate_constant" name="reaction_forward_rate_constant[]" value="" spellcheck="false" placeholder="1.0" step="0.0000000001" /><br /-->
 							1. <input type="text" size="10" maxlength="64" class="reaction_left_hand_side" name="reaction_left_hand_side[]" value="" spellcheck="false" placeholder="&empty;" />
 							<select class="reaction_direction" name="reaction_direction[]">
 								<option value="left">&larr;</option>
 								<option value="both" selected="selected">&#x21cc;</option>
 								<option value="right">&rarr;</option>
 							</select>
-							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="" spellcheck="false" placeholder="&empty;" /><br />
-							<input type="number" size="3" maxlength="10" class="reaction_backward_rate_constant" name="reaction_backward_rate_constant[]" value="" spellcheck="false" placeholder="1.0" step="0.0000000001" />
+							<input type="text" size="10" maxlength="64" class="reaction_right_hand_side" name="reaction_right_hand_side[]" value="" spellcheck="false" placeholder="&empty;" /><!--br />
+							<input type="number" size="3" maxlength="10" class="reaction_backward_rate_constant" name="reaction_backward_rate_constant[]" value="" spellcheck="false" placeholder="1.0" step="0.0000000001" /-->
 						</fieldset><!-- reaction_input_row -->', PHP_EOL;
 		}
 	}
@@ -1621,3 +1621,5 @@ class FileFormat
 	}
 }
 // End of class FileFormat
+
+///:~
