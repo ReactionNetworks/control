@@ -2,12 +2,12 @@
  * Main CoNtRol JavaScript file
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   30/04/2017
+ * @modified   04/09/2019
  */
 
 /**
@@ -385,7 +385,7 @@ $( document ).ready( function()
 	var buttonSize = 0;
 
 	// Enable DSR Java app for browsers with Java installed
-	if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 && deployJava.getJREs().length ) $( '#dsr_graph_button' ).removeClass( 'fancybox' );
+	if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 ) $( '#dsr_graph_button' ).removeClass( 'fancybox' );
 
 	// File inputs slide down out of the File Input header on clock
 	var toolsShown = false;
@@ -539,7 +539,7 @@ $( document ).ready( function()
 	$( '#dsr_graph_button' ).click( function( e )
 	{
 		if( $( this ).hasClass( 'disabled' ) ) e.preventDefault();
-		else if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 && deployJava.getJREs().length )
+		else if( navigator.userAgent.indexOf( 'Android' ) == -1 && navigator.userAgent.indexOf( 'iOS' ) == -1 )
 		{
 			e.preventDefault();
 			window.location.replace( 'jnlp.php' );
@@ -703,3 +703,5 @@ $( document ).ready( function()
 		$( '.reaction_left_hand_side' ).first().select();
 	}
 } );
+
+///:~
