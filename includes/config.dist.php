@@ -10,12 +10,12 @@
  * review the settings from the first section, and preferably also the second section.
  *
  * @author     Pete Donnell <pete dot donnell at port at ac at uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   09/08/2014
+ * @modified   04/09/2019
  */
 
 /////////////////////////////////////////
@@ -23,37 +23,44 @@
 /////////////////////////////////////////
 
 /**
- * Site subdirectory.
+ * Site subdirectory
  */
 define( 'SITE_DIR', 'control' );
 
 /**
- * Site URL.
+ * Site URL
  *
  * If you want to run CoNtRol in the top level directory, remove SITE_DIR from this.
  */
 define( 'SITE_URL', 'http://127.0.0.1/' . SITE_DIR . '/' );
 
 /**
- * Email address for the site admin.
+ * Email address for the site admin
  *
- * All emails sent by CoNtRol are sent from this address.
+ * This is the address users should contact if there is a problem.
  */
 define( 'ADMIN_EMAIL', 'control@example.com' );
 
 /**
- * Database connection information.
+ * Email address from which to send messages
+ *
+ * This could be the same as the site admin, or it could be a noreply address
+ */
+define( 'SENDER_EMAIL', 'noreply@example.com' );
+
+/**
+ * Database connection information
  *
  * You definitely need to change this if you want to use batch processing.
  */
 
-// Example 1: MySQL on the same server.
+// Example 1: MySQL on the same server
 //define( 'DB_STRING', 'mysql:host=localhost;dbname=control;charset=utf8' );
 
-// Example 2: MySQL on a different server.
+// Example 2: MySQL on a different server
 //define( 'DB_STRING', 'mysql:host=1.2.3.4;port=3306;dbname=control;charset=utf8' );
 
-// Example 3: SQLite.
+// Example 3: SQLite
 define( 'DB_STRING', 'sqlite:/var/www/html/control/sql/control.sqlite' );
 
 /**
@@ -144,7 +151,7 @@ define( 'TEMP_FILE_DIR', '/var/tmp/' );
 define( 'TEST_TIMEOUT_LIMIT', 60 );
 
 /**
- * The maximum number of reactions that CoNtRol will accept without warning.
+ * The maximum number of reactions that CoNtRol will accept without warning
  *
  * This option is included because some of the tests struggle with large
  * networks. The analysereacs test currently doesn't complete in a sensible
@@ -157,7 +164,7 @@ define( 'TEST_TIMEOUT_LIMIT', 60 );
 define( 'MAX_REACTIONS_PER_NETWORK', 16 );
 
 /**
- * The server timezone.
+ * The server timezone
  *
  * PHP will issue warnings if the timezone is not set. Autodetection code taken
  * from http://bojanz.wordpress.com/2014/03/11/detecting-the-system-timezone-php/
@@ -193,12 +200,12 @@ date_default_timezone_set( $timezone );
 //////////////////////////////////////////////////
 
 /**
- * Default page title.
+ * Default page title
  */
 define( 'DEFAULT_PAGE_TITLE', 'CoNtRol - Chemical Reaction Network analysis tool' );
 
 /**
- * Default page meta description tag.
+ * Default page meta description tag
  */
 define( 'DEFAULT_PAGE_DESCRIPTION', 'CoNtRol is a web application to analyse chemical reaction networks. It also generates LaTeX markup describing their associated DSR graphs and equations.' );
 
@@ -222,12 +229,12 @@ else $line_ending = PHP_EOL;
 define( 'CLIENT_LINE_ENDING', $line_ending );
 
 /*
- * Required to support cross-platform line endings on file import.
+ * Required to support cross-platform line endings on file import
  */
 ini_set( 'auto_detect_line_endings', '1' );
 
 /*
- * Extra database options.
+ * Extra database options
  *
  * It shouldn't be necessary to change this. Older versions of MySQL did not
  * support the charset=utf8 connection option, in which case it's a good idea

@@ -6,12 +6,12 @@
  * list of known CRNs for use in the isomorphism test.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/08/2014
- * @modified   12/04/2017
+ * @modified   04/09/2019
  */
 
 /**
@@ -122,14 +122,14 @@ if( !count( $_SESSION['errors'] ) )
 		// Notify the administrator, if this option has been configured
 		if( NOTIFY_ADMIN_OF_CRN_SUBMISSION )
 		{
-			$admin_email_split = explode( '@', ADMIN_EMAIL );
-			$extra_headers =  "From: CoNtRol <" . ADMIN_EMAIL . ">\r\n";
+			$sender_email_split = explode( '@', SENDER_EMAIL );
+			$extra_headers =  "From: CoNtRol <" . SENDER_EMAIL . ">\r\n";
 			$extra_headers .= "MIME-Version: 1.0\r\n";
 			$extra_headers .= "Content-Type: text/plain; charset=utf-8; format=flowed\r\n";
 			$extra_headers .= "Content-Transfer-Encoding: 8bit\r\n";
-			$extra_headers .= "Message-ID: <" . time() . '-' . substr( hash( 'sha512', ADMIN_EMAIL . uniqid() ), -10) . '@' . end($admin_email_split) . ">\r\n";
+			$extra_headers .= "Message-ID: <" . time() . '-' . substr( hash( 'sha512', SENDER_EMAIL . uniqid() ), -10 ) . '@' . end( $sender_email_split ) . ">\r\n";
 			$extra_headers .= 'X-Remote-IP: [' . $_SERVER['REMOTE_ADDR'] . "]\r\n";
-			$sendmail_params = '-f' . ADMIN_EMAIL;
+			$sendmail_params = '-f' . SENDER_EMAIL;
 			if( trim( $_POST['submitter'] ) ) $submitter = sanitise( trim( $_POST['submitter'] ) );
 			else $submitter = 'Anonymous';
 			$sauro = $_SESSION['reaction_network']->exportSauro();
