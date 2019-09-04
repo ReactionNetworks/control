@@ -15,6 +15,8 @@
  * @modified   04/09/2019
  */
 
+chdir( __DIR__ );
+
 /**
  * Standard include
  */

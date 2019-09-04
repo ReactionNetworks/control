@@ -27,6 +27,11 @@ require_once( '../includes/classes.php' );
 /**
  * Standard include
  */
+require_once( '../includes/functions.php' );
+
+/**
+ * Standard include
+ */
 require_once( '../includes/session.php' );
 
 $_SESSION['errors'] = array();
