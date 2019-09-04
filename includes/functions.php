@@ -295,7 +295,9 @@ function sanitise( $text )
  */
 function verify_csrf_token()
 {
-	return hash_equals( $_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '' );
+	$post = $_POST['csrf_token'] ?? '';
+	$session = $_SESSION['csrf_token'] ?? '';
+	return hash_equals( $post, $session );
 }
 
 ///:~
