@@ -40,7 +40,7 @@ $_SESSION['errors'] = array();
 if( REQUIRE_CAPTCHA and ( !( isset( $_POST['batch_security_code'] ) ) or ( $_POST['batch_security_code'] !== $_SESSION['batch-captcha'] ) ) ) $_SESSION['errors'][] = 'The security code entered was not correct - please try again.';
 
 // Check that the CSRF code was correct
-if( !isset( $_POST['csrf_token'] ) or $_POST['csrf_token'] !== $_SESSION['csrf_token'] ) $_SESSION['errors'][] = 'CSRF check failed, please try again.';
+if( !verify_csrf_token() ) $_SESSION['errors'][] = 'CSRF check failed, please try again.';
 
 // Check that a CRN description was entered
 if( isset( $_POST['crn_description'] ) ) $_SESSION['crn_description'] = trim( $_POST['crn_description'] );
@@ -161,3 +161,5 @@ if( !count( $_SESSION['errors'] ) )
 // Redirect back to the submission page so the user can see if their submission was successful
 header( 'Location: ' . SITE_URL . 'submit-known-crn.php' );
 die();
+
+///:~

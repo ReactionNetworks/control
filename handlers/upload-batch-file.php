@@ -6,12 +6,12 @@
  * networks, and stores them for later analysis.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    11/04/2013
- * @modified   09/08/2014
+ * @modified   04/09/2019
  */
 
 /**
@@ -35,7 +35,7 @@ $filename = '';
 $original_filename = '';
 $filekey = uniqid();
 
-if( isset( $_FILES ) and count( $_FILES ) and isset( $_FILES['upload_batch_file_input'] ) and count( $_FILES['upload_batch_file_input'] ) and isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_token'] )
+if( verify_csrf_token() and isset( $_FILES ) and count( $_FILES ) and isset( $_FILES['upload_batch_file_input'] ) and count( $_FILES['upload_batch_file_input'] ) )
 {
 	switch( $_FILES['upload_batch_file_input']['error'] )
 	{
@@ -216,7 +216,7 @@ else // There were errors, so redirect the user back to the main page so they ca
 	die();
 }
 
-if(CRNDEBUG)
+if( CRNDEBUG )
 {
 	echo '<pre>$_FILES:', CLIENT_LINE_ENDING;
 	print_r( $_FILES );
@@ -230,3 +230,5 @@ else
 {
 	header( 'Location: ' . SITE_URL . 'acknowledgement.php' );
 }
+
+///:~

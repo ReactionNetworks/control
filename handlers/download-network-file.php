@@ -7,31 +7,31 @@
  * use with offline CRN analysis tools.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/10/2012
- * @modified   29/04/2014
+ * @modified   04/09/2019
  */
 
 /**
  * Standard include
  */
-require_once('../includes/config.php');
+require_once( '../includes/config.php' );
 
 /**
  * Standard include
  */
-require_once('../includes/classes.php');
+require_once( '../includes/classes.php' );
 
 $reactions = new ReactionNetwork();
 
-$numberOfReactions = count($_POST['reaction_direction']);
+$numberOfReactions = count( $_POST['reaction_direction'] );
 
-for($i = 0; $i < $numberOfReactions; ++$i)
+for( $i = 0; $i < $numberOfReactions; ++$i )
 {
-	switch($_POST['reaction_direction'][$i])
+	switch( $_POST['reaction_direction'][$i] )
 	{
 		case 'both':
 			$reversible = true;
@@ -56,25 +56,27 @@ for($i = 0; $i < $numberOfReactions; ++$i)
 			break;
 	}
 
-	$reactions->addReaction(new Reaction($leftHandSide, $rightHandSide, $reversible));
+	$reactions->addReaction( new Reaction( $leftHandSide, $rightHandSide, $reversible ) );
 	$_SESSION['reaction_network'] = $reactions;
 }
 
-if(CRNDEBUG)
+if( CRNDEBUG )
 {
 	echo '<pre>', PHP_EOL, '$_POST:', PHP_EOL;
-	print_r($_POST);
+	print_r( $_POST );
 	echo PHP_EOL, PHP_EOL, '$reactions:', PHP_EOL;
-	print_r($reactions);
+	print_r( $reactions );
 	echo PHP_EOL, PHP_EOL, '$sourceStoichiometryMatrix:', PHP_EOL;
-	print_r($reactions->generateSourceStoichiometryMatrix());
+	print_r( $reactions->generateSourceStoichiometryMatrix() );
 	echo PHP_EOL, PHP_EOL, '$targetStoichiometryMatrix:', PHP_EOL;
-	print_r($reactions->generateTargetStoichiometryMatrix());
+	print_r( $reactions->generateTargetStoichiometryMatrix() );
 	echo PHP_EOL, PHP_EOL, '$stoichiometryMatrix:', PHP_EOL;
-	print_r($reactions->generateStoichiometryMatrix());
-	die('</pre>');
+	print_r( $reactions->generateStoichiometryMatrix() );
+	die( '</pre>' );
 }
 else
 {
-	$reactions->exportTextFile(CLIENT_LINE_ENDING);
+	$reactions->exportTextFile( CLIENT_LINE_ENDING );
 }
+
+///:~

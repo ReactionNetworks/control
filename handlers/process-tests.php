@@ -5,12 +5,12 @@
  * For the current reaction network, runs each enabled test in turn.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    08/10/2012
- * @modified   09/08/2014
+ * @modified   04/09/2019
  */
 
 /**
@@ -38,7 +38,7 @@ require_once( '../includes/session.php' );
  */
 require_once( '../includes/standard-tests.php' );
 
-if( isset( $_SESSION['reaction_network'] ) and $_SESSION['reaction_network']->getNumberOfReactions() and isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_token'] )
+if( verify_csrf_token() and isset( $_SESSION['reaction_network'] ) and $_SESSION['reaction_network']->getNumberOfReactions() )
 {
 	$currentTest = null;
 	$inifilename = $_SESSION['tempfile'] . '.ini';
@@ -55,7 +55,7 @@ if( isset( $_SESSION['reaction_network'] ) and $_SESSION['reaction_network']->ge
 		}
 	}
 
-	if($currentTest)
+	if( $currentTest )
 	{
 		$extension = '';
 		$temp = '';
@@ -98,3 +98,5 @@ else
 {
 	die( '<p>Error: CSRF detected or CRN not set up.</p>' );
 }
+
+///:~

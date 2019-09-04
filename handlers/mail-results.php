@@ -43,7 +43,7 @@ require_once( '../includes/standard-tests.php' );
  */
 require_once( '../includes/version.php' );
 
-if( isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_token'] )
+if( verify_csrf_token() )
 {
 	// Check if a valid email address was submitted
 	$valid = true;
@@ -143,3 +143,5 @@ if( isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_t
 	else die( 'Mail sent successfully' );
 }
 else die( 'CSRF attempt detected' );
+
+///:~

@@ -7,12 +7,12 @@
  * output. It must be included separately in each handler page.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2014 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   09/08/2014
+ * @modified   04/09/2019
  */
 
 /**
@@ -156,23 +156,6 @@ function hide_email_address( $email )
 }
 
 /**
- * Convert a matrix into text
- *
- * @param   array   $matrix  A matrix represented as a 2D array / array of arrays
- * @return  string  $text    The matrix represented as text
- */
-function printMatrix( $matrix )
-{
-	$text = '';
-	foreach( $matrix as $row )
-	{
-		foreach( $row as $element ) $text = $text . ' ' . $element;
-		$text .= PHP_EOL;
-	}
-	return $text;
-}
-
-/**
  * Recursively remove directory
  *
  * Taken from http://lixlpixel.org/recursive_function/php/recursive_directory_delete/
@@ -302,3 +285,17 @@ function sanitise( $text )
 {
 	return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8', false );
 }
+
+/**
+ * Timing safe CSRF token check
+ *
+ * Takes no parameters as CSRF tokens are stored in superglobals
+ *
+ * @return  boolean  Returns true if CSRF token is valid, false otherwise
+ */
+function verify_csrf_token()
+{
+	return hash_equals( $_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '' );
+}
+
+///:~

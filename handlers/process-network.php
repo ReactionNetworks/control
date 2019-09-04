@@ -5,12 +5,12 @@
  * Saves the reaction network to the session
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    17/01/2013
- * @modified   30/04/2017
+ * @modified   04/09/2019
  */
 
 /**
@@ -38,7 +38,7 @@ require_once( '../includes/session.php' );
  */
 require_once( '../includes/standard-tests.php' );
 
-if( count( $_POST ) and isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] === $_SESSION['csrf_token'] )
+if( verify_csrf_token() and count( $_POST ) )
 {
 	$reactions = new ReactionNetwork();
 	$output = '';
@@ -182,3 +182,5 @@ if( count( $_POST ) and isset( $_POST['csrf_token'] ) and $_POST['csrf_token'] =
 		if( $_SESSION['standard_tests'][$i]->getIsEnabled() ) ++$_SESSION['number_of_tests'];
 	}
 }
+
+///:~
