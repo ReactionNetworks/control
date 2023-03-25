@@ -5,12 +5,12 @@
  * Assorted classes used within CoNtRol.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2019 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2023 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
  * @created    01/10/2012
- * @modified   04/09/2019
+ * @modified   25/03/2023
  */
 
 /**
@@ -19,7 +19,7 @@
  * Describes an individual reaction.
  *
  * @author     Pete Donnell <pete-dot-donnell-at-port-dot-ac-dot-uk>
- * @copyright  2012-2017 University of Portsmouth & Kitson Consulting Limited
+ * @copyright  2012-2023 University of Portsmouth & Kitson Consulting Limited
  * @license    https://gnu.org/licenses/gpl-3.0-standalone.html GPLv3 or later
  * @see        https://reaction-networks.net/control/documentation/
  * @package    CoNtRol
@@ -96,7 +96,7 @@ class Reaction
 			// Remove whitespace
 			for( $i = 0; $i < $reactantStringLength; ++$i )
 			{
-				if( $reactantString{$i} !== ' ' ) $temp .= $reactantString{$i};
+				if( $reactantString[$i] !== ' ' ) $temp .= $reactantString[$i];
 			}
 			$reactants = explode('+', $temp);
 		}
@@ -151,7 +151,7 @@ class Reaction
 		// Remove whitespace
 		for( $i = 0; $i < $reactionStringLength; ++$i )
 		{
-			if( $reactionString{$i} !== ' ' and $reactionString{$i} !== '-' and $reactionString{$i} !== '=' ) $temp .= $reactionString{$i};
+			if( $reactionString[$i] !== ' ' and $reactionString[$i] !== '-' and $reactionString[$i] !== '=' ) $temp .= $reactionString[$i];
 		}
 
 		$leftArrowPos = strpos( $temp, '<' );
