@@ -62,7 +62,7 @@ $standardTests = array(
 	),
 
 
-	new NetworkTest
+	/*new NetworkTest
 	(
 		'isomorphic',
 		'Isomorphism lookup',
@@ -70,7 +70,7 @@ $standardTests = array(
 		'isomorphic',
 		array( 'human' ),
 		$doesNotSupportIniFile
-	),
+	),*/
 
 
 	new NetworkTest

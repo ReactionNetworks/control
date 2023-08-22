@@ -54,30 +54,30 @@ if( verify_csrf_token() and count( $_POST ) )
 				$reversible = true;
 				$leftHandSide = $_POST['reaction_left_hand_side'][$i];
 				$rightHandSide = $_POST['reaction_right_hand_side'][$i];
-				if( trim( $_POST['reaction_forward_rate_constant'][$i] ) ) $forwardRateConstant = (float) $_POST['reaction_forward_rate_constant'][$i];
-				if( trim( $_POST['reaction_backward_rate_constant'][$i] ) ) $backwardRateConstant = (float) $_POST['reaction_backward_rate_constant'][$i];
+				if( isset( $_POST['reaction_forward_rate_constant'] ) ) if( trim( $_POST['reaction_forward_rate_constant'][$i] ) ) $forwardRateConstant = (float) $_POST['reaction_forward_rate_constant'][$i];
+				if( isset( $_POST['reaction_backward_rate_constant'] ) ) if( trim( $_POST['reaction_backward_rate_constant'][$i] ) ) $backwardRateConstant = (float) $_POST['reaction_backward_rate_constant'][$i];
 				break;
 
 			case 'right':
 				$reversible = false;
 				$leftHandSide = $_POST['reaction_left_hand_side'][$i];
 				$rightHandSide = $_POST['reaction_right_hand_side'][$i];
-				if( trim( $_POST['reaction_forward_rate_constant'][$i] ) ) $forwardRateConstant = (float) $_POST['reaction_forward_rate_constant'][$i];
+				if( isset( $_POST['reaction_forward_rate_constant'] ) ) if( trim( $_POST['reaction_forward_rate_constant'][$i] ) ) $forwardRateConstant = (float) $_POST['reaction_forward_rate_constant'][$i];
 				break;
 
 			case 'left':
 				$reversible = false;
 				$leftHandSide = $_POST['reaction_right_hand_side'][$i];
 				$rightHandSide = $_POST['reaction_left_hand_side'][$i];
-				if( trim( $_POST['reaction_backward_rate_constant'][$i] ) ) $backwardRateConstant = (float) $_POST['reaction_backward_rate_constant'][$i];
+				if( isset( $_POST['reaction_backward_rate_constant'] ) ) if( trim( $_POST['reaction_backward_rate_constant'][$i] ) ) $backwardRateConstant = (float) $_POST['reaction_backward_rate_constant'][$i];
 				break;
 
 			default:
 				// Throw exception?
 				break;
 		}
-		if( trim( $leftHandSide) === '0' ) $leftHandSide = '';
-		if( trim( $rightHandSide) === '0' ) $rightHandSide = '';
+		if( trim( $leftHandSide) === '0' || trim( $leftHandSide) === '' ) $leftHandSide = null;
+		if( trim( $rightHandSide) === '0' || trim( $rightHandSide) === '' ) $rightHandSide = null;
 		$reaction = new Reaction( $leftHandSide, $rightHandSide, $reversible, $forwardRateConstant, $backwardRateConstant );
 		if( !$reactions->addReaction( $reaction ) or !$reaction->getReactants() ) $output .= 'Reaction ' . ( $i + 1 ) . ' is invalid.<br />';
 	}
